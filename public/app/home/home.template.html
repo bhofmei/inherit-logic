@@ -1,4 +1,4 @@
-<div *ngIf="user">
+<div *ngIf="user" id="home-user">
   <h1>Hello {{user.name}}</h1>
   <a href="api/auth/signout">Sign out</a>
 
@@ -8,7 +8,9 @@
   </ul>
 </div>
 <div *ngIf="!user">
-  <a [routerLink]="['/articles']">List Articles</a>
-  <a [routerLink]="['/authentication/signup']">Sign up</a>
-  <a [routerLink]="['/authentication/signin']">Sign in</a>
+  <ul>
+  <li><a [routerLink]="['/articles']">List Articles</a></li>
+  <li><a [routerLink]="['/authentication/signup']">Sign up</a></li>
+  <li><a [routerLink]="['/authentication/signin']">Sign in</a></li>
+    </ul>
 </div>

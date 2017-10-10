@@ -22,7 +22,7 @@ module.exports = function(){
   require('./strategies/google.js')();*/
   passport.use(new LocalStrategy( function(username, password, done){
     User.findOne({
-      username: username
+      email: username
     }, function(err, user){
       if(err)
         return done(err);

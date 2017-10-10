@@ -45,7 +45,6 @@ exports.signin = function(req, res, next) {
 // Create a new controller method that creates new 'regular' users
 exports.signup = function(req, res) {
   const user = new User(req.body);
-  user.provider = 'local';
 
   user.save((err) => {
     if (err) {
