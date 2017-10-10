@@ -8,7 +8,7 @@ const getErrorMessage = function(err) {
     switch (err.code) {
       case 11000:
       case 11001:
-        message = 'Username already exists';
+        message = 'Email already exists';
         break;
       default:
         message = 'Something went wrong';
@@ -64,31 +64,6 @@ exports.signup = function(req, res) {
           res.json(user);
         }
       });
-    }
-  });
-};
-
-exports.saveOAuthUserProfile = function(req, profile, done) {
-  User.findOne({
-    provider: profile.provider,
-    providerId: profile.providerId
-  }, (err, user) => {
-    if (err) {
-      return done(err);
-    } else {
-      if (!user) {
-        const possibleUsername = profile.username || ((profile.email) ? profile.email.split('@')[0] : '');
-
-        User.findUniqueUsername(possibleUsername, null, (availableUsername) => {
-          profile.username = availableUsername;
-          user = new User(profile);
-          user.save(function(err) {
-            return done(err, user);
-          });
-        });
-      } else {
-      return done(err, user);
-      }
     }
   });
 };
