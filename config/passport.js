@@ -1,5 +1,6 @@
 const passport = require('passport');
 const mongoose = require('mongoose');
+const LocalStrategy = require('passport-local').Strategy;
 
 module.exports = function(){
   const User = mongoose.model('User');
@@ -16,7 +17,22 @@ module.exports = function(){
       done(err, user);
     });
   });
-  require('./strategies/local.js')();
+  /*require('./strategies/local.js')();
   require('./strategies/facebook.js')();
-  require('./strategies/google.js')();
+  require('./strategies/google.js')();*/
+  passport.use(new LocalStrategy( function(username, password, done){
+    User.findOne({
+      username: username
+    }, function(err, user){
+      if(err)
+        return done(err);
+      if(!user){
+        return done(null, false, {message: 'Unknown user'});
+      }
+      if(!user.authenticate(password)){
+        return done(null, false, {message: 'Invalid password'});
+      }
+      return done(null, user);
+    });
+  }));
 }

@@ -3,7 +3,6 @@
 const path = require('path');
 const config = require('./config');
 const http = require('http');
-const socketio = require('socket.io');
 const express = require('express');
 const morgan = require('morgan');
 const compress = require('compression');
@@ -13,12 +12,10 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
-const configureSocketio = require('./socketio');
 
 module.exports = function(db){
   const app = express();
   const server = http.createServer(app);
-  const io = socketio.listen(server);
 
   if(process.env.NODE_ENV === 'development'){
     app.use(morgan('dev'));
@@ -55,8 +52,6 @@ module.exports = function(db){
   require('../app/routes/users.server.routes')(app);
   require('../app/routes/articles.server.routes')(app);
   require('../app/routes/index.server.routes')(app);
-
-  configureSocketio(server, io, mongoStore);
 
   return server;
 };
