@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const ScenarioSchema = new Schema({
   label: String,
   fileCode: String,
-  sceneCode: String,
+  scenCode: String,
   degOfDiff: Number,
   helpMessage: String,
   mutationFreq: Number,

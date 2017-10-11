@@ -2,7 +2,7 @@ module.exports = [
   {
     label: "Which phage is wild type?",
     fileCode: "CRK00",
-    sceneCode: "WTorMute",
+    scenCode: "WTorMute",
     degOfDiff: "1",
     helpMessage: "",
     mutationFreq: 0.0004,
@@ -11,7 +11,7 @@ module.exports = [
   {
     label: "Do both phage contain identical mutations?",
     fileCode: "CRK03",
-    sceneCode: "SameOrDiff1",
+    scenCode: "SameOrDiff1",
     degOfDiff: "12",
     helpMessage: "",
     mutationFreq: 0.0004,
@@ -20,7 +20,7 @@ module.exports = [
   {
     label: "Identify phage with compensating frameshift mutations",
     fileCode: "CRK00",
-    sceneCode: "ThreeOther",
+    scenCode: "ThreeOther",
     degOfDiff: "11",
     helpMessage: "",
     mutationFreq: 0.0004,
@@ -29,7 +29,7 @@ module.exports = [
   {
     label: "Recover each single mutant from a double mutant",
     fileCode: "CRK04",
-    sceneCode: "OneEach",
+    scenCode: "OneEach",
     degOfDiff: "20",
     helpMessage: "",
     mutationFreq: 0.0004,
@@ -38,7 +38,7 @@ module.exports = [
   {
     label: "Map and order a series of deletions",
     fileCode: "CRK06",
-    sceneCode: "MapDelete",
+    scenCode: "MapDelete",
     degOfDiff: "39",
     helpMessage: "",
     mutationFreq: 0.0004,
@@ -47,7 +47,7 @@ module.exports = [
   {
     label: "Which of 3 mutations is between the other two",
     fileCode: "CRK05",
-    sceneCode: "WhoMiddle",
+    scenCode: "WhoMiddle",
     degOfDiff: "30",
     helpMessage: "",
     mutationFreq: 0.0004,
@@ -56,7 +56,7 @@ module.exports = [
   {
     label: "How many mutations? (*HONORS*)",
     fileCode: "CRK11",
-    sceneCode: "HowMany",
+    scenCode: "HowMany",
     degOfDiff: "100",
     helpMessage: "",
     mutationFreq: 0.0004,
@@ -65,7 +65,7 @@ module.exports = [
   {
     label: "Same or different KIND of mutation? (*HONORS*)",
     fileCode: "CRK10",
-    sceneCode: "SameOrDiff2",
+    scenCode: "SameOrDiff2",
     degOfDiff: "55",
     helpMessage: "",
     mutationFreq: 0.0004,
@@ -74,7 +74,7 @@ module.exports = [
   {
     label: "Demonstrate codons consist of 3 bases",
     fileCode: "CRK08",
-    sceneCode: "ProveCode",
+    scenCode: "ProveCode",
     degOfDiff: "40",
     helpMessage: "",
     mutationFreq: 0.0008,
@@ -83,7 +83,7 @@ module.exports = [
   {
     label: "Demonstrate and locate a STOP codon",
     fileCode: "CRK09",
-    sceneCode: "FindStop",
+    scenCode: "FindStop",
     degOfDiff: "50",
     helpMessage: "",
     mutationFreq: 0.0004,
@@ -92,7 +92,7 @@ module.exports = [
   {
     label: "Make mine a double",
     fileCode: "CRK07",
-    sceneCode: "CombineTwo",
+    scenCode: "CombineTwo",
     degOfDiff: "38",
     helpMessage: "",
     mutationFreq: 0.0008,
