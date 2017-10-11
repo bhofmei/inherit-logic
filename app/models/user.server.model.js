@@ -8,8 +8,7 @@ const UserSchema = new Schema({
     type: String,
     index: true,
     required: true,
-    match: /.+\@.+\..+/,
-    alias: 'username'
+    match: /.+\@.+\..+/
   },
   password: {
     type: String,
@@ -24,8 +23,8 @@ const UserSchema = new Schema({
   }
 });
 
-UserSchema.statics.fineOneByUsername = function(username, callback){
-  this.findOne({email: username}, callback);
+UserSchema.statics.fineOneByUsername = function(mail, callback){
+  this.findOne({email: mail}, callback);
 };
 
 UserSchema.methods.authenticate = function(password){
