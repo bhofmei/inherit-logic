@@ -6,7 +6,14 @@ module.exports = function(){
   require('../app/models/user.server.model');
   require('../app/models/article.server.model');
   require('../app/models/scenario.server.model');
-  populateScenario();
+  //populateScenario();
+  if(config.loadScenario){
+    require('./scenario');
+    //const Scenario = mongoose.model('Scenario');
+    //Scenario.find((err,res)=>{
+    //  console.log(res);
+    //});
+  }
   return db;
 };
 

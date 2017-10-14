@@ -19,7 +19,7 @@ module.exports = [
   },
   {
     label: "Identify phage with compensating frameshift mutations",
-    fileCode: "CRK00",
+    fileCode: "CRK01",
     scenCode: "ThreeOther",
     degOfDiff: "11",
     helpMessage: "",

@@ -1,13 +1,11 @@
-const scenarios = require('../controllers/scenarios.server.controller');
+const scenarios = require('../controllers/scenario.server.controller');
 
 module.exports = function(app) {
+    app.route('/api/scenarios')
+        .get(scenarios.list)
 
-  app.route('/api/')
-  .get(scenarios.list)
-  .post(scenarios.list);
+    app.route('/api/scenarios/:scenarioId')
+        .get(scenarios.read)
 
-    app.route('/api/:scenarioID')
-        .get(scenarios.getData)
-
-    app.param('scenarioID', scenarios.scenarioByID);
+    app.param('scenarioId', scenarios.scenarioByCode);
 };

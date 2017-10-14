@@ -48,9 +48,9 @@ module.exports = function(db){
 
   app.use('/', express.static(path.resolve('./public')));
   app.use('/lib', express.static(path.resolve('./node_modules')));
-
+  require('../app/routes/scenario.server.routes')(app);
   require('../app/routes/users.server.routes')(app);
-  require('../app/routes/articles.server.routes')(app);
+  require('../app/routes/article.server.routes')(app);
   require('../app/routes/index.server.routes')(app);
 
   return server;
