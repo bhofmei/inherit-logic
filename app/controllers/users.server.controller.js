@@ -46,6 +46,14 @@ exports.signin = function(req, res, next) {
 exports.signup = function(req, res) {
   const user = new User(req.body);
 
+  // check course number
+  var cExist = Course.courseExists(user.course);
+  if(cExist === -1){
+    res.status(400).send({message: 'Course number does not exist'});
+  } else if(cExist === 0) {
+    user.course = '0000'
+  }
+
   user.save((err) => {
     if (err) {
       return res.status(400).send({
@@ -55,6 +63,8 @@ exports.signup = function(req, res) {
       // Remove sensitive data before login
       user.password = undefined;
       user.salt = undefined;
+
+      // add user to course list
 
       req.login(user, function(err) {
         if (err) {

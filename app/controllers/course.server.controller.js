@@ -79,6 +79,10 @@ exports.read = function(req, res) {
     });
 };*/
 
+exports.addStudent = function(req, res, next){
+
+};
+
 // Create a new controller method that delete an existing article
 exports.delete = function(req, res) {
     // Get the article from the 'request' object
@@ -99,11 +103,11 @@ exports.delete = function(req, res) {
 };
 
 // Create a new controller middleware that retrieves a single existing article
-exports.courseByNum = function(req, res, next, cNum) {
+exports.courseByNum = function(req, res, next, id) {
     // Use the model 'findById' method to find a single article
-    Course.fineOneByNum(cNum).populate('students', 'name email').populate('scenarios').exec((err, course) => {
+    Course.findOne({courseNum: id}).populate('students', 'name email').populate('scenarios').populate('instructor', 'name').exec((err, course) => {
         if (err) return next(err);
-        if (!course) return next(new Error('Failed to load course ' + cNum));
+        if (!course) return next(new Error('Failed to load course ' + id));
 
         // If an course is found use the 'request' object to pass it to the next middleware
         req.course = course;
