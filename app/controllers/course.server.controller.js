@@ -1,6 +1,6 @@
 // Load the module dependencies
 const mongoose = require('mongoose');
-const Article = mongoose.model('Article');
+const Course = mongoose.model('Course');
 
 // Create a new error handling controller method
 const getErrorMessage = function(err) {
@@ -15,14 +15,14 @@ const getErrorMessage = function(err) {
 
 // Create a new controller method that creates new articles
 exports.create = function(req, res) {
-    // Create a new article object
-    const article = new Article(req.body);
+    // Create a new course object
+    const course = new Course(req.body);
 
-    // Set the article's 'creator' property
-    article.creator = req.user;
+    // Set the course's 'instructor' property
+    course.instructor = req.user;
 
-    // Try saving the article
-    article.save((err) => {
+    // Try saving the course
+    course.save((err) => {
         if (err) {
             // If an error occurs send the error message
             return res.status(400).send({
@@ -30,13 +30,13 @@ exports.create = function(req, res) {
             });
         } else {
             // Send a JSON representation of the article
-            res.json(article);
+            res.json(course);
         }
     });
 };
 
 // Create a new controller method that retrieves a list of articles
-exports.list = function(req, res) {
+/*exports.list = function(req, res) {
     // Use the model 'find' method to get a list of articles
     Article.find().sort('-created').populate('creator', 'firstName lastName fullName').exec((err, articles) => {
         if (err) {
@@ -49,15 +49,15 @@ exports.list = function(req, res) {
             res.json(articles);
         }
     });
-};
+};*/
 
-// Create a new controller method that returns an existing article
+// Create a new controller method that returns an existing course
 exports.read = function(req, res) {
-    res.json(req.article);
+    res.json(req.course);
 };
 
 // Create a new controller method that updates an existing article
-exports.update = function(req, res) {
+/*exports.update = function(req, res) {
     // Get the article from the 'request' object
     const article = req.article;
 
@@ -77,15 +77,15 @@ exports.update = function(req, res) {
             res.json(article);
         }
     });
-};
+};*/
 
 // Create a new controller method that delete an existing article
 exports.delete = function(req, res) {
     // Get the article from the 'request' object
-    const article = req.article;
+    const course = req.course;
 
     // Use the model 'remove' method to delete the article
-    article.remove((err) => {
+    course.remove((err) => {
         if (err) {
             // If an error occurs send the error message
             return res.status(400).send({
@@ -93,30 +93,30 @@ exports.delete = function(req, res) {
             });
         } else {
             // Send a JSON representation of the article
-            res.json(article);
+            res.json(course);
         }
     });
 };
 
 // Create a new controller middleware that retrieves a single existing article
-exports.articleByID = function(req, res, next, id) {
+exports.courseByNum = function(req, res, next, cNum) {
     // Use the model 'findById' method to find a single article
-    Article.findById(id).populate('creator', 'firstName lastName fullName').exec((err, article) => {
+    Course.fineOneByNum(cNum).populate('students', 'name email').populate('scenarios').exec((err, course) => {
         if (err) return next(err);
-        if (!article) return next(new Error('Failed to load article ' + id));
+        if (!course) return next(new Error('Failed to load course ' + cNum));
 
-        // If an article is found use the 'request' object to pass it to the next middleware
-        req.article = article;
+        // If an course is found use the 'request' object to pass it to the next middleware
+        req.course = course;
 
         // Call the next middleware
         next();
     });
 };
 
-// Create a new controller middleware that is used to authorize an article operation
+// Create a new controller middleware that is used to authorize a course operation
 exports.hasAuthorization = function(req, res, next) {
-    // If the current user is not the creator of the article send the appropriate error message
-    if (req.article.creator.id !== req.user.id) {
+    // If the current user does not have admin access, send error message
+    if (! req.user.admin) {
         return res.status(403).send({
             message: 'User is not authorized'
         });

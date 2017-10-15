@@ -4,8 +4,8 @@ module.exports = function(app) {
     app.route('/api/scenarios')
         .get(scenarios.list)
 
-    app.route('/api/scenarios/:scenarioId')
+    /*app.route('/api/scenarios/:scenarioId')
         .get(scenarios.read)
 
-    app.param('scenarioId', scenarios.scenarioByCode);
+    app.param('scenarioId', scenarios.scenarioByCode);*/
 };

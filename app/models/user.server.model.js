@@ -20,7 +20,12 @@ const UserSchema = new Schema({
   },
   salt: {
     type: String
-  }
+  },
+  course: {
+    type: Schema.ObjectId,
+    ref: 'Course'
+  },
+  admin: Boolean
 });
 
 UserSchema.statics.fineOneByUsername = function(mail, callback){

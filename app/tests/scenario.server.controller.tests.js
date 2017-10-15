@@ -44,7 +44,7 @@ describe('Scenario Controller Unit Tests:', () => {
 				});
 		});
 
-		it('Should be able to get the specific scenario', (done) => {
+		/*it('Should be able to get the specific scenario', (done) => {
 			// Create a SuperTest request
 			request(app).get('/api/scenarios/' + scenario.scenCode)
 				.set('Accept', 'application/json')
@@ -54,7 +54,7 @@ describe('Scenario Controller Unit Tests:', () => {
 					res.body.should.be.an.Object().and.have.property('label', scenario.label);
 					done();
 				});
-		});
+		});*/
 	});
 
 	// Define a post-tests function
