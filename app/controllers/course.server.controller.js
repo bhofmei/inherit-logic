@@ -35,22 +35,6 @@ exports.create = function(req, res) {
     });
 };
 
-// Create a new controller method that retrieves a list of articles
-/*exports.list = function(req, res) {
-    // Use the model 'find' method to get a list of articles
-    Article.find().sort('-created').populate('creator', 'firstName lastName fullName').exec((err, articles) => {
-        if (err) {
-            // If an error occurs send the error message
-            return res.status(400).send({
-                message: getErrorMessage(err)
-            });
-        } else {
-            // Send a JSON representation of the article
-            res.json(articles);
-        }
-    });
-};*/
-
 // Create a new controller method that returns an existing course
 exports.read = function(req, res) {
     res.json(req.course);
@@ -78,10 +62,6 @@ exports.read = function(req, res) {
         }
     });
 };*/
-
-exports.addStudent = function(req, res, next){
-
-};
 
 // Create a new controller method that delete an existing article
 exports.delete = function(req, res) {

@@ -12,7 +12,6 @@ let instructor, course;
 describe('Course Model Unit Tests:', () => {
   // Define a pre-tests function
   beforeEach((done) => {
-    this.skip();
     // Create a new 'User' model instance
     instructor = new User({
       name: 'Instructor',
@@ -105,7 +104,7 @@ describe('Course Model Unit Tests:', () => {
   }); // end test find
 
   // Define a post-tests function
-  afterEach((done) => {
+  after((done) => {
     // Clean the databases
     Course.remove(() => {
       User.remove(() => {

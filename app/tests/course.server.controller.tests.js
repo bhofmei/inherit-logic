@@ -13,7 +13,6 @@ let instructor, user, course;
 describe('Course Controller Unit Tests:', () => {
 	// Define a pre-tests function
 	beforeEach((done) => {
-    this.skip();
 		// Create a new 'User' model instance
 		instructor = new User({
 			name: 'Instructor',
@@ -47,20 +46,6 @@ describe('Course Controller Unit Tests:', () => {
 
 	// Test the 'Article' GET methods
 	describe('Testing the GET methods', () => {
-		/*it('Should be able to get the list of articles', (done) => {
-			// Create a SuperTest request
-			request(app).get('/api/articles/')
-				.set('Accept', 'application/json')
-				.expect('Content-Type', /json/)
-				.expect(200)
-				.end((err, res) => {
-					res.body.should.be.an.Array().and.have.lengthOf(1);
-					res.body[0].should.have.property('title', article.title);
-					res.body[0].should.have.property('content', article.content);
-
-					done();
-				});
-		});*/
 
 		it('Should be able to get the specific course', (done) => {
 			// Create a SuperTest request

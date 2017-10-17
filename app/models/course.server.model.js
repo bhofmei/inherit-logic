@@ -12,10 +12,6 @@ const CourseSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
-  students: [{
-    type: Schema.ObjectId,
-    ref: 'User'
-  }],
   scenarios: [{
     type: Schema.ObjectId,
     ref: "Scenario"
