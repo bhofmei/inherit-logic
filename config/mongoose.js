@@ -7,6 +7,7 @@ module.exports = function(){
   require('../app/models/article.server.model');
   require('../app/models/scenario.server.model');
   require('../app/models/course.server.model');
+  require('../app/models/fridge.server.model');
 
   if(config.loadScenario){
     require('./scenario');
