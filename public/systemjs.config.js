@@ -4,6 +4,9 @@
       main: './bootstrap.js',
       defaultExtension: 'js',
       format: 'register'
+    },
+    rxjs: {
+      defaultExtension: 'js'
     }
   };
 

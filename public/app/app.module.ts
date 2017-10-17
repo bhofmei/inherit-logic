@@ -10,8 +10,10 @@ import { AppRoutes }       from './app.routes';
 
 import { HomeModule } from './home/home.module';
 import { AuthenticationService } from './authentication/authentication.service';
+import { ScenarioService } from './cricket-scenario/cricket-scenario.service';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ArticleModule } from './articles/article.module';
+import { CricketModule } from './cricket-scenario/cricket-scenario.module';
 
 @NgModule({
   imports: [
@@ -21,13 +23,15 @@ import { ArticleModule } from './articles/article.module';
     AuthenticationModule,
     HomeModule,
     ArticleModule,
+    CricketModule,
     RouterModule.forRoot(AppRoutes),
   ],
   declarations: [
     AppComponent
   ],
   providers: [
-    AuthenticationService
+    AuthenticationService,
+    ScenarioService
   ],
   bootstrap: [AppComponent]
 })

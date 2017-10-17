@@ -10,7 +10,17 @@ module.exports = function(){
   require('../app/models/fridge.server.model');
 
   if(config.loadScenario){
-    require('./scenario');
+    const Scenario = mongoose.model('Scenario');
+    const scenarioList = require('./scenario.data');
+    Scenario.count({}, (err, res)=>{
+      if(res === 0){
+        // add scenarios
+        scenarioList.forEach((data)=>{
+          var sc = new Scenario(data);
+          sc.save()
+        });
+      }
+    });
   }
   return db;
 };

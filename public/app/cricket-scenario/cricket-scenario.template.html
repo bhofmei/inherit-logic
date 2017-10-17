@@ -1,0 +1,10 @@
+<h1>Available Scenarios</h1>
+<div *ngIf="user">
+  <h2>Welcome {{user.name}}</h2>
+</div>
+<ul>
+  <li *ngFor="let scenario of scenarios">
+    <a *ngIf="user" [routerLink]="['/cricket/id', user.userId, scenario.scenCode]">{{scenario.label}}</a>
+    <a *ngIf="!user" [routerLink]="['/cricket', scenario.scenCode]">{{scenario.label}}</a>
+  </li>
+</ul>
