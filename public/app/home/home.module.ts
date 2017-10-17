@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { HomeRoutes } from './home.routes';
 import { HomeComponent } from './home.component';
+import { NavComponent } from '../nav/nav.component'
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { HomeComponent } from './home.component';
   ],
   declarations: [
     HomeComponent,
+    NavComponent
   ]
 })
 export class HomeModule {}
