@@ -31,7 +31,7 @@ describe('Scenario Controller Unit Tests:', () => {
 	describe('Testing the GET methods', () => {
 		it('Should be able to get the list of scenarios', (done) => {
 			// Create a SuperTest request
-			request(app).get('/api/scenarios/')
+			request(app).get('/api/cricket/')
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
 				.expect(200)

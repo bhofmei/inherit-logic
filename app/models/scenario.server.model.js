@@ -11,7 +11,15 @@ const ScenarioSchema = new Schema({
   degOfDiff: Number,
   helpMessage: String,
   mutationFreq: Number,
-  recombinationFreq: Number
+  recombinationFreq: Number,
+  defaultRoom: {
+    type: String,
+    default: 'Lab'
+  },
+  availableRooms: {
+    type: [String],
+    default: ['Lab', 'MultiPlexer', 'SuperPlexer']
+  }
 });
 
 ScenarioSchema.statics.findOneByCode = function(code, callback){
