@@ -8,7 +8,7 @@ exports.render = function(req, res) {
 
 	// Use the 'response' object to render the 'index' view with a 'title' and 'user' properties
 	res.render('index', {
-		title: 'Hello World',
+		title: 'Cricket',
 		user: JSON.stringify(user)
 	});
 };
