@@ -8,7 +8,7 @@ module.exports = function(app){
     app.route('/api/auth/signout').get(users.signout);
 
   // cricket paths
-  app.route('/api/cricket/:userId').get(scenarios.list);
+  //app.route('/api/cricket/:userId').get(scenarios.list);
 
   app.param('userId', users.userById);
 };

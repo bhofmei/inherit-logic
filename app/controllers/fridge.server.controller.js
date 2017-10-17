@@ -17,8 +17,7 @@ exports.createFridge = function (req, res) {
 
   const fridge = new Fridge({
     scenario: req.scenario,
-    owner: req.user
-    // new phages
+    owner: null
   });
   fridge.save((err) => {
     if (err) {
@@ -48,8 +47,8 @@ exports.getFridge = function (req, res) {
       } else if (!fridge) {
         // create a fridge
         const newFridge = new Fridge({
-          scenario: req.scenario,
-          owner: req.user
+          scenario: scen,
+          owner: user
         });
         newFridge.save((err, f) => {
           if (err) {

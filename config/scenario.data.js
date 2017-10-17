@@ -98,5 +98,4 @@ module.exports = [
     mutationFreq: 0.0008,
     recombinationFreq: 0.25
   }
-
 ];

@@ -58,7 +58,7 @@ describe('Fridge Controller Unit Tests:', () => {
 
 		it('Should be able to get existing fridge', (done) => {
 			// Create a SuperTest request
-			request(app).get('/api/cricket/' + user.userId+'/'+scenario.scenCode)
+			request(app).get('/api/cricket/id/' + user.userId+'/'+scenario.scenCode)
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
 				.expect(200)
@@ -70,8 +70,8 @@ describe('Fridge Controller Unit Tests:', () => {
 				});
 		});
 
-    it('Should create new fridge', (done)=>{
-      request(app).get('/api/cricket/' + user.userId+'/'+scenario2.scenCode)
+    it('Should be able to create fridge for user', (done)=>{
+      request(app).get('/api/cricket/id/' + user.userId+'/'+scenario2.scenCode)
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
 				.expect(200)
@@ -82,6 +82,20 @@ describe('Fridge Controller Unit Tests:', () => {
 					done();
 				});
     });
+
+   it('Should be able to create fridge for null user', (done)=>{
+      request(app).get('/api/cricket/' +scenario2.scenCode)
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.expect(200)
+				.end((err, res) => {
+					res.body.should.be.an.Object();
+        res.body.should.have.property('owner', null);
+        res.body.scenario.should.have.property('scenCode', scenario2.scenCode);
+					done();
+				});
+    });
+
 	});
 
   /*describe('Test POST methods', () =>{
@@ -113,7 +127,7 @@ describe('Fridge Controller Unit Tests:', () => {
 			User.remove(() => {
         Scenario.remove(()=>{
           done();
-        })
+        });
 			});
 		});
 	});
