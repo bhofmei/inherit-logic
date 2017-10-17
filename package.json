@@ -11,7 +11,7 @@
     "tsc:w": "tsc -w",
     "app": "node index",
     "start": "concurrently \"npm run tsc:w\" \"npm run app\" ",
-    "test:back": "NODE_ENV=test mocha --reporter spec app/tests"
+    "test:back": "NODE_ENV=test mocha --reporter spec -i -g z app/tests"
   },
   "keywords": [
     "genetics"
@@ -39,6 +39,7 @@
     "express-session": "^1.14.1",
     "method-override": "^2.3.6",
     "mongoose": "^4.6.5",
+    "mongoose-sequence": "^4.0.1",
     "morgan": "^1.7.0",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",

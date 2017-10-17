@@ -1,12 +1,17 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+  userId: {
+    type: Number,
+    index: true
+  },
   name: String,
   email: {
     type: String,
-    index: true,
+    //index: true,
     required: true,
     match: /.+\@.+\..+/
   },
@@ -25,12 +30,15 @@ const UserSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Course'
   },
-  admin: Boolean
+  admin: {
+    type: Boolean,
+    default: false
+  }
 });
 
-UserSchema.statics.fineOneByUsername = function(mail, callback){
+/*UserSchema.statics.fineOneByUsername = function(mail, callback){
   this.findOne({email: mail}, callback);
-};
+};*/
 
 UserSchema.methods.authenticate = function(password){
   return this.password === this.hashPassword(password);
@@ -49,5 +57,7 @@ UserSchema.methods.hashPassword = function(password){
 };
 
 UserSchema.set('toJSON',{getters: true, virtuals: true});
+
+UserSchema.plugin(AutoIncrement, {inc_field: 'userId'});
 
 mongoose.model('User', UserSchema);

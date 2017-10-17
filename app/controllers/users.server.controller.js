@@ -21,6 +21,19 @@ const getErrorMessage = function(err) {
   return message;
 };
 
+exports.userById = function(req, res, next, id ){
+  User.findOne({userId: id}, (err, user) =>{
+    // if error
+    if(err) return next(err);
+    // if user not found
+    else if (!user) return next(new Error('User not found'));
+    // if user found -> next middleware
+    req.user = user;
+    next();
+  });
+};
+
+
 // Create a new controller method that signin users
 exports.signin = function(req, res, next) {
   passport.authenticate('local', (err, user, info) => {
@@ -89,3 +102,5 @@ exports.requiresLogin = function(req, res, next){
   }
   next();
 };
+
+// functions for updating user info
