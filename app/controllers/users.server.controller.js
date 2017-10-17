@@ -77,8 +77,6 @@ exports.signup = function(req, res) {
       user.password = undefined;
       user.salt = undefined;
 
-      // add user to course list
-
       req.login(user, function(err) {
         if (err) {
           res.status(400).send(err);
