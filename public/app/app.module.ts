@@ -14,6 +14,7 @@ import { ScenarioService } from './cricket-scenario/cricket-scenario.service';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ArticleModule } from './articles/article.module';
 import { CricketModule } from './cricket-scenario/cricket-scenario.module';
+import { NavComponent } from './nav/nav.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { CricketModule } from './cricket-scenario/cricket-scenario.module';
     RouterModule.forRoot(AppRoutes),
   ],
   declarations: [
-    AppComponent
+    AppComponent,
+    NavComponent
   ],
   providers: [
     AuthenticationService,

@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { HomeRoutes } from './home.routes';
 import { HomeComponent } from './home.component';
-import { NavComponent } from '../nav/nav.component'
+//import { NavComponent } from '../nav/nav.component'
 
 @NgModule({
   imports: [
@@ -15,7 +15,7 @@ import { NavComponent } from '../nav/nav.component'
   ],
   declarations: [
     HomeComponent,
-    NavComponent
+    //NavComponent
   ]
 })
 export class HomeModule {}

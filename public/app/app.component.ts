@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'genetics-app',
-  template: '<router-outlet></router-outlet>',
+  template: '<cricket-nav></cricket-nav><router-outlet></router-outlet>',
 })
 export class AppComponent {
 	constructor(private _authenticationService: AuthenticationService, private router: Router) {}
