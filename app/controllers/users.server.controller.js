@@ -65,7 +65,7 @@ exports.signup = function (req, res) {
   const user = new User(req.body);
 
   // check course number
-  var cExist = Course.courseExists(user.course);
+  /*var cExist = Course.courseExists(user.course);
   if (cExist === -1) {
     res.status(400)
       .send({
@@ -73,7 +73,7 @@ exports.signup = function (req, res) {
       });
   } else if (cExist === 0) {
     user.course = '0000'
-  }
+  }*/
 
   user.save((err) => {
     if (err) {

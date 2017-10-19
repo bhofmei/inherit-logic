@@ -7,19 +7,17 @@ import { AuthenticationRoutes } from './authentication.routes';
 import { AuthenticationComponent } from './authentication.component';
 import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
-import { SignoutComponent } from './signout/signout.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule.forChild(AuthenticationRoutes)
-  ],
-  declarations: [
-    AuthenticationComponent,
-    SigninComponent,
-    SignupComponent,
-    SignoutComponent
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule.forChild(AuthenticationRoutes)
+    ],
+    declarations: [
+        AuthenticationComponent,
+        SigninComponent,
+        SignupComponent
+    ]
 })
 export class AuthenticationModule { }

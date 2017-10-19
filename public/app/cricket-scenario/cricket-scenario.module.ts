@@ -7,13 +7,13 @@ import { CricketRoutes } from './cricket-scenario.routes';
 import { CricketComponent } from './cricket-scenario.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule.forChild(CricketRoutes),
-  ],
-  declarations: [
-    CricketComponent,
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule.forChild(CricketRoutes),
+    ],
+    declarations: [
+        CricketComponent,
+    ]
 })
 export class CricketModule { }

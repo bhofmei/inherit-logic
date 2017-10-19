@@ -8,14 +8,14 @@ import { HomeComponent } from './home.component';
 //import { NavComponent } from '../nav/nav.component'
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule.forChild(HomeRoutes),
-  ],
-  declarations: [
-    HomeComponent,
-    //NavComponent
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule.forChild(HomeRoutes),
+    ],
+    declarations: [
+        HomeComponent,
+        //NavComponent
+    ]
 })
 export class HomeModule { }

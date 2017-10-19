@@ -6,12 +6,12 @@ import { ViewComponent } from './view/view.component';
 import { EditComponent } from './edit/edit.component';
 
 export const ArticleRoutes: Routes = [{
-  path: 'articles',
-  component: ArticleComponent,
-  children: [
-    { path: '', component: ListComponent },
-    { path: 'create', component: CreateComponent },
-    { path: ':articleId', component: ViewComponent },
-    { path: ':articleId/edit', component: EditComponent }
-  ],
+    path: 'articles',
+    component: ArticleComponent,
+    children: [
+        { path: '', component: ListComponent },
+        { path: 'create', component: CreateComponent },
+        { path: ':articleId', component: ViewComponent },
+        { path: ':articleId/edit', component: EditComponent }
+    ],
 }];

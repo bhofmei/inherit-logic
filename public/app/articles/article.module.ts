@@ -13,17 +13,17 @@ import { EditComponent } from './edit/edit.component';
 import { ArticleService } from './article.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule.forChild(ArticleRoutes)
-  ],
-  declarations: [
-    ArticleComponent,
-    CreateComponent,
-    ListComponent,
-    ViewComponent,
-    EditComponent
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule.forChild(ArticleRoutes)
+    ],
+    declarations: [
+        ArticleComponent,
+        CreateComponent,
+        ListComponent,
+        ViewComponent,
+        EditComponent
+    ]
 })
 export class ArticleModule { }

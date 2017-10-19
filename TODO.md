@@ -8,6 +8,7 @@
 - [ ] users
 
 ## Controllers
+### URL controllers
 - [ ] fridge
   - [ ] GET methods
   - [ ] POST methods
@@ -19,6 +20,11 @@
 - [ ] course
   - add/remove scenarios
 
+### Genetics logic controllers
+  - [ ] generate phage
+  - [ ] perform cross
+  - [ ] get genotype
+
 ## Routes
 - [ ] scenarios/fridge
 - [ ] user
@@ -26,16 +32,44 @@
   
 ## Modules
 ### Navigation/Header
+  - [X] logo
+  - [ ] links
 ### Home
   - [ ] Scenerio list
-### Lab room
-  - [ ] test tubes
-  - [ ] plate
-### Fridge
+  - [ ] Scenario info
+
+
+### Solve Scenarios
+  - [ ] nav between lab, plexer, model
+  - [ ] scenario description
+  - [ ] fridge component
+#### Fridge
   - [ ] shelf
   - [ ] phage
   - [ ] navigate-shelf
-    
+#### Lab room
+  - [ ] diluation tubes 
+  - [ ] e. coli tubes
+  - [ ] plate
+
+#### Plexer
+  - [ ] data table
+#### Model
+  - [] alignments
+
+### Help Info
+
+### User
+  - [ ] Change name
+  - [ ] Possible visualization settings
+  - [ ] change password
+  
+### Admin/Course
+  - [ ] admin only access
+  - [ ] choose scenarios
+  - [ ] list of users
+    - [ ] promote to admin
+    - [ ] forget password
 ## Tests
 ### Backend
 

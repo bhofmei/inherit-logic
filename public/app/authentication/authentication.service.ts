@@ -5,48 +5,41 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AuthenticationService {
-  public user = window['user'];
+    public user = window['user'];
 
-  private _signinURL = 'api/auth/signin';
-  private _signupURL = 'api/auth/signup';
-  private _signoutURL = 'api/auth/signout';
+    private _signinURL = 'api/auth/signin';
+    private _signupURL = 'api/auth/signup';
 
-  constructor(private http: Http) {
+    constructor(private http: Http) {
 
-  }
+    }
 
-  isLoggedIn(): boolean {
-    return (!!this.user);
-  }
+    isLoggedIn(): boolean {
+        return (!!this.user);
+    }
 
-  signin(credentials: any): Observable<any> {
-    let body = JSON.stringify(credentials);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
+    signin(credentials: any): Observable<any> {
+        let body = JSON.stringify(credentials);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._signinURL, body, options)
-      .map(res => this.user = res.json())
-      .catch(this.handleError)
-  }
+        return this.http.post(this._signinURL, body, options)
+            .map(res => this.user = res.json())
+            .catch(this.handleError)
+    }
 
-  signup(user: any): Observable<any> {
-    let body = JSON.stringify(user);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
+    signup(user: any): Observable<any> {
+        let body = JSON.stringify(user);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._signupURL, body, options)
-      .map(res => this.user = res.json())
-      .catch(this.handleError)
-  }
+        return this.http.post(this._signupURL, body, options)
+            .map(res => this.user = res.json())
+            .catch(this.handleError)
+    }
 
-  signout(): Observable<any> {
-    return this.http.get(this._signoutURL)
-      .map(res => this.user = undefined)
-      .catch(this.handleError)
-  }
-
-  private handleError(error: Response) {
-    console.error(error);
-    return Observable.throw(error.json().message || 'Server error');
-  }
+    private handleError(error: Response) {
+        console.error(error);
+        return Observable.throw(error.json().message || 'Server error');
+    }
 }

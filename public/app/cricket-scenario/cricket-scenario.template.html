@@ -1,6 +1,11 @@
 <h1>Available Scenarios</h1>
 <div *ngIf="user">
   <h2>Welcome {{user.name}}</h2>
+  <a href="api/auth/signout">Sign out</a>
+</div>
+<div *ngIf="!user">
+ <a [routerLink]="['/authentication/signup']">Sign up</a><br>
+  <a [routerLink]="['/authentication/signin']">Sign in</a>
 </div>
 <ul>
   <li *ngFor="let scenario of scenarios">
