@@ -6,10 +6,10 @@ import { AuthenticationService } from '../authentication/authentication.service'
   templateUrl: './app/home/home.template.html',
   styleUrls: ['./app/home/home.style.css']
 })
-export class HomeComponent{
+export class HomeComponent {
   user: any;
 
-  constructor(private _authenticationService: AuthenticationService){
+  constructor(private _authenticationService: AuthenticationService) {
     this.user = _authenticationService.user;
   }
 }

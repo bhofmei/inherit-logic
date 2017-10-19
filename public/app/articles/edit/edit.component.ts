@@ -9,31 +9,31 @@ import { ArticleService } from '../article.service';
   templateUrl: 'app/articles/edit/edit.template.html'
 })
 export class EditComponent {
-	article: any = {};
-	errorMessage: string;
-	paramsObserver: any;
+  article: any = {};
+  errorMessage: string;
+  paramsObserver: any;
 
-	constructor(private _router:Router,
-				private _route: ActivatedRoute,
-				private _articleService: ArticleService) {}
+  constructor(private _router: Router,
+    private _route: ActivatedRoute,
+    private _articleService: ArticleService) { }
 
-	ngOnInit() {
-		this.paramsObserver = this._route.params.subscribe(params => {
-			let articleId = params['articleId'];
+  ngOnInit() {
+    this.paramsObserver = this._route.params.subscribe(params => {
+      let articleId = params['articleId'];
 
-			this._articleService.read(articleId).subscribe(article => {
-																this.article = article;
-													 		},
-															error => this._router.navigate(['/articles']));
-		});
-	}
+      this._articleService.read(articleId).subscribe(article => {
+        this.article = article;
+      },
+        error => this._router.navigate(['/articles']));
+    });
+  }
 
-	ngOnDestroy() {
-		this.paramsObserver.unsubscribe();
-	}
+  ngOnDestroy() {
+    this.paramsObserver.unsubscribe();
+  }
 
-	update() {
-		this._articleService.update(this.article).subscribe(savedArticle => this._router.navigate(['/articles', savedArticle._id]),
-							 				  				 error =>  this.errorMessage = error);
-	}
+  update() {
+    this._articleService.update(this.article).subscribe(savedArticle => this._router.navigate(['/articles', savedArticle._id]),
+      error => this.errorMessage = error);
+  }
 }

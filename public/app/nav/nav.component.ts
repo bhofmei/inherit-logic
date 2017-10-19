@@ -6,10 +6,10 @@ import { AuthenticationService } from '../authentication/authentication.service'
   templateUrl: './app/nav/nav.template.html',
   styleUrls: ['./app/nav/nav.style.css']
 })
-export class NavComponent{
+export class NavComponent {
   user: any;
 
-  constructor(private _authenticationService: AuthenticationService){
+  constructor(private _authenticationService: AuthenticationService) {
     this.user = _authenticationService.user;
   }
 }

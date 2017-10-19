@@ -4,19 +4,16 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../authentication.service';
 
 @Component({
-  selector: 'signup',
-  templateUrl: 'app/authentication/signup/signup.template.html'
+  selector: 'signout',
+  template: '<div>Signed out</div><div>{{errorMessage}}</div>'
 })
-export class SignupComponent {
+export class SignoutComponent {
   errorMessage: string;
-  user: any = {};
 
   constructor(private _authenticationService: AuthenticationService,
     private _router: Router) { }
 
-  signup() {
-    this._authenticationService.signup(
-      this.user).subscribe(result => this._router.navigate(['/']),
-      error => this.errorMessage = error);
+  signout() {
+    this._authenticationService.signout().subscribe(result => this._router.navigate(['/']), error => this.errorMessage = error);
   }
 }

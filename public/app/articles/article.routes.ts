@@ -9,9 +9,9 @@ export const ArticleRoutes: Routes = [{
   path: 'articles',
   component: ArticleComponent,
   children: [
-	{path: '', component: ListComponent},
-	{path: 'create', component: CreateComponent},
-	{path: ':articleId', component: ViewComponent},
-	{path: ':articleId/edit', component: EditComponent}
+    { path: '', component: ListComponent },
+    { path: 'create', component: CreateComponent },
+    { path: ':articleId', component: ViewComponent },
+    { path: ':articleId/edit', component: EditComponent }
   ],
 }];

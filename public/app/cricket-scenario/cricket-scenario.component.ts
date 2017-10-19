@@ -6,16 +6,16 @@ import { ScenarioService } from './cricket-scenario.service';
   selector: 'cricket-scenarios',
   templateUrl: './app/cricket-scenario/cricket-scenario.template.html'
 })
-export class CricketComponent{
+export class CricketComponent {
   user: any;
   scenarios: any;
   errorMessage: string;
 
-  constructor(private _authenticationService: AuthenticationService, private _scenarioService: ScenarioService){
+  constructor(private _authenticationService: AuthenticationService, private _scenarioService: ScenarioService) {
     this.user = _authenticationService.user;
   }
 
   ngOnInit() {
-		this._scenarioService.list().subscribe(scenarios  => this.scenarios = scenarios);
-	}
+    this._scenarioService.list().subscribe(scenarios => this.scenarios = scenarios);
+  }
 }

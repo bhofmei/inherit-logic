@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule }   from '@angular/common';
-import { RouterModule} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { AuthenticationRoutes } from './authentication.routes';
 import { AuthenticationComponent } from './authentication.component';
 import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
+import { SignoutComponent } from './signout/signout.component';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { SignupComponent } from './signup/signup.component';
   declarations: [
     AuthenticationComponent,
     SigninComponent,
-    SignupComponent
+    SignupComponent,
+    SignoutComponent
   ]
 })
-export class AuthenticationModule {}
+export class AuthenticationModule { }

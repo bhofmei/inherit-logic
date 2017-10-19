@@ -6,4 +6,4 @@ import { ArticleService } from './article.service';
   template: '<router-outlet></router-outlet>',
   providers: [ArticleService]
 })
-export class ArticleComponent {}
+export class ArticleComponent { }

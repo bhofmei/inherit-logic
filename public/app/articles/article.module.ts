@@ -26,4 +26,4 @@ import { ArticleService } from './article.service';
     EditComponent
   ]
 })
-export class ArticleModule{}
+export class ArticleModule { }
