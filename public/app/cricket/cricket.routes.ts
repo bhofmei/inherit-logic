@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { CricketComponent } from './cricket-scenario.component';
+import { CricketComponent } from './cricket.component';
 
 export const CricketRoutes: Routes = [{
     path: '',

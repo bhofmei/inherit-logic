@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { CricketRoutes } from './cricket-scenario.routes';
-import { CricketComponent } from './cricket-scenario.component';
+import { CricketRoutes } from './cricket.routes';
+import { CricketComponent } from './cricket.component';
 
 @NgModule({
     imports: [

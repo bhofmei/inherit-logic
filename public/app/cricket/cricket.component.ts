@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { ScenarioService } from './cricket-scenario.service';
+import { ScenarioService } from '../scenario/scenario.service';
 
 @Component({
-    selector: 'cricket-scenarios',
-    templateUrl: './app/cricket-scenario/cricket-scenario.template.html'
+    selector: 'cricket',
+    templateUrl: './app/cricket/cricket.template.html'
 })
 export class CricketComponent {
     user: any;

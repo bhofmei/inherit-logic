@@ -10,10 +10,12 @@ import { AppRoutes } from './app.routes';
 
 //import { HomeModule } from './home/home.module';
 import { AuthenticationService } from './authentication/authentication.service';
-import { ScenarioService } from './cricket-scenario/cricket-scenario.service';
+import { ScenarioService } from './scenario/scenario.service';
+
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ArticleModule } from './articles/article.module';
-import { CricketModule } from './cricket-scenario/cricket-scenario.module';
+import { CricketModule } from './cricket/cricket.module';
+import { ScenarioModule } from './scenario/scenario.module';
 import { NavComponent } from './nav/nav.component';
 
 @NgModule({
@@ -25,6 +27,7 @@ import { NavComponent } from './nav/nav.component';
         //HomeModule,
         ArticleModule,
         CricketModule,
+      ScenarioModule,
         RouterModule.forRoot(AppRoutes),
     ],
     declarations: [
