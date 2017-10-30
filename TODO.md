@@ -6,19 +6,36 @@
 - [X] scenerios
   - [X] prefill info
 - [ ] users
+  - [ ] add course info
 
 ## Controllers
 ### URL controllers
 - [ ] fridge
   - [ ] GET methods
+    - [ ] get scenario fridge
   - [ ] POST methods
+    - [ ] save scenario fridge
 - [ ] phage
 - [ ] scenerios
-  - [X] GET methods -> list of scenarios
+  - [ ] GET methods
+    - [X] list of scenarios
+    - [ ] list of scenarios by course
+    - [ ] specific scenario
 - [ ] user
-  - update profile
+  - [ ] GET methods
+    - [X] sign out
+    - [ ] profile page
+  - [ ] POST methods
+    - [X] sign up
+    - [X] sign in
+    - [ ] update profile
 - [ ] course
-  - add/remove scenarios
+  - [ ] GET methods
+    - [ ] get scenario list for course
+  - [ ] POST methods
+    - [ ] update scenario list for course
+  - [ ] DELETE methods
+    - [ ] delete course and all info
 
 ### Genetics logic controllers
   - [ ] generate phage
@@ -28,7 +45,7 @@
 ## Routes
 - [ ] scenarios/fridge
 - [ ] user
-  - update profile
+  - [ ] update profile
   
 ## Modules
 ### Navigation/Header
@@ -36,24 +53,52 @@
   - [ ] links
 ### Home
   - [ ] Scenerio list
+    - [ ] text
+    - [ ] style
   - [ ] Scenario info
-
+    - [ ] text
+    - [ ] style
 
 ### Solve Scenarios
   - [ ] nav between lab, plexer, model
+    - [ ] only allowed by scenario
   - [ ] scenario description
+    - [ ] text
+    - [ ] "get started" button to default location
+    - [ ] style
   - [ ] fridge component
 #### Fridge
   - [ ] shelf
+    - [ ] organization
+    - [ ] drag and drop
+    - [ ] style
   - [ ] phage
+    - [ ] add phage by drag
+    - [ ] remove phage
   - [ ] navigate-shelf
+    - [ ] add shelf
+    - [ ] move to shelf
 #### Lab room
-  - [ ] diluation tubes 
+  - [ ] diluation tubes
+    - [ ] add solution by drag
+    - [ ] remove solution by drag
+    - [ ] adjustable dilution value
+    - [ ] style
   - [ ] e. coli tubes
+    - [ ] dilution value
+    - [ ] add phage by drag
+    - [ ] hide unused tube
+    - [ ] remove solution by drag
+    - [ ] style
   - [ ] plate
-
+    - [ ] add solution
+    - [ ] incubate
+    - [ ] clear
+    - [ ] select phage by click/drag
 #### Plexer
   - [ ] data table
+    - [ ] add phage by drag
+    - [ ] incubate
 #### Model
   - [] alignments
 

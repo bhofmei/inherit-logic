@@ -1,0 +1,16 @@
+<h1>Available Scenarios</h1>
+<div *ngIf="user">
+  <h2>Welcome {{user.name}}</h2>
+  <a href="api/auth/signout">Sign out</a>
+  <ul>
+    <li *ngFor="let scenario of scenarios">
+      <a [routerLink]="[scenario.scenCode, 'loc']">{{scenario.label}}</a>
+    </li>
+  </ul>
+</div>
+<div *ngIf="!user">
+  <p>Sign in or sign up to see scenarios.</p>
+ <a [routerLink]="['/authentication/signup']">Sign up</a><br>
+  <a [routerLink]="['/authentication/signin']">Sign in</a>
+</div>
+

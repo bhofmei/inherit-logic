@@ -6,14 +6,21 @@ import { ScenarioRouterModule } from './scenario.route.module';
 import { ScenarioService } from './scenario.service';
 import { ScenarioComponent } from './scenario.component';
 
+import { LocationModule } from './location/location.module';
+
+import { ListComponent } from './list/list.component';
+
+import{ FridgeComponent } from './fridge/fridge.component';
+
 @NgModule({
   imports: [
     CommonModule,
     ScenarioRouterModule
-    //RouterModule.forChild(_Routes)
   ],
   declarations: [
-    ScenarioComponent
+    FridgeComponent,
+    ScenarioComponent,
+    ListComponent
   ],
   providers: [
     ScenarioService

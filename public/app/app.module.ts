@@ -17,6 +17,7 @@ import { ArticleModule } from './articles/article.module';
 import { CricketModule } from './cricket/cricket.module';
 import { ScenarioModule } from './scenario/scenario.module';
 import { NavComponent } from './nav/nav.component';
+import { LocationModule } from './scenario/location/location.module';
 
 @NgModule({
     imports: [
@@ -26,9 +27,10 @@ import { NavComponent } from './nav/nav.component';
         AuthenticationModule,
         //HomeModule,
         ArticleModule,
-        CricketModule,
       ScenarioModule,
-        RouterModule.forRoot(AppRoutes),
+      LocationModule,
+        RouterModule.forRoot(AppRoutes,
+                            { enableTracing: true }),
     ],
     declarations: [
         AppComponent,

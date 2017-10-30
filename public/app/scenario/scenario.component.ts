@@ -5,7 +5,7 @@ import { ScenarioService } from './scenario.service';
   selector: 'scenario',
   //template: '<router-outlet></router-outlet>',
   templateUrl: 'app/scenario/scenario.template.html',
-  providers: [ScenarioService]
+  //providers: [ScenarioService]
 })
 
 export class ScenarioComponent {
