@@ -6,11 +6,16 @@ import { ListComponent } from './list/list.component';
 const scenarioRoutes: Routes = [
   {
     path: '',
-    component: ScenarioComponent,
+    //component: ScenarioComponent,
     children: [
       {
         path: ':id',
-        loadChildren: 'app/scenario/location/location.module#LocationModule'
+        component: ScenarioComponent,
+        children:[
+        {
+          path: '',
+          loadChildren: 'app/scenario/location/location.module#LocationModule'
+        }]
       },
       {
         path: '',
