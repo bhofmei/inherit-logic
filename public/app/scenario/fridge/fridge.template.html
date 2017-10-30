@@ -1,3 +1,6 @@
-<div class="fridge">Fridge
-<router-outlet></router-outlet>
+<div class="fridge">
+  <div *ngIf="fridge">
+  <h1>{{fridge.scenario.scenCode}}</h1>
+  </div>
+<!--<router-outlet></router-outlet>-->
 </div>
