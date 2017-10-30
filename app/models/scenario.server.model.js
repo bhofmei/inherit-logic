@@ -12,6 +12,9 @@ const ScenarioSchema = new Schema({
   helpMessage: String,
   mutationFreq: Number,
   recombinationFreq: Number,
+  purpose: String,
+  relevance: String,
+  startingPoint: String,
   defaultRoom: {
     type: String,
     default: 'Lab'

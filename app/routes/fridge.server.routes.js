@@ -7,8 +7,8 @@ module.exports = function (app) {
   app.route('/api/cricket/:scenarioId')
     .get(fridge.createFridge);
 
-  app.route('/api/cricket/id/:userId/:scenarioId')
-    .get(fridge.getFridge, fridge.hasFridgeAuthorization);
+  app.route('/api/cricket/:userId/:scenarioId')
+    .get(fridge.getFridge);
 
   app.param('userId', users.userById);
   app.param('scenarioId', scenarios.scenarioByCode);

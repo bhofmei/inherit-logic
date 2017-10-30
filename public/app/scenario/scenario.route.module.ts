@@ -9,7 +9,7 @@ const scenarioRoutes: Routes = [
     //component: ScenarioComponent,
     children: [
       {
-        path: ':id',
+        path: ':scenId',
         component: ScenarioComponent,
         children:[
         {

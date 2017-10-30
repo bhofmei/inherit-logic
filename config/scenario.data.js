@@ -6,7 +6,10 @@ module.exports = [
     degOfDiff: "1",
     helpMessage: "",
     mutationFreq: 0.0004,
-    recombinationFreq: 0.04
+    recombinationFreq: 0.04,
+    purpose: "",
+    relevance: "",
+    startingPoint: ""
   },
   {
     label: "Do both phage contain identical mutations?",

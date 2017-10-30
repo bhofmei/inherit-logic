@@ -18,6 +18,13 @@ export class ScenarioService {
             .catch(this.handleError);
     }
 
+    getFridge(userId: int, scenId: string): Observable<any> {
+      return this._http
+            .get(`${this._baseURL}/${userId}/${scenId}`)
+            .map((res: Response) => res.json())
+            .catch(this.handleError);
+    }
+
     private handleError(error: Response) {
         return Observable.throw(error.json().message || 'Server error');
     }

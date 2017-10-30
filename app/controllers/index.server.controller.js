@@ -2,7 +2,7 @@
 exports.render = function(req, res) {
 	// Set the safe user object
 	const user = (!req.user) ? null : {
-		_id: req.user.id,
+		id: req.user.userId,
 		name: req.user.name
 	};
 
