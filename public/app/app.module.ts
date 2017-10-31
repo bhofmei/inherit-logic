@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpModule, RequestOptions } from '@angular/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { DragulaModule } from 'ng2-dragula';
 
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routes';
@@ -24,6 +25,7 @@ import { LocationModule } from './scenario/location/location.module';
         BrowserModule,
         HttpModule,
         FormsModule,
+      DragulaModule,
         AuthenticationModule,
         //HomeModule,
         ArticleModule,

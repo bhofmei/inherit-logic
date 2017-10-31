@@ -7,12 +7,22 @@
     },
     rxjs: {
       defaultExtension: 'js'
+    },
+    'ng2-dragula': {
+      main: './ng2-dragula.js',
+      defaultExtension: 'js'
+    },
+    dragula : {
+      main: '/dist/dragula.js',
+      defaultExtension: 'js'
     }
   };
 
   var map = {
     '@angular': 'lib/@angular',
-    'rxjs': 'lib/rxjs'
+    'rxjs': 'lib/rxjs',
+    'ng2-dragula': 'lib/ng2-dragula',
+    'dragula': 'lib/dragula'
   };
 
   var ngPackageNames = [
