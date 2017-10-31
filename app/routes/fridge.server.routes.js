@@ -8,7 +8,8 @@ module.exports = function (app) {
     .get(fridge.createFridge);
 
   app.route('/api/cricket/:userId/:scenarioId')
-    .get(fridge.getFridge);
+    .get(fridge.getFridge)
+  .post(fridge.saveFridge)
 
   app.param('userId', users.userById);
   app.param('scenarioId', scenarios.scenarioByCode);
