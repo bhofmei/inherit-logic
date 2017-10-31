@@ -4,6 +4,8 @@
   <link rel="shortcut icon" type="image/png" href="/img/cricket-icon.png">
 	<title><%= title %></title>
 	<base href="/">
+  <!-- bootstrap components -->
+  <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css">
 </head>
 <body>
 	<genetics-app>
@@ -13,8 +15,9 @@
 	<script type="text/javascript">
 		window.user = <%- user || 'null' %>;
 	</script>
-
-	<script src="/socket.io/socket.io.js"></script>
+  <script src="lib/jquery/dist/jquery.min.js"></script>
+  <script src="lib/popper.js/dist/umd/popper.min.js"></script>
+  <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="lib/core-js/client/shim.min.js"></script>
 	<script src="lib/zone.js/dist/zone.js"></script>
 	<script src="lib/reflect-metadata/Reflect.js"></script>

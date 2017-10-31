@@ -5,12 +5,12 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 
 @Component({
     selector: 'fridge',
-    templateUrl: './app/scenario/fridge/fridge.template.html'
+    templateUrl: './app/scenario/fridge/fridge.template.html',
+  styleUrls: ['./app/scenario/fridge/fridge.style.css']
 })
 export class FridgeComponent {
 
  user: any;
-  scenario: any;
   fridge: any;
   routingObserver: any;
   errorMessage: string;
@@ -26,13 +26,11 @@ export class FridgeComponent {
 
     this.routingObserver = this._route.params.subscribe(params => {
             let scenId = params['scenId'];
-      let userId = this.user.id;
-        console.log(this.user, scenId);
+          let userId = this.user.id;
             this._scenarioService
                 .getFridge(userId, scenId)
                 .subscribe(
                 fridge => {
-                  console.log(fridge);
                     this.fridge = fridge;
                 },
                 error => this._router.navigate(['/'])
@@ -42,5 +40,14 @@ export class FridgeComponent {
 
   ngOnDestory(){
     this.routingObserver.unsubscribe()
+  }
+
+  save(){
+    this._scenarioService
+      .saveFridge(this.fridge)
+      .subscribe(savedFridge => {
+      this._router.navigate(['/', savedFridge.scenario.scenCode])
+    },
+                 error => this.errorMessage = error);
   }
 }

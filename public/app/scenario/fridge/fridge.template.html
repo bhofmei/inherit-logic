@@ -1,6 +1,7 @@
-<div class="fridge">
+<div class="fridge container col-3 border border-dark h-100">
   <div *ngIf="fridge">
-  <h1>{{fridge.scenario.scenCode}}</h1>
+  <h2>Fridge</h2>
+  <button (click)="save()" class="btn btn-sm fixed-bottom ">Save</button>
   </div>
 <!--<router-outlet></router-outlet>-->
 </div>
