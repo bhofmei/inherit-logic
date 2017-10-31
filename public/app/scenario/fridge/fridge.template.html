@@ -1,7 +1,14 @@
-<div class="fridge container col-3 border border-dark h-100">
+<div class="card bg-light border-dark">
   <div *ngIf="fridge">
-  <h2>Fridge</h2>
-  <button (click)="save()" class="btn btn-sm fixed-bottom ">Save</button>
+    <h4 class="card-header">Fridge</h4>
+    <div class="card-body">
+      Fridge content
+    </div>
+    <!-- end card body -->
+    <div class="card-footer">
+      <button (click)="save()" class="btn btn-secondary">Save</button>
+    </div>
   </div>
-<!--<router-outlet></router-outlet>-->
+  <!-- end if fridge -->
+  <!--<router-outlet></router-outlet>-->
 </div>
