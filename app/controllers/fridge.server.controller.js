@@ -37,8 +37,8 @@ exports.getFridge = function (req, res) {
   Fridge.findOne({
       owner: user.id,
       scenario: scen.id
-    }).populate('owner')
-    .populate('scenario')
+    }).populate('owner','userId')
+    .populate('scenario','scenCode')
     .exec((err, fridge) => {
       if (err) {
         return res.status(400).send({
@@ -63,6 +63,37 @@ exports.getFridge = function (req, res) {
         res.json(fridge);
       }
     });
+};
+
+exports.saveFridge = function(req, res){
+  // get fridge
+  console.log(req.body);
+  const fridge = req.body;
+  let strains = fridge.strains;
+  let fridgeId = fridge.id;
+  Fridge.findOneAndUpdate(fridgeId, {strains: strains}, (err)=>{
+    if(err){
+      return res.status(400).send({
+        message: getErrorMessage(err)
+      });
+    } else {
+      // send back fridge
+      res.json(fridge);
+    }
+  });
+  //fridge.strains = req.body.strains;
+
+  /*fridge.save((err)=>{
+    if(err){
+      return res.status(400).send({
+        message: getErrorMessage(err)
+      });
+    } else {
+      // send back fridge
+      res.json(fridge);
+    }
+  })*/
+
 };
 
 // authorization
