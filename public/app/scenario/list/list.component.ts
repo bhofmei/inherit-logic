@@ -16,6 +16,6 @@ export class ListComponent {
     }
 
     ngOnInit() {
-        this._scenarioService.list().subscribe(scenarios => this.scenarios = scenarios);
+        this._scenarioService.listScenarios().subscribe(scenarios => this.scenarios = scenarios);
     }
 }

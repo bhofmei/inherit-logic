@@ -11,12 +11,19 @@ export class ScenarioService {
 
     constructor(private _http: Http) { }
 
-    list(): Observable<any> {
+    listScenarios(): Observable<any> {
         return this._http
             .get(this._baseURL)
             .map((res: Response) => res.json())
             .catch(this.handleError);
     }
+
+  getScenario(scenId: string): Observable<any>{
+    return this._http
+            .get(`${this._baseURL}/${scenId}`)
+            .map((res: Response) => res.json())
+            .catch(this.handleError);
+  }
 
     getFridge(userId: int, scenId: string): Observable<any> {
       return this._http
