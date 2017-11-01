@@ -8,8 +8,11 @@ import { Http, Headers, Request, RequestMethod, Response } from '@angular/http';
 @Injectable()
 export class ScenarioService {
     private _baseURL = 'api/cricket';
+    private currScenario: any;
 
-    constructor(private _http: Http) { }
+    constructor(private _http: Http) {
+      this.currScenario = null;
+    }
 
     listScenarios(): Observable<any> {
         return this._http
@@ -19,10 +22,17 @@ export class ScenarioService {
     }
 
   getScenario(scenId: string): Observable<any>{
-    return this._http
+    if(this.currScenario===null){
+    this.currScenario =  this._http
             .get(`${this._baseURL}/${scenId}`)
             .map((res: Response) => res.json())
             .catch(this.handleError);
+    }
+    return this.currScenario;
+  }
+
+  resetScenario(){
+    this.currScenario = null;
   }
 
     getFridge(userId: int, scenId: string): Observable<any> {

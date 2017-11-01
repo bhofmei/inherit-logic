@@ -13,7 +13,7 @@ import { Scenario } from '../scenario.model';
 
 export class LocationComponent {
 
-  scenario: Scenario;
+  scenario: any;
   routingObserver: any;
 
    constructor(private _router: Router,
@@ -28,8 +28,7 @@ export class LocationComponent {
                 .getScenario(scenId)
                 .subscribe(
                 scenario => {
-                    this.createScenario(scenario);
-                  console.log(this.scenario);
+                    this.scenario = scenario;
                 },
                 error => this._router.navigate(['/'])
                 );
@@ -37,19 +36,8 @@ export class LocationComponent {
   }
 
   ngOnDestory(){
+    this._scenarioService.resetScenario();
     this.routingObserver.unsubscribe()
-  }
-
-  createScenario(inputScen: any){
-    // label, mutationFreq, recombinationFreq, purpose, relevance, startingPoint, defaultLocation, availableLocations
-    this.scenario = new Scenario(inputScen.label,
-                                inputScen.mutationFreq,
-                                inputScen.recombinationFreq,
-                                inputScen.purpose,
-                                inputScen.relevance,
-                                inputScen.startingPoint,
-                                inputScen.defaultRoom,
-                                inputScen.availableRooms)
   }
 
 }
