@@ -1403,6 +1403,10 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
+ng2-dnd@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/ng2-dnd/-/ng2-dnd-4.2.0.tgz#85d7ac75199f39a3434b7c32b9ab006677b19b59"
+
 ng2-dragula@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/ng2-dragula/-/ng2-dragula-1.5.0.tgz#12a221d7a34fc629cc74dc98efb26448290eb6e5"

@@ -35,7 +35,7 @@ export class ScenarioService {
     this.currScenario = null;
   }
 
-    getFridge(userId: int, scenId: string): Observable<any> {
+    getFridge(userId: number, scenId: string): Observable<any> {
       return this._http
             .get(`${this._baseURL}/${userId}/${scenId}`)
             .map((res: Response) => res.json())
@@ -45,7 +45,6 @@ export class ScenarioService {
   saveFridge(fridge: any): Observable<any> {
     let userId = fridge.owner.userId;
     let scenCode = fridge.scenario.scenCode;
-    console.log(fridge);
     return this._http
       .post(`${this._baseURL}/${userId}/${scenCode}`, fridge)
             .map((res: Response) => res.json())
