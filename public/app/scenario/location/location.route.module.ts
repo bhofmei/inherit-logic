@@ -17,6 +17,7 @@ const locationRoutes: Routes = [
           { path: 'lab-room', component: LabRoomComponent },
           { path: 'plexer-room', component: PlexerRoomComponent },
           { path: 'model-room', component: ModelRoomComponent},
+          {path: 'info', component: LandingRoomComponent},
           { path: '', component: LandingRoomComponent}
         ]
   }
