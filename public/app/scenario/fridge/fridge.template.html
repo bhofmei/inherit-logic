@@ -2,7 +2,12 @@
   <div *ngIf="fridge">
     <h4 class="card-header">Fridge</h4>
     <div class="card-body">
-      Fridge content
+      <div class="strain-list" [dragula]='"bag-one"'>
+          <div class="strain">1</div>
+        <div class="strain">2</div>
+        <div class="strain">3</div>
+        <div class="strain">4</div>
+      </div>
     </div>
     <!-- end card body -->
     <div class="card-footer">
