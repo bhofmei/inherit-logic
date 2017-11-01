@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { ScenarioService } from '../../scenario.service';
 
 @Component({
   selector: 'landing-room',
@@ -7,13 +10,31 @@ import { Component } from '@angular/core';
 
 export class LandingRoomComponent {
 
-  defaultPath: string;
-  availablePaths: [string];
+  scenario: string;
+  routingObserver: any;
 
-  constructor(){}
+  constructor(private _router: Router,
+               private _route: ActivatedRoute,
+               private _scenarioService: ScenarioService){
 
-  ngOnInit(){}
+  }
 
-  ngOnDestory(){}
+  ngOnInit(){
+    this.routingObserver = this._route.params.subscribe(params => {
+            let scenId = params['scenId'];
+            this._scenarioService
+                .getScenario(scenId)
+                .subscribe(
+                scenario => {
+                    this.scenario = scenario;
+                },
+                error => this._router.navigate(['/'])
+                );
+        });
+  }
+
+  ngOnDestory(){
+    this.routingObserver.unsubscribe()
+  }
 
 }

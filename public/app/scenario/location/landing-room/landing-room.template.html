@@ -1,3 +1,19 @@
 <!-- scenario details -->
-Landing room
+<div class="card">
+  <div *ngIf="scenario">
+    <div class="card-body">
+    <h3 class="card-title">{{scenario.label}} </h3>
+    <h6 class="card-subtitle">Purpose</h6>
+      <p class="card-text">{{scenario.purpose}}</p>
+
+    <h6 class="card-subtitle">Relevance</h6>
+    <p class="card-text">{{scenario.relevance}}</p>
+
+      <h6 class="card-subtitle">Starting Point</h6>
+      <p class="card-text">{{scenario.startingPoint}}</p>
+      <p class="card-link text-right">{{scenario.defaultRoom}}</p>
+    </div> <!-- end card body -->
+  </div>
+</div>
+
 <router-outlet></router-outlet>
