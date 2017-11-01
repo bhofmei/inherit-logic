@@ -52,7 +52,6 @@ export class FridgeComponent {
     this._scenarioService
       .saveFridge(this.fridge)
       .subscribe(savedFridge => {
-      this._router.navigate(['/', savedFridge.scenario.scenCode])
     }, error => this.errorMessage = error);
   }
 }
