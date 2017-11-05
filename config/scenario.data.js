@@ -7,6 +7,8 @@ module.exports = [
     helpMessage: "",
     mutationFreq: 0.0004,
     recombinationFreq: 0.04,
+    gcProb: 72,
+    minStops: 10,
     purpose: "Determine which of two phage is wild type and which mutant for rIIb function.",
     relevance: "You must walk before you can run. This scenario acquaints you with the basic tools of your new trade. You'll meet with the bacterial strains and the two phage phenotypes.",
     startingPoint: "You are given two phage stocks. One of them has a wild-type phenotype, the other lacks rIIb gene function. Determine which is which. You may want to view the tutorial information about the rIIb phage system."
@@ -19,6 +21,8 @@ module.exports = [
     helpMessage: "",
     mutationFreq: 0.0004,
     recombinationFreq: 0.04,
+    gcProb: 72,
+    minStops: 10,
     purpose: "Determine whether two mutant phage contain identical mutations.",
     relevance: "As you get to more advanced scenarios, a key theme will emerge a la Sesame Street's 'One of these things is not like the other'. It is critical to be able to determine whether a given phage is like or unlike another, and phenotype alone doesn't necessarily tell you about genotype.",
     startingPoint: "You are given two mutant phage stocks. Your task is to determine whether they both contain identical or different mutations (if different, they both have they're both addition or deletion mutations). In some ways, getting this foundational concept is the toughest task you'll do...You might want to read and think about the section entitled 'Hypothesis testing and problem solving' accessible from the front page of the website; this contains some general strategies for approaching difficult problems."
@@ -31,6 +35,8 @@ module.exports = [
     helpMessage: "",
     mutationFreq: 0.0004,
     recombinationFreq: 0.04,
+    gcProb: 72,
+    minStops: 10,
     purpose: "Generating and recovering new phage mutants. Starting with a phage mutant in its rIIb gene, identify three mutants of this phage that contain further mutations that restore it to wild type phenotype.",
     relevance: "Of critical importance to your overall goal here is generating new mutations and understanding their relevance to old ones. Just because a phage starts out with a certain genotype doesn't mean all its progeny will. Never forget that the billions of phage in each of your stocks arose from a founder individual through DNA replication. Errors in DNA copying will give rise to new mutations, which may confer new phenotypes.",
     startingPoint: "Starting with a wild type phage and a mutant bearing a single frameshift mutation, identify three phage that contain the original frameshift as well as a compensating mutation. Argue that each of these is probably different. "
@@ -43,6 +49,8 @@ module.exports = [
     helpMessage: "",
     mutationFreq: 0.0004,
     recombinationFreq: 0.04,
+    gcProb: 72,
+    minStops: 10,
     purpose: "",
     relevance: "",
     startingPoint: ""
@@ -55,6 +63,8 @@ module.exports = [
     helpMessage: "",
     mutationFreq: 0.0004,
     recombinationFreq: 0.04,
+    gcProb: 72,
+    minStops: 10,
     purpose: "Master the fine art of mapping deletions and roughly defining their endpoints. Take 8 phage containing deletions and figure out what DNA segments are removed in each.",
     relevance: "Deletion mapping was an essential tool in learning several key facts about the nature of genes and DNA, largely in work done by Sydney Brenner (see the Musty Texts section for more info about this work, which could provide you guidance for this scenario). With deletions in hand, one can proceed to very rapidly determine the general location of a new point mutation. In later scenarios, you'll want to know things about where mutations are relative to one another, and the techniques you discovered in the 'Who's in the middle' scenario can be tedious with large numbers of mutants. Finding out which point mutations lie 'inside' which deletion can lift a lot of this burden for you. For this scenario, do NOT worry about reading frame; assume that every deletion removes vital amino acids.",
     startingPoint: "You are given 8 phage, each containing a deletion of more than 10 nucleotide (note that while we have been speaking of single nucleotide deletions as 'frameshifts', they are formally deletions, but here we're talking about chunks of 10 to 500 nucleotides gone).  The Data Table and tools in the Modelling room will probably be essential. This simulation will help you master the fine art of ordering deletions given a set of phage cross data. Note that for this simulation, any phage containing a deletion bigger than 1 nucleotide is considered to have a mutant phenoype, regardless of its final effect on reading frame."
@@ -67,6 +77,8 @@ module.exports = [
     helpMessage: "",
     mutationFreq: 0.0004,
     recombinationFreq: 0.04,
+    gcProb: 72,
+    minStops: 10,
     purpose: "Figure out which of three +1 frameshift mutations lies between the other two.",
     relevance: "There are several cases upcoming where you'll need to know where different phage sit relative to one another. With any luck, this scenario will also have you thinking carefully about the mechanism and consequences of recombination.",
     startingPoint: " Three phage, each containing a +1 frameshift mutation and a wild type phage just in case you want it. You may want to view the Recombination tutorial."
@@ -79,6 +91,8 @@ module.exports = [
     helpMessage: "",
     mutationFreq: 0.0004,
     recombinationFreq: 0.04,
+    gcProb: 72,
+    minStops: 10,
     purpose: "Figure out how many mutations (all +1 frameshifts) a phage contains.",
     relevance: "To see just how good you are. Developing a successful strategy here requires you to integrate several of the concepts you've been exposed to so far.",
     startingPoint: "A mutant phage containing either 1 or 2 (+1) frameshift mutations. You are given a wild type phage and a phage known to contain a single -1 frameshift mutation as potentially helpful tools. For another bonus point, describe a strategy for figuring out whether a mutant contains 2 or 3 +1 frameshifts (but does NOT produce wild type phenotype)."
@@ -91,6 +105,8 @@ module.exports = [
     helpMessage: "",
     mutationFreq: 0.0004,
     recombinationFreq: 0.04,
+    gcProb: 85,
+    minStops: 3,
     purpose: "Figure out whether two starting phage both contain mutations of like type (i.e. both +1) or opposite types (+1 and -1).",
     relevance: "Exercising your skills in mutant isolation and putting your understanding of frameshifts and translation to the test. Think hard and make sure your conclusions are airtight. To get credit, your strategy must be 'robust'--i.e. no matter where the two mutations are, no matter what the location of stop codons, your approach must be doomed to succeed!",
     startingPoint: "A wild type phage as reference, and two mutant phage containing different mutations that may or may not be of the same sign."
@@ -103,6 +119,8 @@ module.exports = [
     helpMessage: "",
     mutationFreq: 0.0008,
     recombinationFreq: 0.25,
+    gcProb: 85,
+    minStops: 3,
     purpose: "Going for it--can you recapitulate the work of Crick et al.? Demonstrate that codons are comprised of three nucleotides. Check with your instructor to see whether you have to execute this exercise, or only to map out and write up a STRATEGY.",
     relevance: "Are you kidding? This observation, as well as insights the authors derived about stop codons and synonyms in the genetic code addressed some of the biggest questions in biology. Period.",
     startingPoint: "You are given a wild type phage and a mutant one containing a single frameshift mutation (exactly the pieces Crick et al. started with). Create a phage whose genotype and phenotype combine to strongly suggest that the code is made of 3 letter 'words'. (Consider: with a three-letter code, what are the consequences of adding or subtracting 1, 2 or 3 letters?). You do not have to execute this scenario, but you must submit a detailed, workable grant application. It should read like a normal write up, except for 'I would do...' and 'I would expect to observe...' will replace 'I did' and 'I observed'. Note: there's a trick to the final step that makes spotting the 'winning phage' more elegant. Your instructor would undoubtedly look very kindly upon those clever enough to perceive the problem and the elegant solution."
