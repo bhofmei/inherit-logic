@@ -9,12 +9,18 @@ const ScenarioSchema = new Schema({
     index: true
   },
   degOfDiff: Number,
-  helpMessage: String,
+  /* scenaio paramters */
   mutationFreq: Number,
   recombinationFreq: Number,
+  gcProb: Number,
+  minStops: Number,
+  intraMuteDist: [Number],
+  interMuteDist: Number,
+  /* scenario details */
   purpose: String,
   relevance: String,
   startingPoint: String,
+  /* location info */
   defaultRoom: {
     type: String,
     default: 'Lab'
@@ -22,11 +28,17 @@ const ScenarioSchema = new Schema({
   availableRooms: {
     type: [String],
     default: ['Lab', 'MultiPlexer', 'SuperPlexer']
-  }
+  },
+  /* default phage info */
+  referencePhage: [String],
+  otherPhage: [String],
+  alternatePhage: [String]
 });
 
-ScenarioSchema.statics.findOneByCode = function(code, callback){
-  this.findOne({scenCode: code}, callback);
+ScenarioSchema.statics.findOneByCode = function (code, callback) {
+  this.findOne({
+    scenCode: code
+  }, callback);
 };
 
 mongoose.model('Scenario', ScenarioSchema);
