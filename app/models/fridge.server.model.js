@@ -10,8 +10,40 @@ const FridgeSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Scenario'
   },
-  strains: [{}]
+  nShelves: {
+    type: Number,
+    default: 4
+  },
+  nSpots: {
+    type: Number,
+    default: 16
+  },
+  strains: [{
+    type: Schema.ObjectId,
+    ref: 'Phage'
+  }],
+  wtGene: String,
+  stopList: []
 });
+
+FridgeSchema.statics.initStrains = function(){
+  var tempList = [];
+  for(let i = 0; i < (this.nShelves*this.nSpots); i++){
+    tempList.push(null);
+  }
+  this.strains = tempList;
+}
+
+FridgeSchema.methods.addStrain = function(nShelf, nSpot, strainId){
+  var p = nShelf*this.nSpots + nSpot;
+  this.strains[p] = strainId;
+  return strainId;
+}
+
+FridgeSchema.methods.removeStrain = function(nShelf, nSpot){
+  var p = nShelf*this.nSpots + nSpot;
+  this.strains[p] = null;
+}
 
 FridgeSchema.set('toJSON',{getters: true});
 
