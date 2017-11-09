@@ -2,5 +2,6 @@
 module.exports = {
 	db: 'mongodb://localhost/cricket-test',
 	sessionSecret: 'testSessionSecret',
-  loadScenario: false
+  loadScenario: false,
+  phageSeed: 100
 };

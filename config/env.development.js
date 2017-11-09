@@ -2,5 +2,6 @@ module.exports = {
   // Development configuration options
   db: 'mongodb://localhost/cricket-dev',
   sessionSecret : 'developmentSessionSecret',
-  loadScenario: true
+  loadScenario: true,
+  phageSeed: 100
 };
