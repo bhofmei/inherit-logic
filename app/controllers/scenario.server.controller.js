@@ -13,7 +13,7 @@ const getErrorMessage = function(err) {
     }
 };
 
-// Create a new controller method that retrieves a list of articles
+// Create a new controller method that retrieves a list of scenarios
 exports.list = function(req, res) {
   Scenario.find((err, scenarios) => {
         if (err) {
