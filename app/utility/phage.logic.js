@@ -7,7 +7,7 @@ const pEnum = require('./phage.enum');
 exports.doPheno = function (mutantList, stopList) {
   if (mutantList.deletes.length !== 0)
     return pEnum.FRAMEPHENOTYPE.DELETED;
-  var frameInfo = getFrames(pEnum.FRAMECALLER.TRUTH, mutantList.shifts, stopList);
+  var frameInfo = this.getFrames(pEnum.FRAMECALLER.TRUTH, mutantList.shifts, stopList);
   // TODO: decode ilk (returns type of object)
   if (typeof frameInfo === 'string')
     return frameInfo;
@@ -53,7 +53,7 @@ exports.getFrames = function (whoSays, mutantList, stopList) {
     let lookSpot = baseElement.location;
     currentFrameInfo.push(lookSpot - 1) // mark end of old frame
     totalFramage.push(currentFrameInfo) // add frame region to new info
-    if (baseElement.kind === pEnd.MUTEKIND.PLUSONE)
+    if (baseElement.kind === pEnum.MUTEKIND.PLUSONE)
       readFrame++;
     else if (baseElement.kind === pEnum.MUTEKIND.MINUSONE)
       readFrame--;
