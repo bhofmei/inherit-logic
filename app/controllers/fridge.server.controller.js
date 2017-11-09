@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const Fridge = mongoose.model('Fridge');
 const Phage = mongoose.model('Phage');
-const scenPhage = require('../utility/phage.scenario');
+const phageScen = require('../utility/phage.scenario');
 
 // Create a new error handling controller method
 const getErrorMessage = function (err) {
@@ -15,49 +15,31 @@ const getErrorMessage = function (err) {
   }
 };
 
-exports.createFridge = function (req, res) {
-
-  const fridge = new Fridge({
-    scenario: req.scenario,
-    owner: null
-  });
-  fridge.save((err) => {
-    if (err) {
-      return res.status(400).send({
-        message: getErrorMessage(err)
-      });
-    } else {
-      res.json(fridge);
-    }
-  });
-};
 
 const stockFridge = function (scenario, user) {
   // get stock phage and details
-  var stock = scenPhage(scenario);
+  var stock = phageScen.generateScenario(scenario);
+  //console.log(stock.strainList);
   let strainList = stock.strainList;
-  let strainIdList = [];
+  var strainIdList = [];
   // loop through strains and save strains to database
   for (let i = 0; i < strainList.length; i++) {
-    let strain = strainList.length;
-    strain.owner = user.id;
+    let strain = strainList[i];
+    strain.owner = user;
+    strain.scenarioOrigin = scenario;
     let newPhage = new Phage(strain);
-    let strainId = newPhage.save((err, phage) => {
+    newPhage.save((err, phage) => {
       if (err)
-        return -1;
-      else
-        return phage.id
+      console.log(err)
     });
-    if (strainId !== -1)
-      strainIdList.push(strainId);
-  }
+    strainIdList.push(newPhage);
+  } // end for i
   // fridge info
   return {
     scenario: scenario,
     owner: user,
     strains: strainIdList,
-    wtGene: stock.wtGene,
-    stopList: stock.stopList
+    scenarioDetails: JSON.stringify(stock.scenData)
   };
 }
 
@@ -81,6 +63,7 @@ exports.getFridge = function (req, res) {
       } else if (!fridge) {
         // create a fridge
         const fridgeDetails = stockFridge(scen, user);
+        //console.log(fridgeDetails);
         const newFridge = new Fridge(fridgeDetails);
         newFridge.save((err, f) => {
           if (err) {
@@ -117,19 +100,6 @@ exports.saveFridge = function (req, res) {
       res.json(fridge);
     }
   });
-  //fridge.strains = req.body.strains;
-
-  /*fridge.save((err)=>{
-    if(err){
-      return res.status(400).send({
-        message: getErrorMessage(err)
-      });
-    } else {
-      // send back fridge
-      res.json(fridge);
-    }
-  })*/
-
 };
 
 // authorization

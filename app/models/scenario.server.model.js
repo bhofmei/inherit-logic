@@ -31,8 +31,7 @@ const ScenarioSchema = new Schema({
   },
   /* default phage info */
   referencePhage: [String],
-  otherPhage: [String],
-  alternatePhage: [String]
+  otherPhage: [String]
 });
 
 ScenarioSchema.statics.findOneByCode = function (code, callback) {

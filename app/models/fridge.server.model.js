@@ -22,8 +22,7 @@ const FridgeSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Phage'
   }],
-  wtGene: String,
-  stopList: []
+  scenarioDetails: String
 });
 
 FridgeSchema.statics.initStrains = function(){
