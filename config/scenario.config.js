@@ -7,6 +7,7 @@ module.exports = {
   maxFrameTries: 300,
   maxMuteTries: 200,
   shiftOkDist: 25,
+  shiftMin: 18,
   muteOkDist: 12,
   recFrame: 1,
   wildtypePhage: '{"numToMake": 1, "isWildType": true, "deletions": false, "comment": "Wild type phage"}',
