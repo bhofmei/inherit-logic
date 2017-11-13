@@ -95,7 +95,8 @@ exports.generateScenario = function (scenario) {
 } // end generateScenario
 
 exports.makeGene = function (gcProb, minStops) {
-  console.log(randGen.getCount(randEngine));
+  // reset the engine if in testing mode
+  randGen.testingReset(randEngine);
   // input: scenario
   // return wtGene, realStops, frameStopList
   let codons = [];
@@ -174,9 +175,6 @@ exports.makeGene = function (gcProb, minStops) {
 
 exports.makePhage = function (phageDetails, strainNum, phageType, scenData) {
   var outPhage; // note: has phage and updated scenData\
-  //randGen.reset(randEngine);
-  console.log('make phage, rand gen count', randGen.getCount(randEngine));
-
   if (phageDetails.isWildType) {
     // wild type phage
     outPhage = this.makeWTPhage(phageDetails, strainNum, phageType, scenData);
@@ -433,16 +431,16 @@ exports.makeDeletionPhage = function (phage, strainNum, phageType, scenData) {
     scenData.deleteSizes.splice(useDelete, 1);
     if (scenData.deleteSpots.length > 0) {
       //let useSpot = randGen.integer(0, scenData.deleteSpots.length);
-      let useSpot = randGen.randInt(0, scenData.deleteSpots.length, randEngine);
+      let useSpot = randGen.randInt(0, scenData.deleteSpots.length-1, randEngine);
       let deleteSpot = scenData.deleteSpots[useSpot];
       scenData.deleteSpots.splice(useSpot, 1);
       realDelete = [deleteSpot, deleteSpot + deleteSize];
       goodDelete = true
     } // end deleteSpots.length
   } // end deleteSizes.length
-
-  // predefined deletion chouldn't be found, generate one
-  realDelete = generateDeletion(scenData.usedDeleteSpots);
+  // predefined deletion couldn't be found, generate one
+  if(!goodDelete)
+    realDelete = generateDeletion(scenData.usedDeleteSpots);
 
   // have a deletion
   if (realDelete.length > 0) {
