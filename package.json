@@ -11,9 +11,8 @@
     "tsc:w": "tsc -w",
     "app": "node index",
     "start": "concurrently \"npm run tsc:w\" \"npm run app\" ",
-    "test:back": "NODE_ENV=test mocha --reporter spec -i -g phage app/tests",
-    "test:fridge": "NODE_ENV=test mocha --reporter spec -g fridge app/tests",
-    "test:phage": "NODE_ENV=test mocha --reporter spec -g phage app/tests"
+    "test:back": "NODE_ENV=test mocha --reporter spec app/tests",
+    "test:genetics": "NODE_ENV=test mocha --reporter spec app/tests/genetics"
   },
   "keywords": [
     "genetics"
