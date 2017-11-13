@@ -109,8 +109,15 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
       }); // end for copyZone
     } // end if okRecSpots
     newPhageShiftList.sort(util.locSort);
-    newPhageDeletes.sort();
-    console.log(startGeno, endGeno, okRecSpots, newPhageShiftList);
+    // check for multi-deletes
+    if(newPhageDeletes.length > 1){
+      // randomly pick a delete
+      let pickDel = randGen.pick(newPhageDeletes, randEngine);
+      newPhageDeletes = pickDel;
+    } else if(newPhageDeletes.length === 1){
+      newPhageDeletes = newPhageDeletes[0];
+    }
+    console.log(startGeno, endGeno, okRecSpots, newPhageShiftList, newPhageDeletes);
     recGenos.push({
       shifts: newPhageShiftList,
       deletions: newPhageDeletes
