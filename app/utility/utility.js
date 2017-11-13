@@ -1,5 +1,6 @@
 const pEnum = require('./phage.enum');
-exports.howManyToMake = function(randGen, inList){
+const randGen = require('./random.generator');
+/*exports.howManyToMake = function(randGen, inList){
   if(inList.length === 1){
     return inList[0];
   } else {
@@ -13,6 +14,22 @@ exports.holyRoller = function(randGen, numSides, numTimes){
   return diceAr.forEach((n)=>{
     sumDice = sumDice + n;
   });
+}*/
+exports.howManyToMake = function(engine, inList){
+  if(inList.length === 1){
+    return inList[0];
+  } else {
+    return randGen.randInt(inList[0], inList[1], engine);
+  }
+}
+
+exports.holyRoller = function(engine, numSides, numTimes){
+  var diceAr = randGen.randDice(numSides, numTimes, engine);
+  var sumDice = 0;
+  diceAr.forEach((n)=>{
+    sumDice = sumDice + n;
+  });
+  return sumDice;
 }
 
 exports.locSort = function(a, b){
@@ -37,4 +54,21 @@ exports.expand = function(inList, guesses){
     }
   } // end for i
   return expandList;
+}
+
+exports.gaussRand = function(engine, inNum){
+  var notGood = true;
+  var r, v, w;
+  while(notGood){
+    //v = (2 * randGen.real(0,1, false)) - 1;
+    //w = (2 * randGen.real(0,1, false)) - 1;
+    v = (2 * randGen.randReal(0,1, engine)) - 1;
+    w = (2 * randGen.randReal(0,1, engine)) - 1;
+    r = Math.pow(v, 2) + Math.pow(w, 2);
+    if(r < 1 && r !== 0)
+      notGood = false
+  } // end while notGood
+  var fac = Math.sqrt((-2 * Math.log10(r)) / r);
+  var gauss = fac * w;
+  return Math.floor(inNum * gauss);
 }
