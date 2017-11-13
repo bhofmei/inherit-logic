@@ -1,6 +1,8 @@
 const util = require('./utility');
 const clone = require('clone');
-const randGen = require('./random.generator')();
+//const randGen = require('./random.generator')();
+const randGen = require('./random.generator');
+const randEngine = randGen.getEngine();
 const scenConfig = require('../../config/scenario.config');
 const pEnum = require('./phage.enum');
 const phageLogic = require('./phage.logic');
@@ -61,14 +63,16 @@ exports.generateScenario = function (scenario) {
       let howMany = Math.abs(rPhage.numToMake);
       for (let j = 0; j < howMany; j++) {
         let newPhage;
-        if (tmpStrainList.length == 0 || randGen.bool(1, 3)) {
+        //if (tmpStrainList.length == 0 || randGen.bool(1, 3)) {
+        if (tmpStrainList.length == 0 || randGen.randBoolFrac(1, 3, randEngine)) {
           // create new phage
           newPhageDet = makePhage(rPhage, phageNum, pEnum.PHAGETYPE.UNKNOWN, scenDetails);
           newPhage = newPhageDet.phage;
           scenDetails = newPhageDet.scenData;
         } else {
           // duplicate exisiting
-          let pickPhage = randGen.pick(tmpStrainList);
+          //let pickPhage = randGen.pick(tmpStrainList);
+          let pickPhage = randGen.randPick(tmpStrainList, randEngine);
           newPhage = clone(pickPhage);
           newPhage.strainNum = phageNum;
         }
@@ -79,7 +83,8 @@ exports.generateScenario = function (scenario) {
   } // end for i
 
   // shuffle tmpStrainList
-  randGen.shuffle(tmpStrainList);
+  //randGen.shuffle(tmpStrainList);
+  randGen.randShuffle(tmpStrainList, randEngine);
   // add to full strainList
   strainList = strainList.concat(tmpStrainList);
   var output = {
@@ -90,6 +95,7 @@ exports.generateScenario = function (scenario) {
 } // end generateScenario
 
 exports.makeGene = function (gcProb, minStops) {
+  console.log(randGen.getCount(randEngine));
   // input: scenario
   // return wtGene, realStops, frameStopList
   let codons = [];
@@ -104,11 +110,14 @@ exports.makeGene = function (gcProb, minStops) {
       while (!goodCodon) {
         currCodon = '';
         for (let j = 0; j < 3; j++) {
-          let cgVal = randGen.die(100);
+          //let cgVal = randGen.die(100);
+          let cgVal = randGen.randDie(100, randEngine);
           if (cgVal <= gcProb) {
-            currCodon = currCodon + (randGen.bool() ? 'G' : 'C');
+            //currCodon = currCodon + (randGen.bool() ? 'G' : 'C');
+            currCodon = currCodon + (randGen.randBool(randEngine) ? 'G' : 'C');
           } else {
-            currCodon = currCodon + (randGen.bool() ? 'A' : 'T');
+            //currCodon = currCodon + (randGen.bool() ? 'A' : 'T');
+            currCodon = currCodon + (randGen.randBool(randEngine) ? 'A' : 'T');
           }
         } // end for j
         // if currCodon is not stop
@@ -164,7 +173,9 @@ exports.makeGene = function (gcProb, minStops) {
 } // end for makeGene
 
 exports.makePhage = function (phageDetails, strainNum, phageType, scenData) {
-  var outPhage; // note: has phage and updated scenData
+  var outPhage; // note: has phage and updated scenData\
+  //randGen.reset(randEngine);
+  console.log('make phage, rand gen count', randGen.getCount(randEngine));
 
   if (phageDetails.isWildType) {
     // wild type phage
@@ -202,7 +213,7 @@ exports.makeFrameshiftPhage = function (phage, strainNum, phageType, scenData) {
   if (scenData.usedShiftSpots === undefined)
     scenData.usedShiftSpots = [];
   var shiftInfo = phage.frameshifts;
-  var nShifts = util.howManyToMake(randGen, shiftInfo.howMany);
+  var nShifts = util.howManyToMake(randEngine, shiftInfo.howMany);
   var shiftType;
   var muteList = [];
   if (shiftInfo.frameChoice !== 0) {
@@ -211,13 +222,15 @@ exports.makeFrameshiftPhage = function (phage, strainNum, phageType, scenData) {
     // randomly pick type based on mixed property
     switch (shiftInfo.mixed) {
       case pEnum.SHIFTMIXED.NEVER:
-        shiftType = (randGen.bool() ? 1 : -1);
+        //shiftType = (randGen.bool() ? 1 : -1);
+        shiftType = (randGen.randBool(randEngine) ? 1 : -1);
         break;
       case pEnum.SHIFTMIXED.ALWAYS:
         shiftType = (nShifts > 1 ? 2 : 0);
         break;
       case pEnum.SHIFTMIXED.SOMETIMES:
-        shiftType = (randGen.bool() ? 0 : (randGen.bool() ? 1 : -1));
+        //shiftType = (randGen.bool() ? 0 : (randGen.bool() ? 1 : -1));
+        shiftType = (randGen.randBool(randEngine) ? 0 : (randGen.randBool(randEngine) ? 1 : -1));
         break;
       default:
         shiftType = 0;
@@ -368,12 +381,15 @@ const getNewSpot = function (lastMade, scenData) {
   // if interMuteDist not defined
   if (scenData.interMuteDist === -1) {
     if (lastMade === null) {
-      newSpot = randGen.integer(25, 300);
+      //newSpot = randGen.integer(25, 300);
+      newSpot = randGen.randInt(25, 300, randEngine);
     } else {
       let friendly = false;
       while (!friendly) {
-        let newDist = randGen.integer(scenData.intraMuteDist[0], scenData.intraMuteDist[1]);
-        newSpot = (randGen.bool() ? lastMade + newDist : lastMade - newDist);
+        //let newDist = randGen.integer(scenData.intraMuteDist[0], scenData.intraMuteDist[1]);
+        let newDist = randGen.randInt(scenData.intraMuteDist[0], scenData.intraMuteDist[1], randEngine);
+        //newSpot = (randGen.bool() ? lastMade + newDist : lastMade - newDist);
+        newSpot = (randGen.randBool(randEngine) ? lastMade + newDist : lastMade - newDist);
         if (newSpot > 0 && Math.abs(newSpot - lastMade) > 10)
           friendly = true;
       } // end while not friendly
@@ -382,13 +398,16 @@ const getNewSpot = function (lastMade, scenData) {
     // interMuteDist defined
     if (scenData.usedShiftSpots.length === 0) {
       // first shift to be made
-      newSpot = randGen.integer(25, (350 - scenData.interMuteDisance + 50));
+      //newSpot = randGen.integer(25, (350 - scenData.interMuteDisance + 50));
+      newSpot = randGen.randInt(25, (350 - scenData.interMuteDisance + 50), randEngine);
       // allow mutation to be at either end
-      newSpot = (randGen.bool() ? 350 - newSpot : newSpot);
+      //newSpot = (randGen.bool() ? 350 - newSpot : newSpot);
+      newSpot = (randGen.randBool(randEngine) ? 350 - newSpot : newSpot);
     } else {
       let friendly = false;
       while (!friendly) {
-        newSpot = randGen.integer(25, 300);
+        //newSpot = randGen.integer(25, 300);
+        newSpot = randGen.randInt(25, 300, randGen);
         friendly = true;
         for (let j = 0; j < scenData.usedShiftSpots.length; j++) {
           friendly = (Math.abs(scenData.usedShiftSpots.location - newSpot) < scenData.interMuteDisance);
@@ -408,11 +427,13 @@ exports.makeDeletionPhage = function (phage, strainNum, phageType, scenData) {
   // still deletions to be made
   if (scenData.deleteSizes.length > 0) {
     // pick a deletion size
-    let useDelete = randGen.integer(0, scenData.deleteSizes.length - 1);
+    //let useDelete = randGen.integer(0, scenData.deleteSizes.length - 1);
+    let useDelete = randGen.randInt(0, scenData.deleteSizes.length - 1, randEngine);
     let deleteSize = scenData.deleteSizes[useDelete];
     scenData.deleteSizes.splice(useDelete, 1);
     if (scenData.deleteSpots.length > 0) {
-      let useSpot = randGen.integer(0, scenData.deleteSpots.length);
+      //let useSpot = randGen.integer(0, scenData.deleteSpots.length);
+      let useSpot = randGen.randInt(0, scenData.deleteSpots.length, randEngine);
       let deleteSpot = scenData.deleteSpots[useSpot];
       scenData.deleteSpots.splice(useSpot, 1);
       realDelete = [deleteSpot, deleteSpot + deleteSize];
@@ -448,7 +469,8 @@ const generateDeletion = function (usedDeleteSpots) {
 
   const maxDeleteTries = scenConfig.maxDeleteTries;
   while (!goodDelete && deleteTries < maxDeleteTries) {
-    let randInt = randGen.integer(1, 7);
+    //let randInt = randGen.integer(1, 7);
+    let randInt = randGen.randInt(1, 7, randEngine);
     let deleteKind;
     switch (randInt) {
       case 1:
@@ -462,17 +484,21 @@ const generateDeletion = function (usedDeleteSpots) {
     } // end switch
     deleteTries++;
     if (deleteKind === pEnum.DELETEKIND.OUTLEFT) {
-      realDelete = [-100, util.holyRoller(randGen, 70, 3)];
+      //realDelete = [-100, util.holyRoller(randGen, 70, 3)];
+      realDelete = [-100, util.holyRoller(randEngine, 70, 3)];
       realDelete[1] = (realDelete[1] < 40 ? realDelete[1] + 25 : realDelete[1]);
     } else if (deleteKind === pEnum.DELETEKIND.OUTRIGHT) {
-      realDelete = [util.holyRoller(randGen, 70, 3), 500];
+      //realDelete = [util.holyRoller(randGen, 70, 3), 500];
+      realDelete = [util.holyRoller(randEngine, 70, 3), 500];
       realDelete[0] = (realDelete[0] > 270 ? realDelete[0] - 50 : realDelete[0]);
     } else { // internal
       let unsatisfactory = true;
       let leftSide, rightSide;
       while (unsatisfactory) {
-        let core = randGen.die(22) * 17;
-        let delSize = randGen.die(25) * 6 + randGen.die(15);
+        //let core = randGen.die(22) * 17;
+        let core = randGen.randDie(22, randEngine) * 17;
+        //let delSize = randGen.die(25) * 6 + randGen.die(15);
+        let delSize = randGen.randDie(25, randEngine) * 6 + randGen.randDie(15, randEngine);
         if (core < 70) {
           leftSide = core;
           rightSide = core + delSize;
