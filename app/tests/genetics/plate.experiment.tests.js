@@ -504,4 +504,27 @@ describe('Plate experiments unit tests', () => {
 
   }); // end Test generate plate for double phage input
 
+  describe('Test generate plate over capacity', ()=>{
+    it('Should not create plate for single phage input', ()=>{
+      let phage1 = clone(phageList[0]);
+        phage1.numPhage = 100;
+        let phagePlate = plateExp.createPlatePhage(phage1, null, null, null, 20, plateEnum.PLATECALLER.LAB, scenData);
+      var plate = plateExp.generatePlate(bactPerm, phagePlate.genoList, phagePlate.strainList, scenData);
+      plate.full.should.equal(true);
+      plate.littlePlaque.should.have.lengthOf(0);
+      plate.bigPlaque.should.have.lengthOf(0);
+    });
+
+    it('Should not create plate for double phage input', ()=>{
+      let phage1 = clone(phageList[0]);
+        phage1.numPhage = 200;
+      let phage2 = clone(phageList[1]);
+      phage2.numPhage = 300;
+        let phagePlate = plateExp.createPlatePhage(phage1, phage2, null, null, 250, plateEnum.PLATECALLER.LAB, scenData);
+      var plate = plateExp.generatePlate(bactPerm, phagePlate.genoList, phagePlate.strainList, scenData);
+      plate.full.should.equal(true);
+      plate.littlePlaque.should.have.lengthOf(0);
+      plate.bigPlaque.should.have.lengthOf(0);
+    });
+  }); // end Test generate plate over capacity
 });
