@@ -7,6 +7,10 @@ const scenConfig = require('../../config/scenario.config');
 const pEnum = require('./phage.enum');
 const phageLogic = require('./phage.logic');
 
+exports.resetEngine = function(){
+  randGen.reset(randEngine);
+}
+
 exports.generateScenario = function (scenario) {
   // scenario = scenario details - mutationFreq, recombinationFreq, gcProb, minStops, intraMuteDist, interMuteDist, referencePhage, otherPhage, alternatePhage
   // returns JSON list of phage for the scenario (controller handles creating the phage)
@@ -20,6 +24,8 @@ exports.generateScenario = function (scenario) {
   var scenDetails = {
     interMuteDist: scenario.interMuteDist,
     intraMuteDist: scenario.intraMuteDist,
+    mutationFreq: scenario.mutationFreq,
+    recombinationFreq: scenario.recombinationFreq,
     deleteSizes: clone(scenConfig.deleteSizes),
     deleteSpots: clone(scenConfig.deleteSpots),
     usedDeleteSpots: [],
@@ -95,8 +101,6 @@ exports.generateScenario = function (scenario) {
 } // end generateScenario
 
 exports.makeGene = function (gcProb, minStops) {
-  // reset the engine if in testing mode
-  randGen.testingReset(randEngine);
   // input: scenario
   // return wtGene, realStops, frameStopList
   let codons = [];

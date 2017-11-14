@@ -53,9 +53,11 @@ exports.getCount = function(engine){
   return engine.getUseCount();
 }
 
-exports.testingReset = function(engine){
+exports.reset = function(engine){
   // reset counter when testing
   if(config.phageSeed !== null){
     engine.seed(config.phageSeed);
+  } else {
+    engine.autoSeed();
   }
 }

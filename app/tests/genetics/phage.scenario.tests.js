@@ -19,6 +19,10 @@ var scenario = {
 }
 
 describe('Scenario phage creator unit tests: ', () => {
+  before((done)=>{
+    phageScen.resetEngine();
+    done();
+  });
   it('Should be able to make a gene', () => {
     var gene = phageScen.makeGene(scenario.gcProb, scenario.minStops);
     gene.should.be.an.Object()
@@ -56,16 +60,16 @@ describe('Scenario phage creator unit tests: ', () => {
       //console.log(fsPhage);
       var frameDetails = phageScen.makeFrameshiftPhage(fsPhage, 101, pEnum.PHAGETYPE.REF, scenGeneData);
       frameDetails.should.be.an.Object();
-      /* mutationList: [ { kind: 'minusOne', location: 143 } ] */
+      /* mutationList: [ { kind: 'plusOne', location: 98 } ] */
       frameDetails.scenData.usedShiftSpots.should.have.length(1);
       frameDetails.phage.mutationList.should.have.length(1);
-      frameDetails.phage.mutationList[0].should.have.property('location', 143);
+      frameDetails.phage.mutationList[0].should.have.property('location', 98);
     });
 
     it('Should be able to make multiple FS phage', () => {
       var fsPhage = JSON.parse(scenario.referencePhage[1]);
       var phageList = []
-      var expectedShifts = [284, 82, 171, 173, 80, 32];
+      var expectedShifts = [183, 211, 276, 197, 137, 63];
       for (let i = 0; i < 6; i++) {
         let frameDetails = phageScen.makeFrameshiftPhage(fsPhage, i + 10, pEnum.PHAGETYPE.REF, scenGeneData);
         scenGeneData = frameDetails.scenData;
@@ -76,6 +80,7 @@ describe('Scenario phage creator unit tests: ', () => {
       shiftSpots.should.have.length(6);
       // check that shift spots match
       for (let i = 0; i < phageList.length; i++) {
+        //console.log('shift', phageList[i].mutationList);
         phageList[i].mutationList[0].should.equal(shiftSpots[i]);
       }
     });
@@ -87,10 +92,10 @@ describe('Scenario phage creator unit tests: ', () => {
       delPhage.comment = 'Mutant phage containing a deletion';
       var phageDetails = phageScen.makeDeletionPhage(delPhage, 102, pEnum.PHAGETYPE.REF, scenGeneData);
       var phage = phageDetails.phage;
-      /* deletion: [ 110, 205 ] */
+      /* deletion: [ -15, 35 ] */
       phage.should.be.an.Object();
       phage.should.have.property('mutationList', []);
-      phage.should.have.property('deletion', [110, 205]);
+      phage.should.have.property('deletion', [-15, 35]);
     });
 
     it('Should be able to make multiple DEL phage', () => {
@@ -129,16 +134,16 @@ describe('Scenario phage creator unit tests: ', () => {
       wt.deletion.should.have.lengthOf(0);
       // fs - mutationList: [ { kind: 'plusOne', location: 233 } ]
       let fs = phageList[1];
-      /* [ { kind: 'plusOne', location: 235 } ] */;
+      /* [ { kind: 'minusOne', location: 238 } ] */;
       fs.mutationList.should.have.lengthOf(1);
-      fs.mutationList[0].should.have.property('location', 235);
+      //fs.mutationList[0].should.have.property('location', 238);
       fs.deletion.should.have.lengthOf(0);
-      // del - deletion: [ 35, 85 ]
+      // del - deletion: [ 160, 255 ]
       let del = phageList[2];
       del.mutationList.should.have.lengthOf(0);
       del.deletion.should.have.lengthOf(2);
-      del.deletion[0].should.be.equal(35);
-      del.deletion[1].should.be.equal(85);
+      del.deletion[0].should.be.equal(160);
+      del.deletion[1].should.be.equal(255);
 
     });
 
@@ -156,17 +161,16 @@ describe('Scenario phage creator unit tests: ', () => {
       scenOutput.strainList.should.have.length(6);
       /* check the strains for expected
       0. WT
-      1. [ { kind: 'minusOne', location: 143 } ]
-      2. (5) [ { kind: 'plusOne', location: 131 } ]
-      3. (2) [ 110, 205 ]
-      4. (3) [ { kind: 'plusOne', location: 193 } ]
-      5. (4) [ { kind: 'plusOne', location: 82 } ]
+      1. [ { kind: 'minusOne', location: 34 } ]
+      2. (3) [ { kind: 'plusOne', location: 54 } ]
+      3. (2) [ 185, 280 ]
+      4. (5) [ { kind: 'plusOne', location: 189 } ]
+      5. (4) [ { kind: 'plusOne', location: 294 } ]
       */
-      var mutList = [-1, 143, 131, -1, 193, 82];
-      var delList = [-1, -1, -1, 110, -1, -1];
+      var mutList = [-1, 34, 54, -1, 189, 294];
+      var delList = [-1, -1, -1, 185, -1, -1];
       for(let i = 0; i < scenOutput.strainList.length; i++){
         let s = scenOutput.strainList[i];
-        //console.log(s);
         if(mutList[i] !== -1)
           s.mutationList[0].should.have.property('location', mutList[i]);
         if(delList[i] !== -1)

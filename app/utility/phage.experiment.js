@@ -5,6 +5,10 @@ const randEngine = randGen.getEngine();
 const scenConfig = require('../../config/scenario.config');
 const pEnum = require('./phage.enum');
 
+exports.resetEngine = function(){
+  randGen.reset(randEngine);
+}
+
 exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
   var recGenos = [];
   for (let k = 0; k < numToDo; k++) {
@@ -123,6 +127,7 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
     });
   } // end for k
   return recGenos;
+
 } // end recombine
 
 exports.mutagenize = function (inList, numDesired) {

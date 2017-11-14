@@ -9,6 +9,10 @@ const phageLogic = require('./phage.logic');
 const plateEnum = require('./plate.enum');
 const bacteria = require('../models/bacteria.server.model');
 
+exports.resetEngine = function(){
+  randGen.reset(randEngine);
+}
+
 exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData){
   // combines createPlatePhage and generatePlate into one function
   // has: genoList and strainList
