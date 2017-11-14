@@ -60,15 +60,44 @@ exports.gaussRand = function(engine, inNum){
   var notGood = true;
   var r, v, w;
   while(notGood){
-    //v = (2 * randGen.real(0,1, false)) - 1;
-    //w = (2 * randGen.real(0,1, false)) - 1;
-    v = (2 * randGen.randReal(0,1, engine)) - 1;
-    w = (2 * randGen.randReal(0,1, engine)) - 1;
-    r = Math.pow(v, 2) + Math.pow(w, 2);
+    v = (2 * (randGen.randDie(999, engine)/1000.0)) - 1;
+    w = (2 * (randGen.randDie(999, engine)/1000.0)) - 1
+    r = (v*v) + (w*w);
     if(r < 1 && r !== 0)
       notGood = false
   } // end while notGood
-  var fac = Math.sqrt((-2 * Math.log10(r)) / r);
+
+  var fac = Math.sqrt((-2.0 * Math.log10(r)) / r);
   var gauss = fac * w;
   return Math.floor(inNum * gauss);
+}
+
+exports.identicalGenotypes = function( phage1, phage2){
+  // check deletion
+  let d1 = phage1.deletion;
+  let d2 = phage2.deletion;
+  if(d1.length !== d2.length){
+    // only one has deletion -> no match
+    return false;
+  } else if (d1.length > 0 && d2.length > 0){
+    if(d1[0] !== d2[0] || d1[1] !== d2[1])
+      return false;
+  }
+
+  // check mutations
+  let s1 = phage1.shifts;
+  let s2 = phage2.shifts;
+  // number of shifts must match
+  if(s1.length !== s2.length){
+    return false;
+  } else {
+    // loop through deletions
+    for(let i = 0; i < s1.length; i++){
+      if(s1[i].location !== s2[i].location || s1[i].kind != s2[i].kind){
+        return false;
+      }
+    }
+  }
+  // made it this far, they are identical
+  return true;
 }

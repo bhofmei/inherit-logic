@@ -30,13 +30,13 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
     for (let i = 0; i < recSpot.length; i++) {
       let recOk = true;
       let checkRec = recSpot[i];
-      if (startGeno.deletions.length > 0) {
+      if (startGeno.deletion.length > 0) {
         // if chosen recobmination point is in a delete, skip
-        if (checkRec >= startGeno.deletions[0] && checkRec <= startGeno.deletions[1])
+        if (checkRec >= startGeno.deletion[0] && checkRec <= startGeno.deletion[1])
           recOk = false;
       }
-      if (endGeno.deletions.length > 0) {
-        if (checkRec >= endGeno.deletions[0] && checkRec <= endGeno.deletions[1])
+      if (endGeno.deletion.length > 0) {
+        if (checkRec >= endGeno.deletion[0] && checkRec <= endGeno.deletion[1])
           recOk = false;
       }
       if (recOk)
@@ -49,10 +49,10 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
       //if (randGen.bool()) {
       if (randGen.randBool(randEngine)) {
         newPhageShiftList = startGeno.shifts;
-        newPhageDeletes = startGeno.deletions;
+        newPhageDeletes = startGeno.deletion;
       } else {
         newPhageShiftList = endGeno.shifts;
-        newPhageDeletes = endGeno.deletions;
+        newPhageDeletes = endGeno.deletion;
       }
     } else {
       // success recombinations
@@ -95,8 +95,8 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
             newPhageShiftList.push(clone(shiftElt));
         } // end for j
         // copy deletion
-        if (startGeno.deletions.length !== 0 && startGeno.deletions[0] >= copyZone[0] && startGeno.deletions[1] < copyZone[1])
-          newPhageDeletes.push(clone(startGeno.deletions));
+        if (startGeno.deletion.length !== 0 && startGeno.deletion[0] >= copyZone[0] && startGeno.deletion[1] < copyZone[1])
+          newPhageDeletes.push(clone(startGeno.deletion));
       }); // end for copyZone
       endGenoPieces.forEach((copyZone) => {
         for (let j = 0; j < endGeno.shifts.length; j++) {
@@ -104,8 +104,8 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
           if (shiftElt.location >= copyZone[0] && shiftElt.location < copyZone[1])
             newPhageShiftList.push(clone(shiftElt));
         } // end for j
-        if (endGeno.deletions.length !== 0 && endGeno.deletions[0] >= copyZone[0] && endGeno.deletions[1] < copyZone[1])
-          newPhageDeletes.push(clone(endGeno.deletions));
+        if (endGeno.deletion.length !== 0 && endGeno.deletion[0] >= copyZone[0] && endGeno.deletion[1] < copyZone[1])
+          newPhageDeletes.push(clone(endGeno.deletion));
       }); // end for copyZone
     } // end if okRecSpots
     newPhageShiftList.sort(util.locSort);
@@ -117,10 +117,9 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
     } else if(newPhageDeletes.length === 1){
       newPhageDeletes = newPhageDeletes[0];
     }
-    console.log(startGeno, endGeno, okRecSpots, newPhageShiftList, newPhageDeletes);
     recGenos.push({
       shifts: newPhageShiftList,
-      deletions: newPhageDeletes
+      deletion: newPhageDeletes
     });
   } // end for k
   return recGenos;
