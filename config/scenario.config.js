@@ -18,4 +18,6 @@ module.exports = {
   minStops: 10,
   intraMuteDist: [10,80],
   interMuteDist: -1,
+  probDeletion: 0.005,
+  probRadSurvive: 0.01
 };
