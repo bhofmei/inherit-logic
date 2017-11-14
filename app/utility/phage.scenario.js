@@ -178,7 +178,7 @@ exports.makePhage = function (phageDetails, strainNum, phageType, scenData) {
   if (phageDetails.isWildType) {
     // wild type phage
     outPhage = this.makeWTPhage(phageDetails, strainNum, phageType, scenData);
-  } else if (phageDetails.deletions) {
+  } else if (phageDetails.deletion) {
     // phage has deletions
     outPhage = this.makeDeletionPhage(phageDetails, strainNum, phageType, scenData);
   } else if (phageDetails.frameshifts !== null) {
@@ -318,7 +318,7 @@ const generateFrameshift = function (shiftType, nShifts, readable, scenData) {
   if (goodPhage) {
     let allTranslated = phageLogic.doPheno({
       shifts: muteList,
-      deletes: []
+      deletion: []
     }, scenData.realStops);
     if (readable === pEnum.READABLE.CAN && allTranslated !== pEnum.FRAMEPHENOTYPE.ALLTRANSLATED)
       goodPhage = false;

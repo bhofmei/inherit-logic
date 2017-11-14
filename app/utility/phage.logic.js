@@ -5,14 +5,15 @@ const scenConfig = require('../../config/scenario.config');
 const pEnum = require('./phage.enum');
 
 exports.doPheno = function (mutantList, stopList) {
-  if (mutantList.deletes.length !== 0)
+  if (mutantList.deletion.length !== 0)
     return pEnum.FRAMEPHENOTYPE.DELETED;
   var frameInfo = this.getFrames(pEnum.FRAMECALLER.TRUTH, mutantList.shifts, stopList);
   // TODO: decode ilk (returns type of object)
   if (typeof frameInfo === 'string')
     return frameInfo;
   var lastFrame = frameInfo.frameList[frameInfo.frameList.length - 1];
-  switch (lastFrame) {
+  let endFrame = lastFrame[0];
+  switch (endFrame) {
     case 1:
       return pEnum.FRAMEPHENOTYPE.FRAMESHIFTED;
     case -1:
@@ -71,9 +72,9 @@ exports.getFrames = function (whoSays, mutantList, stopList) {
     // start a new register reflecting current frame
     currentFrameInfo = [readFrame, lookSpot];
   } // end for j
-  currentFrameInfo.push(scenConfig.geneLength / 3);
-  totalFramage.push(currentFrameInfo);
+  currentFrameInfo.push(scenConfig.geneLength);
 
+  totalFramage.push(currentFrameInfo);
   var stoppedFramage = [];
   var stopped = false;
   for (let k = 0; k < totalFramage.length; k++) {
@@ -94,7 +95,7 @@ exports.getFrames = function (whoSays, mutantList, stopList) {
                 stopElement[1]
               ]);
               stoppedFramage.push([
-                100, stopElement[1], scenConfig.geneLength / 3
+                -100, stopElement[1], scenConfig.geneLength
               ]);
               stopped = true;
             }
