@@ -15,7 +15,7 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
   var deletesInPlay = false;
   var mutagenized = (specials === 'irrad');
   // phage 1 and 2 will be full objects previously retrieved from mongoose database and numPhage property
-  console.log(phage1, phage2);
+  // console.log(phage1, phage2);
   var parents;
   let getParents = (whoCalled === plateEnum.PLATECALLER.MULTIPLEXER || whoCalled === plateEnum.PLATECALLER.SUPERPLEXER ? false : true)
   var newPhage1, newPhage2, phageRatio;
@@ -87,17 +87,19 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
     numNewGenos = 0;
     if (mutagenized) {
       let numWT = scenConfig.probRadSurvive * newPhage1.numPhage;
-      if (numWT > capacity) {
-        // too many phage
-        replicaStrainList.push(['tooMany', 0]);
-      } else {
-        // TODO: findSpotOnPlate
-        for (let j = 0; j < numWT; j++) {
-          replicaStrainList.push(['phage', 0]);
-        }
-      } // end capacity
       // number of deletions
       let numDeletes = newPhage1.numPhage * scenConfig.probRadSurvive * scenConfig.probDeletion;
+      if (numWT + numDeletes > capacity) {
+        // too many phage
+        return {
+          genoList: genoList,
+          strainList: false
+        }
+      }
+      // TODO: findSpotOnPlate
+      for (let j = 0; j < numWT; j++) {
+        replicaStrainList.push(['phage', 0]);
+      }
       for (let j = 0; j < numDeletes; j++) {
         // spot on plage
         let okayDel = false;
@@ -115,15 +117,19 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
         });
       } // end for j
     } else {
-      if (newPhage1.numPhage > capacity)
-        replicaStrainList.push(['tooMany', 0]);
-      else {
-        for (let j = 0; j < newPhage1.numPhage; j++) {
-          replicaStrainList.push(['phage', 0]);
-        }
-      } // end if capcatiy
+      // not mutagenized
       let changePhage = Math.floor(scenData.mutationFreq * newPhage1.numPhage);
       changePhage = changePhage + util.gaussRand(randEngine, 2 * Math.sqrt(changePhage));
+      if ((newPhage1.numPhage > capacity) || (newPhage1.numPhage + changePhage > capacity)) {
+        // if too many, return so we don't waste time computing
+        return {
+          genoList: genoList,
+          strainList: false
+        };
+      }
+      for (let j = 0; j < newPhage1.numPhage; j++) {
+        replicaStrainList.push(['phage', 0]);
+      }
       let getMutes = phageExper.mutagenize(startGenotypes[0].shifts, changePhage);
       for (let j = 0; j < changePhage; j++) {
         numNewGenos++;
@@ -137,34 +143,28 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
   } else {
     // two phage
     genoList = [startGenotypes[0], startGenotypes[1]];
+    let identical = util.identicalGenotypes(startGenotypes[0], startGenotypes[1]);
     numNewGenos = 1;
-    let numOffspring = Math.max(newPhage1.numPhage, newPhage2.numPhage);
+    // compute offspring counts
+    var nOffspring = computeNumOffspring(newPhage1.numPhage, newPhage2.numPhage, phageRatio, scenData.mutationFreq, scenData.recombinationFreq, identical);
+    //console.log(nOffspring);
 
-    let errAdj = 2 * Math.sqrt(numOffspring);
-    numOffspring = (randGen.randBool(randEngine) ? numOffspring + errAdj : numOffspring - errAdj);
-    let numMute = [];
-    console.log(numOffspring);
-    // compute number of each recombinant
-    let f1 = (phageRatio) / (phageRatio + 1);
-    let f2 = 1 - f1;
-    let numRecomb = computeRecombParameters(f1, f2, scenData.recombinationFreq, numOffspring);
-    let numGeno = [Math.floor(f1 * numOffspring), Math.floor(f2 * numOffspring)];
-    console.log(numGeno);
-    for (let j = 0; j < 2; j++) {
-      let nGeno = numGeno[j];
-      if (nGeno > capacity)
-        replicaStrainList.push(['tooMany', j]);
-      else {
-        // find spot on plate
-        for (let k = 0; k < nGeno; k++) {
-          replicaStrainList.push(['phage', j]);
-        } // end for k
+    // check capacity
+    if (nOffspring.total > capacity) {
+      return {
+        genoList: genoList,
+        strainList: false
       }
-      let tmp = Math.floor(scenData.mutationFreq * nGeno);
-      tmp = (tmp < 1 ? 0 : tmp);
-      numMute.push(tmp + util.gaussRand(randEngine, (2 * Math.sqrt(tmp))));
+    }
+    for (let j = 0; j < 2; j++) {
+      let nGeno = nOffspring.numGeno[j];
+      // find spot on plate
+      for (let k = 0; k < nGeno; k++) {
+        replicaStrainList.push(['phage', j]);
+      } // end for k
+
       // generate mutants
-      let getMutes = phageExper.mutagenize(startGenotypes[j].shifts, numMute[j]);
+      let getMutes = phageExper.mutagenize(startGenotypes[j].shifts, nOffspring.numMut[j]);
       for (let k = 0; k < getMutes.length; k++) {
         numNewGenos++;
         replicaStrainList.push(['mut', numNewGenos]);
@@ -173,17 +173,12 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
           deletion: startGenotypes[j].deletion
         });
       } // end for k
-    } // end for j
-    console.log(numMute);
-    // see if genotypes are identical
-    //let identical = ((startGenotypes[0].shifts === startGenotypes[1].shifts) && (startGenotypes[0].deletion === startGenotypes[1].deletion));
-    let identical = util.identicalGenotypes(startGenotypes[0], startGenotypes[1]);
-    console.log(numRecomb)
+    } // end for
     if (!identical) {
       // recombine - loop through number recombinants
       //console.log(numRecomb);
-      for (let j = 0; j < numRecomb.length; j++) {
-        let nRec = numRecomb[j];
+      for (let j = 0; j < nOffspring.numRecomb.length; j++) {
+        let nRec = nOffspring.numRecomb[j];
         if (nRec > 0) {
           let newGenoList = phageExper.recombine(startGenotypes[0], startGenotypes[1], j, nRec);
           // add to plate
@@ -274,4 +269,32 @@ const computeRecombParameters = function (f1, f2, p, n) {
     numRecomb.push(nR < 0 ? 0 : Math.round(nR));
   }
   return numRecomb;
+}
+
+const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
+  let numOffspring = Math.max(n1, n2);
+
+  let errAdj = 2 * Math.sqrt(numOffspring);
+  numOffspring = (randGen.randBool(randEngine) ? numOffspring + errAdj : numOffspring - errAdj);
+  // compute number of each recombinant
+  let f1 = (nR) / (nR + 1);
+  let f2 = 1 - f1;
+  let numRecomb = (identical ? [0,0,0] : computeRecombParameters(f1, f2, recFreq, numOffspring));
+  let numGeno = [Math.floor(f1 * numOffspring), Math.floor(f2 * numOffspring)];
+  let numMut = numGeno.map((nGeno) => {
+    let nMut = mutFreq * nGeno;
+    nMut = (nMut < 1 ? 0 : nMut);
+    nMut = nMut + util.gaussRand(randEngine, (2 * Math.sqrt(nMut)));
+
+    return Math.round(Math.abs(nMut));
+  });
+  let total = numGeno[0] + numGeno[1] + numRecomb[0] + numRecomb[1] + numRecomb[2] + numMut[0] + numMut[1];
+  // return results
+  return {
+    numOffspring: numOffspring,
+    total: total,
+    numGeno: numGeno,
+    numMut: numMut,
+    numRecomb: numRecomb
+  };
 }

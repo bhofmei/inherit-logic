@@ -66,15 +66,14 @@ describe('Plate experiments unit tests', () => {
       plate.strainList.should.have.length(10);
     });
 
-    it('Should create plate for WT phage - over capacity', () => {
+    it('Should not create plate for WT phage over capacity', () => {
       // wt phage
       let phage1 = clone(phageList[0]);
       phage1.numPhage = 10;
       let plate = plateExp.createPlate(phage1, null, plateEnum.BACTTYPE.PERM, null, 5, plateEnum.PLATECALLER.LAB, scenario);
       // plate should have 1 genotype and 1 toomany phage
       plate.genoList.should.have.lengthOf(1);
-      plate.strainList.should.have.length(1);
-      plate.strainList[0][0].should.be.equal('tooMany');
+      plate.strainList.should.equal(false);
     });
 
     it('Should create huge plate for WT phage', () => {
@@ -135,10 +134,21 @@ describe('Plate experiments unit tests', () => {
       phage1.numPhage = 100;
       phage2.numPhage = 50;
       let plate = plateExp.createPlate(phage1, phage2, plateEnum.BACTTYPE.PERM, null, 200, plateEnum.PLATECALLER.LAB, scenario);
-      // plate should have 2 genotypes
-      // phage: 53 parent 1, 26 parent 2, 0 muts, 0 recomb
+      /*{ numOffspring: 80, total: 79,
+          numGeno: [ 53, 26 ], numMut: [ 0, 0 ],
+          numRecomb: [ 0, 0, 0 ] }*/
       plate.genoList.should.have.lengthOf(2);
       plate.strainList.should.have.length(79);
+    });
+
+    it('Should not create plate over capacity', () => {
+      let phage1 = clone(phageList[0]);
+      let phage2 = clone(phageList[0]);
+      phage1.numPhage = 40;
+      phage2.numPhage = 35;
+      let plate = plateExp.createPlate(phage1, phage2, plateEnum.BACTTYPE.PERM, null, 20, plateEnum.PLATECALLER.LAB, scenario);
+      plate.genoList.should.have.lengthOf(2);
+      plate.strainList.should.equal(false);
     });
 
     it('Should create plate for huge cross WT to WT', () => {
@@ -147,11 +157,11 @@ describe('Plate experiments unit tests', () => {
       phage1.numPhage = 10000;
       phage2.numPhage = 8000;
       let plate = plateExp.createPlate(phage1, phage2, plateEnum.BACTTYPE.PERM, null, 20000, plateEnum.PLATECALLER.LAB, scenario);
-      // plate should have 2 genotypez
-      // phage: 5444 parent 1, 4355 parent 2, 2 muts, 0 recomb
-      //console.log(plate.strainList.length);
+      /*{ numOffspring: 10200, total: 10201,
+          numGeno: [ 5666, 4533 ], numMut: [ 1, 1 ],
+          numRecomb: [ 0, 0, 0 ] }*/
       plate.genoList.should.have.lengthOf(4);
-      plate.strainList.should.have.length(9801);
+      plate.strainList.should.have.length(10201);
     });
 
     it('Should create plate for cross WT to FS', () => {
@@ -160,10 +170,11 @@ describe('Plate experiments unit tests', () => {
       phage1.numPhage = 55;
       phage2.numPhage = 100;
       let plate = plateExp.createPlate(phage1, phage2, plateEnum.BACTTYPE.PERM, null, 200, plateEnum.PLATECALLER.LAB, scenario);
-      // plate should have 2 genotypes
-      // phage: 77 parent 1, 42 parent 2, 0 muts, 2 recomb
-      plate.genoList.should.have.lengthOf(4);
-      plate.strainList.should.have.length(121);
+      /*{ numOffspring: 120, total: 119,
+          numGeno: [ 77, 42 ], numMut: [ 0, 0 ],
+          numRecomb: [ 0, 0, 0 ] }*/
+      plate.genoList.should.have.lengthOf(2);
+      plate.strainList.should.have.length(119);
     });
 
     it('Should create plate for huge cross WT to FS', () => {
@@ -172,10 +183,11 @@ describe('Plate experiments unit tests', () => {
       phage1.numPhage = 8700;
       phage2.numPhage = 3200;
       let plate = plateExp.createPlate(phage1, phage2, plateEnum.BACTTYPE.PERM, null, 10000, plateEnum.PLATECALLER.LAB, scenario);
-      // plate should have 2 genotypes
-      // phage: 6224 parent 1, 2289 parent 2, 4 muts, 9 recomb
-      plate.genoList.should.have.lengthOf(15);
-      plate.strainList.should.have.length(8526);
+      /*{ numOffspring: 8886.547581061775, total: 8894,
+          numGeno: [ 6496, 2389 ], numMut: [ 1, 0 ],
+          numRecomb: [ 8, 0, 0 ] } */
+      plate.genoList.should.have.lengthOf(11);
+      plate.strainList.should.have.length(8894);
     });
 
     it('Should create plate for cross FS to FS', () => {
@@ -184,10 +196,11 @@ describe('Plate experiments unit tests', () => {
       phage1.numPhage = 80;
       phage2.numPhage = 95;
       let plate = plateExp.createPlate(phage1, phage2, plateEnum.BACTTYPE.PERM, null, 200, plateEnum.PLATECALLER.LAB, scenario);
-      // plate should have 2 genotypes
-      // phage: 40 parent 1, 34 parent 2, 0 muts, 0 recomb
-      plate.genoList.should.have.lengthOf(2);
-      plate.strainList.should.have.length(74);
+      /*{ numOffspring: 114.49358868961792, total: 116,
+          numGeno: [ 62, 52 ], numMut: [ 0, 0 ],
+          numRecomb: [ 2, 0, 0 ] }*/
+      plate.genoList.should.have.lengthOf(4);
+      plate.strainList.should.have.length(116);
     });
 
     it('Should create plate for huge cross FS to FS', () => {
@@ -196,23 +209,11 @@ describe('Plate experiments unit tests', () => {
       phage1.numPhage = 4100;
       phage2.numPhage = 7800;
       let plate = plateExp.createPlate(phage1, phage2, plateEnum.BACTTYPE.PERM, null, 10000, plateEnum.PLATECALLER.LAB, scenario);
-      // plate should have 2 genotypes
-      // phage: 4996 parent 1, 2626 parent 2, 3 muts, 13 recomb
-      plate.genoList.should.have.lengthOf(18);
-      plate.strainList.should.have.length(7638);
-    });
-
-    it('Should create plate over capacity', () => {
-      let phage1 = clone(phageList[0]);
-      let phage2 = clone(phageList[0]);
-      phage1.numPhage = 40;
-      phage2.numPhage = 35;
-      let plate = plateExp.createPlate(phage1, phage2, plateEnum.BACTTYPE.PERM, null, 10, plateEnum.PLATECALLER.LAB, scenario);
-      // plate should have 2 genotypes
-      // phage: 53 parent 1, 26 parent 2, 0 muts, 0 recomb
-      console.log(plate);
-      //plate.genoList.should.have.lengthOf(2);
-      //plate.strainList.should.have.length(79);
+      /*{ numOffspring: 7976.635217326557, total: 7989,
+          numGeno: [ 5228, 2748 ], numMut: [ 2, 2 ],
+          numRecomb: [ 7, 2, 0 ] }*/
+      plate.genoList.should.have.lengthOf(15);
+      plate.strainList.should.have.length(7989);
     });
 
   });
