@@ -9,7 +9,19 @@ const phageLogic = require('./phage.logic');
 const plateEnum = require('./plate.enum');
 const bacteria = require('../models/bacteria.server.model');
 
-exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData) {
+exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData){
+  // combines createPlatePhage and generatePlate into one function
+  // has: genoList and strainList
+  var phagePlate = this.createPlatePhage(phage1, phage2, lawnType, specials, capacity, whoCalled, scenData);
+  phagePlate.genoList.forEach((geno)=>{
+  //console.log(geno.shifts);
+  })
+  // has: full, littlePlaque, bigPlaque
+  var plate = this.generatePlate(lawnType, phagePlate.genoList, phagePlate.strainList, scenData);
+  return plate;
+}
+
+exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData) {
   var startGenotypes, genoList;
   var replicaStrainList = [];
   var deletesInPlay = false;
@@ -120,6 +132,7 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
       // not mutagenized
       let changePhage = Math.floor(scenData.mutationFreq * newPhage1.numPhage);
       changePhage = changePhage + util.gaussRand(randEngine, 2 * Math.sqrt(changePhage));
+      //console.log(changePhage);
       if ((newPhage1.numPhage > capacity) || (newPhage1.numPhage + changePhage > capacity)) {
         // if too many, return so we don't waste time computing
         return {
@@ -147,8 +160,7 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
     numNewGenos = 1;
     // compute offspring counts
     var nOffspring = computeNumOffspring(newPhage1.numPhage, newPhage2.numPhage, phageRatio, scenData.mutationFreq, scenData.recombinationFreq, identical);
-    //console.log(nOffspring);
-
+  //console.log(nOffspring);
     // check capacity
     if (nOffspring.total > capacity) {
       return {
@@ -185,7 +197,7 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
           for (let k = 0; k < newGenoList.length; k++) {
             numNewGenos++;
             replicaStrainList.push(['recomb', numNewGenos]);
-            genoList.push(newGenoList[j]);
+            genoList.push(newGenoList[k]);
           } // end for k
         } // end if nRec > 0
       } // end for j
@@ -198,58 +210,56 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
   }
 } // end createPlage
 
-exports.generatePlate = function (lawnTypeStr, genoList, strainList) {
+exports.generatePlate = function (lawnTypeStr, genoList, strainList, scenData) {
   // lawn type is "B" or "K"
+
   var lawnType = bacteria[lawnTypeStr];
   var readOkay = lawnType.wtPhenotype;
   var readBad = lawnType.mutPhenotype;
-  var overwhelm = false;
+  var overwhelm = (strainList === false);
+
+  // if too many, return immediately
+  if (overwhelm) {
+    return {
+      full: true,
+      littlePlaque: [],
+      bigPlaque: []
+    }
+  }
 
   // loop through geno elements
+  //console.log(genoList);
   var phenoList = genoList.map((genoElmt) => {
-    let pheno = phageLogic.doPheno(genoElmt);
-    return (pheno === pEnum.FRAMEPHENOTYPE.ALLTRANSLATED ? readOkay : readBad);
+    //console.log(genoElmt);
+    let pheno = phageLogic.doPheno(genoElmt, scenData.realStops);
+
+    let rType = (pheno === phageEnum.FRAMEPHENOTYPE.ALLTRANSLATED ? readOkay : readBad);
+    //console.log('-', genoElmt.shifts, pheno, rType);//
+    return rType;
   });
 
-  var culledStrainList = [];
-  if (lawnType.kind === plateEnum.BACTTYPE.RESTR) {
-    let i = 0;
-    while (!overwhelm && i < strainList.length) {
-      let strain = strainList[i];
-      if (phenoList[strain[1]] === plateEnum.PLAQUETYPE.DEAD) {
-        // dead
-        if (strain[0] === 'tooMany')
-          overwhelm = true
-        else
-          culledStrainList.push(strain);
-      }
-      i++;
-    } // end while
-    strainList = clone(culledStrainList);
-  } else if (strainList.length > 0) {
-    // if didn't dilute phage to 0, check first element for tooMany
-    overwhelm == (strainList[0][0] === 'tooMany');
-  } // end if lawnType/strainList.length
-
-  // if not overwhelmed, separate phage
+  // separate phage
   var littlePlaqueList = [];
   var bigPlaqueList = [];
-  if (!overwhelm) {
-    if (lawnType === plateEnum.BACTTYPE.PERM) {
-      strainList.forEach((strain) => {
-        if (phenoList[strain[1]] === plateEnum.PLAQUETYPE.SMALL)
-          littlePlaqueList.push(strain);
-        else
-          bigPlaqueList.push(strain)
-      }); // end for each
-    } else {
-      // restrictive bacteria
-      littlePlaqueList = clone(strainList);
-    }
-    // shuffle plaques
-    randGen.randShuffle(littlePlaqueList, randEngine);
-    randGen.randShuffle(bigPlaqueList, randEngine);
+  if (lawnType.kind === plateEnum.BACTTYPE.PERM) {
+    strainList.forEach((strain) => {
+      //console.log(phenoList[strain[1]] )
+      if (phenoList[strain[1]] === plateEnum.PLAQUETYPE.SMALL)
+        littlePlaqueList.push(strain);
+      else
+        bigPlaqueList.push(strain);
+    }); // end for each
+  } else {
+    // restrictive bacteria
+    strainList.forEach((strain) => {
+      if (phenoList[strain[1]] === plateEnum.PLAQUETYPE.SMALL)
+        littlePlaqueList.push(strain);
+      // else it's dead - do nothing
+    })
   }
+  // shuffle plaques
+  randGen.randShuffle(littlePlaqueList, randEngine);
+  randGen.randShuffle(bigPlaqueList, randEngine);
   return {
     full: overwhelm,
     littlePlaque: littlePlaqueList,
@@ -279,7 +289,7 @@ const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
   // compute number of each recombinant
   let f1 = (nR) / (nR + 1);
   let f2 = 1 - f1;
-  let numRecomb = (identical ? [0,0,0] : computeRecombParameters(f1, f2, recFreq, numOffspring));
+  let numRecomb = (identical ? [0, 0, 0] : computeRecombParameters(f1, f2, recFreq, numOffspring));
   let numGeno = [Math.floor(f1 * numOffspring), Math.floor(f2 * numOffspring)];
   let numMut = numGeno.map((nGeno) => {
     let nMut = mutFreq * nGeno;
