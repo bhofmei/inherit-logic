@@ -1,10 +1,10 @@
-const app = require('../../index.js');
+const app = require('../../../index.js');
 const should = require('should');
 const clone = require('clone');
-const scenDefaults = require('../../config/scenario.config');
-const scenarios = require('../../config/scenario.data');
-const phageScen = require('../utility/phage.scenario.js');
-const pEnum = require('../utility/phage.enum')
+const scenDefaults = require('../../../config/scenario.config');
+const scenarios = require('../../../config/scenario.data');
+const phageScen = require('../../utility/phage.scenario.js');
+const pEnum = require('../../utility/phage.enum')
 
 var scenario = {
   id: 0,
@@ -15,7 +15,7 @@ var scenario = {
   intraMuteDist: scenDefaults.intraMuteDist,
   interMuteDist: scenDefaults.interMuteDist,
   referencePhage: [scenDefaults.wildtypePhage, scenDefaults.frameShiftPhage],
-  otherPhage: ['{"numToMake": 1, "isWildType": false, "deletions": true, "comment": "Deletion phage"}', '{"numToMake": 3, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletions": false, "comment": "Mutant phage containing a single +1 frameshift mutation"}']
+  otherPhage: ['{"numToMake": 1, "isWildType": false, "deletion": true, "comment": "Deletion phage"}', '{"numToMake": 3, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Mutant phage containing a single +1 frameshift mutation"}']
 }
 
 describe('Scenario phage creator unit tests: ', () => {
@@ -114,7 +114,7 @@ describe('Scenario phage creator unit tests: ', () => {
     });
 
     it('Should be able to create one of each type', () => {
-      var phages = [scenDefaults.wildtypePhage, scenDefaults.frameShiftPhage, '{"numToMake": 1, "isWildType": false, "deletions": true, "comment": "Deletion phage"}'];
+      var phages = [scenDefaults.wildtypePhage, scenDefaults.frameShiftPhage, '{"numToMake": 1, "isWildType": false, "deletion": true, "comment": "Deletion phage"}'];
       var phageList = [];
       for (let i = 0; i < phages.length; i++) {
         var phageDetails = phageScen.makePhage(JSON.parse(phages[i]), i + 20, pEnum.PHAGETYPE.REF, scenGeneData);

@@ -1,11 +1,11 @@
-const app = require('../../index.js');
+const app = require('../../../index.js');
 const should = require('should');
 const clone = require('clone');
-const scenDefaults = require('../../config/scenario.config');
-const scenarios = require('../../config/scenario.data');
-const phageScen = require('../utility/phage.scenario');
-const phageExp = require('../utility/phage.experiment');
-const pEnum = require('../utility/phage.enum')
+const scenDefaults = require('../../../config/scenario.config');
+const scenarios = require('../../../config/scenario.data');
+const phageScen = require('../../utility/phage.scenario');
+const phageExp = require('../../utility/phage.experiment');
+const pEnum = require('../../utility/phage.enum')
 
 var scenario = {
   id: 0,
@@ -15,7 +15,7 @@ var scenario = {
   minStops: scenDefaults.minStops,
   intraMuteDist: scenDefaults.intraMuteDist,
   interMuteDist: scenDefaults.interMuteDist,
-  referencePhage: [scenDefaults.wildtypePhage, scenDefaults.frameShiftPhage, '{"numToMake": 1, "isWildType": false, "deletions": true, "comment": "Deletion phage"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletions": false, "comment": "Mutant phage containing a single +1 frameshift mutation"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "never", "readable": "any", "frameChoice": -1}, "deletions": false, "comment": "Mutant phage containing a two -1 frameshift mutation"}'],
+  referencePhage: [scenDefaults.wildtypePhage, scenDefaults.frameShiftPhage, '{"numToMake": 1, "isWildType": false, "deletion": true, "comment": "Deletion phage"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Mutant phage containing a single +1 frameshift mutation"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "never", "readable": "any", "frameChoice": -1}, "deletion": false, "comment": "Mutant phage containing a two -1 frameshift mutation"}'],
   otherPhage: []
 }
 
