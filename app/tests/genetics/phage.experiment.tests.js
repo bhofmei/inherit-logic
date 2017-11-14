@@ -38,7 +38,6 @@ describe('Phage experiments unit tests', () => {
       var phageDetails = phageScen.makePhage(JSON.parse(phages[i]), i, pEnum.PHAGETYPE.REF, scenData);
       scenData = phageDetails.scenData;
       phageList.push(phageDetails.phage);
-      console.log(phageDetails.phage);
     }
     done();
   });
