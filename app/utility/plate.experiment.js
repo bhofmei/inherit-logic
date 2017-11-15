@@ -16,10 +16,15 @@ exports.resetEngine = function(){
 exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData){
   // combines createPlatePhage and generatePlate into one function
   // has: genoList and strainList
+  // if both phage empty, throw error
+  if(phage1 === null && phage2 === null)
+    throw new Error('No phage specified');
+  if(lawnType===null || lawnType === undefined)
+    throw new Error('No bacteria specified');
   var phagePlate = this.createPlatePhage(phage1, phage2, lawnType, specials, capacity, whoCalled, scenData);
   phagePlate.genoList.forEach((geno)=>{
   //console.log(geno.shifts);
-  })
+  });
   // has: full, littlePlaque, bigPlaque
   var plate = this.generatePlate(lawnType, phagePlate.genoList, phagePlate.strainList, scenData);
   return plate;
@@ -136,7 +141,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
       // not mutagenized
       let changePhage = Math.floor(scenData.mutationFreq * newPhage1.numPhage);
       changePhage = changePhage + util.gaussRand(randEngine, 2 * Math.sqrt(changePhage));
-      //console.log(changePhage);
+      //console.log('numMut', changePhage);
       if ((newPhage1.numPhage > capacity) || (newPhage1.numPhage + changePhage > capacity)) {
         // if too many, return so we don't waste time computing
         return {
@@ -227,7 +232,8 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, scenData) {
     return {
       full: true,
       littlePlaque: [],
-      bigPlaque: []
+      bigPlaque: [],
+      genotypes: genoList
     }
   }
 
@@ -266,6 +272,7 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, scenData) {
   randGen.randShuffle(bigPlaqueList, randEngine);
   return {
     full: overwhelm,
+    genotypes: genoList,
     littlePlaque: littlePlaqueList,
     bigPlaque: bigPlaqueList
   }
