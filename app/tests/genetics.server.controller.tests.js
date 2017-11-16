@@ -5,9 +5,9 @@ const should = require('should');
 const mongoose = require('mongoose');
 const Phage = mongoose.model('Phage');
 const scenDefaults = require('../../config/scenario.config');
-const phageScen = require('../utility/phage.scenario');
-const phageExp = require('../utility/phage.experiment');
-const plateExp = require('../utility/plate.experiment');;
+const phageScen = require('../genetics/phage.scenario');
+const phageExp = require('../genetics/phage.experiment');
+const plateExp = require('../genetics/plate.experiment');;
 
 // Define global test variables
 let scenario, scenDat;

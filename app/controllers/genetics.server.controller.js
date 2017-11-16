@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Phage = mongoose.model('Phage');
-const plate = require('../utility/plate.experiment');
+const plate = require('../genetics/plate.experiment');
 
 exports.createPlate = function (req, res) {
   // req must have 1-2 phage IDs with numPhage, lawn type, location, specials, capacity, scenarioData

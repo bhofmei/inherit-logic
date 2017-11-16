@@ -2,8 +2,8 @@
 const mongoose = require('mongoose');
 const Fridge = mongoose.model('Fridge');
 const Phage = mongoose.model('Phage');
-const phageScen = require('../utility/phage.scenario');
-const phageEnum = require('../utility/phage.enum');
+const phageScen = require('../genetics/phage.scenario');
+const phageEnum = require('../genetics/phage.enum');
 
 // Create a new error handling controller method
 const getErrorMessage = function (err) {

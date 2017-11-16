@@ -3,8 +3,8 @@ const should = require('should');
 const clone = require('clone');
 const scenDefaults = require('../../../config/scenario.config');
 const scenarios = require('../../../config/scenario.data');
-const phageScen = require('../../utility/phage.scenario.js');
-const pEnum = require('../../utility/phage.enum')
+const phageScen = require('../../genetics/phage.scenario.js');
+const pEnum = require('../../genetics/phage.enum')
 
 var scenario = {
   id: 0,

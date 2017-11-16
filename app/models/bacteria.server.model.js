@@ -1,5 +1,5 @@
 // not a mongoose model since we only have 2 bacteria types
-const plateEnum = require('../utility/plate.enum');
+const plateEnum = require('../genetics/plate.enum');
 
 module.exports = {
   "B": {
