@@ -30,20 +30,20 @@ const stockFridge = function (scenario, user) {
     strain.scenarioOrigin = scenario;
     let newPhage = new Phage(strain);
     newPhage.save((err, phage) => {
-    if (err)
-      console.log(err)
+      if (err)
+        console.log(err)
     });
     strainIdList.push(newPhage);
   } // end for i
-/*Phage.create(strainList, function (err, strains) {
-      if (!err) {
-        strainIdList = strains.map((strain) => {
-          return strain._id;
-        });
-      } else {
-        console.log(err);
-      }
-    });*/
+  /*Phage.create(strainList, function (err, strains) {
+        if (!err) {
+          strainIdList = strains.map((strain) => {
+            return strain._id;
+          });
+        } else {
+          console.log(err);
+        }
+      });*/
   // fridge info
   return {
     scenario: scenario,
@@ -63,7 +63,7 @@ exports.getFridge = function (req, res) {
     })
     .populate('owner', 'userId')
     .populate('scenario', 'scenCode')
-  .populate('strains')
+    .populate('strains')
     .exec((err, fridge) => {
       if (err) {
         return res.status(400)
@@ -92,8 +92,6 @@ exports.getFridge = function (req, res) {
 };
 
 exports.saveFridge = function (req, res) {
-  // get fridge
-  console.log(req.body);
   const fridge = req.body;
   let strains = fridge.strains;
   let fridgeId = fridge.id;
@@ -112,12 +110,37 @@ exports.saveFridge = function (req, res) {
   });
 };
 
-exports.createPhage = function(req, res){
+exports.addPhageToFridge = function (req, res) {
+  let fridge = req.fridge;
+  let strain = req.body;
+  let user = req.user;
+  let scen = req.scenario;
+  // create the phage
+  strain.owner = user;
+  strain.scenarioOrigin = scen;
+  strain.phageType = phageEnum.PHAGETYPE.USER;
+
+  Phage.create(strain, (err, newPhage) => {
+    if (err) {
+      return res.status(400)
+        .send({
+          message: getErrorMessage(err)
+        });
+    } else {
+      fridge.strains.push(newPhage);
+      fridge.save(()=>{
+        res.json(fridge);
+      });
+
+    }
+  });
+};
+
+exports.createPhage = function (req, res) {
   // phageDetails will have strainNum, mutationList, deletion, comment, parents
   // add phageType - USER
 
   var phage = req.body;
-  console.log('phage',phage);
   // req will include scenario and user info
   var user = req.user;
   var scen = req.scenario;
@@ -125,11 +148,33 @@ exports.createPhage = function(req, res){
   phage.scenarioOrigin = scen;
   phage.phageType = phageEnum.PHAGETYPE.USER;
 
-  Phage.create(phage, (err, newPhage)=>{
-    if(err)
-      return res.status(400).send({message: getErrorMessage(err)});
+  Phage.create(phage, (err, newPhage) => {
+    if (err)
+      return res.status(400)
+        .send({
+          message: getErrorMessage(err)
+        });
     else
       res.json(newPhage)
+  });
+};
+
+exports.findFridgeByScenOwner = function (req, res, next) {
+  var user = req.user;
+  var scen = req.scenario;
+  //console.log(user, scen);
+  Fridge.findOne({
+    owner: user._id,
+    scenario: scen._id
+  }, (err, fridge) => {
+    if (err) {
+      next(err)}
+      else if (!fridge){
+        return next(new Error('Failed to find fridge'))}
+      else {
+        req.fridge = fridge;
+        next()
+      }
   });
 };
 

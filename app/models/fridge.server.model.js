@@ -25,25 +25,6 @@ const FridgeSchema = new Schema({
   scenarioDetails: String
 });
 
-FridgeSchema.statics.initStrains = function(){
-  var tempList = [];
-  for(let i = 0; i < (this.nShelves*this.nSpots); i++){
-    tempList.push(null);
-  }
-  this.strains = tempList;
-}
-
-FridgeSchema.methods.addStrain = function(nShelf, nSpot, strainId){
-  var p = nShelf*this.nSpots + nSpot;
-  this.strains[p] = strainId;
-  return strainId;
-}
-
-FridgeSchema.methods.removeStrain = function(nShelf, nSpot){
-  var p = nShelf*this.nSpots + nSpot;
-  this.strains[p] = null;
-}
-
 FridgeSchema.set('toJSON',{getters: true});
 
 mongoose.model('Fridge', FridgeSchema);

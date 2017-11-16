@@ -122,6 +122,12 @@ describe('Fridge Controller Unit Tests:', () => {
 
   describe('Test POST methods', () => {
 
+    beforeEach((done)=>{
+      fridge.save(()=>{
+        done();
+      });
+    });
+
     it('Should be able to create WT phage', (done) => {
       var newPhage = {
         strainNum: 10,
@@ -166,6 +172,49 @@ describe('Fridge Controller Unit Tests:', () => {
         });
     });
 
+    it('Should be able to save WT phage to fridge', (done)=>{
+      var newPhage = {
+        strainNum: 12,
+        mutationList: [],
+        deletionList: []
+      };
+      //console.log(newPhage);
+      request(app)
+        .post('/api/cricket/' + user.userId + '/' + scenario.scenCode + '/fridge-phage')
+        .send(newPhage)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+        let outFridge = res.body;
+        let phage = outFridge.strains[0];
+        phage.scenarioOrigin.should.have.property('scenCode', scenario.scenCode);
+        phage.mutationList.should.have.lengthOf(0);
+        phage.should.have.property('strainNum', newPhage.strainNum);
+          done();
+        });
+    });
+
+    it('Should be able to save FS phage to fridge', (done)=>{
+      var newPhage = {
+        strainNum: 13,
+        mutationList: [{kind: 'minusOne', location: 9}],
+        deletionList: []
+      };
+      //console.log(newPhage);
+      request(app)
+        .post('/api/cricket/' + user.userId + '/' + scenario.scenCode + '/fridge-phage')
+        .send(newPhage)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+        let outFridge = res.body;
+        let phage = outFridge.strains[0];
+        phage.scenarioOrigin.should.have.property('scenCode', scenario.scenCode);
+        phage.mutationList.should.have.lengthOf(1);
+        phage.should.have.property('strainNum', newPhage.strainNum);
+          done();
+        });
+    });
   });
 
   /*describe('Test DELETE methods', ()=>{
