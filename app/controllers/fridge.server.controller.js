@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Fridge = mongoose.model('Fridge');
 const Phage = mongoose.model('Phage');
 const phageScen = require('../utility/phage.scenario');
+const phageEnum = require('../utility/phage.enum');
 
 // Create a new error handling controller method
 const getErrorMessage = function (err) {
@@ -29,11 +30,20 @@ const stockFridge = function (scenario, user) {
     strain.scenarioOrigin = scenario;
     let newPhage = new Phage(strain);
     newPhage.save((err, phage) => {
-      if (err)
+    if (err)
       console.log(err)
     });
     strainIdList.push(newPhage);
   } // end for i
+/*Phage.create(strainList, function (err, strains) {
+      if (!err) {
+        strainIdList = strains.map((strain) => {
+          return strain._id;
+        });
+      } else {
+        console.log(err);
+      }
+    });*/
   // fridge info
   return {
     scenario: scenario,
@@ -48,8 +58,8 @@ exports.getFridge = function (req, res) {
   var scen = req.scenario;
 
   Fridge.findOne({
-      owner: user.id,
-      scenario: scen.id
+      owner: user._id,
+      scenario: scen._id
     })
     .populate('owner', 'userId')
     .populate('scenario', 'scenCode')
@@ -99,6 +109,27 @@ exports.saveFridge = function (req, res) {
       // send back fridge
       res.json(fridge);
     }
+  });
+};
+
+exports.createPhage = function(req, res){
+  // phageDetails will have strainNum, mutationList, deletion, comment, parents
+  // add phageType - USER
+
+  var phage = req.body;
+  console.log('phage',phage);
+  // req will include scenario and user info
+  var user = req.user;
+  var scen = req.scenario;
+  phage.owner = user;
+  phage.scenarioOrigin = scen;
+  phage.phageType = phageEnum.PHAGETYPE.USER;
+
+  Phage.create(phage, (err, newPhage)=>{
+    if(err)
+      return res.status(400).send({message: getErrorMessage(err)});
+    else
+      res.json(newPhage)
   });
 };
 

@@ -13,6 +13,9 @@ module.exports = function (app) {
     .get(fridge.getFridge)
   .post(fridge.saveFridge);
 
+  app.route('/api/cricket/:userId/:scenarioId/phage')
+    .post(fridge.createPhage);
+
   app.param('userId', users.userById);
   app.param('scenarioId', scenarios.scenarioByCode);
 };
