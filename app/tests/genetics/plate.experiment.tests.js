@@ -39,7 +39,7 @@ describe('Plate experiments unit tests', () => {
     phageExp.resetEngine();
     phageScen.resetEngine();
     plateExp.resetEngine();
-    let geneData = phageScen.makeGene(scenario.gcProb, scenario.minStops);
+    /*let geneData = phageScen.makeGene(scenario.gcProb, scenario.minStops);
     scenData.wtGene = geneData.wtGene;
     scenData.realStops = geneData.realStops;
     scenData.framesStopList = geneData.framesStopList;
@@ -50,7 +50,11 @@ describe('Plate experiments unit tests', () => {
       phage.id = 'testing' + i;
       scenData = phageDetails.scenData;
       phageList.push(phage);
-    }
+    }*/
+    let tmp = phageScen.generateScenario(scenario);
+    scenData = tmp.scenData;
+    phageList = tmp.strainList;
+    //console.log(phageList);
     done();
   });
   /* PHAGE:
