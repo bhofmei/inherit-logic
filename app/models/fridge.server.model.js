@@ -10,14 +10,6 @@ const FridgeSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Scenario'
   },
-  nShelves: {
-    type: Number,
-    default: 4
-  },
-  nSpots: {
-    type: Number,
-    default: 16
-  },
   strains: [{
     type: Schema.ObjectId,
     ref: 'Phage'

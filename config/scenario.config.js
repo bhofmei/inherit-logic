@@ -19,5 +19,10 @@ module.exports = {
   intraMuteDist: [10,80],
   interMuteDist: -1,
   probDeletion: 0.005,
-  probRadSurvive: 0.01
+  probRadSurvive: 0.01,
+  /* fridge config */
+  fridge: {
+    nShelves: 2,
+    nSpots: 16
+  }
 };

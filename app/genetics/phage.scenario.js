@@ -289,7 +289,7 @@ const generateFrameshift = function (shiftType, nShifts, readable, scenData) {
         shifter = pEnum.MUTEKIND.MINUSONE;
         break;
       case 0:
-        shifter = (randGen.bool() ? pEnum.MUTEKIND.MINUSONE : pEnum.MUTEKIND.PLUSONE);
+        shifter = (randGen.randBool(randEngine) ? pEnum.MUTEKIND.MINUSONE : pEnum.MUTEKIND.PLUSONE);
         break;
       default:
         shifter = ((shiftType + 1) % 2 ? pEnum.MUTEKIND.MINUSONE : pEnum.MUTEKIND.PLUSONE);

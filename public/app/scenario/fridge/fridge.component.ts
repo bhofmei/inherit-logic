@@ -14,7 +14,7 @@ export class FridgeComponent {
 
   user: any;
   fridge: any;
-  strains: [any];
+  strains: any[];
   routingObserver: any;
   errorMessage: string;
 
@@ -27,16 +27,16 @@ export class FridgeComponent {
 
   ngOnInit(){
      this.user = this._authenticationService.user;
-
     this.routingObserver = this._route.params.subscribe(params => {
             let scenId = params['scenId'];
-          let userId = this.user.id;
+          let userId = this.user.userId || this.user.id;
             this._scenarioService
                 .getFridge(userId, scenId)
                 .subscribe(
                 fridge => {
                   this.fridge = fridge;
-                    this.strains = fridge.strains;
+                  this.strains = fridge.strains;
+                  console.log(this.strains)
                 },
                 error => this._router.navigate(['/'])
                 );

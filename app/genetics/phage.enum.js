@@ -32,6 +32,7 @@ exports.FRAMEPHENOTYPE = {
 exports.PHAGETYPE = {
   REF: 'reference',
   UNKNOWN: 'unknown',
+  EMPTY: 'empty',
   USER: 'user'
 };
 
