@@ -2,18 +2,27 @@
   <div *ngIf="fridge">
     <h4 class="card-header">Fridge</h4>
     <div class="card-body">
-      <div class="strain-list">
+      <!--<div class="strain-list">
         <div *ngFor="let strain of strains">
-        <div class="strain-{{strain.phageType}}">
+        <div class="strain strain-{{strain.phageType}}">
         {{strain.strainNum}}
           <span *ngIf='strain.phageType !== "empty"'>{{strain.id}}</span>
           </div>
-        </div>
+        </div>-->
+       <div *ngFor="let strain of currStrains" class="strain-list">
+         <div class="strain">
+           <span class="strain-num">{{strain.strainNum}}</span>
+          <span *ngIf='strain.phageType !== "empty"'>{{strain.id}}</span>
+          </div>
       </div>
     </div>
     <!-- end card body -->
-    <div class="card-footer">
-      <button (click)="save()" class="btn btn-secondary">Save</button>
+    <div class="card-footer text-center">
+      <!--<button (click)="save()" class="btn btn-secondary">Save</button>-->
+      <div role="toolbar">
+      <button (click)="changeShelf(-1)" [disabled]="shelf==0" class="btn"><span>&laquo;</span></button>
+      <button (click)="changeShelf(1)" [disabled]="shelf==1" class="btn"><span>&raquo;</span></button>
+        </div>
     </div>
   </div>
   <!-- end if fridge -->

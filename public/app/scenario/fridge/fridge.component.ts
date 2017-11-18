@@ -15,6 +15,9 @@ export class FridgeComponent {
   user: any;
   fridge: any;
   strains: any[];
+  currStrains: any[];
+  shelf: number = 0;
+  spots: number = 16;
   routingObserver: any;
   errorMessage: string;
 
@@ -35,8 +38,9 @@ export class FridgeComponent {
                 .subscribe(
                 fridge => {
                   this.fridge = fridge;
-                  this.strains = fridge.strains;
-                  console.log(this.strains)
+                  this.strains = this._fillStrains(fridge.strains);
+                  this._currStrains();
+                  //this.strains = fridge.strains;
                 },
                 error => this._router.navigate(['/'])
                 );
@@ -47,6 +51,20 @@ export class FridgeComponent {
     this.routingObserver.unsubscribe()
   }
 
+  _fillStrains(fridgeStrains: any[]): any[]{
+    for(let i = fridgeStrains.length; i < 2*this.spots; i++){
+      let nStrain = {strainNum: i, phageType: 'empty'};
+      fridgeStrains.push(nStrain);
+    }
+    return fridgeStrains
+  }
+
+  _currStrains(){
+    let start = this.shelf*this.spots;
+    let end = start+this.spots;
+    this.currStrains = this.strains.slice(start,end);
+  }
+
   save(){
     this.fridge.strains = this.strains;
     this._scenarioService
@@ -54,4 +72,16 @@ export class FridgeComponent {
       .subscribe(savedFridge => {
     }, error => this.errorMessage = error);
   }
+
+  changeShelf(inc: number){
+    console.log(this.shelf);
+    if(this.shelf ==0 && inc === 1){
+      this.shelf++;
+      this._currStrains();
+    } else if(this.shelf === 1 && inc === -1){
+      this.shelf--;
+      this._currStrains();
+    }
+  }
+
 }
