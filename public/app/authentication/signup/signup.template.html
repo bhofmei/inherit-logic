@@ -1,18 +1,14 @@
-<form (ngSubmit)="signup()">
-  <div>
-    <label>Name:</label>
-    <input type="text" [(ngModel)]="user.name" name="name">
-  </div>
-  <div>
-    <label>Email:</label>
-    <input type="text" [(ngModel)]="user.email" name="email">
-  </div>
-  <div>
-    <label>Password:</label>
-    <input type="password" [(ngModel)]="user.password" name="password">
-  </div>
-  <div>
-    <input type="submit" value="Sign up">
-  </div>
-  <span>{{errorMessage}}</span>
+<form (ngSubmit)="signup()" class="form-signup">
+  <h2 class="form-signup-heading">Sign up now</h2>
+  <label for="inputName" class="sr-only">Name</label>
+  <input type="text" id="inputName" class="form-control" required autofocus placeholder="Name" [(ngModel)]="user.name" name="name">
+
+  <label for="inputEmail" class="sr-only">Email address</label>
+  <input type="email" id="inputEmail" class="form-control" required placeholder="Email address" [(ngModel)]="user.username" name="username">
+
+  <label for="inputPassword" class="sr-only">Password</label>
+  <input type="password" id="inputPassword" class="form-control" placeholder="Password" [(ngModel)]="user.password" name="password">
+
+  <button class="btn btn-primary btn-block" type="submit">Sign up</button>
+  <p class="text-danger">{{errorMessage}}</p>
 </form>
