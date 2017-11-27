@@ -1,0 +1,12 @@
+<div class="phage-plate border border-dark col-12 col-md-6 col-xl-3 align-middle">
+<div *ngIf="isEmpty" class="empty-plate">
+
+</div>
+<div *ngIf="isFull" class="full-plate">
+  PLATE IS OVER CAPACITY
+  </div>
+  <div *ngIf="!isEmpty && !isFull" class="cross-plate">
+  <span>Little plaques: {{littlePlaqueList.length}}</span>
+  <span>Big plaques: {{bigPlaqueList.length}}</span>
+  </div>
+</div>

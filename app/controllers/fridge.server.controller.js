@@ -4,7 +4,6 @@ const Fridge = mongoose.model('Fridge');
 const Phage = mongoose.model('Phage');
 const phageScen = require('../genetics/phage.scenario');
 const phageEnum = require('../genetics/phage.enum');
-const scenConfig = require('../../config/scenario.config.js');
 
 // Create a new error handling controller method
 const getErrorMessage = function (err) {
@@ -24,19 +23,9 @@ const stockFridge = function (scenario, user) {
   //console.log(stock.strainList);
   let strainList = stock.strainList;
   var strainIdList = [];
-  let totalStrainNum = scenConfig.fridge.nShelves * scenConfig.fridge.nSpots;
   // loop through strains, save strains to database, and create empty strains
-  //for (let i = 0; i < strainList.length; i++) {
-  for(let i = 0; i < totalStrainNum; i++){
-    let strain;
-    if(i < strainList.length){
-      strain = strainList[i];
-    } else {
-      strain = {
-        phageType: phageEnum.PHAGETYPE.EMPTY,
-        strainNum: i
-      }
-    }
+  for (let i = 0; i < strainList.length; i++) {
+    let strain = strainList[i];
     strain.owner = user;
     strain.scenarioOrigin = scenario;
     let newPhage = new Phage(strain);
@@ -65,7 +54,7 @@ exports.getFridge = function (req, res) {
     })
     .populate('owner', 'userId')
     .populate('scenario', 'scenCode')
-    .populate('strains', 'strainNum comment phageType id mutationList')
+    .populate('strains', 'strainNum comment phageType id')
     .exec((err, fridge) => {
       if (err) {
         return res.status(400)

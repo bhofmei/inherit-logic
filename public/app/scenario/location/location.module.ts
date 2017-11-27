@@ -7,6 +7,8 @@ import { ExperimentService } from './experiment.service';
 
 import { LocationComponent } from './location.component';
 import { LabRoomComponent } from './lab-room/lab-room.component';
+import { PlateComponent } from './lab-room/plate.component';
+import { BactTubeComponent } from './lab-room/bact-tube.component';
 import { PlexerRoomComponent } from './plexer-room/plexer-room.component';
 import { ModelRoomComponent } from './model-room/model-room.component';
 import { LandingRoomComponent } from './landing-room/landing-room.component';
@@ -20,6 +22,8 @@ import { LandingRoomComponent } from './landing-room/landing-room.component';
   declarations: [
     LocationComponent,
     LabRoomComponent,
+    PlateComponent,
+    BactTubeComponent,
     PlexerRoomComponent,
     ModelRoomComponent,
     LandingRoomComponent

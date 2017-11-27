@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
+import { ExperimentService } from '../experiment.service';
 
 @Component({
     selector: 'lab-room',
-    template: './app/scenario/fridge/fridge.template.html'
+    templateUrl: './app/scenario/location/lab-room/lab-room.template.html',
+  styleUrls: ['./app/scenario/location/lab-room/lab-room.style.css']
 })
-export class LabRoomComponent {}
+export class LabRoomComponent {
+
+}

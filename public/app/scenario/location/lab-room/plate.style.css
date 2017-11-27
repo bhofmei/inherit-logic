@@ -1,0 +1,17 @@
+.phage-plate{
+  min-height: 200px;
+  padding: 0px;
+  margin: 20px auto 0px auto;
+}
+
+.phage-plate .empty-plate{
+  background-color: palegoldenrod;
+}
+
+.phage-plate .full-plate{
+  background-color: navy;
+}
+
+.phage-plate .cross-plate{
+  background-color: white;
+}

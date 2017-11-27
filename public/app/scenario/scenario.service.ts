@@ -51,6 +51,14 @@ export class ScenarioService {
             .catch(this.handleError);
   }
 
+  addStrain(strain: any, userId: number, scenCode: string): Observable<any> {
+    // returns fridge
+    return this._http
+      .post(`${this._baseURL}/${userId}/${scenCode}/fridge-phage`, strain)
+            .map((res: Response) => res.json())
+            .catch(this.handleError);
+  }
+
     private handleError(error: Response) {
         return Observable.throw(error.json().message || 'Server error');
     }

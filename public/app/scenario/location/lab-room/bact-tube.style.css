@@ -1,0 +1,20 @@
+.bact-tube{
+  min-height: 200px;
+  display: inline-block;
+  border: 1px solid black
+}
+.bact-tube span {
+  font-size: x-large;
+  font-weight: bold;
+}
+.bact-tube-hidden{
+  border: 0px;
+}
+
+#tubeB{
+  color: blue;
+}
+
+#tubeK{
+  color: red;
+}

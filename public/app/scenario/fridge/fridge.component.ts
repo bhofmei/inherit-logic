@@ -1,9 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ScenarioService } from '../scenario.service';
-import { AuthenticationService } from '../../authentication/authentication.service'
-
-import { DragulaService } from 'ng2-dragula';
+import { AuthenticationService } from '../../authentication/authentication.service';
 
 @Component({
     selector: 'fridge',
@@ -14,7 +12,7 @@ export class FridgeComponent {
 
   user: any;
   fridge: any;
-  strains: any[];
+  strains: any[]; // have strainNum, phageType
   currStrains: any[];
   shelf: number = 0;
   spots: number = 16;
@@ -24,8 +22,7 @@ export class FridgeComponent {
   constructor(private _router: Router,
                private _route: ActivatedRoute,
                private _authenticationService: AuthenticationService,
-               private _scenarioService: ScenarioService,
-              private _dragulaService: DragulaService) {
+               private _scenarioService: ScenarioService) {
   }
 
   ngOnInit(){
@@ -38,6 +35,7 @@ export class FridgeComponent {
                 .subscribe(
                 fridge => {
                   this.fridge = fridge;
+                  //console.log(fridge.strains);
                   this.strains = this._fillStrains(fridge.strains);
                   this._currStrains();
                   //this.strains = fridge.strains;
@@ -82,6 +80,15 @@ export class FridgeComponent {
       this.shelf--;
       this._currStrains();
     }
+  }
+
+  addStrain(dat: any){
+    // dat should have: strainNum, mutationList, deleteion
+    // need userId and scenario
+    let userId = this.user.userId || this.user.id;
+    let scenCode = this.fridge.scenario.scenCode;
+    this._scenarioService.addStrain(dat,userId, scenCode)
+    .subscribe((newFridge) => {this.fridge = newFridge},(error)=>{this.errorMessage = error});
   }
 
 }

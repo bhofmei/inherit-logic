@@ -132,7 +132,7 @@ describe('Fridge Controller Unit Tests:', () => {
       var newPhage = {
         strainNum: 10,
         mutationList: [],
-        deletionList: []
+        deletion: []
       };
       //console.log(newPhage);
       request(app)
@@ -154,7 +154,7 @@ describe('Fridge Controller Unit Tests:', () => {
       var newPhage = {
         strainNum: 11,
         mutationList: [{kind: 'plusOne', location: 250}],
-        deletionList: []
+        deletion: []
       };
       //console.log(newPhage);
       request(app)
@@ -176,7 +176,7 @@ describe('Fridge Controller Unit Tests:', () => {
       var newPhage = {
         strainNum: 12,
         mutationList: [],
-        deletionList: []
+        deletion\: []
       };
       //console.log(newPhage);
       request(app)
@@ -198,7 +198,7 @@ describe('Fridge Controller Unit Tests:', () => {
       var newPhage = {
         strainNum: 13,
         mutationList: [{kind: 'minusOne', location: 9}],
-        deletionList: []
+        deletion: []
       };
       //console.log(newPhage);
       request(app)

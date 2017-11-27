@@ -45,7 +45,7 @@
     "mongoose": "^4.6.5",
     "mongoose-sequence": "^4.0.1",
     "morgan": "^1.7.0",
-    "ng2-dnd": "^4.2.0",
+    "ng2-dnd": "^5.0.2",
     "ng2-dragula": "^1.5.0",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
