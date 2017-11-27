@@ -7,7 +7,8 @@
     },
     rxjs: {
       defaultExtension: 'js'
-    }/*,
+    },
+    /*,
     'ng2-dnd': {
       main: 'bundles/ng2-dnd.umd.js',
       defaultExtension: 'js'
@@ -16,7 +17,9 @@
 
   var map = {
     '@angular': 'lib/@angular',
+    '@angular/common/http': 'lib/@angular/common/bundles/common-http.umd.js',
     'rxjs': 'lib/rxjs',
+    'tslib': 'lib/tslib/tslib.js',
     /*'ng2-dnd': 'lib/ng2-dnd/'*/
     'ng2-dnd': 'lib/ng2-dnd/bundles/ng2-dnd.umd.js'
   };
@@ -41,7 +44,7 @@
 
   System.config({
     defaultJSExtensions: true,
-    transpiler: null,
+    transpiler: 'typescript',
     packages: packages,
     map: map
   });

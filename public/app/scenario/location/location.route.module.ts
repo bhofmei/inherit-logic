@@ -7,7 +7,6 @@ import { LabRoomComponent } from './lab-room/lab-room.component';
 import { PlexerRoomComponent } from './plexer-room/plexer-room.component';
 import { ModelRoomComponent } from './model-room/model-room.component';
 import { LandingRoomComponent } from './landing-room/landing-room.component';
-import { LocationComponent } from './location.component';
 
 const locationRoutes: Routes = [
   {

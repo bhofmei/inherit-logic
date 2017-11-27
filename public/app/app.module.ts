@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpModule, RequestOptions } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { DndModule } from 'ng2-dnd';
 
@@ -15,7 +15,6 @@ import { ScenarioService } from './scenario/scenario.service';
 
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ArticleModule } from './articles/article.module';
-import { CricketModule } from './cricket/cricket.module';
 import { ScenarioModule } from './scenario/scenario.module';
 import { NavComponent } from './nav/nav.component';
 import { LocationModule } from './scenario/location/location.module';
@@ -23,10 +22,9 @@ import { LocationModule } from './scenario/location/location.module';
 @NgModule({
     imports: [
         BrowserModule,
-        HttpModule,
+        HttpClientModule,
         FormsModule,
         AuthenticationModule,
-        //HomeModule,
         ArticleModule,
       ScenarioModule,
       LocationModule,
