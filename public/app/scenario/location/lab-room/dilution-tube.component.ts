@@ -31,6 +31,12 @@ export class DilutionTubeComponent {
            }
   }
 
+  getData(src: string): Object {
+    // return data needed for plate
+    // take into account dilution values
+    return this.contents;
+  }
+
   dropContents($event: any, src: string){
     var incomingDat = $event.dragData;
     if(incomingDat.hasOwnProperty('lawnType') && incomingDat.hasOwnProperty('phage')){

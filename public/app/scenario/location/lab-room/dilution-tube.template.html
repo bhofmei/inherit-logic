@@ -5,16 +5,24 @@
   </div>
   <div class="dilution-tubes">
     <div [ngClass]="getClasses()" id="dil-tube-1" dnd-droppable (onDropSuccess)="dropContents($event, '1')">
+      <div class="dil-tube-inner" dnd-draggable [dragEnabled]="canDrag()" [dragData]="getData('1')">
       <span>{{dilutionValue}}^1</span>
+        </div>
     </div>
     <div [ngClass]="getClasses()" id="dil-tube-2" dnd-droppable (onDropSuccess)="dropContents($event, '2')">
+      <div class="dil-tube-inner" dnd-draggable [dragEnabled]="canDrag()" [dragData]="getData('2')">
       <span>{{dilutionValue}}^2</span>
+        </div>
     </div>
     <div [ngClass]="getClasses()" id="dil-tube-3" dnd-droppable (onDropSuccess)="dropContents($event, '3')">
+      <div class="dil-tube-inner" dnd-draggable [dragEnabled]="canDrag()" [dragData]="getData('3')">
       <span>{{dilutionValue}}^3</span>
+        </div>
     </div>
     <div [ngClass]="getClasses()" id="dil-tube-4" dnd-droppable (onDropSuccess)="dropContents($event, '4')">
+      <div class="dil-tube-inner" dnd-draggable [dragEnabled]="canDrag()" [dragData]="getData('4')">
       <span>{{dilutionValue}}^4</span>
+        </div>
     </div>
   </div>
 </div>

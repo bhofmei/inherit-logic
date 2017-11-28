@@ -6,6 +6,9 @@
 .dil-tube.filled{
   background-color:floralwhite;
 }
+.dil-tube-inner{
+  min-height: 200px;
+}
 #dil-value{
   display: inline-block;
 }

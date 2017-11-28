@@ -1,12 +1,12 @@
-<div class="phage-plate border border-dark col-12 col-md-6 col-xl-3 align-middle">
-<div *ngIf="isEmpty" class="empty-plate">
-
-</div>
-<div *ngIf="isFull" class="full-plate">
-  PLATE IS OVER CAPACITY
+<div class="phage-plate border border-dark col-12 col-md-6 col-xl-3 align-middle" dnd-droppable (onDropSuccess)="fillPlate($event)">
+  <div *ngIf="isEmpty && !isFull" class="empty-plate">
+{{errorMessage}}
+  </div>
+  <div *ngIf="isFull" class="full-plate">
+    PLATE IS OVER CAPACITY
   </div>
   <div *ngIf="!isEmpty && !isFull" class="cross-plate">
-  <span>Little plaques: {{littlePlaqueList.length}}</span>
-  <span>Big plaques: {{bigPlaqueList.length}}</span>
+    <span>Little plaques: {{littlePlaqueList.length}}</span>
+    <span>Big plaques: {{bigPlaqueList.length}}</span>
   </div>
 </div>

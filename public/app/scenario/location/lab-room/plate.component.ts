@@ -18,6 +18,7 @@ export class PlateComponent {
   private phage1: any = null;
   private phage2: any = null;
   private scenarioDetails: string;
+  private errorMessage: string = '';
 
   // results after cross
   private isFull: boolean = false;
@@ -33,11 +34,49 @@ export class PlateComponent {
     this.isFull = false;
     this.isEmpty = true;
     this.lawnType = null;
+    this.errorMessage = '';
   }
 
   ngOnInit() {
     this._scenarioService.getScenarioDetails
       .subscribe(details => this.scenarioDetails = details);
+  }
+
+  fillPlate($event: any) {
+    // dragData has lawnType and list of phage
+    var dragData = $event.dragData;
+    this.lawnType = dragData.lawnType;
+    this.phage1 = dragData.phage[0];
+    if(dragData.phage.length === 2){
+      this.phage2 = dragData.phage[1];
+    }
+    // now perform the cross
+    this.performCross();
+  }
+
+  performCross(){
+    // call experiment service, set variables
+    var newPlate = {
+      lawnType: this.lawnType,
+      phage1: this.phage1,
+      phage2: this.phage2,
+      specials: {},
+      location: 'lab-room',
+      scenarioData: this.scenarioDetails,
+      capacity: this.capcity
+    }
+    this._experimentService.createPlate(newPlate)
+    .subscribe((res)=>{
+      console.log(res);
+      this.isFull = res.full;
+      this.littlePlaqueList = res.littlePlaque;
+      this.bigPlaqueList = res.bigPlaque;
+      this.isEmpty = false;
+      // success
+    }, (err)=>{
+      // error
+      this.errorMessage = err.error.message || err.message || 'Error';
+    });
   }
 
 }

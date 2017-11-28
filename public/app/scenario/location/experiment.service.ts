@@ -2,7 +2,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 //import { Http, Headers, Request, RequestMethod, Response } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 //import { Router } from '@angular/router';
 
 @Injectable()
@@ -14,14 +14,12 @@ export class ExperimentService {
   createPlate(plate: any): Observable<any>{
     // plate must have 1-2 phage IDs with numPhage [phage1,phage2], lawn type, location, specials, capacity, scenarioData (from fridge)
     // returns error OR {full, littlePlaque, bigPlaque}
-    return this._http
+    console.log('plate', plate);
+    var res = this._http
     .post(`${this._baseURL}/plate`, plate)
+    return res;
     //.map((res: Response)=>{ res.json()})
     //.catch(this.handleError)
   }
-
-  /*private handleError(error: Response) {
-        return Observable.throw(error.json().message || 'Server error');
-    }*/
 
 }

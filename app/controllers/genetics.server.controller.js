@@ -6,6 +6,7 @@ exports.createPlate = function (req, res) {
   // req must have 1-2 phage IDs with numPhage, lawn type, location, specials, capacity, scenarioData
 
   let reqB = req.body;
+  console.log(reqB);
   var lawnType = reqB.lawnType;
   var location = reqB.location;
   var capacity = reqB.capacity;
@@ -21,9 +22,10 @@ exports.createPlate = function (req, res) {
         .send({
           message: err.message
         });
-      }
+      } else if(phage1.hasOwnProperty('numPhage') === false){
+          res.status(400).send({message: 'numPhage not set'});
+        }
       else {
-        typeof ph1;
         ph1.numPhage = phage1.numPhage;
         // check for phage2
         if (phage2 !== undefined) {
@@ -35,7 +37,9 @@ exports.createPlate = function (req, res) {
               .send({
                 message: err2.message
               });
-            }
+            } else if(phage2.hasOwnProperty('numPhage') === false){
+          res.status(400).send({message: 'numPhage not set'});
+        }
             else {
               ph2.numPhage = phage2.numPhage;
               var newPlate = plate.createPlate(ph1, ph2, lawnType, null, capacity, location, scenData);
@@ -43,7 +47,7 @@ exports.createPlate = function (req, res) {
               if (newPlate)
                 res.json(newPlate);
               else{
-                res.status(300)
+                res.status(400)
                 .send({
                   message: 'double phage - could not create plate'
                 });
@@ -56,7 +60,7 @@ exports.createPlate = function (req, res) {
           if (newPlate)
             res.json(newPlate);
           else{
-            res.status(300)
+            res.status(400)
             .send({
               message: 'single phage - could not create plate'
             });
