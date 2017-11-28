@@ -46,10 +46,15 @@ exports.generateScenario = function (scenario) {
     // for each phage type in list
     let rPhage = JSON.parse(refPhageList[i]);
     for (let j = 0; j < rPhage.numToMake; j++) {
+      try{
       let newPhageDet = this.makePhage(rPhage, phageNum, pEnum.PHAGETYPE.REF, scenDetails);
+
       strainList.push(newPhageDet.phage);
       scenDetails = newPhageDet.scenData;
       phageNum++;
+      } catch (err){
+        console.log(err);
+      }
     } // end for j
   } // end for i
 
@@ -72,7 +77,7 @@ exports.generateScenario = function (scenario) {
         //if (tmpStrainList.length == 0 || randGen.bool(1, 3)) {
         if (tmpStrainList.length == 0 || randGen.randBoolFrac(1, 3, randEngine)) {
           // create new phage
-          newPhageDet = makePhage(rPhage, phageNum, pEnum.PHAGETYPE.UNKNOWN, scenDetails);
+          newPhageDet = this.makePhage(rPhage, phageNum, pEnum.PHAGETYPE.UNKNOWN, scenDetails);
           newPhage = newPhageDet.phage;
           scenDetails = newPhageDet.scenData;
         } else {
@@ -292,7 +297,7 @@ const generateFrameshift = function (shiftType, nShifts, readable, scenData) {
         shifter = (randGen.randBool(randEngine) ? pEnum.MUTEKIND.MINUSONE : pEnum.MUTEKIND.PLUSONE);
         break;
       default:
-        shifter = ((shiftType + 1) % 2 ? pEnum.MUTEKIND.MINUSONE : pEnum.MUTEKIND.PLUSONE);
+        shifter = ((shiftType + i) % 2 ? pEnum.MUTEKIND.MINUSONE : pEnum.MUTEKIND.PLUSONE);
     } // end switch shiftType
     var newSpot = getNewSpot(lastMade, scenData);
     // add to mutation list
@@ -305,7 +310,6 @@ const generateFrameshift = function (shiftType, nShifts, readable, scenData) {
 
   // sort the mutation list
   muteList.sort(util.locSort);
-
   // make sure first mutant is good regardless of location from end point
   if (nShifts > 1) {
     let mutePoint = -100;
@@ -384,7 +388,7 @@ const getNewSpot = function (lastMade, scenData) {
   if (scenData.interMuteDist === -1) {
     if (lastMade === null) {
       //newSpot = randGen.integer(25, 300);
-      newSpot = randGen.randInt(25, 300, randEngine);
+      newSpot = randGen.randDie(300, randEngine) + 25;
     } else {
       let friendly = false;
       while (!friendly) {
@@ -399,20 +403,20 @@ const getNewSpot = function (lastMade, scenData) {
   } else {
     // interMuteDist defined
     if (scenData.usedShiftSpots.length === 0) {
+      let tmp = (350 - scenData.interMuteDist + 50);
       // first shift to be made
       //newSpot = randGen.integer(25, (350 - scenData.interMuteDisance + 50));
-      newSpot = randGen.randInt(25, (350 - scenData.interMuteDisance + 50), randEngine);
+      newSpot = randGen.randDie(tmp, randEngine)+25;
       // allow mutation to be at either end
       //newSpot = (randGen.bool() ? 350 - newSpot : newSpot);
       newSpot = (randGen.randBool(randEngine) ? 350 - newSpot : newSpot);
     } else {
       let friendly = false;
       while (!friendly) {
-        //newSpot = randGen.integer(25, 300);
-        newSpot = randGen.randInt(25, 300, randGen);
+        newSpot = randGen.randDie(300, randEngine) + 25;
         friendly = true;
         for (let j = 0; j < scenData.usedShiftSpots.length; j++) {
-          friendly = (Math.abs(scenData.usedShiftSpots.location - newSpot) < scenData.interMuteDisance);
+          friendly = (Math.abs(scenData.usedShiftSpots[j].location - newSpot) < scenData.interMuteDist);
         } // end for j
       } // end while not friendly
     } // end if usedShiftSpots
