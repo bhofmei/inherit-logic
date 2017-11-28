@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ExperimentService } from '../experiment.service'
+import { ExperimentService } from '../experiment.service';
+import { ScenarioService } from '../../scenario.service'
 
 @Component({
     selector: 'lab-room-plate',
@@ -16,13 +17,14 @@ export class PlateComponent {
   private capcity: number = 1000000;
   private phage1: any = null;
   private phage2: any = null;
+  private scenarioDetails: string;
 
   // results after cross
   private isFull: boolean = false;
   private littlePlaqueList: any[];
   private bigPlaqueList: any[];
 
-  constructor(private _experimentService: ExperimentService){ }
+  constructor(private _experimentService: ExperimentService, private _scenarioService: ScenarioService){ }
 
   clearPlate() {
     // reset all variables
@@ -32,4 +34,10 @@ export class PlateComponent {
     this.isEmpty = true;
     this.lawnType = null;
   }
+
+  ngOnInit() {
+    this._scenarioService.getScenarioDetails
+      .subscribe(details => this.scenarioDetails = details);
+  }
+
 }

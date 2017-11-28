@@ -1,5 +1,6 @@
 //import 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Injectable } from '@angular/core';
 //import { Http, Headers, Request, RequestMethod, Response } from '@angular/http';
@@ -10,6 +11,9 @@ import { HttpClient } from '@angular/common/http';
 export class ScenarioService {
     private _baseURL = 'api/cricket';
     private currScenario: any;
+    private scenarioDetails = new BehaviorSubject<string>("");
+    getScenarioDetails = this.scenarioDetails.asObservable();
+
 
     constructor(private _http: HttpClient) {
       this.currScenario = null;
@@ -33,14 +37,17 @@ export class ScenarioService {
   }
 
   resetScenario(){
+    this.scenarioDetails.next('');
     this.currScenario = null;
   }
 
-    getFridge(userId: number, scenId: string): Observable<any> {
-      return this._http
-            .get(`${this._baseURL}/${userId}/${scenId}`)
-            //.map((res: Response) => res.json())
-            //.catch(this.handleError);
+  getFridge(userId: number, scenId: string): Observable<any> {
+      var res = this._http
+            .get(`${this._baseURL}/${userId}/${scenId}`);
+      res.subscribe((dat: any)=>{
+        this.scenarioDetails.next(dat.scenarioDetails);
+      });
+      return res;
     }
 
   saveFridge(fridge: any): Observable<any> {
