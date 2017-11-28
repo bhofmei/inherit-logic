@@ -11,6 +11,7 @@ export class BactTubeComponent {
   private isHiddenB: boolean = false;
   private isHiddenK: boolean = false;
   private phage: string[] = [];
+  private errorMessage: string = '';
 
   constructor(){ }
 
@@ -19,6 +20,7 @@ export class BactTubeComponent {
     this.phage = [];
     this.isHiddenB = false;
     this.isHiddenK = false;
+    this.errorMessage = '';
   }
 
   canDrag(): boolean {
@@ -33,22 +35,21 @@ export class BactTubeComponent {
            }
   }
 
-  canDrop(): boolean {
-    if(this.phage.length === 2){
-      return false;
-    }
-  }
-
   dropPhage($event: any, src: string){
-    console.log($event, src);
-    this.phage.push($event.dragData.id);
-    switch(src){
-      case 'B':
-        this.isHiddenK = true;
-        break;
-      case 'K':
-        this.isHiddenB = true;
-        break;
-    }
+    var incomingPhage = $event.dragData;
+    if(incomingPhage.hasOwnProperty('id') == false){
+      this.errorMessage = 'only add phage from the fridge';
+    } else if(this.phage.length >= 2) {
+      this.errorMessage = 'cannot have more than 2 phage in a tube';
+    } else {
+      this.phage.push(incomingPhage.id);
+      switch(src){
+        case 'B':
+          this.isHiddenK = true;
+          break;
+        case 'K':
+          this.isHiddenB = true;
+          break;
+      }}
   }
 }
