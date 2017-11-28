@@ -9,8 +9,8 @@
           <span *ngIf='strain.phageType !== "empty"'>{{strain.id}}</span>
           </div>
         </div>-->
-       <div *ngFor="let strain of currStrains" class="strain-list">
-         <div class="ls-strain">
+       <div class="strain-list">
+         <div *ngFor="let strain of currStrains" class="ls-strain" dnd-draggable [dragData]="strain">
            <span class="strain-num text-secondary">{{strain.strainNum}}</span>
           <span *ngIf='strain.phageType !== "empty"'>{{strain.id}}</span>
           </div>

@@ -72,7 +72,6 @@ export class FridgeComponent {
   }
 
   changeShelf(inc: number){
-    console.log(this.shelf);
     if(this.shelf ==0 && inc === 1){
       this.shelf++;
       this._currStrains();

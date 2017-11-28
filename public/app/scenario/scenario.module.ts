@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
 
 import { ScenarioRouterModule } from './scenario.route.module';
 import { ScenarioService } from './scenario.service';
@@ -10,15 +9,12 @@ import { LocationModule } from './location/location.module';
 
 import { ListComponent } from './list/list.component';
 
-import{ FridgeComponent } from './fridge/fridge.component';
-
 @NgModule({
   imports: [
-    CommonModule,
+    SharedModule,
     ScenarioRouterModule
   ],
   declarations: [
-    FridgeComponent,
     ScenarioComponent,
     ListComponent
   ],

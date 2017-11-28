@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
 
 import { LocationRouterModule } from './location.route.module';
 import { ExperimentService } from './experiment.service';
 
+import { FridgeComponent } from '../fridge/fridge.component';
 import { LocationComponent } from './location.component';
 import { LabRoomComponent } from './lab-room/lab-room.component';
 import { PlateComponent } from './lab-room/plate.component';
@@ -15,12 +15,12 @@ import { LandingRoomComponent } from './landing-room/landing-room.component';
 
 @NgModule({
   imports: [
-    CommonModule,
-    FormsModule,
+    SharedModule,
     LocationRouterModule
   ],
   declarations: [
     LocationComponent,
+    FridgeComponent,
     LabRoomComponent,
     PlateComponent,
     BactTubeComponent,

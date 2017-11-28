@@ -9,33 +9,46 @@ import { Component } from '@angular/core';
 export class BactTubeComponent {
 
   private isHiddenB: boolean = false;
-  private isHiddenK: boolean = true;
-  private phage1: any = null;
-  private phage2: any = null;
+  private isHiddenK: boolean = false;
+  private phage: string[] = [];
 
   constructor(){ }
 
   clearTubes() {
     // reset all variables
-    this.phage1 = null;
-    this.phage2 = null;
+    this.phage = [];
     this.isHiddenB = false;
     this.isHiddenK = false;
   }
 
-  canDrop(src: string){
-    if(this.phage1 !== null && this.phage2 !== null){
-      return false;
-    } else if(src === 'B'){
-      return !this.isHiddenB;
-    } else if(src === 'K'){
-      return !this.isHiddenK;
-    } else {
+  canDrag(): boolean {
+    return this.phage.length > 0;
+  }
+
+  getClasses(src: string): Object {
+    return {'bact-tube col-2': true,
+            'invisible': (src === 'B' ? this.isHiddenB : this.isHiddenK),
+            'n-phage-1': this.phage.length === 1,
+            'n-phage-2': this.phage.length === 2
+           }
+  }
+
+  canDrop(): boolean {
+    if(this.phage.length === 2){
       return false;
     }
   }
 
-  dropPhage($event: any){
-    console.log($event);
+  dropPhage($event: any, src: string){
+    console.log($event, src);
+    this.phage.push($event.dragData.id);
+    switch(src){
+      case 'B':
+        this.isHiddenK = true;
+        break;
+      case 'K':
+        this.isHiddenB = true;
+        break;
+    }
   }
 }

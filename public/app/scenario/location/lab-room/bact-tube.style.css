@@ -1,14 +1,18 @@
 .bact-tube{
   min-height: 200px;
   display: inline-block;
-  border: 1px solid black
+  border: 1px solid black;
+  background-color:antiquewhite;
 }
 .bact-tube span {
   font-size: x-large;
   font-weight: bold;
 }
-.bact-tube-hidden{
-  border: 0px;
+.n-phage-1{
+  background-color: lightgray;
+}
+.n-phage-2{
+  background-color:darkgray;
 }
 
 #tubeB{

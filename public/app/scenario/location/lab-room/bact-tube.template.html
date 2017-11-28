@@ -1,8 +1,10 @@
-
-  <div [ngClass]="{'bact-tube col-2': true, 'invisible': isHiddenB}" id="tubeB">
+<div>
+  <div [ngClass]="getClasses('B')" id="tubeB" dnd-droppable [allowDrop]="canDrop()" (onDropSuccess)="dropPhage($event, 'B')" >
     <span>B</span>
   </div>
 
-  <div [ngClass]="{'bact-tube col-2': true, 'invisible': isHiddenK}" id="tubeK">
+  <div [ngClass]="getClasses('K')" id="tubeK" dnd-droppable [allowDrop]="canDrop()" (onDropSuccess)="dropPhage($event, 'K')" >
     <span>K</span>
   </div>
+</div>
+<button (click)="clearTubes()" class="btn btn-outline-secondary btn-sm btn-block">Clear tubes</button>

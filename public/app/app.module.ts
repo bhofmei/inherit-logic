@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-import { DndModule } from 'ng2-dnd';
+//import { DndModule } from 'ng2-dnd';
 
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routes';
@@ -30,7 +30,7 @@ import { LocationModule } from './scenario/location/location.module';
       LocationModule,
         RouterModule.forRoot(AppRoutes,
                             { enableTracing: true }),
-      DndModule.forRoot()
+      //DndModule.forRoot()
     ],
     declarations: [
         AppComponent,
