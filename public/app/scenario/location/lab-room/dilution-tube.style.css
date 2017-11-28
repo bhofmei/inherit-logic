@@ -1,0 +1,14 @@
+.dil-tube {
+  min-height: 200px;
+  display: inline-block;
+  border: 1px solid darkgray;
+}
+.dil-tube.filled{
+  background-color:floralwhite;
+}
+#dil-value{
+  display: inline-block;
+}
+#dil-value input{
+  width: 75px;
+}

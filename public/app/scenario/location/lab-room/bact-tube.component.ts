@@ -27,6 +27,13 @@ export class BactTubeComponent {
     return this.phage.length > 0;
   }
 
+  getDragData(src: string): Object {
+    return {
+      lawnType: src,
+      phage: this.phage
+    }
+  }
+
   getClasses(src: string): Object {
     return {'bact-tube col-2': true,
             'invisible': (src === 'B' ? this.isHiddenB : this.isHiddenK),

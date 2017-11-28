@@ -1,0 +1,23 @@
+<div class="row">
+  <div id="dil-value" class="col-3">
+    <b>Dilution Value</b><br>
+    <input type="number" [(ngModel)]="dilutionValue">
+  </div>
+  <div class="dilution-tubes">
+    <div [ngClass]="getClasses()" id="dil-tube-1" dnd-droppable (onDropSuccess)="dropContents($event, '1')">
+      <span>{{dilutionValue}}^1</span>
+    </div>
+    <div [ngClass]="getClasses()" id="dil-tube-2" dnd-droppable (onDropSuccess)="dropContents($event, '2')">
+      <span>{{dilutionValue}}^2</span>
+    </div>
+    <div [ngClass]="getClasses()" id="dil-tube-3" dnd-droppable (onDropSuccess)="dropContents($event, '3')">
+      <span>{{dilutionValue}}^3</span>
+    </div>
+    <div [ngClass]="getClasses()" id="dil-tube-4" dnd-droppable (onDropSuccess)="dropContents($event, '4')">
+      <span>{{dilutionValue}}^4</span>
+    </div>
+  </div>
+</div>
+<div id="dil-tube-error" [ngClass]="{'alert alert-warning': true, 'invisible':errorMessage === ''}" role="alert">
+  {{errorMessage}}
+</div>

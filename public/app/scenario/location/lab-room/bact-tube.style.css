@@ -15,6 +15,11 @@
   background-color:darkgray;
 }
 
+.bact-tube-inner{
+  display: table-cell;
+  height:200px;
+}
+
 #tubeB{
   color: blue;
 }

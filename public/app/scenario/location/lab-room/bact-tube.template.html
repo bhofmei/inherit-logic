@@ -1,10 +1,14 @@
 <div>
   <div [ngClass]="getClasses('B')" id="tubeB" dnd-droppable (onDropSuccess)="dropPhage($event, 'B')">
+    <div class="bact-tube-inner" dnd-draggable [dragEnabled]="canDrag()" [dragData]="getDragData('B')">
     <span>B</span>
+    </div>
   </div>
 
   <div [ngClass]="getClasses('K')" id="tubeK" dnd-droppable (onDropSuccess)="dropPhage($event, 'K')">
+    <div class="bact-tube-inner" dnd-draggable [dragEnabled]="canDrag()" [dragData]="getDragData('B')">
     <span>K</span>
+    </div>
   </div>
 </div>
 <div id="bact-tube-error" [ngClass]="{'alert alert-warning': true, 'invisible':errorMessage === ''}" role="alert">
