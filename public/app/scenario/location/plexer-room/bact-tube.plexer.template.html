@@ -1,0 +1,10 @@
+  <div class="d-flex">
+    E. coli:
+    <button [ngClass]="getClasses('B')" id="tubeB" (click)="choosePhage('B')" (dblclick)="clearTubes()">
+      <span>B</span>
+    </button>
+
+    <button [ngClass]="getClasses('K')" id="tubeK" (click)="choosePhage('K')" (dblclick)="clearTubes()">
+      <span>K</span>
+    </button>
+</div>
