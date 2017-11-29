@@ -9,6 +9,7 @@
   "scripts": {
     "tsc": "tsc",
     "tsc:w": "tsc -w",
+    "clean": "find ./public/app/ -name '*.js*' -delete",
     "app": "node index",
     "start": "concurrently \"npm run tsc:w\" \"npm run app\" ",
     "test:back": "NODE_ENV=test mocha --reporter spec app/tests",
