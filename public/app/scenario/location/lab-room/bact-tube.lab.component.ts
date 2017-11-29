@@ -3,11 +3,11 @@ import { ScenarioGlobals } from '../../scenario.globals';
 //import { ExperimentService } from '../experiment.service'
 
 @Component({
-    selector: 'lab-room-bact-tube',
-    templateUrl: './app/scenario/location/lab-room/bact-tube.template.html',
-  styleUrls: ['./app/scenario/location/lab-room/bact-tube.style.css']
+    selector: 'bact-tube-lab',
+    templateUrl: './app/scenario/location/lab-room/bact-tube.lab.template.html',
+  styleUrls: ['./app/scenario/location/lab-room/bact-tube.lab.style.css']
 })
-export class BactTubeComponent {
+export class BactTubeLabComponent {
 
   private isHiddenB: boolean = false;
   private isHiddenK: boolean = false;

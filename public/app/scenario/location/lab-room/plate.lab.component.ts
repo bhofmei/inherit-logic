@@ -3,11 +3,11 @@ import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../scenario.service'
 
 @Component({
-    selector: 'lab-room-plate',
-    templateUrl: './app/scenario/location/lab-room/plate.template.html',
-  styleUrls: ['./app/scenario/location/lab-room/plate.style.css']
+    selector: 'plate-lab',
+    templateUrl: './app/scenario/location/lab-room/plate.lab.template.html',
+  styleUrls: ['./app/scenario/location/lab-room/plate.lab.style.css']
 })
-export class PlateComponent {
+export class PlateLabComponent {
   // need to pass scenarioDetails from fridge
 
   private isEmpty: boolean = true;

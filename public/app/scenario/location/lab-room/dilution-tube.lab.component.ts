@@ -3,11 +3,11 @@ import { FormsModule } from '@angular/forms';
 //import { ExperimentService } from '../experiment.service'
 
 @Component({
-    selector: 'lab-room-dilution-tube',
-    templateUrl: './app/scenario/location/lab-room/dilution-tube.template.html',
-  styleUrls: ['./app/scenario/location/lab-room/dilution-tube.style.css']
+    selector: 'dilution-tube-lab',
+    templateUrl: './app/scenario/location/lab-room/dilution-tube.lab.template.html',
+  styleUrls: ['./app/scenario/location/lab-room/dilution-tube.lab.style.css']
 })
-export class DilutionTubeComponent {
+export class DilutionTubeLabComponent {
 
   private dilutionValue: number = 10;
   private contents: Object;

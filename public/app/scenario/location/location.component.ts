@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { ScenarioService } from '../scenario.service';
-import { Scenario } from '../scenario.model';
 
 @Component({
   selector: 'location',
