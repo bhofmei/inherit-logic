@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ScenarioService } from '../scenario.service';
 import { AuthenticationService } from '../../authentication/authentication.service';
+import { ScenarioGlobals } from '../scenario.globals';
 
 @Component({
     selector: 'fridge',
@@ -15,7 +16,8 @@ export class FridgeComponent {
   strains: any[]; // have strainNum, phageType
   currStrains: any[];
   shelf: number = 0;
-  spots: number = 16;
+  maxShelf: number;
+  spots: number;
   routingObserver: any;
   errorMessage: string;
 
@@ -23,6 +25,8 @@ export class FridgeComponent {
                private _route: ActivatedRoute,
                private _authenticationService: AuthenticationService,
                private _scenarioService: ScenarioService) {
+    this.maxShelf = ScenarioGlobals.nFridgeShelf;
+    this.spots = ScenarioGlobals.nFridgeSpots;
   }
 
   ngOnInit(){

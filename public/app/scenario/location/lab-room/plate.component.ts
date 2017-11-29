@@ -34,6 +34,8 @@ export class PlateComponent {
     this.isFull = false;
     this.isEmpty = true;
     this.lawnType = null;
+    this.littlePlaqueList = [];
+    this.bigPlaqueList = [];
     this.errorMessage = '';
   }
 

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ScenarioGlobals } from '../../scenario.globals';
 //import { ExperimentService } from '../experiment.service'
 
 @Component({
@@ -10,7 +11,7 @@ export class BactTubeComponent {
 
   private isHiddenB: boolean = false;
   private isHiddenK: boolean = false;
-  private phage: string[] = [];
+  private phage: any[] = [];
   private errorMessage: string = '';
 
   constructor(){ }
@@ -49,7 +50,11 @@ export class BactTubeComponent {
     } else if(this.phage.length >= 2) {
       this.errorMessage = 'cannot have more than 2 phage in a tube';
     } else {
-      this.phage.push(incomingPhage.id);
+      // add phage
+      this.phage.push({
+        id: incomingPhage.id,
+      numPhage: ScenarioGlobals.numPhage
+      });
       switch(src){
         case 'B':
           this.isHiddenK = true;
