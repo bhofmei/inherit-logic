@@ -67,6 +67,18 @@ export class ScenarioService {
             //.catch(this.handleError);
   }
 
+  updateStrain(strain: any, userId: number, scenCode: string): Observable<any>{
+    let strainId = strain._id;
+    return this._http
+    .post(`${this._baseURL}/${userId}/${scenCode}/${strainId}`, strain)
+  }
+
+  deleteStrain(strain: any, userId: number, scenCode: string): Observable<any>{
+    let strainId = strain._id;
+    return this._http
+    .delete(`${this._baseURL}/${userId}/${scenCode}/${strainId}`)
+  }
+
     /**
  * Handle Http operation that failed.
  * Let the app continue.

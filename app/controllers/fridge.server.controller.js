@@ -119,7 +119,7 @@ exports.addPhageToFridge = function (req, res) {
         });
     } else {
       fridge.strains.push(newPhage);
-      fridge.save(()=>{
+      fridge.save(() => {
         res.json(fridge);
       });
 
@@ -150,6 +150,53 @@ exports.createPhage = function (req, res) {
   });
 };
 
+exports.updatePhage = function (req, res) {
+  // Get the strain from the 'request' object
+  var strain = req.strain;
+
+  // Update the article fields
+  strain.comment = req.body.comment;
+  strain.strainNum = req.body.strainNum;
+
+  // Try saving the updated article
+  strain.save((err) => {
+    if (err) {
+      // If an error occurs send the error message
+      return res.status(400)
+        .send({
+          message: getErrorMessage(err)
+        });
+    } else {
+      // Send a JSON representation of the strain
+      res.json(strain);
+    }
+  });
+};
+
+exports.deletePhage = function (req, res) {
+  var fridge = req.fridge;
+  var strain = req.strain;
+  // delete strain from fridge list
+  fridge.strains.pull(strain._id);
+  fridge.save((error) => {
+    if (error) {
+      return res.status(500)
+        .send('Unable to remove strain from fridge');
+    } else {
+      strain.remove((err) => {
+        if (err) {
+          return res.status(400)
+            .send({
+              message: getErrorMessage(err)
+            });
+        } else {
+          res.json(fridge);
+        }
+      });
+    }
+  });
+};
+
 exports.findFridgeByScenOwner = function (req, res, next) {
   var user = req.user;
   var scen = req.scenario;
@@ -159,25 +206,50 @@ exports.findFridgeByScenOwner = function (req, res, next) {
     scenario: scen._id
   }, (err, fridge) => {
     if (err) {
-      next(err)}
-      else if (!fridge){
-        return next(new Error('Failed to find fridge'))}
-      else {
-        req.fridge = fridge;
-        next()
-      }
+      next(err)
+    } else if (!fridge) {
+      return next(new Error('Failed to find fridge'))
+    } else {
+      req.fridge = fridge;
+      next()
+    }
+  });
+};
+
+exports.phageById = function (req, res, next, id) {
+  Phage.findOne({
+    '_id': id
+  }, (err, phage) => {
+    // if error
+    if (err) return next(err);
+    // if user not found
+    else if (!phage) return next(new Error('Phage not found'));
+    // if user found -> next middleware
+    req.strain = phage;
+    next();
   });
 };
 
 // authorization
 exports.hasFridgeAuthorization = function (req, res, next) {
   // current user must be owner of fridge
-  if (req.fridge.owner.id !== req.user.id) {
+  if (req.fridge.owner._id !== req.user._id) {
     return res.status(403)
       .send({
         message: 'User is not authorized'
       });
   }
   // call next middleware
+  next();
+};
+
+exports.hasPhageAuthorization = function(req, res, next){
+  let ownerId = req.strain.owner.toString();
+  if(ownerId !== req.user.id){
+    return res.status(403)
+      .send({
+        message: 'User is not authorized'
+      });
+  }
   next();
 }

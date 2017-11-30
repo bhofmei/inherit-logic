@@ -11,7 +11,7 @@ module.exports = function (app) {
 
   app.route('/api/cricket/:userId/:scenarioId')
     .get(fridge.getFridge)
-  .post(fridge.saveFridge);
+    .post(fridge.saveFridge);
 
   app.route('/api/cricket/:userId/:scenarioId/phage')
     .post(fridge.createPhage);
@@ -19,6 +19,11 @@ module.exports = function (app) {
   app.route('/api/cricket/:userId/:scenarioId/fridge-phage')
   .post(fridge.findFridgeByScenOwner, fridge.addPhageToFridge);
 
+  app.route('/api/cricket/:userId/:scenarioId/:phageId')
+  .post(fridge.hasPhageAuthorization, fridge.updatePhage)
+  .delete(fridge.findFridgeByScenOwner, fridge.deletePhage);
+
   app.param('userId', users.userById);
   app.param('scenarioId', scenarios.scenarioByCode);
+  app.param('phageId', fridge.phageById);
 };

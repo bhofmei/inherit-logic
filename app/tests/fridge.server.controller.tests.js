@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Scenario = mongoose.model('Scenario');
 const Fridge = mongoose.model('Fridge');
+const Phage = mongoose.model('Phage');
 const scenDefaults = require('../../config/scenario.config');
 
 // Define global test variables
@@ -121,12 +122,23 @@ describe('Fridge Controller Unit Tests:', () => {
   });
 
   describe('Test POST methods', () => {
-
-    beforeEach((done)=>{
-      fridge.save(()=>{
-        done();
+    let phageToUpdate;
+    beforeEach((done) => {
+      fridge.save(() => {
+        // create a phage
+        phageToUpdate = new Phage({
+          strainNum: 121,
+          owner: user,
+          scenarioOrigin: scenario,
+          phageType: 'reference',
+          comment: 'comment from before'
+        });
+        phageToUpdate.save((err) => {
+          if (!err)
+            done();
+        });
       });
-    });
+    }); // end beforeEach
 
     it('Should be able to create WT phage', (done) => {
       var newPhage = {
@@ -153,7 +165,10 @@ describe('Fridge Controller Unit Tests:', () => {
     it('Should be able to create FS phage', (done) => {
       var newPhage = {
         strainNum: 11,
-        mutationList: [{kind: 'plusOne', location: 250}],
+        mutationList: [{
+          kind: 'plusOne',
+          location: 250
+        }],
         deletion: []
       };
       //console.log(newPhage);
@@ -172,32 +187,10 @@ describe('Fridge Controller Unit Tests:', () => {
         });
     });
 
-    it('Should be able to save WT phage to fridge', (done)=>{
+    it('Should be able to save WT phage to fridge', (done) => {
       var newPhage = {
         strainNum: 12,
         mutationList: [],
-        deletion\: []
-      };
-      //console.log(newPhage);
-      request(app)
-        .post('/api/cricket/' + user.userId + '/' + scenario.scenCode + '/fridge-phage')
-        .send(newPhage)
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-        let outFridge = res.body;
-        let phage = outFridge.strains[0];
-        phage.scenarioOrigin.should.have.property('scenCode', scenario.scenCode);
-        phage.mutationList.should.have.lengthOf(0);
-        phage.should.have.property('strainNum', newPhage.strainNum);
-          done();
-        });
-    });
-
-    it('Should be able to save FS phage to fridge', (done)=>{
-      var newPhage = {
-        strainNum: 13,
-        mutationList: [{kind: 'minusOne', location: 9}],
         deletion: []
       };
       //console.log(newPhage);
@@ -207,25 +200,93 @@ describe('Fridge Controller Unit Tests:', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-        let outFridge = res.body;
-        let phage = outFridge.strains[0];
-        phage.scenarioOrigin.should.have.property('scenCode', scenario.scenCode);
-        phage.mutationList.should.have.lengthOf(1);
-        phage.should.have.property('strainNum', newPhage.strainNum);
+          let outFridge = res.body;
+          let phage = outFridge.strains[0];
+          phage.scenarioOrigin.should.have.property('scenCode', scenario.scenCode);
+          phage.mutationList.should.have.lengthOf(0);
+          phage.should.have.property('strainNum', newPhage.strainNum);
           done();
         });
     });
+
+    it('Should be able to save FS phage to fridge', (done) => {
+      var newPhage = {
+        strainNum: 13,
+        mutationList: [{
+          kind: 'minusOne',
+          location: 9
+        }],
+        deletion: []
+      };
+      //console.log(newPhage);
+      request(app)
+        .post('/api/cricket/' + user.userId + '/' + scenario.scenCode + '/fridge-phage')
+        .send(newPhage)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          let outFridge = res.body;
+          let phage = outFridge.strains[0];
+          phage.scenarioOrigin.should.have.property('scenCode', scenario.scenCode);
+          phage.mutationList.should.have.lengthOf(1);
+          phage.should.have.property('strainNum', newPhage.strainNum);
+          done();
+        });
+    });
+
+    it('Should be able to update phage', (done) => {
+      let updateId = phageToUpdate._id
+      let updatedPhage = {
+        strainNum: phageToUpdate.strainNum,
+        comment: 'this is the new comment',
+        '_id': updateId
+      };
+      request(app)
+        .post('/api/cricket/' + user.userId + '/' + scenario.scenCode + '/' + updateId)
+        .send(updatedPhage)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          let newPhage = res.body;
+          newPhage.should.have.property('strainNum', updatedPhage.strainNum);
+          newPhage.should.have.property('comment', updatedPhage.comment);
+        done();
+        });
+    }); // end Should be able to update phage
   });
 
-  /*describe('Test DELETE methods', ()=>{
-    it('Should be able to delete course', ()=>{
-
+  describe('Test DELETE methods', () => {
+    let phageToDelete;
+    beforeEach((done) => {
+      fridge.save(() => {
+        // create a phage
+        phageToDelete = new Phage({
+          strainNum: 121,
+          owner: user,
+          scenarioOrigin: scenario,
+          phageType: 'reference',
+          comment: 'comment from before'
+        });
+        phageToDelete.save((err) => {
+          if (!err)
+            done();
+        });
+      });
+    }); // end beforeEach
+    it('Should be able to delete phage', (done) => {
+      let phageId = phageToDelete._id;
+      request(app)
+        .delete('/api/cricket/' + user.userId + '/' + scenario.scenCode + '/' + phageId)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          // returns fridge
+        let fridge = res.body;
+        fridge.strains.should.have.lengthOf(0);
+        done()
+        });
     });
-
-    it('Should not be able to delete course', ()=>{
-
-    });
-  });*/
+  });
 
   // Define a post-tests function
   afterEach((done) => {

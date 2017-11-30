@@ -1,6 +1,25 @@
 <div id="plex-room" class="container">
   <div class="row clearfix">
     <!-- choose bacteria tube -->
-    <bact-tube-plexer (pickPhageEvent)="phagePicked($event)" class="col-12 col-md-2 float-left"></bact-tube-plexer>
+    <div class="d-flex col-12 col-md-5 float-left" id="bact-tubes">
+      E. coli:
+      <button [ngClass]="getTubeClasses('B')" id="tubeB" (click)="chosenPhage='B'" (dblclick)="clearTubes()">
+      <span>B</span>
+    </button>
+
+      <button [ngClass]="getTubeClasses('K')" id="tubeK" (click)="choosePhage('K')" (dblclick)="clearTubes()">
+      <span>K</span>
+    </button>
+    </div>
+    <div id="multi-super" class="btn-group col-12 col-md-3 float-right" role="group">
+    <button [ngClass]="getButtonClasses('multi')" id="multi-btn" (click)="plexerType='multi'" title="Do 2x8 cross">Multiplexer</button>
+      <button [ngClass]="getButtonClasses('super')" id="super-btn" (click)="plexerType='super'" title="Do 8x8 cross">Superplexer</button>
+    </div>
+    <div class="col-12 col-md-4 float-right">
+      <button class="btn btn-primary" [disabled]="submitDisabled()" id="submit-btn" >Submit</button>
+    </div>
+  </div>
+  <div class="row">
+    table
   </div>
 </div>

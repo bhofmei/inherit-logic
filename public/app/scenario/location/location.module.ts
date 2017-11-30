@@ -15,7 +15,7 @@ import { DilutionTubeLabComponent } from './lab-room/dilution-tube.lab.component
 import { PlateLabComponent } from './lab-room/plate.lab.component';
 // plexer room
 import { PlexerRoomComponent } from './plexer-room/plexer-room.component';
-import { BactTubePlexerComponent } from './plexer-room/bact-tube.plexer.component';
+//import { BactTubePlexerComponent } from './plexer-room/bact-tube.plexer.component';
 // model room
 import { ModelRoomComponent } from './model-room/model-room.component';
 
@@ -33,7 +33,7 @@ import { ModelRoomComponent } from './model-room/model-room.component';
     DilutionTubeLabComponent,
     PlateLabComponent,
     PlexerRoomComponent,
-    BactTubePlexerComponent,
+    //BactTubePlexerComponent,
     ModelRoomComponent,
     LandingRoomComponent
   ],
