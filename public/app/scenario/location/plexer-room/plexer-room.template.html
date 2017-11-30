@@ -1,25 +1,24 @@
 <div id="plex-room" class="container">
   <div class="row clearfix">
     <!-- choose bacteria tube -->
-    <div class="d-flex col-12 col-md-5 float-left" id="bact-tubes">
-      E. coli:
+    <div class="d-flex col-12 col-md-4 float-left" id="bact-tubes">
       <button [ngClass]="getTubeClasses('B')" id="tubeB" (click)="chosenPhage='B'" (dblclick)="clearTubes()">
       <span>B</span>
-    </button>
+      </button>
 
       <button [ngClass]="getTubeClasses('K')" id="tubeK" (click)="choosePhage('K')" (dblclick)="clearTubes()">
       <span>K</span>
-    </button>
+      </button>
     </div>
     <div id="multi-super" class="btn-group col-12 col-md-3 float-right" role="group">
-    <button [ngClass]="getButtonClasses('multi')" id="multi-btn" (click)="plexerType='multi'" title="Do 2x8 cross">Multiplexer</button>
+      <button [ngClass]="getButtonClasses('multi')" id="multi-btn" (click)="plexerType='multi'" title="Do 2x8 cross">Multiplexer</button>
       <button [ngClass]="getButtonClasses('super')" id="super-btn" (click)="plexerType='super'" title="Do 8x8 cross">Superplexer</button>
     </div>
     <div class="col-12 col-md-4 float-right">
-      <button class="btn btn-primary" [disabled]="submitDisabled()" id="submit-btn" >Submit</button>
+      <button class="btn btn-primary" [disabled]="submitDisabled()" id="submit-btn">Submit</button>
     </div>
   </div>
   <div class="row">
-    table
+    <table-plexer class="col-12" [plexerType]="plexerType"></table-plexer>
   </div>
 </div>
