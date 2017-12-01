@@ -31,6 +31,7 @@ export class BactTubeLabComponent {
   getDragData(src: string): Object {
     return {
       lawnType: src,
+      src: src,
       phage: this.phage
     }
   }
@@ -53,6 +54,7 @@ export class BactTubeLabComponent {
       // add phage
       this.phage.push({
         id: incomingPhage.id,
+        strainNum: incomingPhage.strainNum,
       numPhage: ScenarioGlobals.numPhage
       });
       switch(src){
