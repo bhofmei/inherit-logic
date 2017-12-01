@@ -15,3 +15,14 @@
 .phage-plate .cross-plate{
   background-color: white;
 }
+
+.plaque{
+  display: inline-block;
+  border: 1px solid darkgray;
+}
+.dil-tube.dnd-drag-start{
+  -moz-transform: scale(1);
+  -webkit-transform: scale(1);
+  transform: scale(1);
+  background-color: rgba(170,170,170,0.5);
+}

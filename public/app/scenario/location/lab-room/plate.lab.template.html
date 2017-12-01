@@ -6,8 +6,14 @@
     PLATE IS OVER CAPACITY
   </div>
   <div *ngIf="!isEmpty && !isFull" class="cross-plate">
-    <span>Little plaques: {{littlePlaqueList.length}}</span>
-    <span>Big plaques: {{bigPlaqueList.length}}</span>
+    <div>
+    Small plaques:
+      <div class="plaque" dnd-draggable [dragEnabled]="canDrag('small')" [dragData]="pickPhage('small')" (onDragSuccess)="addedToFridge($event)">{{  smallPlaqueList.length }}</div>
+    </div>
+    <div>
+    Large plaques:
+      <div class="plaque" dnd-draggable [dragEnabled]="canDrag('large')" [dragData]="pickPhage('large')" (onDragSuccess)="addedToFridge($event)">{{ largePlaqueList.length }}</div>
+    </div>
   </div>
 </div>
 <button (click)="clearPlate()" class="btn btn-outline-secondary btn-sm btn-block">Clear plate</button>
