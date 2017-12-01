@@ -25,19 +25,21 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
   phagePlate.genoList.forEach((geno)=>{
   //console.log(geno.shifts);
   });
-  // has: full, littlePlaque, bigPlaque
+  // has: full, smallPlaque, largePlaque, genotypes
   var plate = this.generatePlate(lawnType, phagePlate.genoList, phagePlate.strainList, scenData);
   return plate;
 }
 
 exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData) {
+  // returns genoLista and strainList
   var startGenotypes, genoList;
   var replicaStrainList = [];
   var deletesInPlay = false;
   var mutagenized = (specials === 'irrad');
   // phage 1 and 2 will be full objects previously retrieved from mongoose database and numPhage property
   // console.log(phage1, phage2);
-  var parents;
+  // TODO: add parents information
+  var parents = [];
   let getParents = (whoCalled === plateEnum.PLATECALLER.MULTIPLEXER || whoCalled === plateEnum.PLATECALLER.SUPERPLEXER ? false : true)
   var newPhage1, newPhage2, phageRatio;
   var onePhage = false;
@@ -51,7 +53,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
     newPhage1 = {
       genome: {
         deletion: phage1.deletion,
-        shifts: phage1.mutationList
+        shifts: phage1.mutationList,
       },
       mutag: (phage1.origin === 'mutagenesis'),
       numPhage: phage1.numPhage
@@ -119,7 +121,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
       }
       // TODO: findSpotOnPlate
       for (let j = 0; j < numWT; j++) {
-        replicaStrainList.push(['phage', 0]);
+        replicaStrainList.push(0);
       }
       for (let j = 0; j < numDeletes; j++) {
         // spot on plage
@@ -131,7 +133,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
           okayDel = (rightEnd > 35)
         } // end while !okayDel
         numNewGenos++;
-        replicaStrainList.push(['deletion', numNewGenos]);
+        replicaStrainList.push(numNewGenos);
         genoList.push({
           shifts: [],
           deletions: [leftEnd, rightEnd]
@@ -150,12 +152,12 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
         };
       }
       for (let j = 0; j < newPhage1.numPhage; j++) {
-        replicaStrainList.push(['phage', 0]);
+        replicaStrainList.push(0);
       }
       let getMutes = phageExper.mutagenize(startGenotypes[0].shifts, changePhage);
       for (let j = 0; j < changePhage; j++) {
         numNewGenos++;
-        replicaStrainList.push(['mut', numNewGenos]);
+        replicaStrainList.push(numNewGenos);
         genoList.push({
           shifts: getMutes[j],
           deletion: startGenotypes[0].deletion
@@ -181,14 +183,14 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
       let nGeno = nOffspring.numGeno[j];
       // find spot on plate
       for (let k = 0; k < nGeno; k++) {
-        replicaStrainList.push(['phage', j]);
+        replicaStrainList.push(j); // add duplicates of parent
       } // end for k
 
       // generate mutants
       let getMutes = phageExper.mutagenize(startGenotypes[j].shifts, nOffspring.numMut[j]);
       for (let k = 0; k < getMutes.length; k++) {
         numNewGenos++;
-        replicaStrainList.push(['mut', numNewGenos]);
+        replicaStrainList.push(numNewGenos);
         genoList.push({
           shifts: getMutes[k],
           deletion: startGenotypes[j].deletion
@@ -205,7 +207,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
           // add to plate
           for (let k = 0; k < newGenoList.length; k++) {
             numNewGenos++;
-            replicaStrainList.push(['recomb', numNewGenos]);
+            replicaStrainList.push(numNewGenos);
             genoList.push(newGenoList[k]);
           } // end for k
         } // end if nRec > 0
@@ -220,6 +222,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
 } // end createPlage
 
 exports.generatePlate = function (lawnTypeStr, genoList, strainList, scenData) {
+  // return full, smallPlaque, largePlaque, genotypes
   // lawn type is "B" or "K"
 
   var lawnType = bacteria[lawnTypeStr];
@@ -231,8 +234,8 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, scenData) {
   if (overwhelm) {
     return {
       full: true,
-      littlePlaque: [],
-      bigPlaque: [],
+      smallPlaque: [],
+      largePlaque: [],
       genotypes: genoList
     }
   }
@@ -249,32 +252,32 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, scenData) {
   });
 
   // separate phage
-  var littlePlaqueList = [];
-  var bigPlaqueList = [];
+  var smallPlaqueList = [];
+  var largePlaqueList = [];
   if (lawnType.kind === plateEnum.BACTTYPE.PERM) {
     strainList.forEach((strain) => {
       //console.log(phenoList[strain[1]] )
-      if (phenoList[strain[1]] === plateEnum.PLAQUETYPE.SMALL)
-        littlePlaqueList.push(strain);
+      if (phenoList[strain] === plateEnum.PLAQUETYPE.SMALL)
+        smallPlaqueList.push({i:strain, pheno: plateEnum.PLAQUETYPE.SMALL});
       else
-        bigPlaqueList.push(strain);
+        largePlaqueList.push({i:strain, pheno: plateEnum.PLAQUETYPE.LARGE});
     }); // end for each
   } else {
     // restrictive bacteria
     strainList.forEach((strain) => {
-      if (phenoList[strain[1]] === plateEnum.PLAQUETYPE.SMALL)
-        littlePlaqueList.push(strain);
+      if (phenoList[strain] === plateEnum.PLAQUETYPE.SMALL)
+        smallPlaqueList.push({i:strain, pheno: plateEnum.PLAQUETYPE.SMALL});
       // else it's dead - do nothing
     })
   }
   // shuffle plaques
-  randGen.randShuffle(littlePlaqueList, randEngine);
-  randGen.randShuffle(bigPlaqueList, randEngine);
+  randGen.randShuffle(smallPlaqueList, randEngine);
+  randGen.randShuffle(largePlaqueList, randEngine);
   return {
     full: overwhelm,
     genotypes: genoList,
-    littlePlaque: littlePlaqueList,
-    bigPlaque: bigPlaqueList
+    smallPlaque: smallPlaqueList,
+    largePlaque: largePlaqueList
   }
 } // end generatePlage
 

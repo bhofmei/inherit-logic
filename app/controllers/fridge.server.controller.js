@@ -120,7 +120,7 @@ exports.addPhageToFridge = function (req, res) {
     } else {
       fridge.strains.push(newPhage);
       fridge.save(() => {
-        res.json(fridge);
+        res.json(newPhage);
       });
 
     }
@@ -128,6 +128,7 @@ exports.addPhageToFridge = function (req, res) {
 };
 
 exports.createPhage = function (req, res) {
+  // DONT USE
   // phageDetails will have strainNum, mutationList, deletion, comment, parents
   // add phageType - USER
 

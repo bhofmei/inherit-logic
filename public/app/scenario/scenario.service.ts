@@ -10,13 +10,11 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class ScenarioService {
     private _baseURL = 'api/cricket';
-    private currScenario: any;
     private scenarioDetails = new BehaviorSubject<string>("");
     getScenarioDetails = this.scenarioDetails.asObservable();
 
 
     constructor(private _http: HttpClient) {
-      this.currScenario = null;
     }
 
     listScenarios(): Observable<any> {
@@ -27,18 +25,14 @@ export class ScenarioService {
     }
 
   getScenario(scenId: string): Observable<any>{
-    if(this.currScenario===null){
-    this.currScenario =  this._http
+    return this._http
             .get(`${this._baseURL}/${scenId}`)
             //.map((res: Response) => res.json())
             //.catch(this.handleError);
-    }
-    return this.currScenario;
   }
 
   resetScenario(){
     this.scenarioDetails.next('');
-    this.currScenario = null;
   }
 
   getFridge(userId: number, scenId: string): Observable<any> {
@@ -60,7 +54,8 @@ export class ScenarioService {
   }
 
   addStrain(strain: any, userId: number, scenCode: string): Observable<any> {
-    // returns fridge
+    // strains has strainNum, mutationList, deletion
+    // returns new phage
     return this._http
       .post(`${this._baseURL}/${userId}/${scenCode}/fridge-phage`, strain)
             //.map((res: Response) => res.json())

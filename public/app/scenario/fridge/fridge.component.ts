@@ -54,6 +54,7 @@ export class FridgeComponent {
   }
 
   _fillStrains(fridgeStrains: any[]): any[]{
+    // TODO: update for fridge strains not originally in order
     for(let i = fridgeStrains.length; i < 2*this.spots; i++){
       let nStrain = {strainNum: i, phageType: 'empty'};
       fridgeStrains.push(nStrain);
@@ -86,12 +87,57 @@ export class FridgeComponent {
   }
 
   addStrain(dat: any){
-    // dat should have: strainNum, mutationList, deleteion
+    // dat should have: strainNum, mutationList, deletion
     // need userId and scenario
     let userId = this.user.userId || this.user.id;
     let scenCode = this.fridge.scenario.scenCode;
     this._scenarioService.addStrain(dat,userId, scenCode)
-    .subscribe((newFridge) => {this.fridge = newFridge},(error)=>{this.errorMessage = error});
+    .subscribe((newFridge) => {this.fridge = newFridge
+                              },(error)=>{this.errorMessage = error});
   }
 
+
+  canDrop(spot: number): any {
+  return (dragData: any) => {
+    let out = false;
+    if(dragData && dragData.hasOwnProperty('src')){
+      if(dragData.src === 'small' || dragData.src=== 'large'){
+        let trySpot = this.strains[spot];
+        if(trySpot.phageType === 'empty'){
+          out = true;
+        }
+      }
+    }
+    return out;
+  };
+}
+
+  dropStrain($event: any, spot: number){
+    // onDropSuccess
+    let strain = $event.dragData;
+    // need strainNum, mutationList, deletion
+    let newStrain = {
+      strainNum: spot,
+      mutationList: strain.shifts,
+      deletion: strain.deletion
+    }
+    // add to fridge
+    let userId = this.user.userId || this.user.id;
+    let scenCode = this.fridge.scenario.scenCode;
+    this._scenarioService.addStrain(newStrain, userId, scenCode)
+    .subscribe((res)=>{
+      console.log(res);
+      this.strains[spot] = {
+        // strainNum comment phageType id
+        strainNum: res.strainNum,
+        comment: res.comment,
+        phageType: res.phageType,
+        id: res.id
+      }
+      this._currStrains();
+    },
+              (err)=>{
+      this.errorMessage = err;
+    })
+  }
 }

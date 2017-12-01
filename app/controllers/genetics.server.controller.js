@@ -6,7 +6,6 @@ exports.createPlate = function (req, res) {
   // req must have 1-2 phage IDs with numPhage, lawn type, location, specials, capacity, scenarioData
 
   let reqB = req.body;
-  console.log(reqB);
   var lawnType = reqB.lawnType;
   var location = reqB.location;
   var capacity = reqB.capacity;
@@ -14,7 +13,7 @@ exports.createPlate = function (req, res) {
   var phage1 = reqB.phage1;
   var phage2 = reqB.phage2;
 
-  if (phage1 !== undefined && lawnType !== undefined) {
+  if (phage1 !== null && lawnType !== undefined) {
     let pId = phage1.id;
     Phage.findOne({'_id': pId}, 'strainNum mutationList deletion',{lean: true}, (err, ph1) => {
       if (err){
@@ -28,7 +27,7 @@ exports.createPlate = function (req, res) {
       else {
         ph1.numPhage = phage1.numPhage;
         // check for phage2
-        if (phage2 !== undefined) {
+        if (phage2 !== null) {
           // has two phage
           let pId2 = phage2.id;
           Phage.findById(pId2, (err2, ph2) => {
@@ -43,7 +42,7 @@ exports.createPlate = function (req, res) {
             else {
               ph2.numPhage = phage2.numPhage;
               var newPlate = plate.createPlate(ph1, ph2, lawnType, null, capacity, location, scenData);
-              // has full, littlePlaque, bigPlaque
+              // has full, smallPlaque, largePlaque, genotypes
               if (newPlate)
                 res.json(newPlate);
               else{
@@ -57,6 +56,7 @@ exports.createPlate = function (req, res) {
         } else {
           // has one phage
           var newPlate = plate.createPlate(ph1, null, lawnType, null, capacity, location, scenData);
+          // has full, smallPlaque, largePlaque, genotypes
           if (newPlate)
             res.json(newPlate);
           else{

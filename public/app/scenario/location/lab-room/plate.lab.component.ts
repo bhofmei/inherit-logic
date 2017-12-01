@@ -22,8 +22,9 @@ export class PlateLabComponent {
 
   // results after cross
   private isFull: boolean = false;
-  private littlePlaqueList: any[];
-  private bigPlaqueList: any[];
+  private smallPlaqueList: any[];
+  private largePlaqueList: any[];
+  private genotypes: any[];
 
   constructor(private _experimentService: ExperimentService, private _scenarioService: ScenarioService){ }
 
@@ -34,8 +35,9 @@ export class PlateLabComponent {
     this.isFull = false;
     this.isEmpty = true;
     this.lawnType = null;
-    this.littlePlaqueList = [];
-    this.bigPlaqueList = [];
+    this.genotypes = [];
+    this.smallPlaqueList = [];
+    this.largePlaqueList = [];
     this.errorMessage = '';
   }
 
@@ -69,16 +71,52 @@ export class PlateLabComponent {
     }
     this._experimentService.createPlate(newPlate)
     .subscribe((res)=>{
-      console.log(res);
       this.isFull = res.full;
-      this.littlePlaqueList = res.littlePlaque;
-      this.bigPlaqueList = res.bigPlaque;
+      this.smallPlaqueList = res.smallPlaque;
+      this.largePlaqueList = res.largePlaque;
       this.isEmpty = false;
+      this.genotypes = res.genotypes;
+      console.log('little', this.smallPlaqueList);
+      console.log('big', this.largePlaqueList);
+      console.log('genotypes', this.genotypes);
       // success
     }, (err)=>{
       // error
       this.errorMessage = err.error.message || err.message || 'Error';
     });
+  }
+
+  pickPhage(src: string): Object {
+    // dragData
+    // genotype is stored as:
+    let tmpList = (src === 'small' ? this.smallPlaqueList : this.largePlaqueList);
+    if(tmpList.length === 0){
+      return null;
+    }
+    let plaque = tmpList[0];
+    let genotypeIndex = plaque.i;
+    let phage = JSON.parse(JSON.stringify(this.genotypes[genotypeIndex]));
+    phage['src'] = plaque.pheno;
+    return phage;
+  }
+
+  addedToFridge($event) {
+    // onDragSuccess
+    let strain = $event.dragData;
+    let src = strain.src;
+    if(src === 'small'){
+      this.smallPlaqueList.shift();
+    } else { // large
+      this.largePlaqueList.shift();
+    }
+  }
+
+  canDrag(src: string): boolean {
+    // dragEnabled
+    if(src === 'small')
+      return this.smallPlaqueList.length > 0;
+    else // big
+      return this.largePlaqueList.length > 0;
   }
 
 }

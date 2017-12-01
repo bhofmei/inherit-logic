@@ -13,8 +13,7 @@ export class ExperimentService {
 
   createPlate(plate: any): Observable<any>{
     // plate must have 1-2 phage IDs with numPhage [phage1,phage2], lawn type, location, specials, capacity, scenarioData (from fridge)
-    // returns error OR {full, littlePlaque, bigPlaque}
-    console.log('plate', plate);
+    // returns error OR {full, smallPlaque, largePlaque, genotypes}
     var res = this._http
     .post(`${this._baseURL}/plate`, plate)
     return res;
