@@ -77,8 +77,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(false);
@@ -111,8 +111,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(false);
@@ -146,8 +146,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(false);
@@ -181,8 +181,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(false);
@@ -224,8 +224,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(false);
@@ -265,8 +265,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(false);
@@ -306,8 +306,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(false);
@@ -348,8 +348,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(false);
@@ -390,8 +390,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(false);
@@ -431,8 +431,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(false);
@@ -472,8 +472,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(true);
@@ -510,8 +510,8 @@ describe('Genetics Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             let results = res.body;
-            let lPhage = results.littlePlaque.length;
-            let bPhage = results.bigPlaque.length;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
             let nGeno = results.genotypes.length;
             results.should.be.an.Object();
             results.full.should.equal(true);
