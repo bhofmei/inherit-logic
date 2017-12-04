@@ -199,7 +199,6 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
     } // end for
     if (!identical) {
       // recombine - loop through number recombinants
-      //console.log(numRecomb);
       for (let j = 0; j < nOffspring.numRecomb.length; j++) {
         let nRec = nOffspring.numRecomb[j];
         if (nRec > 0) {

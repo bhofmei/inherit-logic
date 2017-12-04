@@ -258,40 +258,40 @@ describe('Plate experiments unit tests', () => {
         let plate = plateExp.generatePlate(bactPerm, plateSm.genoList, plateSm.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        plate.littlePlaque.should.have.lengthOf(nSmall);
-        plate.bigPlaque.should.have.lengthOf(0);
+        plate.smallPlaque.should.have.lengthOf(nSmall);
+        plate.largePlaque.should.have.lengthOf(0);
       });
 
       it('Should generate small plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateSm.genoList, plateSm.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        plate.littlePlaque.should.have.lengthOf(nSmall);
-        plate.bigPlaque.should.have.lengthOf(0);
+        plate.smallPlaque.should.have.lengthOf(nSmall);
+        plate.largePlaque.should.have.lengthOf(0);
       });
 
       it('Should generate large plate, PERM bacteria', () => {
         let plate = plateExp.generatePlate(bactPerm, plateLg.genoList, plateLg.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        let lPhage = plate.littlePlaque.length;
-        let bPhage = plate.bigPlaque.length;
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
         let nPhage = lPhage + bPhage;
         nPhage.should.equal(nLarge + nMut);
-        plate.littlePlaque.should.have.lengthOf(nLarge);
-        plate.bigPlaque.should.have.lengthOf(nMut);
+        plate.smallPlaque.should.have.lengthOf(nLarge);
+        plate.largePlaque.should.have.lengthOf(nMut);
       });
 
       it('Should generate large plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateLg.genoList, plateLg.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        let lPhage = plate.littlePlaque.length;
-        let bPhage = plate.bigPlaque.length;
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
         let nPhage = lPhage + bPhage;
         nPhage.should.equal(nLarge);
-        plate.littlePlaque.should.have.lengthOf(nLarge);
-        plate.bigPlaque.should.have.lengthOf(0);
+        plate.smallPlaque.should.have.lengthOf(nLarge);
+        plate.largePlaque.should.have.lengthOf(0);
       });
     }); // end Test WT phage
 
@@ -322,40 +322,40 @@ describe('Plate experiments unit tests', () => {
         let plate = plateExp.generatePlate(bactPerm, plateSm.genoList, plateSm.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        plate.littlePlaque.should.have.lengthOf(0);
-        plate.bigPlaque.should.have.lengthOf(nSmall);
+        plate.smallPlaque.should.have.lengthOf(0);
+        plate.largePlaque.should.have.lengthOf(nSmall);
       });
 
       it('Should generate small plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateSm.genoList, plateSm.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        plate.littlePlaque.should.have.lengthOf(0);
-        plate.bigPlaque.should.have.lengthOf(0);
+        plate.smallPlaque.should.have.lengthOf(0);
+        plate.largePlaque.should.have.lengthOf(0);
       });
 
       it('Should generate large plate, PERM bacteria', () => {
         let plate = plateExp.generatePlate(bactPerm, plateLg.genoList, plateLg.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        let lPhage = plate.littlePlaque.length;
-        let bPhage = plate.bigPlaque.length;
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
         let nPhage = lPhage + bPhage;
         nPhage.should.equal(nLarge + nMut);
-        plate.littlePlaque.should.have.lengthOf(0);
-        plate.bigPlaque.should.have.lengthOf(nLarge + nMut);
+        plate.smallPlaque.should.have.lengthOf(0);
+        plate.largePlaque.should.have.lengthOf(nLarge + nMut);
       });
 
       it('Should generate large plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateLg.genoList, plateLg.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        let lPhage = plate.littlePlaque.length;
-        let bPhage = plate.bigPlaque.length;
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
         let nPhage = lPhage + bPhage;
         nPhage.should.equal(0);
-        plate.littlePlaque.should.have.lengthOf(0);
-        plate.bigPlaque.should.have.lengthOf(0);
+        plate.smallPlaque.should.have.lengthOf(0);
+        plate.largePlaque.should.have.lengthOf(0);
       });
     }); // end Test FS phage
 
@@ -377,11 +377,12 @@ describe('Plate experiments unit tests', () => {
           { numOffspring: 15244.948974278317, total: 15245,
           numGeno: [ 8469, 6775 ], numMut: [ 0, 1 ],
           numRecomb: [ 0, 0, 0 ] }
+          1 mut
         */
         nPhage1 = 8469, nPhage2 = 6775;
         nMut = plateB.genoList.length - 2;
-        for (let i = 0; i < nMut; i++) {
-          //console.log(plateLg.genoList[i+1].shifts);
+        for (let i = 0; i < plateB.genoList.length; i++) {
+          //console.log(plateB.genoList[i].shifts);
         }
         done();
       });
@@ -390,8 +391,8 @@ describe('Plate experiments unit tests', () => {
         let plate = plateExp.generatePlate(bactPerm, plateB.genoList, plateB.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        let lPhage = plate.littlePlaque.length;
-        let bPhage = plate.bigPlaque.length;
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
         let nPhage = lPhage + bPhage;
         nPhage.should.equal(nPhage1 + nPhage2 + nMut);
         lPhage.should.equal(nPhage1 + nPhage2);
@@ -402,8 +403,8 @@ describe('Plate experiments unit tests', () => {
         let plate = plateExp.generatePlate(bactRest, plateB.genoList, plateB.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        let lPhage = plate.littlePlaque.length;
-        let bPhage = plate.bigPlaque.length;
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
         lPhage.should.equal(nPhage1 + nPhage2);
         bPhage.should.equal(0);
       });
@@ -423,7 +424,7 @@ describe('Plate experiments unit tests', () => {
           { numOffspring: 11780.910976997933, total: 11811,
           numGeno: [ 6425, 5354 ], numMut: [ 6, 3 ],
           numRecomb: [ 21, 2, 0 ] }
-          1 mutant translated, 14 recomb WT
+          1 mutant translated, 13 recomb WT
           WT geno first
         */
         nPhage1 = 6425, nPhage2 = 5354;
@@ -431,7 +432,7 @@ describe('Plate experiments unit tests', () => {
         for (let i = 0; i < nMut + 2; i++) {
           //console.log(plateB.genoList[i].shifts);
         }
-        nMutHiddenPheno = 15;
+        nMutHiddenPheno = 14;
         nMutPheno = nMut - nMutHiddenPheno;
         done();
       });
@@ -440,8 +441,8 @@ describe('Plate experiments unit tests', () => {
         let plate = plateExp.generatePlate(bactPerm, plateB.genoList, plateB.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        let lPhage = plate.littlePlaque.length;
-        let bPhage = plate.bigPlaque.length;
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
         let nPhage = lPhage + bPhage;
         nPhage.should.equal(nPhage1 + nPhage2 + nMut);
         lPhage.should.equal(nPhage1 + nMutHiddenPheno);
@@ -452,8 +453,8 @@ describe('Plate experiments unit tests', () => {
         let plate = plateExp.generatePlate(bactRest, plateB.genoList, plateB.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        let lPhage = plate.littlePlaque.length;
-        let bPhage = plate.bigPlaque.length;
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
         lPhage.should.equal(nPhage1 + nMutHiddenPheno);
         bPhage.should.equal(0);
       });
@@ -471,17 +472,17 @@ describe('Plate experiments unit tests', () => {
         plateB = plateExp.createPlatePhage(phage1, phage2, null, null, 20000, plateEnum.PLATECALLER.LAB, scenData);
         /* 32 mutants
           { numOffspring: 18724.319024958197, total: 18746,
-          numGeno: [ 10463, 8260 ], numMut: [ 0, 4 ],
-          numRecomb: [ 18, 1, 0 ] }
-          3 mutant translated, 0 recomb WT
-          WT geno first
+          numGeno: [ 10463, 8260 ], numMut: [ 2, 1 ],
+          numRecomb: [ 38, 5, 0 ] }
+          2 mutant translated, 2 recomb WT, 1 recomb translated
+          phage1 first
         */
         nPhage1 = 10463, nPhage2 = 8260;
         nMut = plateB.genoList.length - 2;
         for (let i = 0; i < plateB.genoList.length; i++) {
           //console.log(plateB.genoList[i].shifts);
         }
-        nMutHiddenPheno = 3;
+        nMutHiddenPheno = 5;
         nMutPheno = nMut - nMutHiddenPheno;
         done();
       });
@@ -490,8 +491,8 @@ describe('Plate experiments unit tests', () => {
         let plate = plateExp.generatePlate(bactPerm, plateB.genoList, plateB.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        let lPhage = plate.littlePlaque.length;
-        let bPhage = plate.bigPlaque.length;
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
         let nPhage = lPhage + bPhage;
         nPhage.should.equal(nPhage1 + nPhage2 + nMut);
         lPhage.should.equal(nMutHiddenPheno);
@@ -502,8 +503,8 @@ describe('Plate experiments unit tests', () => {
         let plate = plateExp.generatePlate(bactRest, plateB.genoList, plateB.strainList, scenData);
         plate.should.be.an.Object();
         plate.full.should.equal(false);
-        let lPhage = plate.littlePlaque.length;
-        let bPhage = plate.bigPlaque.length;
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
         lPhage.should.equal(nMutHiddenPheno);
         bPhage.should.equal(0);
       });
@@ -518,8 +519,8 @@ describe('Plate experiments unit tests', () => {
       let phagePlate = plateExp.createPlatePhage(phage1, null, null, null, 20, plateEnum.PLATECALLER.LAB, scenData);
       var plate = plateExp.generatePlate(bactPerm, phagePlate.genoList, phagePlate.strainList, scenData);
       plate.full.should.equal(true);
-      plate.littlePlaque.should.have.lengthOf(0);
-      plate.bigPlaque.should.have.lengthOf(0);
+      plate.smallPlaque.should.have.lengthOf(0);
+      plate.largePlaque.should.have.lengthOf(0);
     });
 
     it('Should not create plate for double phage input', () => {
@@ -530,8 +531,8 @@ describe('Plate experiments unit tests', () => {
       let phagePlate = plateExp.createPlatePhage(phage1, phage2, null, null, 250, plateEnum.PLATECALLER.LAB, scenData);
       var plate = plateExp.generatePlate(bactPerm, phagePlate.genoList, phagePlate.strainList, scenData);
       plate.full.should.equal(true);
-      plate.littlePlaque.should.have.lengthOf(0);
-      plate.bigPlaque.should.have.lengthOf(0);
+      plate.smallPlaque.should.have.lengthOf(0);
+      plate.largePlaque.should.have.lengthOf(0);
     });
   }); // end Test generate plate over capacity
 
@@ -551,8 +552,8 @@ describe('Plate experiments unit tests', () => {
       phage1.numPhage = nPhage;
       let plate = plateExp.createPlate(phage1, null, bactPerm, null, 20000, plateEnum.PLATECALLER.LAB, scenData);
       /* numMut 4 */
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
       plate.full.should.equal(false);
       lPhage.should.equal(nPhage);
@@ -567,8 +568,8 @@ describe('Plate experiments unit tests', () => {
       phage1.numPhage = nPhage;
       let plate = plateExp.createPlate(phage1, null, bactRest, null, 20000, plateEnum.PLATECALLER.LAB, scenData);
       /* numMut 5 */
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
       plate.full.should.equal(false);
       lPhage.should.equal(nPhage);
@@ -584,8 +585,8 @@ describe('Plate experiments unit tests', () => {
       phage1.numPhage = nPhage;
       let plate = plateExp.createPlate(phage1, null, bactPerm, null, 20000, plateEnum.PLATECALLER.LAB, scenData);
       /* numMut 4, 3 WT mut */
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
       plate.full.should.equal(false);
       lPhage.should.equal(nWT);
@@ -601,8 +602,8 @@ describe('Plate experiments unit tests', () => {
       phage1.numPhage = nPhage;
       let plate = plateExp.createPlate(phage1, null, bactRest, null, 20000, plateEnum.PLATECALLER.LAB, scenData);
       /* numMut 3, 1 WT mut */
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
       plate.full.should.equal(false);
       lPhage.should.equal(nWT);
@@ -624,8 +625,8 @@ describe('Plate experiments unit tests', () => {
       /*{ numOffspring: 15244.948974278317, total: 15256,
           numGeno: [ 9146, 6097 ], numMut: [ 12, 1 ],
           numRecomb: [ 0, 0, 0 ] }*/
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
       plate.full.should.equal(false);
       lPhage.should.equal(nPhage1 + nPhage2);
@@ -647,8 +648,8 @@ describe('Plate experiments unit tests', () => {
       /*{ numOffspring: 15244.948974278317, total: 15254,
           numGeno: [ 9146, 6097 ], numMut: [ 7, 4 ],
           numRecomb: [ 0, 0, 0 ] }*/
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
       plate.full.should.equal(false);
       lPhage.should.equal(nPhage1 + nPhage2);
@@ -659,10 +660,10 @@ describe('Plate experiments unit tests', () => {
     it('Should create plate for WTxFS input, PERM bacteria', () => {
       let mPhage1 = 15000,
         mPhage2 = 10000,
-        nMut = 11,
+        nMut = 10,
         nPhage1 = 8853,
         nPhage2 = 5902,
-        nMutWT = 6;
+        nMutWT = 7;
       let phage1 = clone(phageList[0]);
       phage1.numPhage = mPhage1;
       let phage2 = clone(phageList[1]);
@@ -672,9 +673,9 @@ describe('Plate experiments unit tests', () => {
           numGeno: [ 8853, 5902 ], numMut: [ 4, 0 ],
           numRecomb: [ 12, 1, 0 ] }*/
       // FS is first
-      // 1 mut WT, 3 mut, 5 recomb WT, 8 recomb FS
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+      // 1 mut WT, 3 mut, 6 recomb WT, 7 recomb FS
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       plate.full.should.equal(false);
       let nGeno = plate.genotypes.length;
       lPhage.should.equal(nPhage2 + nMutWT);
@@ -685,10 +686,10 @@ describe('Plate experiments unit tests', () => {
     it('Should create plate for WTxFS input, REST bacteria', () => {
       let mPhage1 = 15000,
         mPhage2 = 10000,
-        nMut = 22,
+        nMut = 21,
         nPhage1 = 8853,
         nPhage2 = 5902,
-        nMutWT = 11;
+        nMutWT = 12;
       let phage1 = clone(phageList[0]);
       phage1.numPhage = mPhage1;
       let phage2 = clone(phageList[1]);
@@ -698,9 +699,9 @@ describe('Plate experiments unit tests', () => {
           numGeno: [ 8853, 5902 ], numMut: [ 7, 3 ],
           numRecomb: [ 20, 3, 0 ] }*/
       // FS is first
-      // 3 mut WT, 7 mut, 8 recomb WT, 15 recomb FS
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+      // 3 mut WT, 7 mut, 9 recomb WT, 14 recomb FS
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
       plate.full.should.equal(false);
       lPhage.should.equal(nPhage2 + nMutWT);
@@ -711,21 +712,22 @@ describe('Plate experiments unit tests', () => {
     it('Should create plate for FSxFS input, PERM bacteria', () => {
       let mPhage1 = 15000,
         mPhage2 = 10000,
-        nMut = 6,
+        nMut = 12,
         nPhage1 = 8853,
         nPhage2 = 5902,
-        nMutWT = 7;
+        nMutWT = 1;
       let phage1 = clone(phageList[1]);
       phage1.numPhage = mPhage1;
       let phage2 = clone(phageList[3]);
       phage2.numPhage = mPhage2;
       let plate = plateExp.createPlate(phage1, phage2, bactPerm, null, 20000, plateEnum.PLATECALLER.LAB, scenData);
       /*{ numOffspring: 14755.051025721683, total: 14768,
-          numGeno: [ 8853, 5902 ], numMut: [ 5, 4 ],
-          numRecomb: [ 3, 1, 0 ] }*/
-      // 7 mut WT, 2 mut, 0 recomb WT, 4 recomb FS
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+          numGeno: [ 8853, 5902 ], numMut: [ 0, 2 ],
+          numRecomb: [ 9, 2, 0 ] }*/
+      // 0 mut WT, 2 mut, 1 recomb WT, 10 recomb FS
+      // FS 2 first
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
       plate.full.should.equal(false);
       lPhage.should.equal(nMutWT);
@@ -736,21 +738,21 @@ describe('Plate experiments unit tests', () => {
     it('Should create plate for FSxFS input, REST bacteria', () => {
       let mPhage1 = 15000,
         mPhage2 = 10000,
-        nMut = 32,
+        nMut = 26,
         nPhage1 = 8853,
         nPhage2 = 5902,
-        nMutWT = 6;
+        nMutWT = 0;
       let phage1 = clone(phageList[1]);
       phage1.numPhage = mPhage1;
       let phage2 = clone(phageList[3]);
       phage2.numPhage = mPhage2;
       let plate = plateExp.createPlate(phage1, phage2, bactRest, null, 20000, plateEnum.PLATECALLER.LAB, scenData);
       /*{ numOffspring: 14755.051025721683, total: 14793,
-          numGeno: [ 8853, 5902 ], numMut: [ 9, 1 ],
-          numRecomb: [ 27, 1, 0 ] }*/
-      // 6 mut WT, 4 mut, 0 recomb WT, 28 recomb FS
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+          numGeno: [ 8853, 5902 ], numMut: [ 1, 2 ],
+          numRecomb: [ 23, 0, 0 ] }*/
+      // 0 mut WT, 3 mut, 0 recomb WT, 23 recomb FS
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
       plate.full.should.equal(false);
       lPhage.should.equal(nMutWT);
@@ -767,8 +769,8 @@ describe('Plate experiments unit tests', () => {
       phage2.numPhage = mPhage2;
       let plate = plateExp.createPlate(phage1, phage2, bactPerm, null, 20000, plateEnum.PLATECALLER.LAB, scenData);
       plate.full.should.equal(true);
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
       lPhage.should.equal(0);
       bPhage.should.equal(0);
@@ -784,8 +786,8 @@ describe('Plate experiments unit tests', () => {
       phage2.numPhage = mPhage2;
       let plate = plateExp.createPlate(phage1, phage2, bactRest, null, 20000, plateEnum.PLATECALLER.LAB, scenData);
       plate.full.should.equal(true);
-      let lPhage = plate.littlePlaque.length;
-      let bPhage = plate.bigPlaque.length;
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
       lPhage.should.equal(0);
       bPhage.should.equal(0);
