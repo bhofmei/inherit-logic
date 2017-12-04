@@ -280,8 +280,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 15000,
           mPhage2: 10000,
-          nMut: 11,
-          nMutWT: 6,
+          nMut: 10,
+          nMutWT: 7,
           nPhage1: 8853,
           nPhage2: 5902
         };
@@ -322,8 +322,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 15000,
           mPhage2: 10000,
-          nMut: 22,
-          nMutWT: 11,
+          nMut: 21,
+          nMutWT: 12,
           nPhage1: 8853,
           nPhage2: 5902
         };
@@ -364,8 +364,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 15000,
           mPhage2: 10000,
-          nMut: 6,
-          nMutWT: 7,
+          nMut: 12,
+          nMutWT: 1,
           nPhage1: 8853,
           nPhage2: 5902
         };
@@ -405,8 +405,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 15000,
           mPhage2: 10000,
-          nMut: 32,
-          nMutWT: 6,
+          nMut: 26,
+          nMutWT: 0,
           nPhage1: 8853,
           nPhage2: 5902
         };
