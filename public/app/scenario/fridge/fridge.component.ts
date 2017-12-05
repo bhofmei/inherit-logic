@@ -96,7 +96,6 @@ export class FridgeComponent {
                               },(error)=>{this.errorMessage = error});
   }
 
-
   canDrop(spot: number): any {
   return (dragData: any) => {
     let out = false;
@@ -139,5 +138,9 @@ export class FridgeComponent {
               (err)=>{
       this.errorMessage = err;
     })
+  }
+
+  editPhage(src: number) {
+    console.log(src, this.strains[src]);
   }
 }

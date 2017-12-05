@@ -3,3 +3,28 @@
   width: 100%;
   padding: 3px 0px;
 }
+
+.ls-strain{
+  position: relative;
+}
+
+.edit-phage-btn{
+  max-height: 16px;
+  max-width: 16px;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0px;
+  top: unset;
+  right: 0px;
+  opacity: 0.5;
+  /*float: right;*/
+}
+
+.ls-strain span.edit-phage-btn{
+  display: none;
+}
+.ls-strain:hover span.edit-phage-btn,
+.ls-strain:focus span.edit-phage-btn
+{
+  display: inline-block;
+}
