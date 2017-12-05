@@ -684,6 +684,145 @@ describe('Genetics Controller Unit Tests:', () => {
             done();
           });
       }); // end Should create multiplexer for all WT input, REST bacteria
+
+      it('Should create multiplexer for WT X FS input, PERM bacteria', (done) => {
+        let mPhage = 10500;
+        let expectedMut = [5153, 5151, 5357, 5154, 5155, 5364, 5, 5153, 5367, 5148, 5168, 5377, 5366, 5361, 5, 5158];
+        let expectedWT = [5154, 5152, 5353, 5160, 5160, 5359, 10708, 5160, 5377, 5149, 5159, 5367, 5369, 5355, 10725, 5160];
+        let rowPhage = [];
+        let colPhage = [];
+        for (let i = 0; i < 2; i++) {
+          rowPhage.push({
+            id: phageList2[0],
+            numPhage: mPhage
+          });
+        }
+        for (let i = 0; i < 8; i++) {
+          let tmp;
+          if (i === 0)
+            tmp = phageList2[1];
+          else
+            tmp = phageList2[i + 2];
+          //tmp.numPhage = mPhage;
+          colPhage.push({
+            id: tmp,
+            numPhage: mPhage
+          });
+        }
+        let req = {
+          rowPhage: rowPhage,
+          colPhage: colPhage,
+          lawnType: bactPerm,
+          location: 'multiplexer',
+          capacity: 20000,
+          scenarioData: scenDat2
+        };
+        //let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, 20000, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+        /*
+          0, 0: 5147 FS, 5147 WT, 1 mut, 1 mWT, 5 recomb, 6 rWT
+          0, 1: 5147 FS, 5147 WT, 1 mut, 1 mWT, 3 recomb, 4 rWT
+          0, 2: 5352 FS, 5352 WT, 2 mut, 1 mWT, 3 recomb, 0 rWT
+          0, 3: 5147 FS, 5147 WT, 1 mut, 0 mWT, 6 recomb, 13 rWT
+          0, 4: 5147 FS, 5147 WT, 0 mut, 3 mWT, 8 recomb, 10 rWT
+          0, 5: 5352 FS, 5352 WT, 4 mut, 2 mWT, 8 recomb, 5 rWT
+          0, 6: 0 FS, 10704 WT, 3 mut, 0 mWT, 2 recomb, 4 rWT
+          0, 7: 5147 FS, 5147 WT, 1 mut, 0 mWT, 5 recomb, 13 rWT
+          1, 0: 5352 FS, 5352 WT, 3 mut, 0 mWT, 12 recomb, 25 rWT
+          1, 1: 5147 FS, 5147 WT, 0 mut, 0 mWT, 1 recomb, 2 rWT
+          1, 2: 5147 FS, 5147 WT, 6 mut, 0 mWT, 15 recomb, 12 rWT
+          1, 3: 5352 FS, 5352 WT, 0 mut, 1 mWT, 25 recomb, 14 rWT
+          1, 4: 5352 FS, 5352 WT, 2 mut, 2 mWT, 12 recomb, 15 rWT
+          1, 5: 5352 FS, 5352 WT, 3 mut, 0 mWT, 6 recomb, 3 rWT
+          1, 6: 0 FS, 10704 WT, 4 mut, 0 mWT, 1 recomb, 21 rWT
+          1, 7: 5147 FS, 5147 WT, 3 mut, 1 mWT, 8 recomb, 12 rWT
+        */
+        request(app)
+          .post('/api/cricket/plexer')
+          .send(req)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res) => {
+            let results = res.body;
+            results.should.be.an.Object();
+            for (let i = 0; i < 2; i++) {
+              for (let j = 0; j < 8; j++) {
+                let exp = i * 8 + j;
+                results[i][j].should.have.property('largePlaque', expectedMut[exp]);
+                results[i][j].should.have.property('smallPlaque', expectedWT[exp]);
+              }
+            }
+            done();
+          });
+      }); // end Should create multiplexer for WT X FS input, PERM bacteria
+
+      it('Should create multiplexer for WT X FS input, REST bacteria', () => {
+        let mPhage = 10600;
+        let expectedWT = [5200, 5208, 5411, 5414, 5200, 5419, 10824, 5418, 5407, 5413, 5408, 5200, 5416, 5206, 10397, 5422];
+        let rowPhage = [];
+        let colPhage = [];
+        for (let i = 0; i < 2; i++) {
+          rowPhage.push({
+            id: phageList2[0],
+            numPhage: mPhage
+          });
+        }
+        for (let i = 0; i < 8; i++) {
+          let tmp;
+          if (i === 0)
+            tmp = phageList2[1];
+          else
+            tmp = phageList2[i + 2];
+          //tmp.numPhage = mPhage;
+          colPhage.push({
+            id: tmp,
+            numPhage: mPhage
+          });
+        }
+        let req = {
+          rowPhage: rowPhage,
+          colPhage: colPhage,
+          lawnType: bactRest,
+          location: 'multiplexer',
+          capacity: 20000,
+          scenarioData: scenDat2
+        };
+        /*
+          0, 0: 5197 FS, 5197 WT, 3 mut, 1 mWT, 1 recomb, 2 rWT
+          0, 1: 5197 FS, 5197 WT, 2 mut, 0 mWT, 6 recomb, 11 rWT
+          0, 2: 5402 FS, 5402 WT, 7 mut, 1 mWT, 19 recomb, 8 rWT
+          0, 3: 5402 FS, 5402 WT, 3 mut, 3 mWT, 10 recomb, 9 rWT
+          0, 4: 5197 FS, 5197 WT, 3 mut, 1 mWT, 11 recomb, 2 rWT
+          0, 5: 5402 FS, 5402 WT, 1 mut, 0 mWT, 18 recomb, 17 rWT
+          0, 6: 0 FS, 10804 WT, 5 mut, 0 mWT, 1 recomb, 20 rWT
+          0, 7: 5402 FS, 5402 WT, 2 mut, 1 mWT, 9 recomb, 15 rWT
+          1, 0: 5402 FS, 5402 WT, 3 mut, 2 mWT, 6 recomb, 3 rWT
+          1, 1: 5402 FS, 5402 WT, 2 mut, 1 mWT, 11 recomb, 10 rWT
+          1, 2: 5402 FS, 5402 WT, 3 mut, 0 mWT, 9 recomb, 6 rWT
+          1, 3: 5197 FS, 5197 WT, 4 mut, 2 mWT, 1 recomb, 1 rWT
+          1, 4: 5402 FS, 5402 WT, 2 mut, 3 mWT, 15 recomb, 11 rWT
+          1, 5: 5197 FS, 5197 WT, 2 mut, 2 mWT, 7 recomb, 7 rWT
+          1, 6: 0 FS, 10394 WT, 7 mut, 0 mWT, 1 recomb, 3 rWT
+          1, 7: 5402 FS, 5402 WT, 2 mut, 1 mWT, 14 recomb, 19 rWT
+        */
+
+        request(app)
+          .post('/api/cricket/plexer')
+          .send(req)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res) => {
+            let results = res.body;
+            results.should.be.an.Object();
+            for (let i = 0; i < 2; i++) {
+              for (let j = 0; j < 8; j++) {
+                let exp = i * 8 + j;
+                results[i][j].should.have.property('largePlaque', 0);
+                results[i][j].should.have.property('smallPlaque', expectedWT[exp]);
+              }
+            }
+            done();
+          });
+      });
     }); // end Testing multiplexer
 
 
