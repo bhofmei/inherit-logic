@@ -6,7 +6,7 @@
          <div *ngFor="let strain of currStrains; let i=index" class="ls-strain clearfix" dnd-droppable [allowDrop]="canDrop(i)" (onDropSuccess)="dropStrain($event, i)">
           <span class="strain-num text-secondary">{{ strain.strainNum + 1 }}</span>
           <span class="strain-image" *ngIf="strain.phageType !== 'empty'" dnd-draggable [dragEnabled]="strain.phageType !== 'empty'" [dragData]="strain" [title]="strain.comment">{{strain.id}}</span>
-           <span class="oi oi-ellipses edit-phage-btn float-right align-bottom" aria-hidden="true" (click)="editPhage(i)"></span>
+           <!--<span class="oi oi-ellipses edit-phage-btn float-right align-bottom" aria-hidden="true" (click)="editPhage(i)"></span>-->
           </div>
       </div>
     </div>

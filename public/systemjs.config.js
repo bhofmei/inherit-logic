@@ -20,7 +20,7 @@
     '@angular/common/http': 'lib/@angular/common/bundles/common-http.umd.js',
     'rxjs': 'lib/rxjs',
     'tslib': 'lib/tslib/tslib.js',
-    /*'ng2-dnd': 'lib/ng2-dnd/'*/
+    '@ng-bootstrap/ng-bootstrap': 'lib/@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js',
     'ng2-dnd': 'lib/ng2-dnd/bundles/ng2-dnd.umd.js'
   };
 

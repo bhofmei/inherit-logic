@@ -119,6 +119,10 @@
     fs-extra "^4.0.1"
     viz.js "^1.8.0"
 
+"@ng-bootstrap/ng-bootstrap@^1.0.0-beta.6":
+  version "1.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-1.0.0-beta.6.tgz#676cb6c1c6334c3b34d0d549938386ba99796462"
+
 "@types/angular@^1.6.39":
   version "1.6.39"
   resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.6.39.tgz#0c34938fc546f360c14817686f2e453ebf22312f"
@@ -2182,10 +2186,6 @@ ng2-dragula@^1.5.0:
   resolved "https://registry.yarnpkg.com/ng2-dragula/-/ng2-dragula-1.5.0.tgz#12a221d7a34fc629cc74dc98efb26448290eb6e5"
   dependencies:
     dragula "^3.7.2"
-
-ngx-modialog@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-modialog/-/ngx-modialog-5.0.0.tgz#826d235d6a3f33090040b5db810d6cace0ede8c4"
 
 node-pre-gyp@^0.6.39:
   version "0.6.39"
