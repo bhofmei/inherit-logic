@@ -1,0 +1,12 @@
+#tubeB{
+  color: blue;
+}
+
+#tubeK{
+  color: red;
+}
+
+.tb-label{
+  display: block;
+  text-align: center;
+}

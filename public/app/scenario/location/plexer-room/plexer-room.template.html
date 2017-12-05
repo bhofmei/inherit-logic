@@ -1,24 +1,47 @@
 <div id="plex-room" class="container">
   <div class="row clearfix">
-    <!-- choose bacteria tube -->
-    <div class="d-flex col-12 col-md-4 float-left" id="bact-tubes">
-      <button [ngClass]="getTubeClasses('B')" id="tubeB" (click)="chosenPhage='B'" (dblclick)="clearTubes()">
+    <div role="toolbar" class="btn-toolbar justify-content-between col-12 col-md-8">
+      <!-- bact tubes -->
+      <div>
+        <label class="tb-label" for="bact-tubes">E. coli</label>
+        <div id="bact-tubes" class="col-12 col-md-3 btn-group" role="group" aria-label="Bact-tubes">
+          <button [ngClass]="getTubeClasses('B')" id="tubeB" (click)="chosenPhage='B'" (dblclick)="chosenPhage='none'">
       <span>B</span>
-      </button>
+    </button>
 
-      <button [ngClass]="getTubeClasses('K')" id="tubeK" (click)="choosePhage('K')" (dblclick)="clearTubes()">
+          <button [ngClass]="getTubeClasses('K')" id="tubeK" (click)="chosenPhage='K'" (dblclick)="chosenPhage='none'">
       <span>K</span>
-      </button>
-    </div>
-    <div id="multi-super" class="btn-group col-12 col-md-3 float-right" role="group">
-      <button [ngClass]="getButtonClasses('multi')" id="multi-btn" (click)="plexerType='multi'" title="Do 2x8 cross">Multiplexer</button>
-      <button [ngClass]="getButtonClasses('super')" id="super-btn" (click)="plexerType='super'" title="Do 8x8 cross">Superplexer</button>
-    </div>
-    <div class="col-12 col-md-4 float-right">
-      <button class="btn btn-primary" [disabled]="submitDisabled()" id="submit-btn">Submit</button>
+    </button>
+        </div>
+      </div>
+      <!-- end bact-tubes -->
+
+      <!-- dilution-value -->
+      <div id="dilution-value" class="col-12 col-md-3">
+        <label class="tb-label">Dilution</label>
+        <input type="number" min="2" max="20" [(ngModel)]="dilutionValue" class="w-100">
+      </div>
+      <!-- end dilution-value -->
+
+      <!-- plexer type -->
+      <div>
+        <label class="tb-label" for="plexer-type">Plexer</label>
+        <div id="plexer-type" class="col-12 col-md-3 btn-group" role="group" aria-label="Plexer-type">
+          <button [ngClass]="getPlexerClasses('multi')" (click)="plexerType='multi'" title="Perform 2x8 cross">
+      <span>Multi</span>
+    </button>
+
+          <button [ngClass]="getPlexerClasses('super')" (click)="plexerType='super'" title="Perform 8x8 cross">
+      <span>Super</span>
+    </button>
+        </div>
+      </div>
+      <!-- end plexer-type -->
     </div>
   </div>
+  <div>{{chosenPhage}}, {{dilutionValue}}, {{plexerType}}</div>
   <div class="row">
     <table-plexer class="col-12" [plexerType]="plexerType"></table-plexer>
   </div>
+
 </div>

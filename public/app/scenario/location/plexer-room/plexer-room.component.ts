@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
+import { ScenarioGlobals } from '../../scenario.globals';
 
 @Component({
     selector: 'plexer-room',
     templateUrl: './app/scenario/location/plexer-room/plexer-room.template.html',
   styleUrls: ['./app/scenario/location/plexer-room/plexer-room.style.css']
 })
-export class PlexerRoomComponent {
+export class PlexerRoomComponent{
 
   private chosenPhage: string = 'none';
+  private dilutionValue: number = ScenarioGlobals.defaultDilution;
   private plexerType: string = 'multi';
   private rows: any[];
   private cols: any[];
@@ -21,28 +23,19 @@ export class PlexerRoomComponent {
     }
   }
 
-  /* bacteria tubes */
-  clearTubes(){
-    this.chosenPhage = 'none';
-  }
-
-  choosePhage(src: string){
-    this.chosenPhage = src;
-  }
-
   getTubeClasses(src: string): Object {
     return {
-      'bact-tube col-6 m-1': true,
-      'not-chosen': (!(this.chosenPhage === 'none') && (this.chosenPhage !== src)),
-      'chosen': (this.chosenPhage === src)
+      'btn': true,
+      'btn-outline-secondary': (this.chosenPhage !== src),
+      'btn-secondary': (this.chosenPhage === src)
     }
   }
 
-  /* multi/super plexer buttons */
-  getButtonClasses(src: string): Object {
-    return {
-      'btn btn-outline-secondary btn-sm': true,
-      'active': (this.plexerType === src)
+  getPlexerClasses(src: string): Object{
+    return{
+      'btn': true,
+      'btn-outline-secondary':(this.plexerType !== src) ,
+      'btn-secondary': (this.plexerType === src)
     }
   }
 
@@ -50,9 +43,10 @@ export class PlexerRoomComponent {
   submitDisabled(): boolean {
 
     // determine if disabled
-    var disabled = this.chosenPhage !== 'none';
+    var disabled = this.chosenPhage === 'none';
+    return disabled;
     // get row strains
-    var rowStrains = 0, colStrains = 0;
+    /*var rowStrains = 0, colStrains = 0;
     this.rows.forEach((cell)=>{
       if(cell.data !== null)
         rowStrains++;
@@ -65,6 +59,10 @@ export class PlexerRoomComponent {
       disabled = true;
     if((rowStrains!== 2 && this.plexerType === 'multi') || (rowStrains !== 8 && this.plexerType === 'super'))
       disabled = true;
-    return disabled;
+    return disabled;*/
+  }
+
+  performPlexer(){
+    console.log('plexer');
   }
 }
