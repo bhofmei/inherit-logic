@@ -37,7 +37,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
   var deletesInPlay = false;
   var mutagenized = (specials === 'irrad');
   // phage 1 and 2 will be full objects previously retrieved from mongoose database and numPhage property
-  // console.log(phage1, phage2);
+  //console.log('plate', JSON.stringify(phage1), JSON.stringify(phage2));
   // TODO: add parents information
   var parents = [];
   let getParents = (whoCalled === plateEnum.PLATECALLER.MULTIPLEXER || whoCalled === plateEnum.PLATECALLER.SUPERPLEXER ? false : true)
@@ -46,7 +46,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
   if (phage1.hasOwnProperty('strainNum')) {
     if (getParents) {
       parents = {
-        phage: [phage1.id],
+        phage: [phage1._id],
         bacteria: lawnType
       };
     }
@@ -62,7 +62,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
   // if phage2 exists
   if (phage2) {
     if (getParents) {
-      parents.phage.push(phage2.id)
+      parents.phage.push(phage2._id)
     }
     newPhage2 = {
       genome: {
