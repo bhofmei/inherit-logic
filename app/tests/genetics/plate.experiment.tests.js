@@ -39,18 +39,6 @@ describe('Plate experiments unit tests', () => {
     phageExp.resetEngine();
     phageScen.resetEngine();
     plateExp.resetEngine();
-    /*let geneData = phageScen.makeGene(scenario.gcProb, scenario.minStops);
-    scenData.wtGene = geneData.wtGene;
-    scenData.realStops = geneData.realStops;
-    scenData.framesStopList = geneData.framesStopList;
-    for (let i = 0; i < phages.length; i++) {
-      var phageDetails = phageScen.makePhage(JSON.parse(phages[i]), i, phageEnum.PHAGETYPE.REF, scenData);
-      let phage = phageDetails.phage;
-      // add id property to pretend it is from mongo
-      phage.id = 'testing' + i;
-      scenData = phageDetails.scenData;
-      phageList.push(phage);
-    }*/
     let tmp = phageScen.generateScenario(scenario);
     scenData = tmp.scenData;
     phageList = tmp.strainList;
