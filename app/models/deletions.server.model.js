@@ -15,7 +15,9 @@ const DeletionsSchemea = new Schema({
     type: Schema.ObjectId,
     ref: 'Scenario'
   },
-  guesses: Schema.Types.Mixed
+  guesses: Schema.Types.Mixed,
+  geneLength: Number,
+  stepSize: Number
 });
 
 DeletionsSchemea.set('toJSON',{getters: true});

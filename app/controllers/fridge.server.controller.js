@@ -43,10 +43,12 @@ const stockFridge = function (scenario, user) {
   // add deletion guess info if needed
   if(scenario.createDeletionModel){
     // initialize empty guesses
+    let geneLength = scenDefaults.geneLength;
+    let stepSize = scenDefaults.deletionGuessLength;
     let guesses = {};
     for(let i = 0; i < unknwnStrains.length; i++){
       let guess = [];
-      for(let j = 0; j < scenDefaults.geneLength; j += scenDefaults.deletionGuessLength){
+      for(let j = 0; j < geneLength; j += stepSize){
         guess.push(false);
       } // end for j
       guesses[i] = guess;
@@ -55,7 +57,9 @@ const stockFridge = function (scenario, user) {
       strains: unknwnStrains,
       user: user,
       scenario: scenario,
-      guesses: guesses
+      guesses: guesses,
+      geneLength: geneLength,
+      stepSize: stepSize
     };
     Deletions.create(m, (err, newM)=>{
       if(err)
