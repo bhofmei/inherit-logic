@@ -1,6 +1,7 @@
 const scenarios = require('../controllers/scenario.server.controller');
 const users = require('../controllers/users.server.controller');
 const fridge = require('../controllers/fridge.server.controller');
+const deletions = require('../controllers/deletions.server.controller');
 
 module.exports = function (app) {
   app.route('/api/cricket')
@@ -13,8 +14,9 @@ module.exports = function (app) {
     .get(fridge.getFridge)
     .post(fridge.saveFridge);
 
-  app.route('/api/cricket/:userId/:scenarioId/phage')
-    .post(fridge.createPhage);
+  app.route('/api/cricket/:userId/:scenarioId/deletions')
+  .get(deletions.getDeletions)
+  .post(deletions.saveDeletions);
 
   app.route('/api/cricket/:userId/:scenarioId/fridge-phage')
   .post(fridge.findFridgeByScenOwner, fridge.addPhageToFridge);

@@ -11,6 +11,10 @@ const DeletionsSchemea = new Schema({
     ref: 'User',
     index: true
   },
+  scenario: {
+    type: Schema.ObjectId,
+    ref: 'Scenario'
+  },
   guesses: Schema.Types.Mixed
 });
 

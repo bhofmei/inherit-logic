@@ -3,5 +3,7 @@ export const ScenarioGlobals = {
   plateCapacity: 1000000,
   nFridgeShelf: 32,
   nFridgeSpots: 16,
-  defaultDilution: 10
+  defaultDilution: 10,
+  geneLength: 350,
+  deletionGuessLength: 10
 }
