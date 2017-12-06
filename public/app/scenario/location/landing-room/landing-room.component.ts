@@ -10,7 +10,7 @@ import { ScenarioService } from '../../scenario.service';
 
 export class LandingRoomComponent {
 
-  scenario: string;
+  scenario: any;
   routingObserver: any;
 
   constructor(private _router: Router,
@@ -20,7 +20,7 @@ export class LandingRoomComponent {
   }
 
   ngOnInit(){
-    this.routingObserver = this._route.params.subscribe(params => {
+    this.routingObserver = this._route.parent.params.subscribe(params => {
             let scenId = params['scenId'];
             this._scenarioService
                 .getScenario(scenId)
