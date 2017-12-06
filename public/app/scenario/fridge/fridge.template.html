@@ -12,9 +12,23 @@
     </div>
     <!-- end card body -->
     <div class="card-footer text-center">
-      <div role="toolbar">
-      <button (click)="changeShelf(-1)" [disabled]="shelf==0" class="btn"><span>&laquo;</span></button>
-      <button (click)="changeShelf(1)" [disabled]="shelf==1" class="btn"><span>&raquo;</span></button>
+      <div role="toolbar" class="btn-group btn-group-sm">
+        <button (click)="setShelf(0)" [disabled]="shelf==0" class="btn">
+        <span class="oi oi-media-step-backward"></span>
+        <!--<span>&laquo;</span>-->
+        </button>
+      <button (click)="changeShelf(-1)" [disabled]="shelf==0" class="btn">
+        <span class="oi oi-media-skip-backward"></span>
+        <!--<span>&laquo;</span>-->
+        </button>
+      <button (click)="changeShelf(1)" [disabled]="shelf==(maxShelf-1)" class="btn">
+        <span class="oi oi-media-skip-forward"></span>
+        <!--<span>&raquo;</span>-->
+        </button>
+        <button (click)="setShelf(maxShelf-1)" [disabled]="shelf==(maxShelf-1)" class="btn">
+        <span class="oi oi-media-step-forward"></span>
+        <!--<span>&laquo;</span>-->
+        </button>
         </div>
     </div>
   </div>

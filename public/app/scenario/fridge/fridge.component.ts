@@ -55,7 +55,7 @@ export class FridgeComponent {
 
   _fillStrains(fridgeStrains: any[]): any[]{
     // TODO: update for fridge strains not originally in order
-    for(let i = fridgeStrains.length; i < 2*this.spots; i++){
+    for(let i = fridgeStrains.length; i < this.maxShelf*this.spots; i++){
       let nStrain = {strainNum: i, phageType: 'empty'};
       fridgeStrains.push(nStrain);
     }
@@ -77,13 +77,18 @@ export class FridgeComponent {
   }
 
   changeShelf(inc: number){
-    if(this.shelf ==0 && inc === 1){
+    if(this.shelf <= this.maxShelf-1 && inc === 1){
       this.shelf++;
       this._currStrains();
-    } else if(this.shelf === 1 && inc === -1){
+    } else if(this.shelf > 0 && inc === -1){
       this.shelf--;
       this._currStrains();
     }
+  }
+
+  setShelf(nShelf: number){
+    this.shelf = nShelf;
+    this._currStrains();
   }
 
   addStrain(dat: any){
