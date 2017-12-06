@@ -14,7 +14,11 @@ const FridgeSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Phage'
   }],
-  scenarioDetails: String
+  scenarioDetails: String,
+  deletionModel: {
+    type: Schema.ObjectId,
+    ref: 'Deletions'
+  }
 });
 
 FridgeSchema.set('toJSON',{getters: true});

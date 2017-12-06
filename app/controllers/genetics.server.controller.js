@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const clone = require('clone');
 const Phage = mongoose.model('Phage');
+const Deletions = mongoose.model('Deletions');
 const plate = require('../genetics/plate.experiment');
 const plexer = require('../genetics/plexer.experiment');
 

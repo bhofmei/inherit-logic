@@ -9,6 +9,7 @@ module.exports = function(){
   require('../app/models/course.server.model');
   require('../app/models/fridge.server.model');
   require('../app/models/phage.server.model');
+  require('../app/models/deletions.server.model');
 
   if(config.loadScenario){
     const Scenario = mongoose.model('Scenario');

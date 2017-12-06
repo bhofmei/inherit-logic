@@ -4,6 +4,7 @@ const Fridge = mongoose.model('Fridge');
 const Phage = mongoose.model('Phage');
 const phageScen = require('../genetics/phage.scenario');
 const phageEnum = require('../genetics/phage.enum');
+const scenDefaults = require('../../config/scenario.config.js');
 
 // Create a new error handling controller method
 const getErrorMessage = function (err) {
@@ -23,6 +24,7 @@ const stockFridge = function (scenario, user) {
   //console.log(stock.strainList);
   let strainList = stock.strainList;
   var strainIdList = [];
+  let unknwnStrains = [];
   // loop through strains, save strains to database, and create empty strains
   for (let i = 0; i < strainList.length; i++) {
     let strain = strainList[i];
@@ -34,13 +36,41 @@ const stockFridge = function (scenario, user) {
         console.log(err)
     });
     strainIdList.push(newPhage);
+    if(strain.phageType === phageEnum.PHAGETYPE.UNKNOWN){
+      unknwnStrains.push(newPhage);
+    }
   } // end for i
+  let deletionModel = null;
+  // add deletion guess info if needed
+  if(scenario.createDeletionModel){
+    // initialize empty guesses
+    let guesses = {};
+    for(let i = 0; i < unknwnStrains.length; i++){
+      let guess = [];
+      for(let j = 0; j < scenDefaults.geneLength; j += scenDefaults.deletionGuessLength){
+        guess.push(false);
+      } // end for j
+      guesses[i] = guess;
+    } // end for i
+    let m = {
+      strains: unknwnStrains,
+      user: user,
+      guesses: guesses
+    };
+    Deletions.create(m, (err, newM)=>{
+      if(err)
+        throw new Error('Unable to create deletion model');
+      else
+        deletionModel = newM;
+    });
+  }
   // fridge info
   return {
     scenario: scenario,
     owner: user,
     strains: strainIdList,
-    scenarioDetails: JSON.stringify(stock.scenData)
+    scenarioDetails: JSON.stringify(stock.scenData),
+    deletionModel: deletionModel
   };
 }
 

@@ -24,5 +24,7 @@ module.exports = {
   fridge: {
     nShelves: 32,
     nSpots: 16
-  }
+  },
+  createDeletionModel: false,
+  deletionGuessLength: 10
 };
