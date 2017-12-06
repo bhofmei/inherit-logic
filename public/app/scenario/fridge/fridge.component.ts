@@ -29,6 +29,9 @@ export class FridgeComponent {
     this.spots = ScenarioGlobals.nFridgeSpots;
   }
 
+  /**
+   * Initailize the fridge when creating component
+   */
   ngOnInit(){
      this.user = this._authenticationService.user;
     this.routingObserver = this._route.params.subscribe(params => {
@@ -53,6 +56,10 @@ export class FridgeComponent {
     this.routingObserver.unsubscribe()
   }
 
+  /**
+   * @param {any[]} fridgeStrains - array for created strains in the fridge
+   * @returns {any[]} - array of all slots in fridge, including empty
+   */
   _fillStrains(fridgeStrains: any[]): any[]{
     var out = [];
     for(let i = 0; i < this.maxShelf*this.spots; i++){
@@ -66,20 +73,19 @@ export class FridgeComponent {
     return out;
   }
 
+  /**
+   * Sets strains for visible shelf
+   */
   _currStrains(){
     let start = this.shelf*this.spots;
     let end = start+this.spots;
     this.currStrains = this.strains.slice(start,end);
   }
 
-  save(){
-    this.fridge.strains = this.strains;
-    this._scenarioService
-      .saveFridge(this.fridge)
-      .subscribe(savedFridge => {
-    }, error => this.errorMessage = error);
-  }
-
+  /**
+   * Increase or decrease visible shelf
+   * @param {number} inc - amout to change shelf by
+   */
   changeShelf(inc: number){
     if(this.shelf <= this.maxShelf-1 && inc === 1){
       this.shelf++;
@@ -90,21 +96,27 @@ export class FridgeComponent {
     }
   }
 
+  /**
+   * Set visible shelf to a specific number;
+   * used to jump to the beginning and end
+   * @param {number} nShelf - shelf to go to
+   */
   setShelf(nShelf: number){
     this.shelf = nShelf;
     this._currStrains();
   }
 
-  addStrain(dat: any){
-    // dat should have: strainNum, mutationList, deletion
-    // need userId and scenario
-    let userId = this.user.userId || this.user.id;
-    let scenCode = this.fridge.scenario.scenCode;
-    this._scenarioService.addStrain(dat,userId, scenCode)
-    .subscribe((newFridge) => {this.fridge = newFridge
-                              },(error)=>{this.errorMessage = error});
-  }
-
+  /**
+   * Determine if strain can be dropped in a slot
+   * can be dropped if slot is empty and src is small or large
+   *
+   * Called by allowDrop
+   *
+   * @param {number} spot - spot to test to see if can drop
+   *
+   * @returns {any} - function which returns true or false if
+   * strain can be dropped in slot
+   */
   canDrop(spot: number): any {
   return (dragData: any) => {
     let out = false;
@@ -120,6 +132,16 @@ export class FridgeComponent {
   };
 }
 
+
+  /**
+   * Adds a new strain to a fridge
+   *
+   * Called by onDropSucess of slot
+   *
+   * @param {any} $event - drag event, incuding data for strain to add;
+   * has: strainNum, mutationList, deletion
+   * @param {number} spot - slot to drop new strain
+   */
   dropStrain($event: any, spot: number){
     // onDropSuccess
     let strain = $event.dragData;
