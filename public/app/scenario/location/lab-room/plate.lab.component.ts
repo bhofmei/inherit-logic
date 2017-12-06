@@ -65,7 +65,7 @@ export class PlateLabComponent {
       phage1: this.phage1,
       phage2: this.phage2,
       specials: {},
-      location: 'lab-room',
+      location: 'lab',
       scenarioData: this.scenarioDetails,
       capacity: this.capcity
     }
