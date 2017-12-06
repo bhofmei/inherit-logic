@@ -22,7 +22,7 @@ module.exports = {
   probRadSurvive: 0.01,
   /* fridge config */
   fridge: {
-    nShelves: 2,
+    nShelves: 32,
     nSpots: 16
   }
 };
