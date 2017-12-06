@@ -92,10 +92,9 @@ exports.handlePlexer = function (req, res) {
   var location = reqB.location;
   var capacity = reqB.capacity;
   var scenData = JSON.parse(reqB.scenarioData);
+  console.log()
   var rowPhageId = reqB.rowPhage.map((phage) => {
-    if (phage !== null) {
       return phage.id
-    }
   });
   var colPhageId = reqB.colPhage.map((phage) => {
     return phage.id;

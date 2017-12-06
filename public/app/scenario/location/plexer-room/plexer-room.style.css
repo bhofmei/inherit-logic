@@ -10,3 +10,23 @@
   display: block;
   text-align: center;
 }
+
+#submit-plexer-btn{
+  position: absolute;
+  bottom: 0px;
+}
+.plexer-td{
+  border: 1px solid darkgray;
+  height: 15px;
+  width: 11%;
+}
+
+.plexer-td-label{
+  border: 1.5px solid black;
+  height: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+.plexer-td-results{
+  font-size: smaller;
+}
