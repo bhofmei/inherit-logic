@@ -4,7 +4,7 @@
   <a href="api/auth/signout">Sign out</a>
   <ul>
     <li *ngFor="let scenario of scenarios">
-      <a [routerLink]="[scenario.scenCode]">{{scenario.label}}</a>
+      <a [routerLink]="[scenario.scenCode, 'info']">{{scenario.label}}</a>
     </li>
   </ul>
 </div>
