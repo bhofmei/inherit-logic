@@ -18,10 +18,12 @@ const getErrorMessage = function (err) {
 };
 
 
-const stockFridge = function (scenario, user) {
+exports.stockFridge = function (req, res) {
+  var user = req.user;
+  var scen = req.scenario;
+  console.log('stock');
   // get stock phage and details
-  var stock = phageScen.generateScenario(scenario);
-  //console.log(stock.strainList);
+  var stock = phageScen.generateScenario(scen);
   let strainList = stock.strainList;
   var strainIdList = [];
   let unknwnStrains = [];
@@ -29,53 +31,56 @@ const stockFridge = function (scenario, user) {
   for (let i = 0; i < strainList.length; i++) {
     let strain = strainList[i];
     strain.owner = user;
-    strain.scenarioOrigin = scenario;
+    strain.scenarioOrigin = scen;
     let newPhage = new Phage(strain);
     newPhage.save((err, phage) => {
+      //console.log(phage);
       if (err)
-        console.log(err)
+        res.status(500).send('Unable to create new phage for scenario');
     });
     strainIdList.push(newPhage);
+    //console.log('p', newPhage);
     if(strain.phageType === phageEnum.PHAGETYPE.UNKNOWN){
       unknwnStrains.push(newPhage);
     }
   } // end for i
+  let guessStr = '';
   // add deletion guess info if needed
-  if(scenario.createDeletionModel){
+  //if(scenario.createDeletionModel){
     // initialize empty guesses
     let geneLength = scenDefaults.geneLength;
     let stepSize = scenDefaults.deletionGuessLength;
     let guesses = {};
+    //console.log('unknowns', unknwnStrains);
     for(let i = 0; i < unknwnStrains.length; i++){
       let guess = [];
       for(let j = 0; j < geneLength; j += stepSize){
         guess.push(false);
       } // end for j
-      guesses[i] = guess;
+      let s = unknwnStrains[i].strainNum;
+      guesses[s] = guess;
     } // end for i
-    let m = {
-      strains: unknwnStrains,
-      user: user,
-      scenario: scenario,
-      guesses: guesses,
-      geneLength: geneLength,
-      stepSize: stepSize
-    };
-    Deletions.create(m, (err, newM)=>{
-      if(err)
-        throw new Error('Unable to create deletion model');
-    });
-  }
+    guessStr = JSON.stringify(guesses);
   // fridge info
-  return {
-    scenario: scenario,
+  var newFridge = {
+    scenario: scen,
     owner: user,
     strains: strainIdList,
-    scenarioDetails: JSON.stringify(stock.scenData)
+    scenarioDetails: JSON.stringify(stock.scenData),
+    guesses: guessStr
   };
-}
+  // save fridge
+  Fridge.create(newFridge, (err, fridge)=>{
+    if(err)
+      res.status(500).send('Unable to save new fridge');
+    else{
+      res.json(fridge);
+    }
+  });
+};
 
 exports.getFridge = function (req, res) {
+  console.log('get');
   var user = req.user;
   var scen = req.scenario;
 
@@ -94,8 +99,8 @@ exports.getFridge = function (req, res) {
           });
       } else if (!fridge) {
         // create a fridge
-        const fridgeDetails = stockFridge(scen, user);
-        //console.log(fridgeDetails);
+        /*const fridgeDetails = stockFridge(scen, user);
+        console.log('(', fridgeDetails.guesses, ')');
         const newFridge = new Fridge(fridgeDetails);
         newFridge.save((err, f) => {
           if (err) {
@@ -106,11 +111,26 @@ exports.getFridge = function (req, res) {
           } else {
             res.json(f);
           }
-        });
+        });*/
+        res.status(307).send('No fridge for scenario/user');
       } else {
+        //console.log(fridge);
         res.json(fridge);
       }
     });
+};
+
+exports.saveDeletions = function(req, res){
+  let newGuesses = req.body;
+  let fridge = req.fridge;
+
+  fridge.guesses = newGuesses;
+  fridge.save((err)=>{
+    if(err)
+      return res.status(500).send('Could not save new guesses');
+    else
+      res.json(newGuesses);
+  });
 };
 
 exports.saveFridge = function (req, res) {
@@ -202,6 +222,20 @@ exports.deletePhage = function (req, res) {
         }
       });
     }
+  });
+};
+
+exports.phageById = function (req, res, next, id) {
+  Phage.findOne({
+    '_id': id
+  }, (err, phage) => {
+    // if error
+    if (err) return next(err);
+    // if user not found
+    else if (!phage) return next(new Error('Phage not found'));
+    // if user found -> next middleware
+    req.strain = phage;
+    next();
   });
 };
 
