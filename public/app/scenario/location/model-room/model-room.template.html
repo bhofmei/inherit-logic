@@ -1,0 +1,15 @@
+
+<div *ngIf="keys.length > 0" class="container" id="modeller">
+  <div class="col-1">
+  <div class="row" *ngFor="let phage of keys">
+    <span class="text-secondary">{{phage+1}}</span>
+    </div>
+  </div>
+    <div id="modeller-rows" class="col-11">
+    <div class="row" *ngFor="let phage of keys">
+    <div class="btn-group phage-delete-row w-100">
+      <div *ngFor="let p of geneAr" [ngClass]="getBlockClass(phage,p)" (click)="toggleBlock(phage,p)" [title]="p" [style.width.%]="_width"> </div>
+    </div>
+  </div>
+      </div><!-- end modeller-rows -->
+  </div> <!-- end modeller -->

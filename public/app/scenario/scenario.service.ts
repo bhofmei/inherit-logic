@@ -12,7 +12,7 @@ export class ScenarioService {
     private _baseURL = 'api/cricket';
     private _scenarioDetails = new BehaviorSubject<string>('');
     getScenarioDetails = this._scenarioDetails.asObservable();
-  private _scenarioGuesses = new BehaviorSubject<string>('');
+  private _scenarioGuesses = new BehaviorSubject<any>({});
   getGuesses = this._scenarioGuesses.asObservable();
   private _scenarioCode = new BehaviorSubject<string>('');
   getScenarioCode = this._scenarioCode.asObservable();
@@ -36,13 +36,13 @@ export class ScenarioService {
 
   resetScenario(){
     this._scenarioDetails.next('');
-    this._scenarioGuesses.next('');
+    this._scenarioGuesses.next({});
     this._scenarioCode.next('');
   }
 
   setScenario(scenarioDetails: string, scenarioGuesses: string){
     this._scenarioDetails.next(scenarioDetails);
-    this._scenarioGuesses.next(scenarioGuesses);
+    this._scenarioGuesses.next(JSON.parse(scenarioGuesses));
   }
 
   saveDeletions(guesses: any, userId: number, scenId: string): Observable<any>{

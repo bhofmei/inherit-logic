@@ -36,22 +36,6 @@ export class FridgeComponent {
      this.user = this._authenticationService.user;
     let userId = this.user.userId || this.user.id;
     let scenId = this._route.snapshot.paramMap.get('scenId');
-    /*this.routingObserver = this._route.params.subscribe(params => {
-            let scenId = params['scenId'];
-          let userId = this.user.userId || this.user.id;
-            this.subscription = this._scenarioService
-                .getFridge(userId, scenId)
-                .subscribe(
-                fridge => {
-                  this.fridge = fridge;
-                  //console.log(fridge.strains);
-                  this.strains = this._fillStrains(fridge.strains);
-                  this._currStrains();
-                  //this.strains = fridge.strains;
-                },
-                error => this._router.navigate(['/'])
-                );
-        });*/
     this.subscription = this._scenarioService.getFridge(userId, scenId)
     .subscribe(
       (fridge) => {this._initFridge(fridge)},
@@ -77,6 +61,7 @@ export class FridgeComponent {
     this.fridge = newFridge;
     this.strains = this._fillStrains(newFridge.strains);
     this._currStrains();
+    this._scenarioService.setScenario(newFridge.scenarioDetails, newFridge.guesses);
   }
 
   ngOnDestory(){
