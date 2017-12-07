@@ -40,6 +40,11 @@ export class ScenarioService {
     this._scenarioCode.next('');
   }
 
+  setScenario(scenarioDetails: string, scenarioGuesses: string){
+    this._scenarioDetails.next(scenarioDetails);
+    this._scenarioGuesses.next(scenarioGuesses);
+  }
+
   saveDeletions(guesses: any, userId: number, scenId: string): Observable<any>{
     var res = this._http
       .post(`${this._baseURL}/${userId}/${scenId}/deletions`, guesses);
