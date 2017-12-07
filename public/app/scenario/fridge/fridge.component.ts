@@ -18,8 +18,8 @@ export class FridgeComponent {
   shelf: number = 0;
   maxShelf: number;
   spots: number;
-  routingObserver: any;
   errorMessage: string;
+  private subscription: any;
 
   constructor(private _router: Router,
                private _route: ActivatedRoute,
@@ -34,10 +34,12 @@ export class FridgeComponent {
    */
   ngOnInit(){
      this.user = this._authenticationService.user;
-    this.routingObserver = this._route.params.subscribe(params => {
+    let userId = this.user.userId || this.user.id;
+    let scenId = this._route.snapshot.paramMap.get('scenId');
+    /*this.routingObserver = this._route.params.subscribe(params => {
             let scenId = params['scenId'];
           let userId = this.user.userId || this.user.id;
-            this._scenarioService
+            this.subscription = this._scenarioService
                 .getFridge(userId, scenId)
                 .subscribe(
                 fridge => {
@@ -49,11 +51,36 @@ export class FridgeComponent {
                 },
                 error => this._router.navigate(['/'])
                 );
-        });
+        });*/
+    this.subscription = this._scenarioService.getFridge(userId, scenId)
+    .subscribe(
+      (fridge) => {this._initFridge(fridge)},
+      (err) => {
+        if(err.status === 307){
+        this._createFridge(userId, scenId);
+      } else {
+        this.errorMessage = err.message;
+      } }
+    );
+  }
+
+  _createFridge(userId: number, scenId: string){
+    this.subscription = this._scenarioService.createFridge(userId, scenId)
+    .subscribe((fridge)=>{
+      this._initFridge(fridge);
+    }, (err)=>{
+      this.errorMessage = err.message;
+    });
+  }
+
+  _initFridge(newFridge: any){
+    this.fridge = newFridge;
+    this.strains = this._fillStrains(newFridge.strains);
+    this._currStrains();
   }
 
   ngOnDestory(){
-    this.routingObserver.unsubscribe()
+    this.subscription.unsubscribe();
   }
 
   /**

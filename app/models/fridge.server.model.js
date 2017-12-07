@@ -14,7 +14,8 @@ const FridgeSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Phage'
   }],
-  scenarioDetails: String
+  scenarioDetails: String,
+  guesses: String
 });
 
 FridgeSchema.set('toJSON',{getters: true});

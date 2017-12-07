@@ -38,8 +38,8 @@ describe('Fridge Controller Unit Tests:', () => {
       minStops: scenDefaults.minStops,
       intraMuteDist: scenDefaults.intraMuteDist,
       interMuteDist: scenDefaults.interMuteDist,
-      referencePhage: [scenDefaults.wildtypePhage],
-      otherPhage: []
+      referencePhage: [],
+      otherPhage: [scenDefaults.wildtypePhage]
     });
 
     fridge = new Fridge({
@@ -107,7 +107,7 @@ describe('Fridge Controller Unit Tests:', () => {
 
     it('Should be able to create fridge for user', (done) => {
       request(app)
-        .get('/api/cricket/' + user.userId + '/' + scenario2.scenCode)
+        .post('/api/cricket/' + user.userId + '/' + scenario2.scenCode)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -140,68 +140,19 @@ describe('Fridge Controller Unit Tests:', () => {
       });
     }); // end beforeEach
 
-    it('Should be able to create WT phage', (done) => {
-      var newPhage = {
-        strainNum: 10,
-        mutationList: [],
-        deletion: []
-      };
-      //console.log(newPhage);
-      request(app)
-        .post('/api/cricket/' + user.userId + '/' + scenario.scenCode + '/phage')
-        .send(newPhage)
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-          let phage = res.body;
-          phage.should.be.an.Object();
-          phage.scenarioOrigin.should.have.property('scenCode', scenario.scenCode);
-          phage.mutationList.should.have.lengthOf(0);
-          phage.should.have.property('strainNum', newPhage.strainNum);
-          done();
-        });
-    });
-
-    it('Should be able to create FS phage', (done) => {
-      var newPhage = {
-        strainNum: 11,
-        mutationList: [{
-          kind: 'plusOne',
-          location: 250
-        }],
-        deletion: []
-      };
-      //console.log(newPhage);
-      request(app)
-        .post('/api/cricket/' + user.userId + '/' + scenario2.scenCode + '/phage')
-        .send(newPhage)
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-          let phage = res.body;
-          phage.should.be.an.Object();
-          phage.scenarioOrigin.should.have.property('scenCode', scenario2.scenCode);
-          phage.mutationList.should.have.lengthOf(1);
-          phage.should.have.property('strainNum', newPhage.strainNum);
-          done();
-        });
-    });
-
     it('Should be able to save WT phage to fridge', (done) => {
       var newPhage = {
         strainNum: 12,
         mutationList: [],
         deletion: []
       };
-      //console.log(newPhage);
       request(app)
         .post('/api/cricket/' + user.userId + '/' + scenario.scenCode + '/fridge-phage')
         .send(newPhage)
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-          let outFridge = res.body;
-          let phage = outFridge.strains[0];
+          let phage = res.body;
           phage.scenarioOrigin.should.have.property('scenCode', scenario.scenCode);
           phage.mutationList.should.have.lengthOf(0);
           phage.should.have.property('strainNum', newPhage.strainNum);
@@ -225,8 +176,7 @@ describe('Fridge Controller Unit Tests:', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-          let outFridge = res.body;
-          let phage = outFridge.strains[0];
+          let phage = res.body;
           phage.scenarioOrigin.should.have.property('scenCode', scenario.scenCode);
           phage.mutationList.should.have.lengthOf(1);
           phage.should.have.property('strainNum', newPhage.strainNum);

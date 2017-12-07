@@ -1,7 +1,7 @@
 //import 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
+import { Subject }    from 'rxjs/Subject';
 import { Injectable } from '@angular/core';
 //import { Http, Headers, Request, RequestMethod, Response } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
@@ -10,8 +10,12 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class ScenarioService {
     private _baseURL = 'api/cricket';
-    private scenarioDetails = new BehaviorSubject<string>("");
-    getScenarioDetails = this.scenarioDetails.asObservable();
+    private _scenarioDetails = new BehaviorSubject<string>('');
+    getScenarioDetails = this._scenarioDetails.asObservable();
+  private _scenarioGuesses = new BehaviorSubject<string>('');
+  getGuesses = this._scenarioGuesses.asObservable();
+  private _scenarioCode = new BehaviorSubject<string>('');
+  getScenarioCode = this._scenarioCode.asObservable();
 
 
     constructor(private _http: HttpClient) {
@@ -25,22 +29,30 @@ export class ScenarioService {
     }
 
   getScenario(scenId: string): Observable<any>{
+    this._scenarioCode.next(scenId);
     return this._http
-            .get(`${this._baseURL}/${scenId}`)
-            //.map((res: Response) => res.json())
-            //.catch(this.handleError);
+            .get(`${this._baseURL}/${scenId}`);
   }
 
   resetScenario(){
-    this.scenarioDetails.next('');
+    this._scenarioDetails.next('');
+    this._scenarioGuesses.next('');
+    this._scenarioCode.next('');
+  }
+
+  saveDeletions(guesses: any, userId: number, scenId: string): Observable<any>{
+    var res = this._http
+      .post(`${this._baseURL}/${userId}/${scenId}/deletions`, guesses);
+    return res;
+  }
+
+  createFridge(userId: number, scenId: string): Observable<any>{
+    return this._http.get(`${this._baseURL}/${userId}/${scenId}/new-fridge`);
   }
 
   getFridge(userId: number, scenId: string): Observable<any> {
       var res = this._http
             .get(`${this._baseURL}/${userId}/${scenId}`);
-      res.subscribe((dat: any)=>{
-        this.scenarioDetails.next(dat.scenarioDetails);
-      });
       return res;
     }
 
