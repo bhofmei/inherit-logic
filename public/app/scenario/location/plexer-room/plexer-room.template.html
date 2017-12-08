@@ -38,13 +38,13 @@
       </div>
       <!-- end plexer-type -->
       <div class="col-12 col-sm-6 col-md-3 btn-group-vertical">
-        <button class="btn btn-outline-primary" (click)="reset()">Reset</button>
+        <button class="btn btn-outline-primary btn-sm" (click)="reset()">Reset</button>
         <button class="btn btn-primary" [disabled]="submitDisabled()" (click)="performPlexer()">Submit</button>
       </div>
     </div>
     <!-- end toolbar -->
   </div>
-  <div>{{chosenPhage}}, {{dilutionValue}}, {{plexerType}}</div>
+  <div id="error-message" class="alert alert-warning" [class.invisible]="errorMessage==''"></div>
   <!-- data table -->
   <div class="row">
     <table class="w-100 h-100">
@@ -52,22 +52,21 @@
       <tr>
         <td></td>
         <td *ngFor="let col of cols; let i=index" dnd-droppable (onDropSuccess)="addPhage($event, 'col', i)" class="plexer-td-label">
-          <span *ngIf="col !== null">{{ col.strainNum }}</span>
+          <span *ngIf="col !== null">{{ col.strainNum+1 }}</span>
         </td>
       </tr>
       <!-- rows with data -->
       <tr *ngFor="let row of rows; let i=index" [ngClass]="getRowClass(i)">
         <td dnd-droppable (onDropSuccess)="addPhage($event, 'row', i)" class="plexer-td-label">
-          <span *ngIf="row !== null">{{ row.strainNum }}</span>
+          <span *ngIf="row !== null">{{ row.strainNum+1 }}</span>
         </td>
         <td *ngFor="let col of cols; let j=index" class="plexer-td">
           <div *ngIf="results && results[i] && results[i][j]">
             <div *ngIf="results[i][j].full">
-            Over capacity
+              Over capacity
             </div>
             <div *ngIf="!results[i][j].full" class="plexer-td-results">
-            Small: {{results[i][j].smallPlaque}} <br>
-            Large: {{results[i][j].largePlaque}}
+              Small: {{results[i][j].smallPlaque}} <br> Large: {{results[i][j].largePlaque}}
             </div>
           </div>
         </td>

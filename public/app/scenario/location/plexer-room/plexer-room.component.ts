@@ -28,7 +28,7 @@ export class PlexerRoomComponent{
 
   ngOnInit() {
     this.subscription = this._scenarioService.getScenarioDetails
-      .subscribe(details => this.scenarioDetails = details);
+      .subscribe((details) => this.scenarioDetails = details);
   }
 
   ngOnDestroy(){
@@ -104,7 +104,7 @@ export class PlexerRoomComponent{
     var disabled = this.chosenPhage === 'none';
     // check that at least 1 phage added for row/col
     if(this.nStrains[0] === 0 || this.nStrains[1] === 0){
-      return false;
+      return true;
     }
     return disabled;
   }
@@ -155,7 +155,7 @@ export class PlexerRoomComponent{
     .subscribe((res)=>{
       this.results = res;
     }, (err)=>{
-      this.errorMessage = err.error.message || err.message || 'Error';
+      this.errorMessage = err.error.message || err.message || 'Unknown error';
     });
   }
 

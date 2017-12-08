@@ -17,15 +17,19 @@
 }
 .plexer-td{
   border: 1px solid darkgray;
-  height: 15px;
+  height: 25px;
   width: 11%;
 }
 
 .plexer-td-label{
   border: 1.5px solid black;
-  height: 15px;
+  height: 25px;
   text-align: center;
   font-weight: bold;
+}
+
+.plexer-td-label.dnd-drag-enter{
+  background-color: #dddddd;
 }
 .plexer-td-results{
   font-size: smaller;
