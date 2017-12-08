@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil'
+
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { ScenarioService } from '../../scenario.service';
 import { ScenarioGlobals } from '../../scenario.globals';
@@ -17,22 +20,22 @@ export class ModelRoomComponent {
   private geneAr: number[];
   private stepSize: number;
   private scenarioId: string;
-  private routingObserver: any;
   private userId: number;
   private errorMessage: string = '';
-  private subscription: any;
   private _width: string;
+  private isDestroyed$: Subject<boolean>;
 
   constructor(private _router: Router,
                private _route: ActivatedRoute,
                private _authenticationService: AuthenticationService,
               private _scenarioService: ScenarioService){
+    this.isDestroyed$ = new Subject<boolean>();
+
     this.stepSize = ScenarioGlobals.deletionGuessLength;
     this.geneAr = [];
-    let nBlocks: number = 0;
-    for(let i = 0; i < ScenarioGlobals.geneLength; i+= this.stepSize){
+    let nBlocks: number = Math.ceil(ScenarioGlobals.geneLength/this.stepSize);
+    for(let i = 0; i < nBlocks; i++){
       this.geneAr.push(i);
-      nBlocks++;
     }
     this._width = (100 / nBlocks).toString();
   }
@@ -40,32 +43,53 @@ export class ModelRoomComponent {
   ngOnInit(){
     let userObj = this._authenticationService.user;
     this.userId =  userObj.userId || userObj.id;
-    this.routingObserver = this._route.parent.params.subscribe(params =>{
+    this._route.parent.params
+      .takeUntil(this.isDestroyed$)
+      .subscribe(params =>{
       this.scenarioId = params['scenId']
     });
-    let scenCode;
-    this.subscription = this._scenarioService.getGuesses
+    this._scenarioService.getGuesses
+      .takeUntil(this.isDestroyed$)
       .subscribe((dels) => {
       this.guesses = dels;
       this.keys = Object.keys(dels).map((k)=> {return Number.parseInt(k);});
+      console.log(this.keys);
     });
   }
 
   ngOnDestory(){
-    this.routingObserver.unsubscribe();
-    this.subscription.unsubscribe();
+    this.isDestroyed$.next(true);
+    this.isDestroyed$.unsubscribe();
   }
 
   getBlockClass(strain: number, pos: number){
     let posGuess = this.guesses[strain][pos];
     return {
-      'guess-block border border-primary': true,
-      'bg-primary': posGuess // active
+      'guess-block btn p-0': true,
+      'btn-outline-secondary': !posGuess, // inactive
+      'bg-dark': posGuess // active
     }
   }
 
   toggleBlock(strain: number, pos: number){
     let c = this.guesses[strain][pos];
     this.guesses[strain][pos] = !c;
+  }
+
+  resetData(){
+    // loop through set to false
+  }
+
+  saveData(){
+    // use service and save data
+    let out = JSON.stringify(this.guesses)
+    this._scenarioService
+      .saveDeletions(this.guesses, this.userId, this.scenarioId)
+      .takeUntil(this.isDestroyed$)
+      .subscribe((dat)=>{
+      this.guesses = JSON.parse(dat);
+      this._scenarioService.setScenario(null, dat);
+      //console.log(JSON.stringify(this.guesses));
+    });
   }
 }
