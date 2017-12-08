@@ -1,17 +1,18 @@
-<div *ngIf="keys.length > 0" class="container">
-<div id="model-toolbar" class="row justify-content-end" role="toolbar">
-  <button class="btn btn-primary" (click)="saveData()">
+<div class="container">
+<div id="model-toolbar" class="row mb-3" role="toolbar">
+  <div id="error-message" class="alert alert-warning mb-0 col-8 col-sm-9 col-md-10" [class.invisible]="errorMessage==''">{{errorMessage}}</div>
+  <button *ngIf="keys.length > 0" class="btn btn-primary col-4 col-sm-3 col-md-2" (click)="saveData()">
       Save
-    </button>
-</div>
-<div class="row" id="modeller">
+  </button>
+</div> <!-- end toolbar -->
+<div *ngIf="keys.length > 0" class="row w-100" id="modeller">
   <div class="col-1">
-    <div class="row text-secondary mb-1" *ngFor="let phage of keys">
+    <div class="row text-secondary mb-2 d-block text-right mr-1" *ngFor="let phage of keys">
       {{phage+1}}
     </div>
   </div>
   <div id="modeller-rows" class="col-11">
-    <div class="row mb-1" *ngFor="let phage of keys">
+    <div class="row mb-2" *ngFor="let phage of keys">
       <div class="btn-group phage-delete-row w-100">
         <div *ngFor="let i of geneAr" [ngClass]="getBlockClass(phage,i)" (click)="toggleBlock(phage,i)" [title]="i*stepSize" [style.width.%]="_width"> </div>
       </div>
@@ -20,5 +21,4 @@
   <!-- end modeller-rows -->
 </div>
 <!-- end modeller -->
-  </div>
-<div id="error-message" class="alert alert-warning" [class.invisible]="errorMessage==''"></div>
+</div>

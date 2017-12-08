@@ -53,7 +53,11 @@ export class ModelRoomComponent {
       .subscribe((dels) => {
       this.guesses = dels;
       this.keys = Object.keys(dels).map((k)=> {return Number.parseInt(k);});
-      console.log(this.keys);
+      if(this.keys.length === 0){
+        this.errorMessage = 'No phage available for modelling'
+      } else {
+        this.errorMessage = '';
+      }
     });
   }
 
@@ -76,10 +80,6 @@ export class ModelRoomComponent {
     this.guesses[strain][pos] = !c;
   }
 
-  resetData(){
-    // loop through set to false
-  }
-
   saveData(){
     // use service and save data
     let out = JSON.stringify(this.guesses)
@@ -89,7 +89,6 @@ export class ModelRoomComponent {
       .subscribe((dat)=>{
       this.guesses = JSON.parse(dat);
       this._scenarioService.setScenario(null, dat);
-      //console.log(JSON.stringify(this.guesses));
     });
   }
 }
