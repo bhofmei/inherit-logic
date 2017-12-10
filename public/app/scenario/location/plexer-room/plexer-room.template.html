@@ -44,7 +44,9 @@
     </div>
     <!-- end toolbar -->
   </div>
-  <div id="error-message" class="alert alert-warning" [class.invisible]="errorMessage==''"></div>
+  <div id="error-message" class="alert alert-warning" [class.invisible]="errorMessage==''">
+    {{ errorMessage }}
+  </div>
   <!-- data table -->
   <div class="row">
     <table class="w-100 h-100">

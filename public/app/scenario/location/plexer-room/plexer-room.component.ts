@@ -71,9 +71,13 @@ export class PlexerRoomComponent{
    */
   getTubeClasses(src: string): Object {
     return {
-      'btn': true,
-      'btn-outline-secondary': (this.chosenPhage !== src),
-      'btn-secondary': (this.chosenPhage === src)
+      'btn border border-secondary': true,
+      //'': (this.chosenPhage !== src),
+      'chosen': (this.chosenPhage === src),
+      'btn-outline-info': (src==='B' && this.chosenPhage !== src),
+      'btn-info': (src==='B' && this.chosenPhage === src),
+      'btn-outline-danger': (src==='K' && this.chosenPhage !== src),
+      'btn-danger': (src==='K' && this.chosenPhage === src)
     }
   }
 
