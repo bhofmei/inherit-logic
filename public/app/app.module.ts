@@ -28,8 +28,8 @@ import { LocationModule } from './scenario/location/location.module';
         ArticleModule,
       ScenarioModule,
       LocationModule,
-        RouterModule.forRoot(AppRoutes,
-                            { enableTracing: true }),
+        //RouterModule.forRoot(AppRoutes,{ enableTracing: true }),
+      RouterModule.forRoot(AppRoutes),
       //DndModule.forRoot()
     ],
     declarations: [

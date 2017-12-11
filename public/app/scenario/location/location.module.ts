@@ -6,16 +6,9 @@ import { ExperimentService } from './experiment.service';
 
 import { FridgeComponent } from '../fridge/fridge.component';
 import { LocationComponent } from './location.component';
-// landing/info room
 import { LandingRoomComponent } from './landing-room/landing-room.component';
-// lab room
 import { LabRoomComponent } from './lab-room/lab-room.component';
-import { BactTubeLabComponent } from './lab-room/bact-tube.lab.component';
-import { DilutionTubeLabComponent } from './lab-room/dilution-tube.lab.component';
-import { PlateLabComponent } from './lab-room/plate.lab.component';
-// plexer room
 import { PlexerRoomComponent } from './plexer-room/plexer-room.component';
-// model room
 import { ModelRoomComponent } from './model-room/model-room.component';
 
 
@@ -28,9 +21,6 @@ import { ModelRoomComponent } from './model-room/model-room.component';
     LocationComponent,
     FridgeComponent,
     LabRoomComponent,
-    BactTubeLabComponent,
-    DilutionTubeLabComponent,
-    PlateLabComponent,
     PlexerRoomComponent,
     ModelRoomComponent,
     LandingRoomComponent

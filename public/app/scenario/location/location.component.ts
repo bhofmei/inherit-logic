@@ -14,6 +14,7 @@ export class LocationComponent {
 
   scenario: any;
   routingObserver: any;
+  private subscription: any;
 
    constructor(private _router: Router,
                private _route: ActivatedRoute,
@@ -23,7 +24,7 @@ export class LocationComponent {
     ngOnInit(){
     this.routingObserver = this._route.params.subscribe(params => {
             let scenId = params['scenId'];
-            this._scenarioService
+            this.subscription = this._scenarioService
                 .getScenario(scenId)
                 .subscribe(
                 scenario => {
@@ -36,6 +37,7 @@ export class LocationComponent {
 
   ngOnDestory(){
     this._scenarioService.resetScenario();
+    this.subscription.unsubscribe();
     this.routingObserver.unsubscribe()
   }
 
