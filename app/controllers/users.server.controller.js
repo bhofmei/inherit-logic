@@ -1,6 +1,7 @@
 const User = require('mongoose')
   .model('User');
 const passport = require('passport');
+const scenData = require('../../config/scenario.data');
 
 const getErrorMessage = function (err) {
   let message = '';
@@ -62,7 +63,14 @@ exports.signin = function (req, res, next) {
 
 // Create a new controller method that creates new 'regular' users
 exports.signup = function (req, res) {
+
+  // initialize scenario access
+  let access = {};
+  scenData.forEach((scen)=>{
+    access[scen.scenCode] = false;
+  });
   const user = new User(req.body);
+  user.accessGranted = access;
 
   // check course number
   /*var cExist = Course.courseExists(user.course);

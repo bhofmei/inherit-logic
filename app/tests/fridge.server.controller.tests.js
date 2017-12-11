@@ -107,7 +107,7 @@ describe('Fridge Controller Unit Tests:', () => {
 
     it('Should be able to create fridge for user', (done) => {
       request(app)
-        .post('/api/cricket/' + user.userId + '/' + scenario2.scenCode)
+        .get('/api/cricket/' + user.userId + '/' + scenario2.scenCode + '/new-fridge')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)

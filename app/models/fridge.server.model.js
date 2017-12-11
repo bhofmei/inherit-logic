@@ -10,6 +10,10 @@ const FridgeSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Scenario'
   },
+  accessGranted: {
+    type: Boolean,
+    default: false
+  },
   strains: [{
     type: Schema.ObjectId,
     ref: 'Phage'

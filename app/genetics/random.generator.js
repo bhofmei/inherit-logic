@@ -61,3 +61,7 @@ exports.reset = function(engine){
     engine.autoSeed();
   }
 }
+
+exports.setSeed = function(engine, num){
+  engine.seed(num);
+}

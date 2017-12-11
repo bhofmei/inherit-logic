@@ -27,10 +27,11 @@ const UserSchema = new Schema({
   salt: {
     type: String
   },
-  course: {
+  course: [{
     type: Schema.ObjectId,
     ref: 'Course'
-  },
+  }],
+  accessGranted: {},
   admin: {
     type: Boolean,
     default: false

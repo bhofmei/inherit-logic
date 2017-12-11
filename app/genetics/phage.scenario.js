@@ -11,6 +11,10 @@ exports.resetEngine = function(){
   randGen.reset(randEngine);
 }
 
+exports.seedEngine = function(num){
+  randGen.setSeed(randEngine, num)
+}
+
 exports.generateScenario = function (scenario) {
   // scenario = scenario details - mutationFreq, recombinationFreq, gcProb, minStops, intraMuteDist, interMuteDist, referencePhage, otherPhage, alternatePhage
   // returns JSON list of phage for the scenario (controller handles creating the phage)

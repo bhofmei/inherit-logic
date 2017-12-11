@@ -21,8 +21,19 @@ const getErrorMessage = function (err) {
 exports.stockFridge = function (req, res) {
   var user = req.user;
   var scen = req.scenario;
-  console.log('stock');
+  // determine if access granted -> default true bc of testing
+  let access;
+  if(user.hasOwnProperty('accessGranted')){
+    // created user
+    access = user.accessGranted[scen.scenCode];
+  } else {
+    // testing user -> grant access to use predefined see
+    access = true;
+  }
   // get stock phage and details
+  if(!access){
+    phageEnum.seedEngine(scen.degOfDiff);
+  }
   var stock = phageScen.generateScenario(scen);
   let strainList = stock.strainList;
   var strainIdList = [];
@@ -64,6 +75,7 @@ exports.stockFridge = function (req, res) {
   // fridge info
   var newFridge = {
     scenario: scen,
+    accessGranted: access,
     owner: user,
     strains: strainIdList,
     scenarioDetails: JSON.stringify(stock.scenData),
@@ -80,7 +92,6 @@ exports.stockFridge = function (req, res) {
 };
 
 exports.getFridge = function (req, res) {
-  console.log('get');
   var user = req.user;
   var scen = req.scenario;
 
@@ -123,13 +134,14 @@ exports.getFridge = function (req, res) {
 exports.saveDeletions = function(req, res){
   let newGuesses = req.body;
   let fridge = req.fridge;
+  let s = JSON.stringify(req.body);
 
-  fridge.guesses = newGuesses;
+  fridge.guesses = s;
   fridge.save((err)=>{
     if(err)
       return res.status(500).send('Could not save new guesses');
     else
-      res.json(newGuesses);
+      res.json(s);
   });
 };
 
@@ -151,6 +163,17 @@ exports.saveFridge = function (req, res) {
     }
   });
 };
+
+exports.deleteFridge = function(req, res) {
+  // called with findFridgebyScenOwner
+  var fridge = req.fridge;
+  fridge.remove((err, f) =>{
+    if(err)
+      res.status(500).send({message: 'Failed to remove fridge'});
+    else
+      res.json(fridge);
+  });
+}
 
 exports.addPhageToFridge = function (req, res) {
   let fridge = req.fridge;
