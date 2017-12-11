@@ -21,14 +21,14 @@ const ScenarioSchema = new Schema({
   relevance: String,
   startingPoint: String,
   /* location info */
-  defaultRoom: {
+ /* defaultRoom: {
     type: String,
     default: 'Lab'
   },
   availableRooms: {
     type: [String],
     default: ['Lab', 'MultiPlexer', 'SuperPlexer']
-  },
+  },*/
   /* default phage info */
   referencePhage: [String],
   otherPhage: [String]

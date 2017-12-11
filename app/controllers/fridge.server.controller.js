@@ -32,7 +32,7 @@ exports.stockFridge = function (req, res) {
   }
   // get stock phage and details
   if(!access){
-    phageEnum.seedEngine(scen.degOfDiff);
+    phageScen.seedEngine(scen.degOfDiff);
   }
   var stock = phageScen.generateScenario(scen);
   let strainList = stock.strainList;
