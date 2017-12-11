@@ -1,17 +1,39 @@
 <div class="container mt-2">
   <div class="row">
-    <div class="col-sm-4">
-      <fridge></fridge>
-    </div>
+    <fridge class="col-4 col-md-3"></fridge>
     <!-- location navigation -->
-    <div class="col-8">
-      <ul class=" nav nav-pills mb-2" role="tablist">
-        <li class="nav-item"><a class="nav-link" [routerLinkActive]="['active']" data-toggle="pill" routerLink="info" aria-selected="true">Info</a></li>
-        <li class="nav-item"><a class="nav-link" [routerLinkActive]="['active']" data-toggle="pill" routerLink="lab-room" aria-selected="false">Lab</a></li>
-        <li class="nav-item"><a class="nav-link" [routerLinkActive]="['active']" routerLink="plexer-room" data-toggle="pill" aria-selected="false">Plexer</a></li>
-        <li class="nav-item"><a class="nav-link" [routerLinkActive]="['active']" data-toggle="pill" aria-selected="false" routerLink="model-room">Model</a></li>
-      </ul>
-      <router-outlet></router-outlet>
+    <div class="col-8 col-md-9 container-fluid">
+      <div class="card">
+        <div class="card-header">
+          <ul class=" nav nav-pills card-header-pills">
+            <li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" data-toggle="pill" routerLink="info" aria-selected="true">
+            Info
+            </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLinkActive]="['active']" data-toggle="pill" routerLink="lab-room" aria-selected="false">
+            Lab
+          </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLinkActive]="['active']" routerLink="plexer-room" data-toggle="pill" aria-selected="false">
+            Plexer
+          </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLinkActive]="['active']" data-toggle="pill" aria-selected="false" routerLink="model-room">
+            Model
+          </a>
+            </li>
+          </ul>
+        </div>
+        <!-- end card header -->
+        <div class="card-body">
+          <router-outlet></router-outlet>
+        </div>
+        <!-- end card-body -->
+      </div>
+      <!-- end card -->
     </div>
   </div>
   <!-- end row -->

@@ -1,7 +1,7 @@
 <div id="lab-room" class="container">
   <div class="row clearfix" id="top-row">
     <div id="bact-tubes-section" class="col-8 col-md-3">
-      <label class="tb-lab-label" for="bact-tubes" title="Bacteria to grow phage in">E. coli</label>
+      <label class="tb-lab-label font-italic" for="bact-tubes" title="Bacteria to grow phage in">E. coli</label>
       <div class="row h-100" id="bact-tubes">
         <div id="bact-tube-B" [ngClass]="getClassesBact('B')" title="On E. coli B, rIIb mutants make Big plaques and rIIb wild type phage make small plaques." dnd-droppable (onDropSuccess)="dropPhageBact($event, 'B')">
           <div class="test-tube-inner" dnd-draggable [dragEnabled]="canDragBact()" [dragData]="getDataBact('B')">
