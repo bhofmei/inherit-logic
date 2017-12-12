@@ -17,15 +17,35 @@ const getErrorMessage = function (err) {
   }
 };
 
+const getFridgeInfo = function(fridge){
+  let strains = fridge.strains.map((strain)=>{
+    return {
+      comment: strain.comment,
+      id: strain.id,
+      parents: strain.parents,
+      strainNum: strain.strainNum,
+      phageType: strain.phageType
+    }
+  });
+  return {
+    scenarioDetails: fridge.scenarioDetails,
+    guesses: fridge.guesses,
+    strains: strains,
+    accessGranted: fridge.accessGranted,
+    userId: fridge.owner.userId,
+    scenCode: fridge.scenario.scenCode
+  }
+}
 
 exports.stockFridge = function (req, res) {
   var user = req.user;
   var scen = req.scenario;
   // determine if access granted -> default true bc of testing
+  let accessGranted = user.get('accessGranted');
   let access;
-  if(user.hasOwnProperty('accessGranted')){
+  if(accessGranted){
     // created user
-    access = user.accessGranted[scen.scenCode];
+    access = accessGranted[scen.scenCode];
   } else {
     // testing user -> grant access to use predefined see
     access = true;
@@ -86,7 +106,8 @@ exports.stockFridge = function (req, res) {
     if(err)
       res.status(500).send('Unable to save new fridge');
     else{
-      res.json(fridge);
+      let i = getFridgeInfo(fridge);
+      res.json(i);
     }
   });
 };
@@ -101,7 +122,7 @@ exports.getFridge = function (req, res) {
     })
     .populate('owner', 'userId')
     .populate('scenario', 'scenCode')
-    .populate('strains', 'strainNum comment phageType id')
+    .populate('strains', 'strainNum comment phageType id parents')
     .exec((err, fridge) => {
       if (err) {
         return res.status(400)
@@ -109,24 +130,10 @@ exports.getFridge = function (req, res) {
             message: getErrorMessage(err)
           });
       } else if (!fridge) {
-        // create a fridge
-        /*const fridgeDetails = stockFridge(scen, user);
-        console.log('(', fridgeDetails.guesses, ')');
-        const newFridge = new Fridge(fridgeDetails);
-        newFridge.save((err, f) => {
-          if (err) {
-            return res.status(400)
-              .send({
-                message: getErrorMessage(err)
-              });
-          } else {
-            res.json(f);
-          }
-        });*/
         res.status(307).send('No fridge for scenario/user');
-      } else {
-        //console.log(fridge);
-        res.json(fridge);
+      } else {//
+        let i = getFridgeInfo(fridge);
+        res.json(i);
       }
     });
 };

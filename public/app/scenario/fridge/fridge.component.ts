@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 
 import { ScenarioService } from '../scenario.service';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { ScenarioGlobals } from '../scenario.globals';
 
 import { User } from '../../interfaces/user.interface';
+import { Fridge } from '../../interfaces/fridge.interface';
 
 @Component({
     selector: 'fridge',
@@ -16,14 +17,14 @@ import { User } from '../../interfaces/user.interface';
 export class FridgeComponent implements OnInit, OnDestroy{
 
   user: User;
-  fridge: any;
+  fridge: Fridge;
   strains: any[]; // have strainNum, phageType
   currStrains: any[];
   shelf: number = 0;
   maxShelf: number;
   spots: number;
   errorMessage: string;
-  private isDestoryed$: BehaviorSubject<boolean>
+  private isDestoryed$: Subject<boolean>
 
   constructor(private _router: Router,
                private _route: ActivatedRoute,
@@ -31,18 +32,26 @@ export class FridgeComponent implements OnInit, OnDestroy{
                private _scenarioService: ScenarioService) {
     this.maxShelf = ScenarioGlobals.nFridgeShelf;
     this.spots = ScenarioGlobals.nFridgeSpots;
-    this.isDestoryed$ = new BehaviorSubject<boolean>(false);
+    this.isDestoryed$ = new Subject<boolean>();
   }
 
   /**
    * Initailize the fridge when creating component
    */
   ngOnInit(){
-    this._authenticationService.getUser
-    .takeUntil(this.isDestoryed$)
-    .subscribe( (user) => {this.user = user});
+    this.user = this._authenticationService.getUser2();
+
+    if(this.user === null || this.user === undefined){
+      this._router.navigate(['authentication/signin']);
+    }
+    let scenId;
+    this._scenarioService.getScenarioCode
+      .takeUntil(this.isDestoryed$)
+      .subscribe((sc)=>{
+      scenId = sc;
+    });
     let userId = this.user.id;
-    let scenId = this._route.snapshot.paramMap.get('scenId');
+    //let scenId = this._route.snapshot.paramMap.get('scenId');
     this._scenarioService.getFridge(userId, scenId)
     .takeUntil(this.isDestoryed$)
     .subscribe(
@@ -71,8 +80,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
     });
   }
 
-  _initFridge(newFridge: any){
-    console.log(newFridge);
+  _initFridge(newFridge: Fridge){
     this.fridge = newFridge;
     this.strains = this._fillStrains(newFridge.strains);
     this._currStrains();
@@ -176,10 +184,9 @@ export class FridgeComponent implements OnInit, OnDestroy{
     }
     // add to fridge
     let userId = this.user.id;
-    let scenCode = this.fridge.scenario.scenCode;
+    let scenCode = this.fridge.scenCode;
     this._scenarioService.addStrain(newStrain, userId, scenCode)
     .subscribe((res)=>{
-      console.log(res);
       this.strains[spot] = {
         // strainNum comment phageType id
         strainNum: res.strainNum,
