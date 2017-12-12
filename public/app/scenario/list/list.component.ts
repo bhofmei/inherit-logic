@@ -4,6 +4,7 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 import { ScenarioService } from '../scenario.service';
 
 import { User } from '../../interfaces/user.interface';
+import { Scenario } from '../../interfaces/scenario.interface';
 
 @Component({
     selector: 'scenario-list',
@@ -11,22 +12,16 @@ import { User } from '../../interfaces/user.interface';
 })
 export class ListComponent implements OnInit, OnDestroy{
     user: User;
-    scenarios: any;
+    scenarios: Scenario[];
     errorMessage: string;
-  private uSubscription: Subscription;
   private sSubscription: Subscription;
-
-
 
     constructor(private _authenticationService: AuthenticationService, private _scenarioService: ScenarioService) {
 
     }
 
     ngOnInit() {
-      this.uSubscription = this._authenticationService.getUser
-      .subscribe((user) =>{
-        this.user = user;
-      });
+      this.user = this._authenticationService.getUser2();
       this.sSubscription = this._scenarioService.listScenarios()
         .subscribe((scenarios) => {
         this.scenarios = scenarios
@@ -34,7 +29,6 @@ export class ListComponent implements OnInit, OnDestroy{
     }
 
   ngOnDestroy(){
-    this.uSubscription.unsubscribe();
     this.sSubscription.unsubscribe();
   }
 }
