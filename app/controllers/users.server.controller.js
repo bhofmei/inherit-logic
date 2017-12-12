@@ -63,15 +63,17 @@ exports.signin = function (req, res, next) {
 
 // Create a new controller method that creates new 'regular' users
 exports.signup = function (req, res) {
-
+  let tmp = req.body;
+  //console.log(req.body);
+  tmp.email = tmp.username;
   // initialize scenario access
   let access = {};
   scenData.forEach((scen)=>{
     access[scen.scenCode] = false;
   });
-  const user = new User(req.body);
-  user.accessGranted = access;
 
+  tmp.accessGranted = access;
+const user = new User(tmp);
   // check course number
   /*var cExist = Course.courseExists(user.course);
   if (cExist === -1) {

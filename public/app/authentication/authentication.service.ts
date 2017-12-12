@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AuthenticationService {
-    public user = window['user'];
+    public user: any;
 
     private _signinURL = 'api/auth/signin';
     private _signupURL = 'api/auth/signup';

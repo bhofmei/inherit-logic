@@ -17,7 +17,9 @@ export class SignupComponent {
 
     signup() {
         this._authenticationService.signup(
-            this.user).subscribe(result => this._router.navigate(['/']),
-            error => this.errorMessage = error);
+            this.user).subscribe((result) => {
+          this._authenticationService.user = result;
+          this._router.navigate(['/'])},
+            error => {console.log(error); this.errorMessage = error.error.message});
     }
 }

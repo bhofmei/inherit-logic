@@ -17,7 +17,9 @@ export class SigninComponent {
 
     signin() {
         this._authenticationService.signin(
-            this.credentials).subscribe(result => this._router.navigate(['/']),
-            error => this.errorMessage = error);
+            this.credentials).subscribe(result => {
+          this._authenticationService.user = result;
+          this._router.navigate(['/'])},
+            error => {console.log(error); this.errorMessage = error.message});
     }
 }
