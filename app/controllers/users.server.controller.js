@@ -23,6 +23,14 @@ const getErrorMessage = function (err) {
   return message;
 };
 
+const getUserInfo = function(user){
+  return {
+    id: user.userId,
+    name: user.name,
+    m: user.admin
+  }
+};
+
 exports.userById = function (req, res, next, id) {
   User.findOne({
     userId: id
@@ -45,6 +53,7 @@ exports.signin = function (req, res, next) {
       res.status(400)
         .send(info);
     } else {
+      let userInfo = getUserInfo(user);
       // Remove sensitive data before login
       user.password = undefined;
       user.salt = undefined;
@@ -54,7 +63,7 @@ exports.signin = function (req, res, next) {
           res.status(400)
             .send(err);
         } else {
-          res.json(user);
+          res.json(userInfo);
         }
       });
     }
@@ -92,6 +101,7 @@ const user = new User(tmp);
           message: getErrorMessage(err)
         });
     } else {
+      let userInfo = getUserInfo(user);
       // Remove sensitive data before login
       user.password = undefined;
       user.salt = undefined;
@@ -101,7 +111,7 @@ const user = new User(tmp);
           res.status(400)
             .send(err);
         } else {
-          res.json(user);
+          res.json(userInfo);
         }
       });
     }

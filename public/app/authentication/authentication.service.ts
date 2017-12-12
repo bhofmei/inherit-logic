@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 //import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { User } from '../interfaces/user.interface';
 
 @Injectable()
 export class AuthenticationService {
-    public user: any;
+    public user: User;
 
     private _signinURL = 'api/auth/signin';
     private _signupURL = 'api/auth/signup';
@@ -19,22 +20,22 @@ export class AuthenticationService {
         return (!!this.user);
     }
 
-    signin(credentials: any): Observable<any> {
+    signin(credentials: any): Observable<User> {
         let body = JSON.stringify(credentials);
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         //let options = new RequestOptions({ headers: headers });
 
-        return this.http.post(this._signinURL, body, { headers: headers })
+        return this.http.post<User>(this._signinURL, body, { headers: headers })
             //.map(res => this.user = res.json())
             //.catch(this.handleError)
     }
 
-    signup(user: any): Observable<any> {
+    signup(user: any): Observable<User> {
         let body = JSON.stringify(user);
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         //let options = new RequestOptions({ headers: headers });
 
-        return this.http.post(this._signupURL, body, { headers: headers })
+        return this.http.post<User>(this._signupURL, body, { headers: headers })
             //.map(res => this.user = res.json())
             //.catch(this.handleError)
     }
