@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 
 import { ScenarioService } from '../scenario.service';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { ScenarioGlobals } from '../scenario.globals';
+import { NgbdModalContent } from './phage.component';
 
 import { User } from '../../interfaces/user.interface';
 import { Fridge } from '../../interfaces/fridge.interface';
@@ -16,6 +18,7 @@ import { Fridge } from '../../interfaces/fridge.interface';
 })
 export class FridgeComponent implements OnInit, OnDestroy{
 
+  private modalDialog: string = 'Hi';
   user: User;
   fridge: Fridge;
   strains: any[]; // have strainNum, phageType
@@ -29,7 +32,8 @@ export class FridgeComponent implements OnInit, OnDestroy{
   constructor(private _router: Router,
                private _route: ActivatedRoute,
                private _authenticationService: AuthenticationService,
-               private _scenarioService: ScenarioService) {
+               private _scenarioService: ScenarioService,
+              private _modalService: NgbModal) {
     this.maxShelf = ScenarioGlobals.nFridgeShelf;
     this.spots = ScenarioGlobals.nFridgeSpots;
     this.isDestoryed$ = new Subject<boolean>();
@@ -194,5 +198,17 @@ export class FridgeComponent implements OnInit, OnDestroy{
 
   editPhage(src: number) {
     console.log(src, this.strains[src]);
+  }
+
+  open(content){
+    const modelRef = this._modalService.open(NgbdModalContent, { windowClass: 'phage-dialog'});
+    modelRef.componentInstance.name = this.modalDialog;
+    console.log(modelRef);
+
+    modelRef.result.then((result)=>{
+      console.log('Closed with', result);
+    }, (reason)=>{
+      console.log('Dismissed with', reason);
+    });
   }
 }
