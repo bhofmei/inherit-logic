@@ -539,13 +539,16 @@ const checkPhageDeletion = function (keyMutes, usedDeleteSpots) {
     let dist01 = Math.abs(keyMutes[0] - inDelete[1]);
     let dist10 = Math.abs(keyMutes[1] - inDelete[0]);
     if (keyMutes[0] > 0 && keyMutes[1] < 350) {
-      if (dist00 < 13 || dist11 < 13 || dist01 < 13 || dist10 < 13) {
+      //if (dist00 < 13 || dist11 < 13 || dist01 < 13 || dist10 < 13) {
+      if (dist00 < 10 || dist11 < 10 || dist01 < 10 || dist10 < 10) {
         return false
       }
-    } else if (keyMutes[0] === -100 && dist11 < 25) {
+    //} else if (keyMutes[0] === -100 && dist11 < 25) {
+      } else if (keyMutes[0] === -100 && dist11 < 20) {
       // check for outLeft
       return false;
-    } else if (keyMutes[1] === 500 && dist00 < 25)
+    //} else if (keyMutes[1] === 500 && dist00 < 25)
+      } else if (keyMutes[1] === 500 && dist00 < 20)
       // check outright
       return false;
   }

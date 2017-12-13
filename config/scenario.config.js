@@ -1,8 +1,10 @@
 /* scenario default data */
 module.exports = {
   geneLength: 350,
-  deleteSizes: [50, 50, 50, 95, 95, 95, 140, 155],
-  deleteSpots: [-15, 10, 35, 60, 85, 110, 135, 160, 185, 210],
+  /*deleteSizes: [50, 50, 50, 95, 95, 95, 140, 155],
+  deleteSpots: [-15, 10, 35, 60, 85, 110, 135, 160, 185, 210],*/
+  deleteSizes: [50, 50, 50, 90, 90, 100, 140, 160],
+  deleteSpots: [-10, 10, 40, 60, 80, 110, 130, 160, 190, 210],
   maxDeleteTries: 5000,
   maxFrameTries: 300,
   maxMuteTries: 200,
@@ -26,5 +28,5 @@ module.exports = {
     nSpots: 16
   },
   createDeletionModel: false,
-  deletionGuessLength: 10
+  deletionGuessLength: 5
 };
