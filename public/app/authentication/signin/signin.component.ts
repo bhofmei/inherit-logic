@@ -23,7 +23,8 @@ export class SigninComponent {
           .subscribe((result) => {
           // TODO: update
           this._authenticationService.setUser(result);
-          this._router.navigate(['/'])
+          let redirect = this._authenticationService.redirectUrl ? this._authenticationService.redirectUrl : '/';
+          this._router.navigate([redirect]);
         },
             (error) => {
           this.errorMessage = error.message
@@ -31,6 +32,7 @@ export class SigninComponent {
     }
 
   ngOnDestroy(){
+    if(this.subscription)
     this.subscription.unsubscribe();
   }
 }

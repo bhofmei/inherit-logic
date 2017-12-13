@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 
 import { LocationRouterModule } from './location.route.module';
+import { LocationGuard } from './location-guard.service';
 import { ExperimentService } from './experiment.service';
 
 import { FridgeComponent } from '../fridge/fridge.component';
@@ -26,7 +27,8 @@ import { ModelRoomComponent } from './model-room/model-room.component';
     LandingRoomComponent
   ],
   providers: [
-    ExperimentService
+    ExperimentService,
+    LocationGuard
   ]
 })
 export class LocationModule {}
