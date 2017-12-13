@@ -3,8 +3,10 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { Injectable } from '@angular/core';
-//import { Http, Headers, Request, RequestMethod, Response } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
+
+import { Scenario } from '../interfaces/scenario.interface';
+import { Fridge } from '../interfaces/fridge.interface';
 
 
 @Injectable()
@@ -26,10 +28,10 @@ export class ScenarioService {
             .get(this._baseURL)
     }
 
-    getScenario(scenId: string): Observable<any> {
+    getScenario(scenId: string): Observable<Scenario> {
         this._scenarioCode.next(scenId);
         return this._http
-            .get(`${this._baseURL}/${scenId}`);
+            .get<Scenario>(`${this._baseURL}/${scenId}`);
     }
 
     resetScenario() {
@@ -51,13 +53,13 @@ export class ScenarioService {
             .post(`${this._baseURL}/${userId}/${scenId}/deletions`, guesses);
     }
 
-    createFridge(userId: number, scenId: string): Observable<any> {
-        return this._http.get(`${this._baseURL}/${userId}/${scenId}/new-fridge`);
+    createFridge(userId: number, scenId: string): Observable<Fridge> {
+        return this._http.get<Fridge>(`${this._baseURL}/${userId}/${scenId}/new-fridge`);
     }
 
-    getFridge(userId: number, scenId: string): Observable<any> {
+    getFridge(userId: number, scenId: string): Observable<Fridge> {
         var res = this._http
-            .get(`${this._baseURL}/${userId}/${scenId}`);
+            .get<Fridge>(`${this._baseURL}/${userId}/${scenId}`);
         return res;
     }
 
