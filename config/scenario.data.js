@@ -113,7 +113,7 @@ module.exports = [
     label: "How many mutations? (*HONORS*)",
     fileCode: "CRK11",
     scenCode: "HowMany",
-    degOfDiff: 100,
+    degOfDiff: 101,
     mutationFreq: scenDefaults.mutationFreq,
     recombinationFreq: scenDefaults.recombinationFreq,
     gcProb: scenDefaults.gcProb,
@@ -125,7 +125,7 @@ module.exports = [
     relevance: "To see just how good you are. Developing a successful strategy here requires you to integrate several of the concepts you've been exposed to so far.",
     startingPoint: "A mutant phage containing either 1 or 2 (+1) frameshift mutations. You are given a wild type phage and a phage known to contain a single -1 frameshift mutation as potentially helpful tools. For another bonus point, describe a strategy for figuring out whether a mutant contains 2 or 3 +1 frameshifts (but does NOT produce wild type phenotype).",
     referencePhage: [scenDefaults.wildtypePhage, '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": -1}, "deletion": false, "comment": "Mutant phage containing a single -1 frameshift"}'],
-    otherPhage: ['{"numToMake": 1, "isWildType": "false", "frameshifts": {"howMany": [1,2], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Mutant phage containing one OR two +1 frameshift mutations"}']
+    otherPhage: ['{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [1,2], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Mutant phage containing one OR two +1 frameshift mutations"}']
   },
   {
     label: "Same or different KIND of mutation? (*HONORS*)",
