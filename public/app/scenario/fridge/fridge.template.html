@@ -1,6 +1,9 @@
 <div class="card bg-light border-dark">
   <div *ngIf="fridge">
-    <h4 class="card-header">Fridge</h4>
+    <div class="card-header d-flex justify-content-between">
+    <h4 class="card-title mb-0">Fridge</h4>
+    <h6 *ngIf="!fridge.accessGranted" class="card-subtitle text-muted m-0 align-self-end">Practice</h6>
+    </div>
     <div class="card-body">
        <div class="strain-list">
          <div *ngFor="let strain of currStrains; let i=index" class="ls-strain clearfix" dnd-droppable [allowDrop]="canDrop(i)" (onDropSuccess)="dropStrain($event, i)">

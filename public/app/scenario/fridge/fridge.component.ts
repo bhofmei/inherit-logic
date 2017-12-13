@@ -41,10 +41,6 @@ export class FridgeComponent implements OnInit, OnDestroy{
   ngOnInit(){
     this.user = this._authenticationService.getUser2();
 
-    if(this.user === null || this.user === undefined){
-      this._router.navigate(['authentication/signin']);
-    }
-
     let userId = this.user.id;
     let scenId = this._route.snapshot.paramMap.get('scenId');
     this._scenarioService.getFridge(userId, scenId)
