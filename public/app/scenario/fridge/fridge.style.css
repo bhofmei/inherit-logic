@@ -20,11 +20,28 @@
   /*float: right;*/
 }
 
-.ls-strain span.edit-phage-btn{
+.ls-strain div span.edit-phage-btn{
   display: none;
 }
-.ls-strain:hover span.edit-phage-btn,
-.ls-strain:focus span.edit-phage-btn
+.ls-strain:hover div span.edit-phage-btn,
+.ls-strain:focus div span.edit-phage-btn
 {
   display: inline-block;
+}
+
+.strain-image{
+  background: url(../../../img/dna-black.svg) repeat-x center center;
+  height: 20px;
+}
+
+.strain-image-unknown{
+  background-image: url(../../../img/dna-purple.svg)
+}
+
+.strain-image-reference{
+  background-image: url(../../../img/dna-teal.svg)
+}
+
+.phage-dialog div.modal-dialog{
+  top: 25%;
 }
