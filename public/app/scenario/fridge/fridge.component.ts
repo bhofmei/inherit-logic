@@ -6,7 +6,7 @@ import { Subject } from 'rxjs/Subject';
 import { ScenarioService } from '../scenario.service';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { ScenarioGlobals } from '../scenario.globals';
-import { NgbdModalContent } from './phage.component';
+import { PhageDialogComponent } from './phage-dialog.component';
 
 import { User } from '../../interfaces/user.interface';
 import { Fridge } from '../../interfaces/fridge.interface';
@@ -27,8 +27,8 @@ export class FridgeComponent implements OnInit, OnDestroy{
   shelf: number = 0;
   maxShelf: number;
   spots: number;
-  errorMessage: string;
-  private isDestoryed$: Subject<boolean>
+  errorMessage: string = '';
+  private isDestroyed$: Subject<boolean>
 
   constructor(private _router: Router,
                private _route: ActivatedRoute,
@@ -37,7 +37,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
               private _modalService: NgbModal) {
     this.maxShelf = ScenarioGlobals.nFridgeShelf;
     this.spots = ScenarioGlobals.nFridgeSpots;
-    this.isDestoryed$ = new Subject<boolean>();
+    this.isDestroyed$ = new Subject<boolean>();
   }
 
   /**
@@ -49,7 +49,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
     let userId = this.user.id;
     let scenId = this._route.snapshot.paramMap.get('scenId');
     this._scenarioService.getFridge(userId, scenId)
-    .takeUntil(this.isDestoryed$)
+    .takeUntil(this.isDestroyed$)
     .subscribe(
       (fridge) => {this._initFridge(fridge)},
       (err) => {
@@ -62,13 +62,13 @@ export class FridgeComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(){
-    this.isDestoryed$.next(true);
-    this.isDestoryed$.unsubscribe();
+    this.isDestroyed$.next(true);
+    this.isDestroyed$.unsubscribe();
   }
 
   _createFridge(userId: number, scenId: string){
     this._scenarioService.createFridge(userId, scenId)
-    .takeUntil(this.isDestoryed$)
+    .takeUntil(this.isDestroyed$)
       .subscribe((fridge)=>{
       this._initFridge(fridge);
     }, (err)=>{
@@ -114,6 +114,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * @param {number} inc - amout to change shelf by
    */
   changeShelf(inc: number){
+    this.errorMessage = '';
     if(this.shelf <= this.maxShelf-1 && inc === 1){
       this.shelf++;
       this._currStrains();
@@ -198,19 +199,53 @@ export class FridgeComponent implements OnInit, OnDestroy{
     })
   }
 
+  /**
+   * opens a dialog box to edit/learn more about selected phage
+   */
   editPhage(src: number) {
-    console.log(src, this.strains[src]);
-  }
-
-  open(content){
-    const modelRef = this._modalService.open(NgbdModalContent, { windowClass: 'phage-dialog'});
-    modelRef.componentInstance.name = this.modalDialog;
-    console.log(modelRef);
+    let phage = this.strains[src];
+    const modelRef = this._modalService.open(PhageDialogComponent, { windowClass: 'phage-dialog'});
+    modelRef.componentInstance.phage = phage;
 
     modelRef.result.then((result)=>{
-      console.log('Closed with', result);
+      let resType = typeof result;
+      if(resType === "string" && result === 'delete'){
+        // delete the phage
+        this._deletePhage(src);
+      } else if (resType === "object"){
+        // edit it
+        this._editPhage(src, result);
+      } else {
+        // do nothing
+        return
+      }
     }, (reason)=>{
-      console.log('Dismissed with', reason);
+      // do nothing
+      return;
+    });
+  }
+
+  _editPhage(src: number, newPhage: FridgePhage){
+    this._scenarioService.updateStrain(newPhage, this.user.id, this.fridge.scenCode)
+    .takeUntil(this.isDestroyed$)
+    .subscribe((res)=>{
+      this.strains[src] = res;
+      this._currStrains();
+    }, (err)=>{
+      this.errorMessage = err.error.message;
+    });
+  }
+
+  _deletePhage(src: number){
+    let newPhage = this.strains[src];
+    this._scenarioService.deleteStrain(newPhage, this.user.id, this.fridge.scenCode)
+    .takeUntil(this.isDestroyed$)
+    .subscribe((res)=>{
+      // successful
+      this.strains[src] = {strainNum: src, phageType: 'empty', comment:'', id: ''};
+      this._currStrains();
+    }, (err)=>{
+      this.errorMessage = err.error.message;
     });
   }
 }

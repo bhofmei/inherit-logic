@@ -6,7 +6,7 @@ import { LocationGuard } from './location-guard.service';
 import { ExperimentService } from './experiment.service';
 
 import { FridgeComponent } from '../fridge/fridge.component';
-import { NgbdModalContent } from '../fridge/phage.component';
+import { PhageDialogComponent } from '../fridge/phage-dialog.component';
 import { LocationComponent } from './location.component';
 import { LandingRoomComponent } from './landing-room/landing-room.component';
 import { LabRoomComponent } from './lab-room/lab-room.component';
@@ -22,18 +22,18 @@ import { ModelRoomComponent } from './model-room/model-room.component';
   declarations: [
     LocationComponent,
     FridgeComponent,
+    PhageDialogComponent,
     LabRoomComponent,
     PlexerRoomComponent,
     ModelRoomComponent,
-    LandingRoomComponent,
-    NgbdModalContent
+    LandingRoomComponent
   ],
   providers: [
     ExperimentService,
     LocationGuard
   ],
   entryComponents: [
-    NgbdModalContent
+    PhageDialogComponent
   ]
 })
 export class LocationModule {}

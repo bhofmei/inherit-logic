@@ -5,11 +5,14 @@
     <h6 *ngIf="!fridge.accessGranted" class="card-subtitle text-muted m-0 align-self-end">Practice</h6>
     </div>
     <div class="card-body">
+      <div *ngIf="errorMessage!==''" class="alert alert-danger">
+      {{errorMessage}}
+      </div>
        <div class="strain-list">
-         <div *ngFor="let strain of currStrains; let i=index" class="ls-strain clearfix" dnd-droppable [allowDrop]="canDrop(i)" (onDropSuccess)="dropStrain($event, i)">
+         <div *ngFor="let strain of currStrains" class="ls-strain clearfix" dnd-droppable [allowDrop]="canDrop(strain.strainNum)" (onDropSuccess)="dropStrain($event, strain.strainNum)">
           <span class="strain-num text-secondary">{{ strain.strainNum + 1 }}</span>
           <span class="strain-image" *ngIf="strain.phageType !== 'empty'" dnd-draggable [dragEnabled]="strain.phageType !== 'empty'" [dragData]="strain" [title]="strain.comment">{{strain.id}}</span>
-           <!--<span class="oi oi-ellipses edit-phage-btn float-right align-bottom" aria-hidden="true" (click)="editPhage(i)"></span>-->
+           <span *ngIf="strain.phageType !== 'empty'" class="oi oi-ellipses edit-phage-btn float-right align-bottom" aria-hidden="true" (click)="editPhage(strain.strainNum)"></span>
           </div>
       </div>
     </div>

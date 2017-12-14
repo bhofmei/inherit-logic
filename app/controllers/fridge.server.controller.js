@@ -212,7 +212,7 @@ exports.updatePhage = function (req, res) {
   // Get the strain from the 'request' object
   var strain = req.strain;
 
-  // Update the article fields
+  // Update
   strain.comment = req.body.comment;
   strain.strainNum = req.body.strainNum;
 
@@ -248,7 +248,7 @@ exports.deletePhage = function (req, res) {
               message: getErrorMessage(err)
             });
         } else {
-          res.json(fridge);
+          res.json(strain);
         }
       });
     }

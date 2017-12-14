@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Scenario } from '../interfaces/scenario.interface';
 import { Fridge } from '../interfaces/fridge.interface';
+import { FridgePhage, GenotypePhage } from '../interfaces/phage.interface';
 
 
 @Injectable()
@@ -72,23 +73,23 @@ export class ScenarioService {
         //.catch(this.handleError);
     }
 
-    addStrain(strain: any, userId: number, scenCode: string): Observable<any> {
+    addStrain(strain: GenotypePhage, userId: number, scenCode: string): Observable<FridgePhage> {
         // strains has strainNum, mutationList, deletion
         // returns new phage
         return this._http
-            .post(`${this._baseURL}/${userId}/${scenCode}/fridge-phage`, strain)
+            .post<FridgePhage>(`${this._baseURL}/${userId}/${scenCode}/fridge-phage`, strain)
         //.map((res: Response) => res.json())
         //.catch(this.handleError);
     }
 
-    updateStrain(strain: any, userId: number, scenCode: string): Observable<any> {
-        let strainId = strain._id;
+    updateStrain(strain: FridgePhage, userId: number, scenCode: string): Observable<FridgePhage> {
+        let strainId = strain.id;
         return this._http
-            .post(`${this._baseURL}/${userId}/${scenCode}/${strainId}`, strain)
+            .post<FridgePhage>(`${this._baseURL}/${userId}/${scenCode}/${strainId}`, strain)
     }
 
-    deleteStrain(strain: any, userId: number, scenCode: string): Observable<any> {
-        let strainId = strain._id;
+    deleteStrain(strain: FridgePhage, userId: number, scenCode: string): Observable<any> {
+        let strainId = strain.id;
         return this._http
             .delete(`${this._baseURL}/${userId}/${scenCode}/${strainId}`)
     }
