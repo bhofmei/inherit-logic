@@ -343,7 +343,7 @@ export class LabRoomComponent {
       specials: {},
       location: 'lab',
       scenarioData: this.scenarioDetails,
-      capacity: ScenarioDefaults.plateCapacity
+      capacity: ScenarioGlobals.plateCapacity
     }
     this._experimentService.createPlate(newPlate)
     .takeUntil(this.isDestroyed$)

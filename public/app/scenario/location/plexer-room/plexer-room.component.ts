@@ -192,7 +192,7 @@ export class PlexerRoomComponent{
       this.nStrains[0] = this.rows.filter(function(value) { return value !== null }).length;
     } else if (spot < 8) { // column
       this.cols[spot] = phage;
-      this.nStrains[1] = this.rows.filter(function(value) { return value !== null }).length;
+      this.nStrains[1] = this.cols.filter(function(value) { return value !== null }).length;
     }
   }
 
