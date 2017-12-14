@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { ScenarioGlobals } from '../../scenario.globals';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../scenario.service'
+import { FridgePhage, ExperimentPhage } from '../../../interfaces/phage.interface';
 
 @Component({
     selector: 'plexer-room',
@@ -11,12 +12,12 @@ import { ScenarioService } from '../../scenario.service'
 })
 export class PlexerRoomComponent{
 
-  private chosenPhage: string = 'none';
+  private chosenBact: string = 'none';
   private dilutionValue: number = ScenarioGlobals.defaultDilution;
   private plexerType: string = 'multi';
   private scenarioDetails: string;
-  private rows: any[];
-  private cols: any[];
+  private rows: ExperimentPhage[];
+  private cols: ExperimentPhage[];
   private nStrains: number[] = [0,0];
   private results: Object;
   private errorMessage: string = '';
@@ -54,7 +55,7 @@ export class PlexerRoomComponent{
    * Called on (click) of reset button
    */
   reset(){
-    this.chosenPhage = 'none';
+    this.chosenBact = 'none';
     this.dilutionValue = ScenarioGlobals.defaultDilution;
     this.plexerType = 'multi';
     this._clearData();
@@ -72,12 +73,12 @@ export class PlexerRoomComponent{
   getTubeClasses(src: string): Object {
     return {
       'btn border border-secondary': true,
-      //'': (this.chosenPhage !== src),
-      'chosen': (this.chosenPhage === src),
-      'btn-outline-info': (src==='B' && this.chosenPhage !== src),
-      'btn-info': (src==='B' && this.chosenPhage === src),
-      'btn-outline-danger': (src==='K' && this.chosenPhage !== src),
-      'btn-danger': (src==='K' && this.chosenPhage === src)
+      //'': (this.chosenBact !== src),
+      'chosen': (this.chosenBact === src),
+      'btn-outline-info': (src==='B' && this.chosenBact !== src),
+      'btn-info': (src==='B' && this.chosenBact === src),
+      'btn-outline-danger': (src==='K' && this.chosenBact !== src),
+      'btn-danger': (src==='K' && this.chosenBact === src)
     }
   }
 
@@ -105,7 +106,7 @@ export class PlexerRoomComponent{
   submitDisabled(): boolean {
 
     // determine if disabled
-    var disabled = this.chosenPhage === 'none';
+    var disabled = this.chosenBact === 'none';
     // check that at least 1 phage added for row/col
     if(this.nStrains[0] === 0 || this.nStrains[1] === 0){
       return true;
@@ -119,14 +120,15 @@ export class PlexerRoomComponent{
    *
    * Used before submitting row/col phage
    *
-   * @param {any[]} inData - input array to be cleaned
-   * @returns {any[]} - cleaned array
+   * @param {ExperimentPhage[]} inData - input array to be cleaned
+   * @returns {ExperimentPhage[]} - cleaned array
    */
-  _cleanArrays(inData: any[]): any[]{
+  _cleanArrays(inData: ExperimentPhage[]): ExperimentPhage[]{
     var clean = inData.filter((elt)=>{
       return elt !== null
     }).map((elt)=>{
-        return {id: elt._id,
+        return {id: elt.id,
+                strainNum: elt.strainNum,
                numPhage: elt.numPhage / this.dilutionValue
                }
     });
@@ -146,7 +148,7 @@ export class PlexerRoomComponent{
     let cleanCols = this._cleanArrays(this.cols);
     // gather data
     var data = {
-      lawnType: this.chosenPhage,
+      lawnType: this.chosenBact,
       rowPhage: cleanRows,
       colPhage: cleanCols,
       specials: {},
@@ -173,8 +175,12 @@ export class PlexerRoomComponent{
    * @param {number} spot - position to add phage
    */
   addPhage($event: any, dir: string, spot: number){
-    let phage = $event.dragData;
-    phage.numPhage = ScenarioGlobals.numPhage;
+    let fphage: FridgePhage = $event.dragData;
+    let phage: ExperimentPhage = {
+      id: fphage.id,
+      strainNum: fphage.strainNum,
+      numPhage: ScenarioGlobals.numPhage
+    }
     // add to row
     if(dir === 'row' && spot < 8){
       this.rows[spot] = phage;

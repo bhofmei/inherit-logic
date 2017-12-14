@@ -6,6 +6,8 @@ import { ScenarioGlobals } from '../../scenario.globals';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../scenario.service';
 
+import { ExperimentPhage, GenotypePhage } from '../../../interfaces/phage.interface';
+
 @Component({
     selector: 'lab-room',
     templateUrl: './app/scenario/location/lab-room/lab-room.template.html',
@@ -16,7 +18,7 @@ export class LabRoomComponent {
   private isDestroyed$: Subject<boolean>;
   // bacteria tubes
   private isHidden: Object = {'K': false, 'B': false};
-  private phage: any[] = [];
+  private phage: ExperimentPhage[] = [];
 
   // dilution tubes
   private dilutionValue: number = ScenarioGlobals.defaultDilution;
@@ -32,7 +34,7 @@ export class LabRoomComponent {
   private isFull: boolean = false;
   private smallPlaqueList: any[];
   private largePlaqueList: any[];
-  private genotypes: any[];
+  private genotypes: GenotypePhage[];
 
   private errorMessage: string = '';
 
@@ -145,7 +147,7 @@ export class LabRoomComponent {
     } else if(this.phage.length >= 2) {
       this.errorMessage = 'Cannot have more than 2 phage in a tube';
     } else {
-      // add phage
+      // add phage - type ExperimentPhage
       this.phage.push({
         id: incomingPhage.id,
         strainNum: incomingPhage.strainNum,
@@ -334,7 +336,7 @@ export class LabRoomComponent {
    * @param {any} phage1 - first phage in cross
    * @param {any} phage2 - second phage in cross, or null
    */
-  _performCross(lawnType: string, phage1: any, phage2: any){
+  _performCross(lawnType: string, phage1: ExperimentPhage, phage2: ExperimentPhage){
     let newPlate = {
       lawnType: lawnType,
       phage1: phage1,
@@ -352,6 +354,7 @@ export class LabRoomComponent {
       this.largePlaqueList = res.largePlaque;
       this.isEmpty = false;
       this.genotypes = res.genotypes;
+      console.log(res.smallPlaque, res.genotypes);
       // success
     }, (err)=>{
       // error
@@ -382,7 +385,7 @@ export class LabRoomComponent {
    * @param {string} src - small or large plaque
    * @returns {Object} - phage genotype data
    */
-  getPhagePlate(src: string): Object{
+  getPhagePlate(src: string): GenotypePhage{
     let tmpList = (src === 'small' ? this.smallPlaqueList : this.largePlaqueList);
     if(tmpList.length === 0){
       return null;

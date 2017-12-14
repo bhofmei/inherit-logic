@@ -10,6 +10,7 @@ import { NgbdModalContent } from './phage.component';
 
 import { User } from '../../interfaces/user.interface';
 import { Fridge } from '../../interfaces/fridge.interface';
+import { FridgePhage, GenotypePhage } from '../../interfaces/phage.interface';
 
 @Component({
     selector: 'fridge',
@@ -21,8 +22,8 @@ export class FridgeComponent implements OnInit, OnDestroy{
   private modalDialog: string = 'Hi';
   user: User;
   fridge: Fridge;
-  strains: any[]; // have strainNum, phageType
-  currStrains: any[];
+  strains: FridgePhage[];
+  currStrains: FridgePhage[];
   shelf: number = 0;
   maxShelf: number;
   spots: number;
@@ -83,13 +84,13 @@ export class FridgeComponent implements OnInit, OnDestroy{
   }
 
   /**
-   * @param {any[]} fridgeStrains - array for created strains in the fridge
-   * @returns {any[]} - array of all slots in fridge, including empty
+   * @param {Phage[]} fridgeStrains - array for created strains in the fridge
+   * @returns {Phage[]} - array of all slots in fridge, including empty
    */
-  _fillStrains(fridgeStrains: any[]): any[]{
-    var out = [];
+  _fillStrains(fridgeStrains: FridgePhage[]): FridgePhage[]{
+    var out: FridgePhage[] = [];
     for(let i = 0; i < this.maxShelf*this.spots; i++){
-      out.push({strainNum: i, phageType: 'empty'});
+      out.push({strainNum: i, phageType: 'empty', comment: '', id: ''});
     }
     // add original strains
     for(let i=0; i < fridgeStrains.length; i++){
@@ -144,11 +145,11 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * strain can be dropped in slot
    */
   canDrop(spot: number): any {
-  return (dragData: any) => {
+  return (dragData: GenotypePhage) => {
     let out = false;
     if(dragData && dragData.hasOwnProperty('src')){
       if(dragData.src === 'small' || dragData.src=== 'large'){
-        let trySpot = this.strains[spot];
+        let trySpot: FridgePhage = this.strains[spot];
         if(trySpot.phageType === 'empty'){
           out = true;
         }
@@ -165,12 +166,12 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * Called by onDropSucess of slot
    *
    * @param {any} $event - drag event, incuding data for strain to add;
-   * has: strainNum, mutationList, deletion
+   * has: shifts, deletion
    * @param {number} spot - slot to drop new strain
    */
   dropStrain($event: any, spot: number){
     // onDropSuccess
-    let strain = $event.dragData;
+    let strain: GenotypePhage = $event.dragData;
     // need strainNum, mutationList, deletion
     let newStrain = {
       strainNum: spot,
@@ -183,16 +184,17 @@ export class FridgeComponent implements OnInit, OnDestroy{
     this._scenarioService.addStrain(newStrain, userId, scenCode)
     .subscribe((res)=>{
       this.strains[spot] = {
-        // strainNum comment phageType id
+        // strainNum comment phageType id parents
         strainNum: res.strainNum,
         comment: res.comment,
         phageType: res.phageType,
-        id: res.id
+        id: res.id,
+        parents: res.parents
       }
       this._currStrains();
     },
               (err)=>{
-      this.errorMessage = err;
+      this.errorMessage = err.message;
     })
   }
 

@@ -5,11 +5,11 @@
       <div>
         <label class="tb-label font-italic" for="bact-tubes">E. coli</label>
         <div id="bact-tubes" class="col-12 col-sm-6 col-md-3 btn-group" role="group" aria-label="Bact-tubes">
-          <button [ngClass]="getTubeClasses('B')" id="tubeB" (click)="chosenPhage='B'" (dblclick)="chosenPhage='none'">
+          <button [ngClass]="getTubeClasses('B')" id="tubeB" (click)="chosenBact='B'" (dblclick)="chosenBact='none'">
       <span>B</span>
     </button>
 
-          <button [ngClass]="getTubeClasses('K')" id="tubeK" (click)="chosenPhage='K'" (dblclick)="chosenPhage='none'">
+          <button [ngClass]="getTubeClasses('K')" id="tubeK" (click)="chosenBact='K'" (dblclick)="chosenBact='none'">
       <span>K</span>
     </button>
         </div>
