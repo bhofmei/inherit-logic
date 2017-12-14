@@ -21,7 +21,7 @@ export class LabRoomComponent {
   private phage: ExperimentPhage[] = [];
 
   // dilution tubes
-  private dilutionValue: number = ScenarioGlobals.defaultDilution;
+  private dilutionValue: number = ScenarioGlobals.defaultLabDilution;
   private contents: any[];
   private visibleLabel: boolean[];
   private canEditDilution: boolean = true;
@@ -29,7 +29,6 @@ export class LabRoomComponent {
   // plate
   private isEmpty: boolean = true;
   private lawnType: string = '';
-  private capcity: number = ScenarioGlobals.plateCapacity;
   private scenarioDetails: string;
   private isFull: boolean = false;
   private smallPlaqueList: any[];
@@ -344,7 +343,7 @@ export class LabRoomComponent {
       specials: {},
       location: 'lab',
       scenarioData: this.scenarioDetails,
-      capacity: this.capcity
+      capacity: ScenarioDefaults.plateCapacity
     }
     this._experimentService.createPlate(newPlate)
     .takeUntil(this.isDestroyed$)
@@ -354,7 +353,6 @@ export class LabRoomComponent {
       this.largePlaqueList = res.largePlaque;
       this.isEmpty = false;
       this.genotypes = res.genotypes;
-      console.log(res.smallPlaque, res.genotypes);
       // success
     }, (err)=>{
       // error

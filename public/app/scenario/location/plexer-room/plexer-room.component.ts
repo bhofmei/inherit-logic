@@ -13,7 +13,7 @@ import { FridgePhage, ExperimentPhage } from '../../../interfaces/phage.interfac
 export class PlexerRoomComponent{
 
   private chosenBact: string = 'none';
-  private dilutionValue: number = ScenarioGlobals.defaultDilution;
+  private dilutionValue: number = ScenarioGlobals.defaultPlexerDilution;
   private plexerType: string = 'multi';
   private scenarioDetails: string;
   private rows: ExperimentPhage[];
@@ -22,8 +22,10 @@ export class PlexerRoomComponent{
   private results: Object;
   private errorMessage: string = '';
   private subscription: Subscription;
+  private expSubscription: Subscription;
 
-  constructor(private _experimentService: ExperimentService, private _scenarioService: ScenarioService){
+  constructor( private _experimentService: ExperimentService,
+               private _scenarioService: ScenarioService){
     this._clearData();
   }
 
@@ -33,7 +35,10 @@ export class PlexerRoomComponent{
   }
 
   ngOnDestroy(){
-    this.subscription.unsubscribe();
+    if(this.subscription)
+      this.subscription.unsubscribe();
+    if(this.expSubscription)
+    this.expSubscription.unsubscribe();
   }
 
   /**
@@ -56,7 +61,7 @@ export class PlexerRoomComponent{
    */
   reset(){
     this.chosenBact = 'none';
-    this.dilutionValue = ScenarioGlobals.defaultDilution;
+    this.dilutionValue = ScenarioGlobals.defaultPlexerDilution;
     this.plexerType = 'multi';
     this._clearData();
     this.results = {};
@@ -129,7 +134,7 @@ export class PlexerRoomComponent{
     }).map((elt)=>{
         return {id: elt.id,
                 strainNum: elt.strainNum,
-               numPhage: elt.numPhage / this.dilutionValue
+               numPhage: elt.numPhage / (this.dilutionValue * 1000)
                }
     });
     return clean
@@ -154,10 +159,10 @@ export class PlexerRoomComponent{
       specials: {},
       location: this.plexerType,
       scenarioData: this.scenarioDetails,
-      capacity: ScenarioGlobals.plateCapacity
+      capacity: ScenarioGlobals.plexerCapacity
     };
     // use the service
-    this._experimentService.performPlexer(data)
+    this.expSubscription = this._experimentService.performPlexer(data)
     .subscribe((res)=>{
       this.results = res;
     }, (err)=>{
