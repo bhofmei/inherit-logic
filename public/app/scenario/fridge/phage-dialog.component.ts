@@ -12,7 +12,6 @@ export class PhageDialogComponent {
   @Input() phage: FridgePhage;
 
   public viewParents: boolean = false;
-  public hasParents: boolean;
 
   constructor(public activeModal: NgbActiveModal) {
     //this.hasParents = (this.phage.parents.length === 0);
