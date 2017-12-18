@@ -138,6 +138,24 @@ exports.getFridge = function (req, res) {
     });
 };
 
+exports.getStudentFridge = function(req, res){
+  let student = req.student;
+  let scen = req.scenario;
+  Fridge.findOne({
+    owner: student._id,
+    scenario: scen._id
+  }).populate('strains', 'strainNum comment phageType id mutationList deletion parents')
+  .exec((err, fridge)=>{
+    if(err){
+      return res.status(500).send({message: getErrorMessage(err)});
+    } else if(!fridge){
+      return res.status(404).send({message: 'Fridge not found'});
+    } else {
+      res.json(fridge);
+    }
+  });
+};
+
 exports.saveDeletions = function(req, res){
   let newGuesses = req.body;
   let fridge = req.fridge;
@@ -180,7 +198,7 @@ exports.deleteFridge = function(req, res) {
     else
       res.json(fridge);
   });
-}
+};
 
 exports.addPhageToFridge = function (req, res) {
   let fridge = req.fridge;
