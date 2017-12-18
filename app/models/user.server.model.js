@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Schema = mongoose.Schema;
 
@@ -24,34 +24,45 @@ const UserSchema = new Schema({
       }, 'Password should be longer'
     ]
   },
-  salt: {
-    type: String
-  },
-  course: [{
+  course: {
     type: Schema.ObjectId,
     ref: 'Course'
-  }],
+  },
   accessGranted: {},
   admin: {
+    type: Boolean,
+    default: false
+  },
+  instructor: {
     type: Boolean,
     default: false
   }
 });
 
-/*UserSchema.statics.fineOneByUsername = function(mail, callback){
-  this.findOne({email: mail}, callback);
-};*/
-
-UserSchema.methods.authenticate = function(password){
-  return this.password === this.hashPassword(password);
+UserSchema.methods.authenticate = function(candidatePassword, callback){
+  bcrypt.compare(candidatePassword, this.password, (err, isMatch)=>{
+    if(err)
+      return callback(err);
+    callback(null, isMatch);
+  });
 };
 
 UserSchema.pre('save', function(next){
+  const SALT_FACTOR=10;
+  if(!this.isModified('password'))
+    return next();
   if(this.password){
-    this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
-    this.password = this.hashPassword(this.password);
+    bcrypt.genSalt(SALT_FACTOR, (err, salt)=>{
+      if(err)
+        return next(err);
+      bcrypt.hash(this.password, salt, (err, hash)=>{
+        if(err)
+          return next(err);
+        this.password = hash;
+        next();
+      });
+    });
   }
-  next();
 });
 
 UserSchema.methods.hashPassword = function(password){

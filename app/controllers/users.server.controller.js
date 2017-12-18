@@ -23,28 +23,13 @@ const getErrorMessage = function (err) {
   return message;
 };
 
-const getUserInfo = function(user){
+const getUserInfo = function (user) {
   return {
     id: user.userId,
     name: user.name,
     m: user.admin
   }
 };
-
-exports.userById = function (req, res, next, id) {
-  User.findOne({
-    userId: id
-  }, (err, user) => {
-    // if error
-    if (err) return next(err);
-    // if user not found
-    else if (!user) return next(new Error('User not found'));
-    // if user found -> next middleware
-    req.user = user;
-    next();
-  });
-};
-
 
 // Create a new controller method that signin users
 exports.signin = function (req, res, next) {
@@ -54,9 +39,6 @@ exports.signin = function (req, res, next) {
         .send(info);
     } else {
       let userInfo = getUserInfo(user);
-      // Remove sensitive data before login
-      user.password = undefined;
-      user.salt = undefined;
 
       req.login(user, (err) => {
         if (err) {
@@ -77,12 +59,12 @@ exports.signup = function (req, res) {
   tmp.email = tmp.username;
   // initialize scenario access
   let access = {};
-  scenData.forEach((scen)=>{
+  scenData.forEach((scen) => {
     access[scen.scenCode] = false;
   });
 
   tmp.accessGranted = access;
-const user = new User(tmp);
+  const user = new User(tmp);
   // check course number
   /*var cExist = Course.courseExists(user.course);
   if (cExist === -1) {
@@ -124,6 +106,26 @@ exports.signout = function (req, res) {
   res.redirect('/');
 };
 
+/**
+ * grant access to student for specific scenario
+ */
+exports.grantAccess = function(req, res){
+  let scenario = req.scenario;
+  let scenId = scenario.scenCode;
+  let user = req.student;
+
+  if(user.accessGranted !== null && user.accessGranted !== undefined)
+  {user.accessGranted[scenId] = true;
+  user.save((err, updated)=>{
+    if(err)
+      return res.status(500).send({message: getErrorMessage(err)});
+    res.json(updated);
+  });
+  } else {
+    return res.status(200);
+  }
+};
+
 exports.requiresLogin = function (req, res, next) {
   if (!req.isAuthenticated()) {
     return res.status(401)
@@ -132,6 +134,26 @@ exports.requiresLogin = function (req, res, next) {
       });
   }
   next();
+};
+
+exports.userById = function (req, res, next, id) {
+  User.findOne({
+    userId: id
+  }, (err, user) => {
+    // if error
+    if (err) return next(err);
+    // if user not found
+    else if (!user) return next(new Error('User not found'));
+    // if user found -> next middleware
+    // if req has user specified, use user prop
+    if (req.user) {
+      req.student = user;
+    }
+    else {
+      req.user = user;
+    }
+    next();
+  });
 };
 
 // functions for updating user info
