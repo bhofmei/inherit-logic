@@ -17,7 +17,7 @@ const getErrorMessage = function (err) {
  *  list all users in the system
  */
 exports.listUsers = function(req, res){
-  User.find({}, (err, users)=>{
+  User.find((err, users)=>{
     if(err){
       return res.status(500).send({message: getErrorMessage(err)});
     } else if(!users){
@@ -27,6 +27,12 @@ exports.listUsers = function(req, res){
     }
   });
 };
+
+exports.getUser = function(req, res){
+  let user = req.student;
+  delete user.password;
+  res.json(user);
+}
 
 exports.deleteUser = function(req, res){
   let student = req.student; // student to be deleted
@@ -39,10 +45,12 @@ exports.deleteUser = function(req, res){
   });
 };
 
-exports.grantAdmin = function(req, res){
+exports.setAdminAccess = function(req, res){
+  let body = req.body;
   // admin is user, user to grant access is student
   let user = req.student;
-  user.admin = true;
+  if(user.admin !== body.admin){
+    user.admin = body.admin;
   user.save((err)=>{
     if(err){
       return res.status(500).send({message: getErrorMessage(err)});
@@ -51,6 +59,9 @@ exports.grantAdmin = function(req, res){
       res.json(user);
     }
   });
+  } else {
+    res.json(user);
+  }
 };
 
 exports.deleteCourseStudents = function(req, res){
@@ -70,7 +81,7 @@ exports.hasAuthorization = function(req, res, next) {
     // If the current user does not have admin access, send error message
     if (!req.user.admin) {
         return res.status(403).send({
-            message: 'User is not authorized'
+            message: 'Not authorized'
         });
     }
     // Call the next middleware

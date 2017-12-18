@@ -54,7 +54,12 @@ exports.signin = function (req, res, next) {
           res.status(400)
             .send(err);
         } else {
-          res.json(userInfo);
+          user.lastLogin = Date.now();
+          user.save((err)=>{
+            if(!err){
+              res.json(userInfo);
+            }
+          });
         }
       });
     }

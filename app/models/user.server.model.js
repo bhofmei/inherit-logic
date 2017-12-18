@@ -36,6 +36,10 @@ const UserSchema = new Schema({
   instructor: {
     type: Boolean,
     default: false
+  },
+  lastLogin: {
+    type: Date,
+    default: Date.now()
   }
 });
 
