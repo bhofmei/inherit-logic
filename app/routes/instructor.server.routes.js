@@ -15,6 +15,7 @@ module.exports = function (app) {
 
   app.route('/api/instr/:instrId/courses/:courseNum/users')
     .get(instructor.hasAuthorization, instructor.isInstructor, instructor.getStudents)
+    .post(instructor.hasAuthorization, instructor.isInstructor, instructor.addInstructor);
 
   app.route('/api/instr/:instrId/courses/:courseNum/:scenarioId')
     .get(instructor.hasAuthorization, instructor.isInstructor, instructor.getScenarioStatus)

@@ -31,6 +31,15 @@ const getUserInfo = function (user) {
   }
 };
 
+/**
+ * return full user object
+ */
+exports.getUser = function(req, res){
+  let user = req.user;
+  delete user.password;
+  res.json(user);
+};
+
 // Create a new controller method that signin users
 exports.signin = function (req, res, next) {
   passport.authenticate('local', (err, user, info) => {
