@@ -66,28 +66,27 @@ exports.getCourse = function (req, res) {
   res.json(req.course);
 };
 
-// Create a new controller method that updates an existing article
-/*exports.update = function(req, res) {
-    // Get the article from the 'request' object
-    const article = req.article;
+/**
+ * Update the description of an existing course
+ */
+exports.editCourse = function(req, res) {
+    const course = req.course;
 
-    // Update the article fields
-    article.title = req.body.title;
-    article.content = req.body.content;
+    // Update the fields
+    course.description = req.body.description;
 
     // Try saving the updated article
-    article.save((err) => {
+    course.save((err) => {
         if (err) {
             // If an error occurs send the error message
             return res.status(400).send({
                 message: getErrorMessage(err)
             });
         } else {
-            // Send a JSON representation of the article
-            res.json(article);
+          res.json(course);
         }
     });
-};*/
+};
 
 /**
  * Create a new controller method that delete a course

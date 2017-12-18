@@ -30,7 +30,8 @@ describe('Instructor Controller Course-related Unit Tests: ', () => {
     instructor.save(() => {
       course = new Course({
         courseNum: 'TEST004',
-        instructors: [instructor]
+        instructors: [instructor],
+        description: 'Description of course'
       });
       course.save(() => {
         // Create a student
@@ -44,7 +45,8 @@ describe('Instructor Controller Course-related Unit Tests: ', () => {
         instructor2.save(() => {
           course2 = new Course({
             courseNum: 'TEST005',
-            instructors: [instructor, instructor2]
+            instructors: [instructor, instructor2],
+            description: 'Description 2'
           });
           course2.save(() => {
             student.save(() => {
@@ -167,6 +169,25 @@ describe('Instructor Controller Course-related Unit Tests: ', () => {
           done();
         });
     }); // end Should not be able to create course by student
+
+    it('Should be able to edit course', (done) => {
+      let body = {
+        description: 'Updated description'
+      };
+      request(app)
+        .post('/api/instr/' + instructor.userId+'/courses/' + course.courseNum)
+        .send(body)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+        let updated = res.body;
+          updated.should.be.an.Object();
+          updated.should.have.property('courseNum', course.courseNum);
+        updated.should.have.property('description', body.description);
+          done();
+        });
+    }); // end Should be able to create course
 
   }); // end Test POST methods
 

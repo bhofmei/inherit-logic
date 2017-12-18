@@ -10,6 +10,7 @@ module.exports = function (app) {
 
   app.route('/api/instr/:instrId/courses/:courseNum')
     .get(instructor.hasAuthorization, instructor.isInstructor, instructor.getCourse)
+    .post(instructor.hasAuthorization, instructor.isInstructor, instructor.editCourse)
     .delete(instructor.hasAuthorization, instructor.isInstructor, instructor.deleteCourse);
 
   app.route('/api/instr/:instrId/courses/:courseNum/users')
