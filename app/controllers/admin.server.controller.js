@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const User = require('mongoose').model('User');
 const Course = mongoose.model('Course');
 const ObjectId = mongoose.Types.ObjectId;

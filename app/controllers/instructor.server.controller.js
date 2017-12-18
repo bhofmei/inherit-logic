@@ -69,23 +69,24 @@ exports.getCourse = function (req, res) {
 /**
  * Update the description of an existing course
  */
-exports.editCourse = function(req, res) {
-    const course = req.course;
+exports.editCourse = function (req, res) {
+  const course = req.course;
 
-    // Update the fields
-    course.description = req.body.description;
+  // Update the fields
+  course.description = req.body.description;
 
-    // Try saving the updated article
-    course.save((err) => {
-        if (err) {
-            // If an error occurs send the error message
-            return res.status(400).send({
-                message: getErrorMessage(err)
-            });
-        } else {
-          res.json(course);
-        }
-    });
+  // Try saving the updated article
+  course.save((err) => {
+    if (err) {
+      // If an error occurs send the error message
+      return res.status(400)
+        .send({
+          message: getErrorMessage(err)
+        });
+    } else {
+      res.json(course);
+    }
+  });
 };
 
 /**
@@ -109,6 +110,33 @@ exports.deleteCourse = function (req, res) {
     }
   });
 };
+
+exports.addInstructor = function (req, res) {
+  let newInstructor = req.student;
+  let course = req.course;
+  newInstructor.instructor = true;
+  newInstructor.save((err, i) => {
+    if (err) {
+      return res.status(400)
+        .send({
+          message: getErrorMessage(err)
+        });
+    } else {
+      course.instructors.push(i);
+      course.save((err2, c) => {
+        if (err2) {
+          return res.status(400)
+            .send({
+              message: getErrorMessage(err)
+            });
+        } else {
+          res.json(c);
+        }
+      });
+    }
+  });
+}
+
 
 /**
  * get list of students for a course
@@ -240,4 +268,3 @@ exports.isInstructor = function (req, res, next) {
   }
   next();
 };
-

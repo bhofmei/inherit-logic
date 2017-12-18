@@ -62,7 +62,7 @@ describe('Instructor Controller Course-related Unit Tests: ', () => {
 
     it('Should be able to get list of courses for instructor', (done) => {
       request(app)
-        .get('/api/instr/' + instructor.userId+'/courses')
+        .get('/api/instr/' + instructor.userId + '/courses')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -139,16 +139,16 @@ describe('Instructor Controller Course-related Unit Tests: ', () => {
         description: 'Test course'
       };
       request(app)
-        .post('/api/instr/' + instructor.userId+'/courses')
+        .post('/api/instr/' + instructor.userId + '/courses')
         .send(newCourse)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-        let nC = res.body;
+          let nC = res.body;
           nC.should.be.an.Object();
           nC.should.have.property('courseNum', newCourse.courseNum);
-        nC.instructors.should.have.lengthOf(1);
+          nC.instructors.should.have.lengthOf(1);
           done();
         });
     }); // end Should be able to create course
@@ -159,7 +159,7 @@ describe('Instructor Controller Course-related Unit Tests: ', () => {
         description: 'Test course'
       };
       request(app)
-        .post('/api/instr/' + student.userId+'/courses')
+        .post('/api/instr/' + student.userId + '/courses')
         .send(newCourse)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -175,23 +175,40 @@ describe('Instructor Controller Course-related Unit Tests: ', () => {
         description: 'Updated description'
       };
       request(app)
-        .post('/api/instr/' + instructor.userId+'/courses/' + course.courseNum)
+        .post('/api/instr/' + instructor.userId + '/courses/' + course.courseNum)
         .send(body)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-        let updated = res.body;
+          let updated = res.body;
           updated.should.be.an.Object();
           updated.should.have.property('courseNum', course.courseNum);
-        updated.should.have.property('description', body.description);
+          updated.should.have.property('description', body.description);
+
           done();
         });
     }); // end Should be able to create course
 
+    it('Should be able to add new instructor', (done) => {
+      request(app)
+        .post('/api/instr/' + instructor.userId + '/courses/' + course.courseNum + '/users/' + instructor2.userId)
+        .send({})
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          let updated = res.body;
+          updated.should.be.an.Object();
+          updated.should.have.property('courseNum', course.courseNum);
+          updated.instructors.should.have.lengthOf(2);
+          done();
+        });
+    }); // end
+
   }); // end Test POST methods
 
- describe('Test DELETE methods', () => {
+  describe('Test DELETE methods', () => {
 
     it('Should be able to delete course2', (done) => {
       request(app)
