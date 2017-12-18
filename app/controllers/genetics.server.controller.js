@@ -111,7 +111,7 @@ exports.handlePlexer = function (req, res) {
     },
     (err, array) => {
       if (err) {
-        req.status(400)
+        res.status(400)
           .send({
             message: 'Error finding a column phage'
           });
