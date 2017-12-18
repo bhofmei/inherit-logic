@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Course = mongoose.model('Course');
-const Users = mongoose.model('User');
+const User = mongoose.model('User');
 const scenData = require('../../config/scenario.data');
 
 // Create a new error handling controller method
@@ -44,7 +44,7 @@ exports.createCourse = function (req, res) {
   const course = new Course(req.body);
 
   // Set the course's 'instructor' property
-  course.instructor = [req.user];
+  course.instructors = [req.user];
 
   // Try saving the course
   course.save((err) => {
@@ -118,7 +118,7 @@ exports.getStudents = function (req, res) {
   const course = req.course;
   let courseId = new ObjectId(course._id);
 
-  Users.find({
+  User.find({
     course: courseId
   }, (err, users) => {
     if (err) {
@@ -147,21 +147,9 @@ exports.getScenarioStatus = function (req, res) {
   const course = req.course;
   let scenario = req.scenario;
 
-  if (!course) {
-    return res.status(404)
-      .send({
-        message: 'Users not found'
-      });
-  } else if (!scenario) {
-    return res.status(404)
-      .send({
-        message: 'Scenario not found'
-      });
-  }
-
   let courseId = new ObjectId(course._id);
   let scenId = scenario.scenCode;
-  Users.find({
+  User.find({
     course: courseId
   }, (err, students) => {
     if (err) {
@@ -175,7 +163,7 @@ exports.getScenarioStatus = function (req, res) {
           message: 'no students found'
         });
     } else {
-      var output = students.forEach((student) => {
+      var output = students.map((student) => {
         return {
           name: student.name,
           id: student.userId,
@@ -191,13 +179,9 @@ exports.getScenarioStatus = function (req, res) {
  * Get status of all scenarios for a single user
  */
 exports.getStudentStatus = function (req, res) {
+  //console.log(req.student);
+  //console.log(req.user);
   let student = req.student;
-  if (!student) {
-    return res.status(404)
-      .send({
-        message: 'Student not found'
-      });
-  }
   var outStatus = scenData.map((scenario) => {
     return {
       label: scenario.label,
@@ -256,4 +240,5 @@ exports.isInstructor = function (req, res, next) {
       });
   }
   next();
-}
+};
+

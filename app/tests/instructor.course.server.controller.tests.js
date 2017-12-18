@@ -9,7 +9,7 @@ const Course = mongoose.model('Course');
 // Define global test variables
 let instructor, instructor2, student, course, course2;
 
-describe('Instructor Controller Unit Tests:', () => {
+describe('Instructor Controller Course-related Unit Tests: ', () => {
   // Define a pre-tests function
   before((done) => {
     // Create a new 'User' model instance
@@ -56,11 +56,11 @@ describe('Instructor Controller Unit Tests:', () => {
     });
   }); // end before
 
-  describe('Testing the course-related GET methods', () => {
+  describe('Testing GET methods', () => {
 
     it('Should be able to get list of courses for instructor', (done) => {
       request(app)
-        .get('/api/instr/' + instructor.userId)
+        .get('/api/instr/' + instructor.userId+'/courses')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -75,7 +75,7 @@ describe('Instructor Controller Unit Tests:', () => {
     it('Should be able to get the specific course', (done) => {
       // Create a SuperTest request
       request(app)
-        .get('/api/instr/' + instructor.userId + '/' + course.courseNum)
+        .get('/api/instr/' + instructor.userId + '/courses/' + course.courseNum)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -91,7 +91,7 @@ describe('Instructor Controller Unit Tests:', () => {
     it('Should not be able to get course of other instructor', (done) => {
       // Create a SuperTest request
       request(app)
-        .get('/api/instr/' + instructor2.userId + '/' + course.courseNum)
+        .get('/api/instr/' + instructor2.userId + '/courses/' + course.courseNum)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
@@ -104,7 +104,7 @@ describe('Instructor Controller Unit Tests:', () => {
     it('Should not be able to get course as student', (done) => {
       // Create a SuperTest request
       request(app)
-        .get('/api/instr/' + student.userId + '/' + course.courseNum)
+        .get('/api/instr/' + student.userId + '/courses/' + course.courseNum)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
@@ -116,7 +116,7 @@ describe('Instructor Controller Unit Tests:', () => {
 
     it('Should be able to get students of course', (done) => {
       request(app)
-        .get('/api/instr/' + instructor.userId + '/' + course.courseNum + '/users')
+        .get('/api/instr/' + instructor.userId + '/courses/' + course.courseNum + '/users')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -129,7 +129,7 @@ describe('Instructor Controller Unit Tests:', () => {
     }); // end Should be able to get students of course
   }); // end Testing the course-related GET method
 
-  describe('Test course-related POST methods', () => {
+  describe('Test POST methods', () => {
 
     it('Should be able to create course', (done) => {
       let newCourse = {
@@ -137,7 +137,7 @@ describe('Instructor Controller Unit Tests:', () => {
         description: 'Test course'
       };
       request(app)
-        .post('/api/instr/' + instructor.userId)
+        .post('/api/instr/' + instructor.userId+'/courses')
         .send(newCourse)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -146,6 +146,7 @@ describe('Instructor Controller Unit Tests:', () => {
         let nC = res.body;
           nC.should.be.an.Object();
           nC.should.have.property('courseNum', newCourse.courseNum);
+        nC.instructors.should.have.lengthOf(1);
           done();
         });
     }); // end Should be able to create course
@@ -156,7 +157,7 @@ describe('Instructor Controller Unit Tests:', () => {
         description: 'Test course'
       };
       request(app)
-        .post('/api/instr/' + student.userId)
+        .post('/api/instr/' + student.userId+'/courses')
         .send(newCourse)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -173,7 +174,7 @@ describe('Instructor Controller Unit Tests:', () => {
 
     it('Should be able to delete course2', (done) => {
       request(app)
-        .delete('/api/instr/' + instructor.userId + '/' + course2.courseNum)
+        .delete('/api/instr/' + instructor.userId + '/courses/' + course2.courseNum)
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -186,7 +187,7 @@ describe('Instructor Controller Unit Tests:', () => {
 
     it('Should not be able to delete non-existant course', (done) => {
       request(app)
-        .delete('/api/instr/' + instructor.userId + '/TEST100')
+        .delete('/api/instr/' + instructor.userId + '/courses/TEST100')
         .expect('Content-Type', /json/)
         .expect(400)
         .end((err, res) => {
@@ -199,7 +200,7 @@ describe('Instructor Controller Unit Tests:', () => {
 
     it('Should not be able to delete course2 by student', (done) => {
       request(app)
-        .delete('/api/instr/' + student.userId + '/' + course.courseNum)
+        .delete('/api/instr/' + student.userId + '/courses/' + course.courseNum)
         .expect('Content-Type', /json/)
         .expect(403)
         .end((err, res) => {

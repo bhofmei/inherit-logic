@@ -4,24 +4,24 @@ const scenarios = require('../controllers/scenario.server.controller');
 const fridge = require('../controllers/fridge.server.controller');
 
 module.exports = function (app) {
-  app.route('/api/instr/:instrId')
+  app.route('/api/instr/:instrId/courses')
     .get(instructor.hasAuthorization, instructor.listCourses)
     .post(instructor.hasAuthorization, instructor.createCourse);
 
-  app.route('/api/instr/:instrId/:courseNum')
+  app.route('/api/instr/:instrId/courses/:courseNum')
     .get(instructor.hasAuthorization, instructor.isInstructor, instructor.getCourse)
     .delete(instructor.hasAuthorization, instructor.isInstructor, instructor.deleteCourse);
 
-  app.route('/api/instr/:instrId/:courseNum/users')
+  app.route('/api/instr/:instrId/courses/:courseNum/users')
     .get(instructor.hasAuthorization, instructor.isInstructor, instructor.getStudents)
 
-  app.route('/api/instr/:instrId/:courseNum/:scenId')
+  app.route('/api/instr/:instrId/courses/:courseNum/:scenarioId')
     .get(instructor.hasAuthorization, instructor.isInstructor, instructor.getScenarioStatus)
 
-  app.route('/api/instr/:instrId/:userId')
+  app.route('/api/instr/:instrId/users/:userId')
     .get(instructor.hasAuthorization, instructor.getStudentStatus)
 
-  app.route('/api/instr/:instrId/:userId/:scenarioId')
+  app.route('/api/instr/:instrId/users/:userId/:scenarioId')
   .get(instructor.hasAuthorization, fridge.getStudentFridge)
   .post(instructor.hasAuthorization, users.grantAccess);
 
