@@ -1,5 +1,5 @@
 const scenarios = require('../controllers/scenario.server.controller');
-const users = require('../controllers/users.server.controller');
+const user = require('../controllers/user.server.controller');
 const fridge = require('../controllers/fridge.server.controller');
 
 module.exports = function (app) {
@@ -26,7 +26,7 @@ module.exports = function (app) {
   .post(fridge.hasPhageAuthorization, fridge.updatePhage)
   .delete(fridge.findFridgeByScenOwner, fridge.deletePhage);
 
-  app.param('userId', users.userById);
+  app.param('userId', user.userById);
   app.param('scenarioId', scenarios.scenarioByCode);
   app.param('phageId', fridge.phageById);
 };

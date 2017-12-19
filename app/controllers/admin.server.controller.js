@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const User = require('mongoose').model('User');
 const Course = mongoose.model('Course');
 const ObjectId = mongoose.Types.ObjectId;
+const scenData = require('../../config/scenario.data');
 
 const getErrorMessage = function (err) {
   if (err.errors) {
@@ -14,76 +15,100 @@ const getErrorMessage = function (err) {
 };
 
 /**
+ * user must be instructor or admin
+ */
+exports.hasAuthorization = function (req, res, next) {
+  if (!(req.user.role === 'instr' || req.user.role === 'admin')) {
+    return res.status(403)
+      .send({
+        message: 'Not authorized'
+      });
+  }
+  // Call the next middleware
+  next();
+};
+
+/**
+ * user must be admin
+ */
+exports.isAdmin = function (req, res, next) {
+  if (req.user.role !== 'admin') {
+    return res.status(403)
+      .send({
+        message: 'Not authorized'
+      });
+  }
+  next();
+}
+
+/**
  *  list all users in the system
  */
-exports.listUsers = function(req, res){
-  User.find((err, users)=>{
-    if(err){
-      return res.status(500).send({message: getErrorMessage(err)});
-    } else if(!users){
-      return res.status(404).send({message: 'No users found'});
+exports.listUsers = function (req, res) {
+  User.find((err, users) => {
+    if (err) {
+      return res.status(500)
+        .send({
+          message: getErrorMessage(err)
+        });
+    } else if (!users) {
+      return res.status(404)
+        .send({
+          message: 'No users found'
+        });
     } else {
       res.json(users);
     }
   });
 };
 
-exports.getUser = function(req, res){
-  let user = req.student;
-  delete user.password;
-  res.json(user);
-}
+/**
+ * get user
+ */
+exports.getUser = function (req, res) {
+  let student = req.student;
+  delete student.password;
+  var scenStatus = scenData.map((scenario) => {
+    return {
+      label: scenario.label,
+      status: student.accessGranted[scenario.scenCode]
+    }
+  });
+  student.scenarioStatus = scenStatus
+  res.json(student);
+};
 
-exports.deleteUser = function(req, res){
+exports.deleteUser = function (req, res) {
   let student = req.student; // student to be deleted
-  student.remove((err, s)=>{
-    if(err){
-      res.status(500).send({message: getErrorMessage(err)});
+  student.remove((err, s) => {
+    if (err) {
+      res.status(500)
+        .send({
+          message: getErrorMessage(err)
+        });
     } else {
       res.json(student);
     }
   });
 };
 
-exports.setAdminAccess = function(req, res){
-  let body = req.body;
+exports.setRole = function (req, res) {
+  let body = req.body; // includes role
   // admin is user, user to grant access is student
-  let user = req.student;
-  if(user.admin !== body.admin){
-    user.admin = body.admin;
-  user.save((err)=>{
-    if(err){
-      return res.status(500).send({message: getErrorMessage(err)});
-    }
-    else {
-      res.json(user);
-    }
-  });
+  let student = req.student;
+  if (student.role !== body.role) {
+    student.role = body.role;
+    student.save((err) => {
+      if (err) {
+        return res.status(500)
+          .send({
+            message: getErrorMessage(err)
+          });
+      } else {
+        res.json(student);
+      }
+    });
   } else {
-    res.json(user);
+    res.json(student);
   }
-};
-
-exports.deleteCourseStudents = function(req, res){
-  let courseId = new ObjectId(req.course._id);
-  User.remove({course: courseId}, (err, students)=>{
-    if(err){
-      return res.status(500).send({message: getErrorMessage(err)})
-    } else {
-      res.json(students);
-    }
-  });
-}
-
-
-// Ensure that user has admin access
-exports.hasAuthorization = function(req, res, next) {
-    // If the current user does not have admin access, send error message
-    if (!req.user.admin) {
-        return res.status(403).send({
-            message: 'Not authorized'
-        });
-    }
-    // Call the next middleware
-    next();
 };

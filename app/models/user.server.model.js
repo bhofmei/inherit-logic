@@ -3,6 +3,11 @@ const bcrypt = require('bcrypt');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Schema = mongoose.Schema;
 
+const rolesEnum = {
+  values: ['admin', 'instr', 'student'],
+  message: 'Value "{VALUE}" is not a valid role'
+};
+
 const UserSchema = new Schema({
   userId: {
     type: Number,
@@ -29,13 +34,10 @@ const UserSchema = new Schema({
     ref: 'Course'
   },
   accessGranted: {},
-  admin: {
-    type: Boolean,
-    default: false
-  },
-  instructor: {
-    type: Boolean,
-    default: false
+  role: {
+    type: String,
+    enum: rolesEnum,
+    default: 'student'
   },
   lastLogin: {
     type: Date,

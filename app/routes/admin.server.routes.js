@@ -1,29 +1,25 @@
-const user = require('../controllers/users.server.controller');
-const instructor = require('../controllers/instructor.server.controller');
+const user = require('../controllers/user.server.controller');
 const admin = require('../controllers/admin.server.controller');
+const scenario = require('../controllers/scenario.server.controller');
+const fridge = require('../controllers/fridge.server.controller');
 
-module.exports = function(app) {
-  app.route('/api/admin/:adminId/users')
-    .get(admin.hasAuthorization, admin.listUsers);
+module.exports = function (app) {
 
-  app.route('/api/admin/:adminId/users/:userId')
-    .get(admin.hasAuthorization, admin.getUser)
-    .post(admin.hasAuthorization, admin.setAdminAccess)
-    .delete(admin.hasAuthorization, admin.deleteUser);
+  /* admin user routes */
+  app.route('/api/admin/:userId/users')
+    .get(admin.isAdmin, admin.listUsers);
 
-  app.route('/api/admin/:adminId/courses/:courseNum')
-    .get(admin.hasAuthorization, instructor.getCourse)
-    .delete(admin.hasAuthorization, instructor.deleteCourse);
+  app.route('/api/admin/:userId/users/:studentId')
+    .get(admin.isAdmin, admin.getUser)
+    .post(admin.isAdmin, admin.setRole)
+    .delete(admin.isAdmin, admin.deleteUser);
 
-  app.route('/api/admin/:adminId/courses/:courseNum/users')
-    .get(admin.hasAuthorization, instructor.getStudents)
-    .delete(admin.hasAuthorization, admin.deleteCourseStudents);
+  /* admin user scenario routes */
+  app.route('/api/admin/:userId/users/:studentId/:scenarioId')
+    .get(admin.hasAuthorization, fridge.getStudentFridge)
+    .post(admin.hasAuthorization, user.grantAccess);
 
-  app.route('/api/admin/:adminId/courses/:courseNum/users/:userId')
-  .post(admin.hasAuthorization, instructor.addInstructor)
-
-
-  app.param('adminId', user.userById);
   app.param('userId', user.userById);
-  app.param('courseNum', instructor.courseByNum);
+  app.param('studentId', user.userById);
+  app.param('scenarioId', scenario.scenarioByCode);
 };

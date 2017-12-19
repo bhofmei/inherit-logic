@@ -3,125 +3,75 @@ const request = require('supertest');
 const should = require('should');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const Course = mongoose.model('Course');
+const Scenario = mongoose.model('Scenario');
+const Fridge = mongoose.model('Fridge');
+const scenDefaults = require('../../config/scenario.config');
 
-let admin, instructors, students, course1, course2;
-describe('Admin Controller Unit Tests: ', () => {
+let admin, instr, student1, student2, fridge, scenario;
+describe('Admin Controller Unit Tests', () => {
 
   before((done) => {
-    let t = new User({
+    admin = new User({
       name: 'Administrator',
       email: 'admin@test.com',
       password: 'password',
-      admin: true
+      role: 'admin'
     });
-
-    let tmp = [];
-
-    t.save((err, a) => {
-      admin = a;
-      for (let i = 0; i < 3; i++) {
-        tmp.push({
-          name: 'Instructor' + i,
-          email: 'instr' + i + '@test.com',
-          password: 'password',
-          instructor: (i < 2)
-        });
-      } // end for i
-      User.create(tmp, (err, res) => {
-        instructors = res;
-        course1 = new Course({
-          courseNum: 'TEST001',
-          description: 'first test course',
-          instructors: [instructors[0]]
-        });
-        course2 = new Course({
-          courseNum: 'TEST002',
-          description: 'second test course',
-          instructors: [instructors[1]]
-        });
-        course1.save(() => {
-          course2.save(() => {
-            let tmp2 = [];
-            for (let s = 0; s < 8; s++) {
-              tmp2.push({
-                name: 'Student' + s,
-                email: 'student' + s + '@test.com',
-                password: 'password',
-                course: (s < 4 ? course1 : course2),
-                admin: s === 5
+    instr = new User({
+      name: 'Instructor',
+      email: 'instr@test.com',
+      password: 'password',
+      role: 'instr'
+    });
+    student1 = new User({
+      name: 'Student1',
+      email: 'student1@test.com',
+      password: 'password',
+      role: 'student',
+      accessGranted: {
+        WTorMute: false,
+        ThreeOther: false
+      }
+    });
+    student2 = new User({
+      name: 'Student1',
+      email: 'student1@test.com',
+      password: 'password',
+      role: 'student',
+      accessGranted: {
+        WTorMute: true,
+        ThreeOther: false
+      }
+    });
+    scenario = new Scenario({
+      scenCode: 'WTorMute'
+    });
+    admin.save(() => {
+      instr.save(() => {
+        student1.save(() => {
+          student2.save(() => {
+            scenario.save(() => {
+              fridge = new Fridge({
+                owner: student1,
+                scenario: scenario,
+                accessGranted: student1.accessGranted[scenario.scenCode],
+                strains: []
               });
-            }
-            User.create(tmp2, (err2, res2) => {
-              students = res2;
-              done();
-            }); // end student create
-          }); // end save course 2
-        }); // end save course 1
-      }); // end create instructors
-    }); // end save admin
+              fridge.save(() => {
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
   }); // end before
 
-  describe('Test GET methods', () => {
+  describe('Testing GET methods', () => {
 
-    it('Should list all users', (done) => {
+    it('Should be able to get all users as admin', (done) => {
       request(app)
         .get('/api/admin/' + admin.userId + '/users')
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-          let userList = res.body;
-          userList.should.be.an.Array();
-          userList.should.have.lengthOf(12);
-          done();
-        });
-    }); // end Should list all users
-
-    it('Should get specific user', (done) => {
-      let testSt = students[0];
-      request(app)
-        .get('/api/admin/' + admin.userId + '/users/' + testSt.userId)
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-          let u = res.body;
-          u.should.be.an.Object();
-          u.should.have.property('name', testSt.name);
-          done();
-        });
-    });
-
-    it('Should not get a non-existant user', (done) => {
-      request(app)
-        .get('/api/admin/' + admin.userId + '/users/' + students[7].userId + 100)
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        //.expect(200)
-        .end((err, res) => {
-          should.exist(err);
-          done();
-        });
-    }); // end Should not get a non-existant user
-
-    it('Should get course', (done) => {
-      request(app)
-        .get('/api/admin/' + admin.userId + '/courses/' + course1.courseNum)
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-          let course = res.body;
-          course.should.be.an.Object();
-          course.should.have.property('courseNum', course1.courseNum);
-          done();
-        });
-    }); // end Should get all students for a cousre
-
-    it('Should get all students for course', (done) => {
-      request(app)
-        .get('/api/admin/' + admin.userId + '/courses/' + course1.courseNum + '/users')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -131,57 +81,11 @@ describe('Admin Controller Unit Tests: ', () => {
           userList.should.have.lengthOf(4);
           done();
         });
-    }); // end Should get all students for a cousre
+    }); // end Should be able to get all users as admin
 
-  }); // end Test GET methods
-
-  describe('Test POST methods', () => {
-
-    it('Should grant admin access', (done) => {
-      let testSt = students[1];
+    it('Should not be able to get all users as instr', (done) => {
       request(app)
-        .post('/api/admin/' + admin.userId + '/users/' + testSt.userId)
-        .send({
-          admin: true
-        })
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-          let u = res.body;
-          u.should.be.an.Object();
-          u.should.have.property('name', testSt.name);
-          u.should.have.property('admin', true);
-          done();
-        });
-    }); // end Should grant admin access
-
-    it('Should remove admin access', (done) => {
-      let testSt = students[5];
-      request(app)
-        .post('/api/admin/' + admin.userId + '/users/' + testSt.userId)
-        .send({
-          admin: false
-        })
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-          let u = res.body;
-          u.should.be.an.Object();
-          u.should.have.property('name', testSt.name);
-          u.should.have.property('admin', false);
-          done();
-        });
-    }); // end Should remove admin access
-
-    it('Should not allow grant admin access', (done) => {
-      let testSt = students[3];
-      request(app)
-        .post('/api/admin/' + instructors[0].userId + '/users/' + testSt.userId)
-        .send({
-          admin: false
-        })
+        .get('/api/admin/' + instr.userId + '/users')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
@@ -189,78 +93,250 @@ describe('Admin Controller Unit Tests: ', () => {
           res.body.should.have.property('message', 'Not authorized');
           done();
         });
-    }); // end Should not allow grant admin access
+    }); // end Should not be able to get all users as instr
 
-    it('Should add instructor to course', (done) => {
+    it('Should not be able to get all users as student1', (done) => {
       request(app)
-        .post('/api/admin/' + admin.userId + '/courses/' + course1.courseNum + '/users/' +
-          instructors[2].userId)
-        .send({})
+        .get('/api/admin/' + student1.userId + '/users')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(200)
+        .expect(403)
         .end((err, res) => {
-          let updated = res.body;
-          updated.should.be.an.Object();
-          updated.should.have.property('courseNum', course1.courseNum);
-          updated.instructors.should.have.lengthOf(2);
+          res.body.should.have.property('message', 'Not authorized');
           done();
         });
-    }); // end Should add instructor to course
+    }); // end Should not be able to get all users as student1
 
-  }); // end Test POST methods
-
-  describe('Test DELETE methods', () => {
-
-    it('Should delete user', (done) => {
-      let testSt = students[0];
+    it('Should be able to get student1 as admin', (done) => {
       request(app)
-        .delete('/api/admin/' + admin.userId + '/users/' + testSt.userId)
+        .get('/api/admin/' + admin.userId + '/users/' + student1.userId)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
           let u = res.body;
-          u.should.have.property('name', testSt.name);
+          u.should.be.an.Object();
+          u.should.have.property('name', student1.name);
           done();
         });
-    }); // end Should delete user
+    }); // end Should be able to get student1 as admin
 
-    it('Should delete all students in course', (done) => {
+    it('Should not be able to get student1 as instr', (done) => {
       request(app)
-        .delete('/api/admin/' + admin.userId + '/courses/' + course2.courseNum + '/users')
+        .get('/api/admin/' + instr.userId + '/users/' + student1.userId)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(403)
+        .end((err, res) => {
+          res.body.should.have.property('message', 'Not authorized');
+          done();
+        });
+    }); // end Should not be able to get student1 as instr
+
+    it('Should not be able to get student1 as student2', (done) => {
+      request(app)
+        .get('/api/admin/' + student2.userId + '/users/' + student1.userId)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(403)
+        .end((err, res) => {
+          res.body.should.have.property('message', 'Not authorized');
+          done();
+        });
+    }); // end Should not be able to get student1 as student2
+
+    it('Should be able to get fridge as admin', (done) => {
+      request(app)
+        .get('/api/admin/' + admin.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-          let result = res.body;
-          result.should.have.property('ok', 1);
-          result.should.have.property('n', 4);
+          let f = res.body;
+          f.should.be.an.Object();
+          f.strains.should.have.lengthOf(0);
           done();
         });
-    }); // end Should delete all students in course
+    }); // end Should be able to get fridge as admin
 
-    it('Should delete course', (done) => {
+    it('Should be able to get fridge as instr', (done) => {
       request(app)
-        .delete('/api/admin/' + admin.userId + '/courses/' + course2.courseNum)
+        .get('/api/admin/' + instr.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-          let c = res.body;
-          c.should.have.property('courseNum', course2.courseNum);
+          let f = res.body;
+          f.should.be.an.Object();
+          f.strains.should.have.lengthOf(0);
           done();
         });
-    }); // end Should delete course
+    }); // end Should be able to get fridge as instr
 
-  }); // end Test DELETE methods
+    it('Should not be able to get fridge as student2', (done) => {
+      request(app)
+        .get('/api/admin/' + student2.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(403)
+        .end((err, res) => {
+          res.body.should.have.property('message', 'Not authorized');
+          done();
+        });
+    }); // end Should not be able to get fridge as student2
+
+  }); // end Testing GET methods
+
+  describe('Testing POST methods', (done) => {
+
+    beforeEach((done) => {
+      student1.role = 'student';
+      student1.accessGranted.WTorMute = false;
+      student1.save(() => {
+        done();
+      });
+    }); // end beforeEach
+
+    it('Should be able to set role as admin', (done) => {
+      let body = {
+        role: 'instr'
+      };
+      request(app)
+        .post('/api/admin/' + admin.userId + '/users/' + student2.userId)
+        .send(body)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          let nu = res.body;
+          nu.should.have.property('name', student2.name);
+          nu.should.have.property('role', 'instr');
+          done();
+        });
+    }); // end Should be able to set role as admin
+
+    it('Should not be able to set role as instr', (done) => {
+      let body = {
+        role: 'instr'
+      };
+      request(app)
+        .post('/api/admin/' + instr.userId + '/users/' + student1.userId)
+        .send(body)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(403)
+        .end((err, res) => {
+          res.body.should.have.property('message', 'Not authorized');
+          done();
+        });
+    }); // end Should not be able to set role as instr
+
+    it('Should be able to grant scenario access as admin', (done) => {
+      request(app)
+        .post('/api/admin/' + admin.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
+        .send({})
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          let nu = res.body;
+          nu.should.have.property('name', student1.name);
+          nu.accessGranted.should.have.property(scenario.scenCode, true);
+          done();
+        });
+    }); // end Should be able to grant scenario access as admin
+
+    it('Should be able to grant scenario access as instr', (done) => {
+      request(app)
+        .post('/api/admin/' + instr.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
+        .send({})
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          let nu = res.body;
+          nu.should.have.property('name', student1.name);
+          nu.accessGranted.should.have.property(scenario.scenCode, true);
+          done();
+        });
+    }); // end Should be able to grant scenario access as instr
+
+    it('Should not be able to grant scenario access as student1', (done) => {
+      request(app)
+        .post('/api/admin/' + student1.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
+        .send({})
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(403)
+        .end((err, res) => {
+          res.body.should.have.property('message', 'Not authorized');
+          done();
+        });
+
+    }); // end Should not be able to grant scenario access as student1
+
+  }); // end Testing POST methods
+
+  describe('Testing DELETE methods', () => {
+    let tmpUser;
+    beforeEach((done) => {
+      User.create({
+        name: 'Temp',
+        email: 'tmp@test.com'
+      }, (err, res) => {
+        if (!err)
+          tmpUser = res;
+        done();
+      });
+    }); // end beforeEach
+
+    it('Should be able to delete user as admin', (done) => {
+      request(app)
+        .delete('/api/admin/' + admin.userId + '/users/' + tmpUser.userId)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          let nu = res.body;
+          nu.should.have.property('name', tmpUser.name);
+          done();
+        });
+    }); // end Should be able to delete user as admin
+
+    it('Should not be able to delete user as instr', (done) => {
+      request(app)
+        .delete('/api/admin/' + instr.userId + '/users/' + tmpUser.userId)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(403)
+        .end((err, res) => {
+          res.body.should.have.property('message', 'Not authorized');
+          done();
+        });
+    }); // end Should not be able to delete user as instr
+
+    it('Should not be able to delete user as student1', (done) => {
+      request(app)
+        .delete('/api/admin/' + student1.userId + '/users/' + tmpUser.userId)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(403)
+        .end((err, res) => {
+          res.body.should.have.property('message', 'Not authorized');
+          done();
+        });
+    }); // end Should not be able to delete user as student1
+
+  }); // end Testing DELETE methods
 
   after((done) => {
     User.remove(() => {
-      Course.remove(() => {
-        done();
+      Scenario.remove(() => {
+        Fridge.remove(() => {
+          done();
+        });
       });
     });
-  }) // end after
+  }); // end after
 
 }); // end Admin Controller Unit Tests

@@ -34,6 +34,7 @@
     "@angular/router": "^5.0.0",
     "@compodoc/compodoc": "^1.0.4",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.6",
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.15.2",
     "bootstrap": "4.0.0-beta.2",
     "clone": "^2.1.1",
