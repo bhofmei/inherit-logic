@@ -16,6 +16,7 @@ import { ScenarioService } from './scenario/scenario.service';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ArticleModule } from './articles/article.module';
 import { ScenarioModule } from './scenario/scenario.module';
+import { AdminModule } from './admin/admin.module';
 import { NavComponent } from './nav/nav.component';
 import { LocationModule } from './scenario/location/location.module';
 
@@ -24,11 +25,12 @@ import { LocationModule } from './scenario/location/location.module';
         BrowserModule,
         HttpClientModule,
         FormsModule,
+      AdminModule,
         AuthenticationModule,
         ArticleModule,
       ScenarioModule,
       LocationModule,
-        //RouterModule.forRoot(AppRoutes,{ enableTracing: true }),
+      //  RouterModule.forRoot(AppRoutes,{ enableTracing: true }),
       RouterModule.forRoot(AppRoutes),
       //DndModule.forRoot()
     ],

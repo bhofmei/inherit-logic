@@ -3,6 +3,8 @@ const User = require('mongoose')
 const passport = require('passport');
 const scenData = require('../../config/scenario.data');
 
+const roles = ['student', 'instr', 'admin']
+
 const getErrorMessage = function (err) {
   let message = '';
 
@@ -27,7 +29,7 @@ const getUserInfo = function (user) {
   return {
     id: user.userId,
     name: user.name,
-    m: user.admin
+    role: roles.indexOf(user.role)
   }
 };
 
@@ -151,6 +153,10 @@ exports.requiresLogin = function (req, res, next) {
 };
 
 exports.userById = function (req, res, next, id) {
+  // check for negative id -> send error
+  if(id < 0){
+    return next(new Error('Invalid user'))
+  }
   User.findOne({
     userId: id
   }, (err, user) => {

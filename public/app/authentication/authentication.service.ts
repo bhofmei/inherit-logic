@@ -9,18 +9,39 @@ import { User } from '../interfaces/user.interface';
 @Injectable()
 export class AuthenticationService {
     private _user: BehaviorSubject<User> = new BehaviorSubject<User>(null);
-  public getUser = this._user.asObservable();
+    public getUser = this._user.asObservable();
+
+    private _user2: User;
 
     private _signinURL = 'api/auth/signin';
     private _signupURL = 'api/auth/signup';
+
+    public redirectUrl: string;
 
     constructor(private http: HttpClient) {
       //this._user = new BehaviorSubject<User>(null);
     }
 
   setUser(user: User){
-    console.log(user);
     this._user.next(user);
+    this._user2 = user;
+  }
+
+  getUser2(): User{
+    return this._user2;
+  }
+
+  isLoggedIn(){
+    return (!!this._user2);
+  }
+
+  canAccessAdmin(){
+    if(this._user2){
+      return this._user2.role > 0
+    }
+    else{
+      return false;
+    }
   }
 
     signin(credentials: any): Observable<User> {
