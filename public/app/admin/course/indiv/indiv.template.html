@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <div *ngIf="courseInfo" id="course-info">
+    <div class="row">
+    <h4 class="col-11">{{ courseInfo.courseNum }}</h4>
+    <a class="mt-2 font-italic col-1" [routerLink]="['./edit']">edit</a>
+    </div>
+
+    <div class="text-secondary" id="desc">{{ courseInfo.description }}</div>
+
+    <h6 class="mt-4 mb-2">Students: {{ students.length }}</h6>
+    <div class="list-group">
+      <a *ngFor="let student of students" [routerLink]="['./']" class="list-group-item list-group-item-action">{{student.name}}</a>
+    </div>
+    <!-- end students -->
+  </div>
+  <!-- end course info -->
+</div>

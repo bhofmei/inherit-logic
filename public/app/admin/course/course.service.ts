@@ -15,6 +15,7 @@ export class CourseService {
   }
 
   setAdmin(id: number){
+    console.log(id);
     this._adminId.next(id);
   }
 
@@ -29,13 +30,17 @@ export class CourseService {
   }*/
   createCourse(body: any): Observable<Course>{
     return this._http
-      .post<Course>(`${this._baseURL}/${this._adminId}/courses`, body);
+      .post<Course>(`${this._baseURL}/${this._adminId.getValue()}/courses`, body);
   }
 
 
-  getCourse(userId: number, courseNum: string): Observable<any>{
+  /*getCourse(userId: number, courseNum: string): Observable<any>{
     return this._http
       .get(`${this._baseURL}/${userId}/courses/${courseNum}`);
+  }*/
+  getCourse(courseNum: string): Observable<Course>{
+    return this._http
+      .get<Course>(`${this._baseURL}/${this._adminId.getValue()}/courses/${courseNum}`);
   }
 
   editCourse(userId: number, courseNum: string, body: any): Observable<any>{
