@@ -3,9 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AdminGuard } from './admin-guard.service';
 
+import { CourseRoutes } from './course/course.routes';
+
 import { AdminComponent } from './admin.component';
 import { NotAuthComponent } from './not-auth/not-auth.component';
-import { CourseComponent } from './course/course.component';
 
 const adminRoutes: Routes = [
   {
@@ -16,20 +17,13 @@ const adminRoutes: Routes = [
     children: [
       {
         path: 'courses',
-        component: CourseComponent,
-        /*children: [
-          {path: '',
-          loadChildren: 'app/admin/course/course.module#CourseModule'}
-        ]*/
+        //component: CourseComponent,
+        children: CourseRoutes
       },
       /*{
         path: 'users',
         //component: AdminUsersComponent
       },*/
-      {
-        path: '',
-        component: AdminComponent
-      }
     ]
   },
   {
@@ -46,4 +40,4 @@ const adminRoutes: Routes = [
     RouterModule
   ]
 })
-export class AdminRouterModule {}
+export class AdminRouteModule {}

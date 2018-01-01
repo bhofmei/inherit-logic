@@ -62,6 +62,18 @@ exports.listCourses = function (req, res) {
   });
 };
 
+exports.listCourseNum = function(req, res){
+  Course.find({}, 'courseNum', (err, courses)=>{
+    if(err){
+      return res.status(500).send({message: getErrorMessage(err)})
+    } else if (!courses){
+      return res.status(404).send({message: 'No courses found'})
+    } else {
+      res.json(courses);
+    }
+  })
+}
+
 /**
  *  Create a new course
  */
@@ -90,9 +102,9 @@ exports.createCourse = function (req, res) {
 /**
  * get an existing course
  */
-exports.getCourse = function (req, res) {
+/*exports.getCourse = function (req, res) {
   res.json(req.course);
-};
+};*/
 
 /**
  * Update the description of an existing course
@@ -137,10 +149,10 @@ exports.deleteCourse = function (req, res) {
 };
 
 /**
- * get list of students for a course
+ * get course details and list of students for a course
  */
-exports.getStudents = function (req, res) {
-  const course = req.course;
+exports.getCourse = function (req, res) {
+  var course = req.course;
   let courseId = new ObjectId(course._id);
 
   User.find({
@@ -151,13 +163,9 @@ exports.getStudents = function (req, res) {
         .send({
           message: getErrorMessage(err)
         });
-    } else if (!students) {
-      return res.status(404)
-        .send({
-          message: 'No students found'
-        });
     } else {
-      res.json(students);
+      course.students = students;
+      res.json(course);
     }
   });
 };

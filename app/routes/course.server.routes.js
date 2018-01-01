@@ -5,20 +5,23 @@ const scenario = require('../controllers/scenario.server.controller');
 
 module.exports = function (app) {
 
+  app.route('/api/courses')
+  .get(course.listCourseNum);
+
   app.route('/api/admin/:userId/courses')
     .get(admin.hasAuthorization, course.listCourses)
-    .post(admin.hasAuthorization, course.createCourse)
+    .post(admin.hasAuthorization, course.createCourse);
 
   app.route('/api/admin/:userId/courses/:courseNum')
     .get(admin.hasAuthorization, course.isInstructor, course.getCourse)
     .post(admin.hasAuthorization, course.isInstructor, course.editCourse)
     .delete(admin.hasAuthorization, course.isInstructor, course.deleteCourse);
 
-  app.route('/api/admin/:userId/courses/:courseNum/users')
-    .get(admin.hasAuthorization, course.isInstructor, course.getStudents)
+  app.route('/api/admin/:userId/courses/:courseNum/students')
+    //.get(admin.hasAuthorization, course.isInstructor, course.getStudents)
     .delete(admin.isAdmin, course.deleteCourseStudents);
 
-  app.route('/api/admin/:userId/courses/:courseNum/users/:studentId')
+  app.route('/api/admin/:userId/courses/:courseNum/students/:studentId')
     .post(admin.hasAuthorization, course.isInstructor, course.setInstructor)
 
   app.route('/api/admin/:userId/courses/:courseNum/:scenarioId')

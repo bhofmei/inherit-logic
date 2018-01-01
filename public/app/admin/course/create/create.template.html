@@ -1,0 +1,11 @@
+<form (ngSubmit)="createCourse()" class="form-create-course col-12 col-md-8 justify-content-center">
+  <h4 class="form-create-course-heading">Create Course</h4>
+  <label for="courseNum" class="sr-only">Course Number</label>
+  <input type="text" id="courseNum" class="form-control" required autofocus placeholder="Course Number" [(ngModel)]="courseDetails.courseNum" name="courseNum">
+
+  <label for="courseDesc" class="sr-only">Course Description</label>
+  <textarea type="text" id="courseDesc" class="form-control" placeholder="Description" [(ngModel)]="courseDetails.description" name="courseDesc"></textarea>
+
+  <button class="btn btn-primary" type="submit">Submit</button>
+  <p class="text-danger">{{errorMessage}}</p>
+</form>

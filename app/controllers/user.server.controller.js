@@ -29,6 +29,7 @@ const getUserInfo = function (user) {
   return {
     id: user.userId,
     name: user.name,
+    email: user.email,
     role: roles.indexOf(user.role)
   }
 };
@@ -67,6 +68,8 @@ exports.signin = function (req, res, next) {
     }
   })(req, res, next);
 };
+
+// TODO: add verify method for making major changes
 
 // Create a new controller method that creates new 'regular' users
 exports.signup = function (req, res) {

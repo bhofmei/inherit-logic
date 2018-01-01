@@ -24,7 +24,6 @@ export class AdminGuard implements CanActivate {
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let url: string = state.url;
 
-
     let role: boolean = this._authenticationService.canAccessAdmin();
     if(role)
       return true;
