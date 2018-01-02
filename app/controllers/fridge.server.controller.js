@@ -24,7 +24,8 @@ const getFridgeInfo = function(fridge){
       id: strain.id,
       parents: strain.parents,
       strainNum: strain.strainNum,
-      phageType: strain.phageType
+      phageType: strain.phageType,
+      submitted: strain.submitted
     }
   });
   return {
@@ -122,7 +123,7 @@ exports.getFridge = function (req, res) {
     })
     .populate('owner', 'userId')
     .populate('scenario', 'scenCode')
-    .populate('strains', 'strainNum comment phageType id parents')
+    .populate('strains', 'strainNum comment phageType id parents submitted')
     .exec((err, fridge) => {
       if (err) {
         return res.status(400)
@@ -144,7 +145,7 @@ exports.getStudentFridge = function(req, res){
   Fridge.findOne({
     owner: student._id,
     scenario: scen._id
-  }).populate('strains', 'strainNum comment phageType id mutationList deletion parents')
+  }).populate('strains', 'strainNum comment phageType id mutationList deletion parents submitted')
   .exec((err, fridge)=>{
     if(err){
       return res.status(500).send({message: getErrorMessage(err)});
@@ -233,6 +234,7 @@ exports.updatePhage = function (req, res) {
   // Update
   strain.comment = req.body.comment;
   strain.strainNum = req.body.strainNum;
+  strain.submitted = req.body.submitted;
 
   // Try saving the updated article
   strain.save((err) => {

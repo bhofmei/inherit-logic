@@ -24,6 +24,10 @@ const PhageSchema = new Schema({
     type: String,
     default: ''
   },
+  submitted: {
+    type: Boolean,
+    default: false
+  },
   parents: [{
     type: Schema.ObjectId,
     ref: 'Phage'
