@@ -77,9 +77,14 @@ export class CourseService {
       .delete(`${this._baseURL}/${userId}/courses/${courseNum}/users`);
   }
 
-  getScenarioStatus(userId: number, courseNum: string, scenId: string): Observable<any>{
+  /*getScenarioStatus(userId: number, courseNum: string, scenId: string): Observable<any>{
     return this._http
       .get(`${this._baseURL}/${userId}/courses/${courseNum}/${scenId}`);
+  }*/
+
+  getScenarioStatus(courseNum: string, scenId: string): Observable<Student[]>{
+    return this._http
+      .get<Student[]>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}/${scenId}`);
   }
 
   getCourseList(): Observable<any>{

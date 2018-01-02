@@ -1,0 +1,29 @@
+<div class="container-fluid">
+  <div *ngIf="errorMessage !== ''" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="scenario && courseNum">
+    <div class="row">
+      <a [routerLink]="['../']" class="text-dark"><h4>{{ courseNum }}</h4> </a>
+    </div>
+
+    <div class="row d-flex mb-2" id="scenarioInfo">
+      <div class="text-weight-bold text-primary mr-2">{{scenario.scenCode}}</div>
+      <div class="text-secondary">{{ scenario.label }}</div>
+    </div>
+
+    <div class="list-group">
+      <div *ngFor="let student of students" class="list-group-item justify-content-between d-flex">
+        <div class="">
+        <span class="text-primary student-label">{{student.name}}:</span> {{ formatAccess(student.status) }}
+        </div>
+        <div class="btn-group" role="group">
+          <button class="btn btn-outline-secondary btn-sm">Grant access</button>
+          <button class="btn btn-outline-primary btn-sm">View fridge</button>
+        </div>
+        </div> <!-- end list-group-item -->
+    </div>
+    <!-- end students -->
+  </div>
+  <!-- end info -->
+</div>
