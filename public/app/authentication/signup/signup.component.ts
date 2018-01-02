@@ -1,8 +1,13 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil'
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/concat'
 
 import { AuthenticationService } from '../authentication.service';
+import { CourseService } from '../../admin/course/course.service';
 
 @Component({
     selector: 'signup',
@@ -11,15 +16,42 @@ import { AuthenticationService } from '../authentication.service';
 })
 export class SignupComponent implements OnDestroy {
     errorMessage: string;
-  private subscription: Subscription;
+  private courses: string[] = [];
     user: any = {};
+  private isDestroyed$: Subject<boolean>;
 
     constructor(private _authenticationService: AuthenticationService,
-        private _router: Router) { }
+                 private _courseService: CourseService,
+        private _router: Router) {
+      this.isDestroyed$ = new Subject<boolean>();
+    }
+
+  _reorderCourses(courses: any): any{
+    let na = courses.filter((c)=>{return c.courseNum === 'NA'});
+    let other = courses.filter((c)=>{
+      return c.courseNum !== 'NA'
+    });
+    return na.concat(other);
+  }
+
+  ngOnInit(){
+    this._courseService.getCourseList()
+      .takeUntil(this.isDestroyed$)
+      .subscribe((res)=>{
+        let tmp = this._reorderCourses(res);
+        this.courses = tmp;
+    }, (err)=>{
+      this.courses = [];
+    });
+  }
 
     signup() {
-        this.subscription = this._authenticationService
+      if(this.user.course === undefined){
+        this.errorMessage = 'Select a course'
+      } else {
+          this._authenticationService
           .signup(this.user)
+      .takeUntil(this.isDestroyed$)
           .subscribe((result) => {
           this._authenticationService.setUser(result);
           this._router.navigate(['/'])
@@ -27,9 +59,11 @@ export class SignupComponent implements OnDestroy {
             (error) => {
           this.errorMessage = error.error.message
         });
+      }
     }
 
   ngOnDestroy(){
-    this.subscription.unsubscribe();
+    this.isDestroyed$.next(true);
+    this.isDestroyed$.unsubscribe();
   }
 }
