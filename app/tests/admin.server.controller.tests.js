@@ -4,10 +4,12 @@ const should = require('should');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Scenario = mongoose.model('Scenario');
+const Course = mongoose.model('Course');
 const Fridge = mongoose.model('Fridge');
+const Phage = mongoose.model('Phage');
 const scenDefaults = require('../../config/scenario.config');
 
-let admin, instr, student1, student2, fridge, scenario;
+let admin, instr, student1, student2, fridge, scenario, course;
 describe('Admin Controller Unit Tests', () => {
 
   before((done) => {
@@ -48,21 +50,29 @@ describe('Admin Controller Unit Tests', () => {
     });
     admin.save(() => {
       instr.save(() => {
-        student1.save(() => {
-          student2.save(() => {
-            scenario.save(() => {
-              fridge = new Fridge({
-                owner: student1,
-                scenario: scenario,
-                accessGranted: student1.accessGranted[scenario.scenCode],
-                strains: []
-              });
-              fridge.save(() => {
-                done();
+        course = new Course({
+          courseNum: 'TEST001',
+          instructors: [instr]
+        });
+
+        course.save(() => {
+          student1.course = course;
+          student1.save(() => {
+            student2.save(() => {
+              scenario.save(() => {
+                fridge = new Fridge({
+                  owner: student1,
+                  scenario: scenario,
+                  accessGranted: student1.accessGranted[scenario.scenCode],
+                  strains: []
+                });
+                fridge.save(() => {
+                  done();
+                });
               });
             });
           });
-        });
+        })
       });
     });
   }); // end before
@@ -71,7 +81,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should be able to get all users as admin', (done) => {
       request(app)
-        .get('/api/admin/' + admin.userId + '/users')
+        .get('/api/admin/' + admin.userId + '/students')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -83,21 +93,23 @@ describe('Admin Controller Unit Tests', () => {
         });
     }); // end Should be able to get all users as admin
 
-    it('Should not be able to get all users as instr', (done) => {
+    it('Should be able to get students as instr', (done) => {
       request(app)
-        .get('/api/admin/' + instr.userId + '/users')
+        .get('/api/admin/' + instr.userId + '/students')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
         .end((err, res) => {
-          res.body.should.have.property('message', 'Not authorized');
+          let userList = res.body;
+          userList.should.be.an.Array();
+          userList.should.have.lengthOf(1);
           done();
         });
     }); // end Should not be able to get all users as instr
 
     it('Should not be able to get all users as student1', (done) => {
       request(app)
-        .get('/api/admin/' + student1.userId + '/users')
+        .get('/api/admin/' + student1.userId + '/students')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
@@ -109,7 +121,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should be able to get student1 as admin', (done) => {
       request(app)
-        .get('/api/admin/' + admin.userId + '/users/' + student1.userId)
+        .get('/api/admin/' + admin.userId + '/students/' + student1.userId)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -123,7 +135,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should not be able to get student1 as instr', (done) => {
       request(app)
-        .get('/api/admin/' + instr.userId + '/users/' + student1.userId)
+        .get('/api/admin/' + instr.userId + '/students/' + student1.userId)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
@@ -135,7 +147,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should not be able to get student1 as student2', (done) => {
       request(app)
-        .get('/api/admin/' + student2.userId + '/users/' + student1.userId)
+        .get('/api/admin/' + student2.userId + '/students/' + student1.userId)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
@@ -147,7 +159,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should be able to get fridge as admin', (done) => {
       request(app)
-        .get('/api/admin/' + admin.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
+        .get('/api/admin/' + admin.userId + '/students/' + student1.userId + '/' + scenario.scenCode)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -161,7 +173,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should be able to get fridge as instr', (done) => {
       request(app)
-        .get('/api/admin/' + instr.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
+        .get('/api/admin/' + instr.userId + '/students/' + student1.userId + '/' + scenario.scenCode)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -175,7 +187,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should not be able to get fridge as student2', (done) => {
       request(app)
-        .get('/api/admin/' + student2.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
+        .get('/api/admin/' + student2.userId + '/students/' + student1.userId + '/' + scenario.scenCode)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
@@ -202,7 +214,7 @@ describe('Admin Controller Unit Tests', () => {
         role: 'instr'
       };
       request(app)
-        .post('/api/admin/' + admin.userId + '/users/' + student2.userId)
+        .post('/api/admin/' + admin.userId + '/students/' + student2.userId)
         .send(body)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -220,7 +232,7 @@ describe('Admin Controller Unit Tests', () => {
         role: 'instr'
       };
       request(app)
-        .post('/api/admin/' + instr.userId + '/users/' + student1.userId)
+        .post('/api/admin/' + instr.userId + '/students/' + student1.userId)
         .send(body)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -233,7 +245,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should be able to grant scenario access as admin', (done) => {
       request(app)
-        .post('/api/admin/' + admin.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
+        .post('/api/admin/' + admin.userId + '/students/' + student1.userId + '/' + scenario.scenCode)
         .send({})
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -248,7 +260,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should be able to grant scenario access as instr', (done) => {
       request(app)
-        .post('/api/admin/' + instr.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
+        .post('/api/admin/' + instr.userId + '/students/' + student1.userId + '/' + scenario.scenCode)
         .send({})
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -263,7 +275,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should not be able to grant scenario access as student1', (done) => {
       request(app)
-        .post('/api/admin/' + student1.userId + '/users/' + student1.userId + '/' + scenario.scenCode)
+        .post('/api/admin/' + student1.userId + '/students/' + student1.userId + '/' + scenario.scenCode)
         .send({})
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -292,7 +304,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should be able to delete user as admin', (done) => {
       request(app)
-        .delete('/api/admin/' + admin.userId + '/users/' + tmpUser.userId)
+        .delete('/api/admin/' + admin.userId + '/students/' + tmpUser.userId)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -305,7 +317,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should not be able to delete user as instr', (done) => {
       request(app)
-        .delete('/api/admin/' + instr.userId + '/users/' + tmpUser.userId)
+        .delete('/api/admin/' + instr.userId + '/students/' + tmpUser.userId)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
@@ -317,7 +329,7 @@ describe('Admin Controller Unit Tests', () => {
 
     it('Should not be able to delete user as student1', (done) => {
       request(app)
-        .delete('/api/admin/' + student1.userId + '/users/' + tmpUser.userId)
+        .delete('/api/admin/' + student1.userId + '/students/' + tmpUser.userId)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
@@ -333,7 +345,11 @@ describe('Admin Controller Unit Tests', () => {
     User.remove(() => {
       Scenario.remove(() => {
         Fridge.remove(() => {
-          done();
+          Course.remove(()=>{
+            Phage.remove(()=>{
+              done();
+            });
+          });
         });
       });
     });

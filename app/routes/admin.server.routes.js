@@ -6,16 +6,16 @@ const fridge = require('../controllers/fridge.server.controller');
 module.exports = function (app) {
 
   /* admin user routes */
-  app.route('/api/admin/:userId/users')
-    .get(admin.isAdmin, admin.listUsers);
+  app.route('/api/admin/:userId/students')
+    .get(admin.hasAuthorization, admin.listUsers);
 
-  app.route('/api/admin/:userId/users/:studentId')
+  app.route('/api/admin/:userId/students/:studentId')
     .get(admin.isAdmin, admin.getUser)
     .post(admin.isAdmin, admin.setRole)
     .delete(admin.isAdmin, admin.deleteUser);
 
   /* admin user scenario routes */
-  app.route('/api/admin/:userId/users/:studentId/:scenarioId')
+  app.route('/api/admin/:userId/students/:studentId/:scenarioId')
     .get(admin.hasAuthorization, fridge.getStudentFridge)
     .post(admin.hasAuthorization, user.grantAccess);
 

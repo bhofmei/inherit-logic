@@ -42,10 +42,38 @@ exports.isAdmin = function (req, res, next) {
 }
 
 /**
- *  list all users in the system
+ *  list all users in the system for admin OR
+ *  list all students for instructor courses for instructor
  */
 exports.listUsers = function (req, res) {
-  User.find((err, users) => {
+
+  let user = req.user;
+  let userId = new ObjectId(user._id);
+  //let query;
+  if(user.role === 'instr'){
+    // get all students in instr courses
+    Course.find({
+      instructors: userId
+    }, (err, courses)=>{
+      if(err){
+        return res.status(500)
+        .send({message: err})
+      } else {
+        // we have courses
+        User.find({
+          course: { $in: courses }
+        }, (err2, students)=>{
+          if(err2){
+            res.status(500)
+            .send({message: err2});
+          } else {
+            res.json(students);
+          }
+        })
+      }
+    })
+  } else
+  {User.find((err, users) => {
     if (err) {
       return res.status(500)
         .send({
@@ -60,6 +88,7 @@ exports.listUsers = function (req, res) {
       res.json(users);
     }
   });
+  }
 };
 
 /**
