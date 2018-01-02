@@ -1,17 +1,34 @@
 <div class="container-fluid">
   <div *ngIf="courseInfo" id="course-info">
     <div class="row">
-    <h4 class="col-11">{{ courseInfo.courseNum }}</h4>
-    <a class="mt-2 font-italic col-1" [routerLink]="['./edit']">edit</a>
+      <h4 class="col-11">{{ courseInfo.courseNum }}</h4>
+      <a class="mt-2 font-italic col-1" [routerLink]="['./edit']">edit</a>
     </div>
 
     <div class="text-secondary" id="desc">{{ courseInfo.description }}</div>
 
-    <h6 class="mt-4 mb-2">Students: {{ students.length }}</h6>
-    <div class="list-group">
-      <a *ngFor="let student of students" [routerLink]="['./']" class="list-group-item list-group-item-action">{{student.name}}</a>
+    <div class="row">
+      <h6 class="mt-2">View Scenario Status </h6>
     </div>
-    <!-- end students -->
+    <div class="row">
+      <div id="statusByStudent" class="col-12 col-lg-6">
+        <h6 class="mb-2">By Student</h6>
+        <div class="list-group">
+          <a *ngFor="let student of students" [routerLink]="['./']" class="list-group-item list-group-item-action">{{student.name}}</a>
+        </div>
+        <!-- end students -->
+      </div>
+      <!-- statusByStudent -->
+      <div id="statusByScenario" class="col-12 col-lg-6">
+        <h6 class="mb-2">By Scenario</h6>
+        <div class="list-group">
+          <a *ngFor="let scen of scenarios" [routerLink]="['./', scen.scenCode]" class="list-group-item list-group-item-action">{{ scen.label }}</a>
+        </div>
+      </div>
+      <!-- statusByScenario -->
+
+    </div>
+    <!-- end row -->
   </div>
   <!-- end course info -->
 </div>
