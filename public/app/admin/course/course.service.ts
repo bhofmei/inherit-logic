@@ -15,13 +15,21 @@ export class CourseService {
   }
 
   setAdmin(id: number){
-    console.log(id);
     this._adminId.next(id);
   }
 
-  listCourses(userId: number): Observable<any>{
+  getAdmin(): number{
+    return this._adminId.getValue();
+  }
+
+  /*listCourses(userId: number): Observable<any>{
     return this._http
       .get(`${this._baseURL}/${userId}/courses`);
+  }*/
+
+  listCourses(): Observable<any>{
+    return this._http
+      .get(`${this._baseURL}/${this.getAdmin()}/courses`);
   }
 
   /*createCourse(userId: number, body: any): Observable<any>{
@@ -30,7 +38,7 @@ export class CourseService {
   }*/
   createCourse(body: any): Observable<Course>{
     return this._http
-      .post<Course>(`${this._baseURL}/${this._adminId.getValue()}/courses`, body);
+      .post<Course>(`${this._baseURL}/${this.getAdmin()}/courses`, body);
   }
 
 
@@ -40,12 +48,17 @@ export class CourseService {
   }*/
   getCourse(courseNum: string): Observable<Course>{
     return this._http
-      .get<Course>(`${this._baseURL}/${this._adminId.getValue()}/courses/${courseNum}`);
+      .get<Course>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}`);
   }
 
-  editCourse(userId: number, courseNum: string, body: any): Observable<any>{
+  /*editCourse(userId: number, courseNum: string, body: any): Observable<any>{
     return this._http
       .post(`${this._baseURL}/${userId}/courses/${courseNum}`, body);
+  }*/
+
+  editCourse(courseNum: string, body: any): Observable<Course>{
+    return this._http
+      .post<Course>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}`, body);
   }
 
   deleteCourse(userId: number, courseNum: string): Observable<any>{

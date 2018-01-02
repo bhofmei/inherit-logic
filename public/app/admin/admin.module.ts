@@ -7,6 +7,8 @@ import { NotAuthComponent } from './not-auth/not-auth.component';
 import { CourseComponent } from './course/course.component';
 import { CreateComponent } from './course/create/create.component';
 import { IndivComponent } from './course/indiv/indiv.component';
+import { EditComponent } from './course/edit/edit.component';
+import { ListComponent } from './course/list/list.component';
 
 import { AdminGuard } from './admin-guard.service';
 
@@ -23,7 +25,9 @@ import { UserService } from './user/user.service';
     NotAuthComponent,
     CourseComponent,
     CreateComponent,
-    IndivComponent
+    IndivComponent,
+    EditComponent,
+    ListComponent
   ],
   providers: [
     AdminGuard,

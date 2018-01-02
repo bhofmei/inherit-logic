@@ -1,0 +1,16 @@
+<div class="container-fluid">
+  <div *ngIf="courseInfo" id="course-info">
+    <h4 class="">{{ courseInfo.courseNum }}</h4>
+
+    <form (ngSubmit)="update()">
+      <div class="text-secondary d-block">
+        Description
+      </div>
+      <textarea type="text" id="desc-input" [(ngModel)]="courseInfo.description" placeholder="Course description" name="description"></textarea>
+
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+
+  </div>
+  <!-- end course info -->
+</div>
