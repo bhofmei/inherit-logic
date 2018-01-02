@@ -1,0 +1,15 @@
+<div class="container">
+<h4 class="text-dark">Students</h4>
+<div class="col-12">
+  <div *ngIf="errorMessage !== ''" class="alert alert-danger">{{ errorMessage }}</div>
+  <div class="list-group mt-2">
+      <a *ngFor="let student of students" [routerLink]="[student.userId]" class="list-group-item list-group-item-action">
+      <div class="d-flex justify-content-between">
+        <div class="text-primary">{{student.name}}</div>
+        <div *ngIf="student.role=='student' && student.course" class="text-secondary">{{student.course.courseNum}}</div>
+        <div *ngIf="student.role!='student'" class="text-secondary">{{student.role}}</div>
+      </div>
+    </a>
+  </div> <!-- end list-group -->
+</div> <!-- end col-12 -->
+</div>

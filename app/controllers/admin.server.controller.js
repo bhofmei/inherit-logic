@@ -62,32 +62,28 @@ exports.listUsers = function (req, res) {
         // we have courses
         User.find({
           course: { $in: courses }
-        }, (err2, students)=>{
+        }).populate('course', 'courseNum')
+        .sort('name')
+        .exec((err2, students)=>{
           if(err2){
             res.status(500)
             .send({message: err2});
           } else {
             res.json(students);
           }
-        })
+        });
       }
     })
-  } else
-  {User.find((err, users) => {
-    if (err) {
-      return res.status(500)
-        .send({
-          message: getErrorMessage(err)
+  } else { User.find().populate('course', 'courseNum')
+        .sort('name')
+        .exec((err2, students)=>{
+          if(err2){
+            res.status(500)
+            .send({message: err2});
+          } else {
+            res.json(students);
+          }
         });
-    } else if (!users) {
-      return res.status(404)
-        .send({
-          message: 'No users found'
-        });
-    } else {
-      res.json(users);
-    }
-  });
   }
 };
 

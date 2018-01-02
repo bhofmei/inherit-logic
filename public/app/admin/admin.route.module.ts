@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminGuard } from './admin-guard.service';
 
 import { CourseRoutes } from './course/course.routes';
+import { StudentRoutes } from './student/student.routes';
 
 import { AdminComponent } from './admin.component';
 import { NotAuthComponent } from './not-auth/not-auth.component';
@@ -20,10 +21,10 @@ const adminRoutes: Routes = [
         //component: CourseComponent,
         children: CourseRoutes
       },
-      /*{
-        path: 'users',
-        //component: AdminUsersComponent
-      },*/
+      {
+        path: 'students',
+        children: StudentRoutes
+      },
     ]
   },
   {

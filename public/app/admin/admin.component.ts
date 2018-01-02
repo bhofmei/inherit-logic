@@ -4,6 +4,7 @@ import 'rxjs/add/operator/takeUntil'
 
 import { AuthenticationService } from '../authentication/authentication.service';
 import { CourseService } from './course/course.service';
+import { StudentService } from './student/student.service';
 import { User } from '../interfaces/user.interface';
 
 @Component({
@@ -18,7 +19,8 @@ export class AdminComponent{
 
   constructor(
     private _authenticationService: AuthenticationService,
-    private _courseService: CourseService
+    private _courseService: CourseService,
+     private _studentService: StudentService
   ){}
 
   ngOnInit(){
@@ -35,11 +37,13 @@ export class AdminComponent{
     this.adminUser = this._authenticationService.getUser();
     let userId = this.adminUser.id;
     this._courseService.setAdmin(userId);
+    this._studentService.setAdmin(userId);
     console.log('admin-comp', this.adminUser);
   }
 
   ngOnDestroy(){
     this._courseService.setAdmin(-1);
+    this._studentService.setAdmin(-1);
   }
 
 }

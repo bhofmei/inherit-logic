@@ -11,9 +11,10 @@ import { EditComponent } from './course/edit/edit.component';
 import { ListComponent } from './course/list/list.component';
 import { StatusComponent } from './course/status/status.component';
 
+import { StudentListComponent } from './student/student-list/student-list.component';
 import { AdminGuard } from './admin-guard.service';
 
-import { UserService } from './user/user.service';
+import { StudentService } from './student/student.service';
 
 @NgModule({
   imports: [
@@ -28,11 +29,12 @@ import { UserService } from './user/user.service';
     IndivComponent,
     EditComponent,
     ListComponent,
-    StatusComponent
+    StatusComponent,
+    StudentListComponent
   ],
   providers: [
     AdminGuard,
-    UserService
+    StudentService
   ]
 })
 export class AdminModule {}
