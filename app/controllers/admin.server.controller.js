@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const User = require('mongoose').model('User');
+const User = require('mongoose')
+  .model('User');
 const Course = mongoose.model('Course');
 const ObjectId = mongoose.Types.ObjectId;
 const scenData = require('../../config/scenario.data');
@@ -50,40 +51,51 @@ exports.listUsers = function (req, res) {
   let user = req.user;
   let userId = new ObjectId(user._id);
   //let query;
-  if(user.role === 'instr'){
+  if (user.role === 'instr') {
     // get all students in instr courses
     Course.find({
       instructors: userId
-    }, (err, courses)=>{
-      if(err){
+    }, (err, courses) => {
+      if (err) {
         return res.status(500)
-        .send({message: err})
+          .send({
+            message: err
+          })
       } else {
         // we have courses
         User.find({
-          course: { $in: courses }
-        }).populate('course', 'courseNum')
-        .sort('name')
-        .exec((err2, students)=>{
-          if(err2){
-            res.status(500)
-            .send({message: err2});
-          } else {
-            res.json(students);
-          }
-        });
+            course: {
+              $in: courses
+            }
+          })
+          .populate('course', 'courseNum')
+          .sort('name')
+          .exec((err2, students) => {
+            if (err2) {
+              res.status(500)
+                .send({
+                  message: err2
+                });
+            } else {
+              res.json(students);
+            }
+          });
       }
     })
-  } else { User.find().populate('course', 'courseNum')
-        .sort('name')
-        .exec((err2, students)=>{
-          if(err2){
-            res.status(500)
-            .send({message: err2});
-          } else {
-            res.json(students);
-          }
-        });
+  } else {
+    User.find()
+      .populate('course', 'courseNum')
+      .sort('name')
+      .exec((err2, students) => {
+        if (err2) {
+          res.status(500)
+            .send({
+              message: err2
+            });
+        } else {
+          res.json(students);
+        }
+      });
   }
 };
 
@@ -91,16 +103,21 @@ exports.listUsers = function (req, res) {
  * get user
  */
 exports.getUser = function (req, res) {
-  let student = req.student;
-  delete student.password;
-  var scenStatus = scenData.map((scenario) => {
-    return {
-      label: scenario.label,
-      status: student.accessGranted[scenario.scenCode]
+  let tmp = req.student;
+  tmp.populate('course', (err, student) => {
+    if(err){
+      return res.status(500).send({message: err});
     }
+    delete student.password;
+    var scenStatus = scenData.map((scenario) => {
+      return {
+        label: scenario.label,
+        status: student.accessGranted[scenario.scenCode]
+      }
+    });
+    student.scenarioStatus = scenStatus
+    res.json(student);
   });
-  student.scenarioStatus = scenStatus
-  res.json(student);
 };
 
 exports.deleteUser = function (req, res) {

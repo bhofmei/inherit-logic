@@ -39,7 +39,7 @@ export class StudentService {
 
   getStudent(studentId: number): Observable<AdminStudent>{
     return this._http
-            .get<AdminStudent>(`${this._baseURL}/${this.getAdmin()}/users/${studentId}`);
+            .get<AdminStudent>(`${this._baseURL}/${this.getAdmin()}/students/${studentId}`);
   }
 
   setUserRole(userId: number, studentId: number, role: string): Observable<any>{

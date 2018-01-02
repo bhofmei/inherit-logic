@@ -12,6 +12,7 @@ import { ListComponent } from './course/list/list.component';
 import { StatusComponent } from './course/status/status.component';
 
 import { StudentListComponent } from './student/student-list/student-list.component';
+import { StudentIndivComponent } from './student/student-indiv/student-indiv.component';
 import { AdminGuard } from './admin-guard.service';
 
 import { StudentService } from './student/student.service';
@@ -30,7 +31,8 @@ import { StudentService } from './student/student.service';
     EditComponent,
     ListComponent,
     StatusComponent,
-    StudentListComponent
+    StudentListComponent,
+    StudentIndivComponent
   ],
   providers: [
     AdminGuard,

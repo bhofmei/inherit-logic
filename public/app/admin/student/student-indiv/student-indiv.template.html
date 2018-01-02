@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <div *ngIf="errorMessage !== ''" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="student">
+    <div id="student-info">
+      <div class="row mb-0" id="student-name">
+        <h4 class="text-dark">
+          {{ student.name }}
+        </h4>
+      </div>
+
+      <div class="row mb-2" id="student-email">
+        <!--<a [routerLink]="['mailto:', student.email]">{{ student.email }}</a>-->
+        {{ student.email }}
+      </div>
+
+      <div class="row text-secondary mb-3" id="student-desc">
+        {{ getStudentDesc() }}
+      </div>
+    </div>
+    <!-- end student info -->
+
+    <div id="student-toolbar">
+
+    </div>
+
+    <div id="student-scenarios">
+      <h5>Scenarios</h5>
+      <div class="list-group">
+        <div *ngFor="let scenario of scenarios" class="list-group-item justify-content-between d-flex">
+          <div class="">
+            <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(scenario.scenCode) }}</span>
+          </div>
+          <div class="btn-group" role="group">
+            <button class="btn btn-outline-secondary btn-sm">Grant access</button>
+            <button class="btn btn-outline-primary btn-sm">View fridge</button>
+          </div>
+        </div>
+        <!-- end list-group-item -->
+      </div>
+      <!-- end list-group -->
+    </div>
+    <!-- end student-scenarios -->
+  </div>
+  <!-- end if student -->
+</div>
+<!-- end container -->
