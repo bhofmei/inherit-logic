@@ -63,7 +63,7 @@ exports.listCourses = function (req, res) {
 };
 
 exports.listCourseNum = function(req, res){
-  Course.find({}, 'courseNum', (err, courses)=>{
+  Course.find({}, 'courseNum id', (err, courses)=>{
     if(err){
       return res.status(500).send({message: getErrorMessage(err)})
     } else if (!courses){
@@ -102,9 +102,9 @@ exports.createCourse = function (req, res) {
 /**
  * get an existing course
  */
-/*exports.getCourse = function (req, res) {
+exports.getCourse = function (req, res) {
   res.json(req.course);
-};*/
+};
 
 /**
  * Update the description of an existing course
@@ -149,23 +149,23 @@ exports.deleteCourse = function (req, res) {
 };
 
 /**
- * get course details and list of students for a course
+ * get list of students for a course
  */
-exports.getCourse = function (req, res) {
+exports.getStudents = function (req, res) {
   var course = req.course;
   let courseId = new ObjectId(course._id);
 
   User.find({
     course: courseId
-  }, (err, students) => {
+  }, 'name userId accessGranted email',
+            (err, students) => {
     if (err) {
       return res.status(500)
         .send({
           message: getErrorMessage(err)
         });
     } else {
-      course.students = students;
-      res.json(course);
+      res.json(students);
     }
   });
 };

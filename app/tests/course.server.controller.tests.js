@@ -169,7 +169,7 @@ describe('Course Controller Unit Tests', () => {
 
     it('Should be able to get students of course1 as admin', (done) => {
       request(app)
-        .get('/api/admin/' + admin.userId + '/courses/' + course1.courseNum + '/users')
+        .get('/api/admin/' + admin.userId + '/courses/' + course1.courseNum + '/students')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -183,7 +183,7 @@ describe('Course Controller Unit Tests', () => {
 
     it('Should be able to get students of course1 as instr1', (done) => {
       request(app)
-        .get('/api/admin/' + instructors[0].userId + '/courses/' + course1.courseNum + '/users')
+        .get('/api/admin/' + instructors[0].userId + '/courses/' + course1.courseNum + '/students')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -197,7 +197,7 @@ describe('Course Controller Unit Tests', () => {
 
     it('Should not be able to get students of course1 as student', (done) => {
       request(app)
-        .get('/api/admin/' + students[1].userId + '/courses/' + course1.courseNum + '/users')
+        .get('/api/admin/' + students[1].userId + '/courses/' + course1.courseNum + '/students')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
@@ -391,7 +391,7 @@ describe('Course Controller Unit Tests', () => {
 
     it('Should be able to add instr to course1 as admin', (done) => {
       request(app)
-        .post('/api/admin/' + admin.userId + '/courses/' + course1.courseNum + '/users/' + instructors[2].userId)
+        .post('/api/admin/' + admin.userId + '/courses/' + course1.courseNum + '/students/' + instructors[2].userId)
         .send({
           instructor: true
         })
@@ -409,7 +409,7 @@ describe('Course Controller Unit Tests', () => {
 
     it('Should be able to add instr to course2 as instr', (done) => {
       request(app)
-        .post('/api/admin/' + instructors[1].userId + '/courses/' + course2.courseNum + '/users/' + instructors[2].userId)
+        .post('/api/admin/' + instructors[1].userId + '/courses/' + course2.courseNum + '/students/' + instructors[2].userId)
         .send({
           instructor: true
         })
@@ -448,7 +448,7 @@ describe('Course Controller Unit Tests', () => {
 
     it('Should delete user as admin', (done) => {
       request(app)
-        .delete('/api/admin/' + admin.userId + '/users/' + tmpUser.userId)
+        .delete('/api/admin/' + admin.userId + '/students/' + tmpUser.userId)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -461,7 +461,7 @@ describe('Course Controller Unit Tests', () => {
 
     it('Should not delete user as instr', (done) => {
       request(app)
-        .delete('/api/admin/' + instructors[1].userId + '/users/' + tmpUser.userId)
+        .delete('/api/admin/' + instructors[1].userId + '/students/' + tmpUser.userId)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)
@@ -473,7 +473,7 @@ describe('Course Controller Unit Tests', () => {
 
     it('Should delete all students in course as admin', (done) => {
       request(app)
-        .delete('/api/admin/' + admin.userId + '/courses/' + course2.courseNum + '/users')
+        .delete('/api/admin/' + admin.userId + '/courses/' + course2.courseNum + '/students')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -487,7 +487,7 @@ describe('Course Controller Unit Tests', () => {
 
     it('Should not delete all students in course as instr', (done) => {
       request(app)
-        .delete('/api/admin/' + instructors[1].userId + '/courses/' + course2.courseNum + '/users')
+        .delete('/api/admin/' + instructors[1].userId + '/courses/' + course2.courseNum + '/students')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(403)

@@ -18,7 +18,7 @@ module.exports = function (app) {
     .delete(admin.hasAuthorization, course.isInstructor, course.deleteCourse);
 
   app.route('/api/admin/:userId/courses/:courseNum/students')
-    //.get(admin.hasAuthorization, course.isInstructor, course.getStudents)
+    .get(admin.hasAuthorization, course.isInstructor, course.getStudents)
     .delete(admin.isAdmin, course.deleteCourseStudents);
 
   app.route('/api/admin/:userId/courses/:courseNum/students/:studentId')

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil'
 
 import { CourseService } from '../course.service';
 //import { AuthenticationService } from '../../../authentication/authentication.service';
@@ -19,7 +21,7 @@ export class IndivComponent{
 
   private students: Student[] = [];
   private courseInfo: Course;
-  private subscription: Subscription;
+  private isDestroyed$: Subject<boolean>;
   private paramObserver: any;
 
   //private courseNum: string;
@@ -28,16 +30,23 @@ export class IndivComponent{
   constructor(private _router: Router,
         private _route: ActivatedRoute,
                private _courseService: CourseService){
+    this.isDestroyed$ = new Subject<boolean>();
   }
 
   ngOnInit(){
     this.paramObserver = this._route.params.subscribe(params => {
             let course = params['courseNum'];
 
-            this.subscription = this._courseService.getCourse(course).subscribe((info) => {
-              console.log(info);
-                //this.students = info.students;
+            this._courseService.getCourse(course)
+        .takeUntil(this.isDestroyed$)
+              .subscribe((info) => {
               this.courseInfo = info;
+              this._courseService.getStudents(course)
+              .takeUntil(this.isDestroyed$)
+              .subscribe((students)=>{
+                console.log(students);
+                this.students = students;
+              });
             },
                 (error) => {
               this.errorMessage = error.message;
@@ -47,7 +56,8 @@ export class IndivComponent{
 
   ngOnDestroy(){
     this.paramObserver.unsubscribe();
-    this.subscription.unsubscribe();
+    this.isDestroyed$.next(true);
+    this.isDestroyed$.unsubscribe();
   }
 
 }
