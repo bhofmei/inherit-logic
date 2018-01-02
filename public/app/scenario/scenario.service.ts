@@ -73,7 +73,7 @@ export class ScenarioService {
         //.catch(this.handleError);
     }
 
-    addStrain(strain: GenotypePhage, userId: number, scenCode: string): Observable<FridgePhage> {
+    addStrain(strain: any, userId: number, scenCode: string): Observable<FridgePhage> {
         // strains has strainNum, mutationList, deletion
         // returns new phage
         return this._http

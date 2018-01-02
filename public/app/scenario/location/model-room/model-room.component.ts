@@ -41,11 +41,15 @@ export class ModelRoomComponent {
   }
 
   ngOnInit(){
-    this._authenticationService.getUser
+    /*this._authenticationService.getUser
       .takeUntil(this.isDestroyed$)
       .subscribe( (res) =>{
       this.userId = res.id;
-    });
+    });*/
+    let u = this._authenticationService.getUser();
+    if(u){
+      this.userId = u.id;
+    }
     this._route.parent.params
       .takeUntil(this.isDestroyed$)
       .subscribe(params =>{

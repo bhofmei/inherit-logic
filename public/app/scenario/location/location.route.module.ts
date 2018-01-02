@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+  import { NgModule } from '@angular/core';
+  import { Routes, RouterModule } from '@angular/router';
 
 import { LocationComponent } from './location.component';
 import { LocationGuard } from './location-guard.service';

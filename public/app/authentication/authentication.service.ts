@@ -8,26 +8,26 @@ import { User } from '../interfaces/user.interface';
 
 @Injectable()
 export class AuthenticationService {
-    private _user: BehaviorSubject<User> = new BehaviorSubject<User>(null);
-    public getUser = this._user.asObservable();
+    //private _user: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+    //public getUser = this._user.asObservable();
 
     private _user2: User;
 
     private _signinURL = 'api/auth/signin';
     private _signupURL = 'api/auth/signup';
 
-    public redirectUrl: string;
+    public redirectUrl: string = '/';
 
     constructor(private http: HttpClient) {
       //this._user = new BehaviorSubject<User>(null);
     }
 
   setUser(user: User){
-    this._user.next(user);
+    //this._user.next(user);
     this._user2 = user;
   }
 
-  getUser2(): User{
+  getUser(): User{
     return this._user2;
   }
 
@@ -44,19 +44,19 @@ export class AuthenticationService {
     }
   }
 
-    signin(credentials: any): Observable<User> {
-        let body = JSON.stringify(credentials);
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  signin(credentials: any): Observable<User> {
+      let body = JSON.stringify(credentials);
+      let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-        return this.http.post<User>(this._signinURL, body, { headers: headers });
-    }
+      return this.http.post<User>(this._signinURL, body, { headers: headers });
+  }
 
-    signup(user: any): Observable<User> {
-        let body = JSON.stringify(user);
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  signup(user: any): Observable<User> {
+      let body = JSON.stringify(user);
+      let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-        return this.http.post<User>(this._signupURL, body, { headers: headers })
-    }
+      return this.http.post<User>(this._signupURL, body, { headers: headers })
+  }
 
     /*private handleError(error: Response) {
         console.error(error);
