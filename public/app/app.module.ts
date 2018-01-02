@@ -12,6 +12,7 @@ import { AppRoutes } from './app.routes';
 //import { HomeModule } from './home/home.module';
 import { AuthenticationService } from './authentication/authentication.service';
 import { ScenarioService } from './scenario/scenario.service';
+import { CourseService } from './admin/course/course.service';
 
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ArticleModule } from './articles/article.module';
@@ -40,7 +41,8 @@ import { LocationModule } from './scenario/location/location.module';
     ],
     providers: [
         AuthenticationService,
-        ScenarioService
+        ScenarioService,
+      CourseService
     ],
     bootstrap: [AppComponent]
 })

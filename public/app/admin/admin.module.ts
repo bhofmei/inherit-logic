@@ -12,7 +12,6 @@ import { ListComponent } from './course/list/list.component';
 
 import { AdminGuard } from './admin-guard.service';
 
-import { CourseService } from './course/course.service';
 import { UserService } from './user/user.service';
 
 @NgModule({
@@ -31,7 +30,6 @@ import { UserService } from './user/user.service';
   ],
   providers: [
     AdminGuard,
-    CourseService,
     UserService
   ]
 })
