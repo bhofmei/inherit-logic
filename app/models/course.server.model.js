@@ -5,6 +5,7 @@ const CourseSchema = new Schema({
   courseNum: {
     type: String,
     trim: true,
+    uppercase: true,
     required: 'Course num cannot be blank',
     unique: 'Course num must be unique'
   },

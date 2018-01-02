@@ -255,7 +255,7 @@ exports.getScenarioStatus = function (req, res) {
       var output = students.map((student) => {
         return {
           name: student.name,
-          id: student.userId,
+          userId: student.userId,
           status: student.accessGranted[scenId]
         }
       });
