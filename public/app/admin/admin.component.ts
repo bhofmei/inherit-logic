@@ -36,14 +36,15 @@ export class AdminComponent{
     }); */
     this.adminUser = this._authenticationService.getUser();
     let userId = this.adminUser.id;
+    let userRole = this.adminUser.role;
     this._courseService.setAdmin(userId);
-    this._studentService.setAdmin(userId);
+    this._studentService.setAdmin(userId, userRole);
     console.log('admin-comp', this.adminUser);
   }
 
   ngOnDestroy(){
     this._courseService.setAdmin(-1);
-    this._studentService.setAdmin(-1);
+    this._studentService.setAdmin(-1, -1);
   }
 
 }

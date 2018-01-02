@@ -10,16 +10,22 @@ export class StudentService {
 
   private _baseURL = 'api/admin';
   private _adminId = new BehaviorSubject<number>(-1);
+  private _adminRole = new BehaviorSubject<number>(-1);
 
   constructor(private _http: HttpClient) {
   }
 
-  setAdmin(id: number){
+  setAdmin(id: number, role: number){
     this._adminId.next(id);
+    this._adminRole.next(role);
   }
 
   getAdmin(): number{
     return this._adminId.getValue();
+  }
+
+  getAdminRole(): number{
+    return this._adminRole.getValue();
   }
 
   /*listStudents(userId: number): Observable<any>{
