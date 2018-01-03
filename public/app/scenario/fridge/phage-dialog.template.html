@@ -23,7 +23,7 @@
     <div *ngIf="phage.phageType==='user'" class="row form-group" id="phageSubmit">
       <label for="submitInput" class="col-sm-3 col-form-label text-secondary" style="font-weight: 500;" title="submit phage for grading">Submitted</label>
       <div class="col-sm-9">
-        <input type="checkbox" class="" id="submitInput" [(value)]="phage.submitted">
+        <input type="checkbox" class="" id="submitInput" [(ngModel)]="phage.submitted">
       </div>
     </div>
     <!-- end row phageType -->
