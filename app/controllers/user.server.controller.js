@@ -34,10 +34,14 @@ const getUserInfo = function (user) {
   }
 };
 
+const getStudentInfo = function(user){
+
+};
+
 /**
  * return full user object
  */
-exports.getUser = function(req, res){
+exports.getUser = function (req, res) {
   let user = req.user;
   delete user.password;
   res.json(user);
@@ -58,8 +62,8 @@ exports.signin = function (req, res, next) {
             .send(err);
         } else {
           user.lastLogin = Date.now();
-          user.save((err)=>{
-            if(!err){
+          user.save((err) => {
+            if (!err) {
               res.json(userInfo);
             }
           });
@@ -128,18 +132,24 @@ exports.signout = function (req, res) {
 /**
  * grant access to student for specific scenario
  */
-exports.grantAccess = function(req, res){
+exports.grantAccess = function (req, res) {
   let scenario = req.scenario;
   let scenId = scenario.scenCode;
   let user = req.student;
 
-  if(user.accessGranted !== null && user.accessGranted !== undefined)
-  {user.accessGranted[scenId] = true;
-  user.save((err, updated)=>{
-    if(err)
-      return res.status(500).send({message: getErrorMessage(err)});
-    res.json(updated);
-  });
+  if (user.accessGranted !== null && user.accessGranted !== undefined) {
+    user.accessGranted[scenId] = true;
+    user.markModified('accessGranted');
+    user.save((err, updated) => {
+      if (err) {
+        return res.status(500)
+          .send({
+            message: getErrorMessage(err)
+          });
+      }
+
+      res.json(updated);
+    });
   } else {
     return res.status(200);
   }
@@ -157,7 +167,7 @@ exports.requiresLogin = function (req, res, next) {
 
 exports.userById = function (req, res, next, id) {
   // check for negative id -> send error
-  if(id < 0){
+  if (id < 0) {
     return next(new Error('Invalid user'))
   }
   User.findOne({
@@ -171,8 +181,7 @@ exports.userById = function (req, res, next, id) {
     // if req has user specified, use user prop
     if (req.user) {
       req.student = user;
-    }
-    else {
+    } else {
       req.user = user;
     }
     next();

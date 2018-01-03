@@ -49,8 +49,10 @@ export class StudentFridgeComponent{
         .takeUntil(this.isDestroyed$)
               .subscribe((fridge) => {
               this.fridge = fridge;
-              this.fridge.strains.sort((a,b)=>{return a.strainNum - b.strainNum});
               this.hasFridge = (fridge.strains !== undefined);
+              if(this.hasFridge){
+                this.fridge.strains.sort((a,b)=>{return a.strainNum - b.strainNum});
+              }
               this.setPhage('all');
             },
                 (error) => {
@@ -84,8 +86,6 @@ export class StudentFridgeComponent{
       });
     }
   }
-
-
 
   ngOnDestroy(){
     this.paramObserver.unsubscribe();

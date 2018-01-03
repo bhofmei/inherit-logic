@@ -42,7 +42,6 @@ export class StudentIndivComponent{
             this._studentService.getStudent(studentId)
         .takeUntil(this.isDestroyed$)
               .subscribe((info) => {
-              console.log(info);
               this.student = info;
               this._scenarioService.listScenarios()
                   .takeUntil(this.isDestroyed$)
@@ -51,7 +50,7 @@ export class StudentIndivComponent{
                 });
             },
                 (error) => {
-              console.log(error);
+              console.error(error);
               this.errorMessage = error.message;
             });
         });
@@ -79,6 +78,18 @@ export class StudentIndivComponent{
     } else {
       return s.role;
     }
+  }
+
+  grantAccess(scenCode: string){
+    this._studentService.grantScenAccess(this.student.userId, scenCode)
+      .takeUntil(this.isDestroyed$)
+      .subscribe((res)=>{
+        if(res!==undefined && res !== null){
+          this.student.accessGranted[scenCode] = res.accessGranted[scenCode];
+        }
+    }, (err)=>{
+      this.errorMessage = err.error.message;
+    });
   }
 
   ngOnDestroy(){

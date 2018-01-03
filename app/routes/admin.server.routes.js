@@ -17,7 +17,7 @@ module.exports = function (app) {
   /* admin user scenario routes */
   app.route('/api/admin/:userId/students/:studentId/:scenarioId')
     .get(admin.hasAuthorization, fridge.getStudentFridge)
-    .post(admin.hasAuthorization, user.grantAccess);
+    .post(admin.hasAuthorization, fridge.deleteStudentFridge, user.grantAccess);
 
   app.param('userId', user.userById);
   app.param('studentId', user.userById);

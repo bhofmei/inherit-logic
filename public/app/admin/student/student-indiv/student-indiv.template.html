@@ -33,8 +33,8 @@
             <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(scenario.scenCode) }}</span>
           </div>
           <div class="btn-group" role="group">
-            <button class="btn btn-outline-secondary btn-sm">Grant access</button>
-            <button class="btn btn-outline-primary btn-sm">View fridge</button>
+            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="student.accessGranted[scenario.scenCode]">Grant access</button>
+            <a [routerLink]="['./', scenario.scenCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
           </div>
         </div>
         <!-- end list-group-item -->
