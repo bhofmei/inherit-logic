@@ -14,7 +14,7 @@
       <div id="statusByStudent" class="col-12 col-lg-6">
         <h6 class="mb-2">By Student</h6>
         <div class="list-group">
-          <a *ngFor="let student of students" [routerLink]="['./']" class="list-group-item list-group-item-action">{{student.name}}</a>
+          <a *ngFor="let student of students" [routerLink]="['../../students', student.userId]" class="list-group-item list-group-item-action">{{student.name}}</a>
         </div>
         <!-- end students -->
       </div>

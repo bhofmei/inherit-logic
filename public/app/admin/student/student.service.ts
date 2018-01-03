@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { AdminStudent } from '../../interfaces/student.interface';
+import { StudentFridge } from '../../interfaces/fridge.interface';
+
 
 @Injectable()
 export class StudentService {
@@ -59,14 +61,23 @@ export class StudentService {
             .delete(`${this._baseURL}/${userId}/users/${studentId}`);
   }
 
-  getFridge(userId: number, studentId: number, scenId: string): Observable<any>{
+  /*getFridge(userId: number, studentId: number, scenId: string): Observable<any>{
     return this._http
             .get(`${this._baseURL}/${userId}/users/${studentId}/${scenId}`);
+  }*/
+
+  getFridge(studentId: number, scenId: string): Observable<StudentFridge>{
+    return this._http
+            .get<StudentFridge>(`${this._baseURL}/${this.getAdmin()}/students/${studentId}/${scenId}`);
   }
 
-  grantScenAccess(userId: number, studentId: number, scenId: string): Observable<any>{
+  /*grantScenAccess(userId: number, studentId: number, scenId: string): Observable<any>{
     return this._http
             .post(`${this._baseURL}/${userId}/users/${studentId}/${scenId}`, {});
+  }*/
+  grantScenAccess(studentId: number, scenId: string): Observable<any>{
+    return this._http
+            .post(`${this._baseURL}/${this.getAdmin()}/students/${studentId}/${scenId}`, {});
   }
 
 

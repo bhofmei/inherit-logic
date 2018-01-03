@@ -1,4 +1,4 @@
-import { FridgePhage } from './phage.interface';
+import { FridgePhage, StudentPhage } from './phage.interface';
 
 export interface Fridge {
   scenarioDetails: string;
@@ -7,4 +7,12 @@ export interface Fridge {
   accessGranted: boolean;
   userId: number;
   scenCode: string;
+}
+
+export interface StudentFridge {
+  owner: { name: string, userId: number };
+  scenario: {scenCode: string, label: string};
+  strains?: StudentPhage[];
+  accessGranted?: boolean;
+  guesses?: string;
 }

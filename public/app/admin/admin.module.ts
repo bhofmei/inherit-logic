@@ -13,6 +13,9 @@ import { StatusComponent } from './course/status/status.component';
 
 import { StudentListComponent } from './student/student-list/student-list.component';
 import { StudentIndivComponent } from './student/student-indiv/student-indiv.component';
+import { StudentFridgeComponent } from './student/student-fridge/student-fridge.component';
+import { StudentPhageComponent } from './student/student-fridge/student-phage.component';
+
 import { AdminGuard } from './admin-guard.service';
 
 import { StudentService } from './student/student.service';
@@ -32,7 +35,9 @@ import { StudentService } from './student/student.service';
     ListComponent,
     StatusComponent,
     StudentListComponent,
-    StudentIndivComponent
+    StudentIndivComponent,
+    StudentFridgeComponent,
+    StudentPhageComponent
   ],
   providers: [
     AdminGuard,
