@@ -57,10 +57,10 @@ export class StudentIndivComponent{
   }
 
   getScenStatus(scenCode: string): string{
-    let st = this.student.accessGranted[scenCode];
-    if(st === true){
+    let isGranted = this.student.accessGranted[scenCode];
+    if(isGranted === true){
       return 'Access granted'
-    } else if (st === false) {
+    } else if (isGranted === false) {
       return 'Access not granted'
     } else {
       return 'NA'
@@ -80,8 +80,23 @@ export class StudentIndivComponent{
     }
   }
 
-  grantAccess(scenCode: string){
-    this._studentService.grantScenAccess(this.student.userId, scenCode)
+  accessButtonClass( scenCode: string ): Object{
+    let isGranted = this.student.accessGranted[scenCode];
+    return {
+      'btn btn-sm': true,
+      'btn-outline-secondary': isGranted,
+      'btn-outline-dark': !isGranted
+    }
+  }
+
+  accessButtonText(scenCode: string): string{
+    let isGranted = this.student.accessGranted[scenCode];
+    return (isGranted ? 'Revoke access' : 'Grant access');
+  }
+
+  toggleAccess(scenCode: string){
+    let curState = this.student.accessGranted[scenCode];
+    this._studentService.grantScenAccess(this.student.userId, scenCode, !curState)
       .takeUntil(this.isDestroyed$)
       .subscribe((res)=>{
         if(res!==undefined && res !== null){
@@ -91,6 +106,18 @@ export class StudentIndivComponent{
       this.errorMessage = err.error.message;
     });
   }
+
+  /*grantAccess(scenCode: string){
+    this._studentService.grantScenAccess(this.student.userId, scenCode)
+      .takeUntil(this.isDestroyed$)
+      .subscribe((res)=>{
+        if(res!==undefined && res !== null){
+          this.student.accessGranted[scenCode] = res.accessGranted[scenCode];
+        }
+    }, (err)=>{
+      this.errorMessage = err.error.message;
+    });
+  }*/
 
   ngOnDestroy(){
     this.paramObserver.unsubscribe();

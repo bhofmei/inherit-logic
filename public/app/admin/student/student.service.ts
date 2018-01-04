@@ -75,9 +75,9 @@ export class StudentService {
     return this._http
             .post(`${this._baseURL}/${userId}/users/${studentId}/${scenId}`, {});
   }*/
-  grantScenAccess(studentId: number, scenId: string): Observable<AdminStudent>{
+  grantScenAccess(studentId: number, scenId: string, updatedState: boolean): Observable<AdminStudent>{
     return this._http
-            .post<AdminStudent>(`${this._baseURL}/${this.getAdmin()}/students/${studentId}/${scenId}`, {});
+            .post<AdminStudent>(`${this._baseURL}/${this.getAdmin()}/students/${studentId}/${scenId}`, {access: updatedState});
   }
 
 

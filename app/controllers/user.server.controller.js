@@ -137,8 +137,10 @@ exports.grantAccess = function (req, res) {
   let scenId = scenario.scenCode;
   let user = req.student;
 
+  let access = req.body; // this has {access: boolean}
+
   if (user.accessGranted !== null && user.accessGranted !== undefined) {
-    user.accessGranted[scenId] = true;
+    user.accessGranted[scenId] = access.access;
     user.markModified('accessGranted');
     user.save((err, updated) => {
       if (err) {

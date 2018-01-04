@@ -13,13 +13,13 @@
     </div>
 
     <div class="list-group">
-      <div *ngFor="let student of students" class="list-group-item justify-content-between d-flex">
+      <div *ngFor="let student of students; let i = index" class="list-group-item justify-content-between d-flex">
         <div class="">
         <span class="text-primary student-label">{{student.name}}:</span> {{ formatAccess(student.status) }}
         </div>
         <div class="btn-group" role="group">
-          <button class="btn btn-outline-secondary btn-sm">Grant access</button>
-          <button class="btn btn-outline-primary btn-sm">View fridge</button>
+          <button [ngClass]="accessButtonClass(student.status)" (click)="toggleAccess(i)">{{ accessButtonText(student.status) }}</button>
+          <button class="btn btn-outline-primary btn-sm" (click)="goToFridge(student.userId)">View fridge</button>
         </div>
         </div> <!-- end list-group-item -->
     </div>
