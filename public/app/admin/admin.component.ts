@@ -39,7 +39,6 @@ export class AdminComponent{
     let userRole = this.adminUser.role;
     this._courseService.setAdmin(userId);
     this._studentService.setAdmin(userId, userRole);
-    console.log('admin-comp', this.adminUser);
   }
 
   ngOnDestroy(){

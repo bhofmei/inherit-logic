@@ -7,6 +7,7 @@ import { CourseRoutes } from './course/course.routes';
 import { StudentRoutes } from './student/student.routes';
 
 import { AdminComponent } from './admin.component';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { NotAuthComponent } from './not-auth/not-auth.component';
 
 const adminRoutes: Routes = [
@@ -25,6 +26,10 @@ const adminRoutes: Routes = [
         path: 'students',
         children: StudentRoutes
       },
+      {
+        path: '',
+        component: AdminHomeComponent
+      }
     ]
   },
   {

@@ -3,7 +3,9 @@ import { SharedModule } from '../shared/shared.module';
 
 import { AdminRouteModule } from './admin.route.module';
 import { AdminComponent } from './admin.component';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { NotAuthComponent } from './not-auth/not-auth.component';
+
 import { CourseComponent } from './course/course.component';
 import { CreateComponent } from './course/create/create.component';
 import { IndivComponent } from './course/indiv/indiv.component';
@@ -27,6 +29,7 @@ import { StudentService } from './student/student.service';
   ],
   declarations: [
     AdminComponent,
+    AdminHomeComponent,
     NotAuthComponent,
     CourseComponent,
     CreateComponent,
