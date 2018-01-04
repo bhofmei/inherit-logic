@@ -21,7 +21,7 @@ export class ListComponent implements OnInit, OnDestroy{
     }
 
     ngOnInit() {
-      this.user = this._authenticationService.getUser2();
+      this.user = this._authenticationService.getUser();
       this.sSubscription = this._scenarioService.listScenarios()
         .subscribe((scenarios) => {
         this.scenarios = scenarios
