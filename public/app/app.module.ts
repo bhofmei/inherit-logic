@@ -19,7 +19,6 @@ import { ArticleModule } from './articles/article.module';
 import { ScenarioModule } from './scenario/scenario.module';
 import { AdminModule } from './admin/admin.module';
 import { NavComponent } from './nav/nav.component';
-import { LocationModule } from './scenario/location/location.module';
 
 @NgModule({
     imports: [
@@ -30,10 +29,7 @@ import { LocationModule } from './scenario/location/location.module';
         AuthenticationModule,
         ArticleModule,
       ScenarioModule,
-      LocationModule,
-      //  RouterModule.forRoot(AppRoutes,{ enableTracing: true }),
-      RouterModule.forRoot(AppRoutes),
-      //DndModule.forRoot()
+      RouterModule.forRoot(AppRoutes)
     ],
     declarations: [
         AppComponent,

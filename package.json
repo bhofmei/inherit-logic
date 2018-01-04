@@ -9,9 +9,11 @@
   "scripts": {
     "tsc": "tsc",
     "tsc:w": "tsc -w",
+    "webpack": "webpack --watch",
     "clean": "find ./public/app/ -name '*.js*' -delete",
     "app": "node index",
     "start": "concurrently \"npm run tsc:w\" \"npm run app\" ",
+    "start:w": "concurrently \"npm run webpack\" \"npm run app\" ",
     "test:back": "NODE_ENV=test mocha --reporter spec app/tests",
     "test:genetics": "NODE_ENV=test mocha --reporter spec app/tests/genetics"
   },
@@ -71,12 +73,14 @@
     "@types/angular": "^1.6.39",
     "@types/core-js": "^0.9.43",
     "@types/node": "^8.0.53",
+    "awesome-typescript-loader": "^3.4.1",
     "concurrently": "3.1.0",
     "should": "^13.1.2",
     "supertest": "^3.0.0",
     "traceur": "0.0.11",
     "typescript": "2.4.2",
-    "typescript-formatter": "^6.0.0"
+    "typescript-formatter": "^6.0.0",
+    "webpack": "^3.10.0"
   },
   "repository": {
     "type": "git",

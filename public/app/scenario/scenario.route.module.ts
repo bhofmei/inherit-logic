@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ScenarioComponent } from './scenario.component';
 import { ListComponent } from './list/list.component';
+
+import { LocationRoutes } from './location/location.routes';
 const scenarioRoutes: Routes = [
   {
     path: '',
@@ -11,11 +13,7 @@ const scenarioRoutes: Routes = [
       {
         path: ':scenId',
         component: ScenarioComponent,
-        children:[
-        {
-          path: '',
-          loadChildren: 'app/scenario/location/location.module#LocationModule'
-        }]
+        children: LocationRoutes
       },
       {
         path: '',
