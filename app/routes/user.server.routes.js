@@ -7,6 +7,8 @@ module.exports = function(app){
     app.route('/api/auth/signin').post(user.signin);
     app.route('/api/auth/signout').get(user.signout);
 
+  //TODO: add verification route and get user route
+
   // cricket paths
   //app.route('/api/cricket/:userId').get(scenarios.list);
 
