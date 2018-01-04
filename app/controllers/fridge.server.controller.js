@@ -146,11 +146,17 @@ exports.getStudentFridge = function(req, res){
     owner: student._id,
     scenario: scen._id
   }).populate('strains', 'strainNum comment phageType id mutationList deletion parents submitted')
+  .populate('owner', 'name userId')
+  .populate('scenario', 'scenCode label')
   .exec((err, fridge)=>{
     if(err){
       return res.status(500).send({message: getErrorMessage(err)});
     } else if(!fridge){
-      return res.status(404).send({message: 'Fridge not found'});
+      let out = {
+        owner: {name: student.name, userId: student.userId},
+        scenario: {scenCode: scen.scenCode, label: scen.label}
+      };
+      res.json(out);
     } else {
       res.json(fridge);
     }
@@ -200,6 +206,21 @@ exports.deleteFridge = function(req, res) {
       res.json(fridge);
   });
 };
+
+exports.deleteStudentFridge = function(req, res, next){
+  let student = req.student;
+  let scen = req.scenario;
+  Fridge.remove({
+    owner: student._id,
+    scenario: scen._id
+  }, (err)=>{
+    if(err){
+      next(err);
+    } else {
+      next();
+    }
+  });
+}
 
 exports.addPhageToFridge = function (req, res) {
   let fridge = req.fridge;
