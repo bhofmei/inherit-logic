@@ -4,25 +4,23 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { CourseService } from '../course.service';
-//import { AuthenticationService } from '../../../authentication/authentication.service';
 
 import { Course } from '../../../interfaces/course.interface';
 import { Student } from '../../../interfaces/student.interface';
 
 @Component({
-  selector: 'course-edit',
-  templateUrl: 'app/admin/course/edit/edit.template.html',
-  styleUrls: ['app/admin/course/edit/edit.style.css']
+  selector: 'course-edit-cmp',
+  templateUrl: 'app/admin/course/course-edit/course-edit.template.html',
+  styleUrls: ['app/admin/course/course-edit/course-edit.style.css']
 })
 
-export class EditComponent{
+export class CourseEditComponent{
 
   private courseInfo: Course;
   private subscription: Subscription;
   private subscription2: Subscription;
   private paramObserver: any;
 
-  //private courseNum: string;
   private errorMessage: string = '';
 
   constructor(private _router: Router,

@@ -7,11 +7,11 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { NotAuthComponent } from './not-auth/not-auth.component';
 
 import { CourseComponent } from './course/course.component';
-import { CreateComponent } from './course/create/create.component';
-import { IndivComponent } from './course/indiv/indiv.component';
-import { EditComponent } from './course/edit/edit.component';
-import { ListComponent } from './course/list/list.component';
-import { StatusComponent } from './course/status/status.component';
+import { CourseCreateComponent } from './course/course-create/course-create.component';
+import { CourseIndivComponent } from './course/course-indiv/course-indiv.component';
+import { CourseEditComponent } from './course/course-edit/course-edit.component';
+import { CourseListComponent } from './course/course-list/course-list.component';
+import { CourseScenarioComponent } from './course/course-scenario/course-scenario.component';
 
 import { StudentListComponent } from './student/student-list/student-list.component';
 import { StudentIndivComponent } from './student/student-indiv/student-indiv.component';
@@ -32,11 +32,11 @@ import { StudentService } from './student/student.service';
     AdminHomeComponent,
     NotAuthComponent,
     CourseComponent,
-    CreateComponent,
-    IndivComponent,
-    EditComponent,
-    ListComponent,
-    StatusComponent,
+    CourseCreateComponent,
+    CourseIndivComponent,
+    CourseEditComponent,
+    CourseListComponent,
+    CourseScenarioComponent,
     StudentListComponent,
     StudentIndivComponent,
     StudentFridgeComponent,

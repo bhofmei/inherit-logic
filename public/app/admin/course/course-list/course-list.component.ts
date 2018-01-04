@@ -5,10 +5,10 @@ import { CourseService } from '../course.service';
 import { Course } from '../../../interfaces/course.interface';
 
 @Component({
-    selector: 'course-list',
-    templateUrl: './app/admin/course/list/list.template.html'
+    selector: 'course-list-cmp',
+    templateUrl: './app/admin/course/course-list/course-list.template.html'
 })
-export class ListComponent implements OnInit, OnDestroy{
+export class CourseListComponent implements OnInit, OnDestroy{
     private courses: Course[];
   private subscription: Subscription;
 

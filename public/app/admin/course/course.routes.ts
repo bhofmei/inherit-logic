@@ -1,29 +1,29 @@
 import { Routes } from '@angular/router';
 
 import { CourseComponent } from './course.component';
-import { CreateComponent } from './create/create.component';
-import { IndivComponent } from './indiv/indiv.component';
-import { EditComponent } from './edit/edit.component';
-import { ListComponent } from './list/list.component';
-import { StatusComponent } from './status/status.component';
+import { CourseCreateComponent } from './course-create/course-create.component';
+import { CourseIndivComponent } from './course-indiv/course-indiv.component';
+import { CourseEditComponent } from './course-edit/course-edit.component';
+import { CourseListComponent } from './course-list/course-list.component';
+import { CourseScenarioComponent } from './course-scenario/course-scenario.component';
 
 export const CourseRoutes: Routes = [
   {
     path: 'create',
-    component: CreateComponent
+    component: CourseCreateComponent
   },
   { path: ':courseNum',
-    component: IndivComponent
+    component: CourseIndivComponent
   },
   { path: ':courseNum/edit',
-    component: EditComponent
+    component: CourseEditComponent
   },
   {
     path: ':courseNum/:scenId',
-    component: StatusComponent
+    component: CourseScenarioComponent
   },
   {
     path: '',
-    component: ListComponent
+    component: CourseListComponent
   }
 ];

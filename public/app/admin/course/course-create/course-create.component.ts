@@ -6,11 +6,11 @@ import { CourseService } from '../course.service';
 
 @Component({
   selector: 'course-create-cmp',
-  templateUrl: 'app/admin/course/create/create.template.html',
-  styleUrls: ['app/admin/course/create/create.style.css']
+  templateUrl: 'app/admin/course/course-create/course-create.template.html',
+  styleUrls: ['app/admin/course/course-create/course-create.style.css']
 })
 
-export class CreateComponent {
+export class CourseCreateComponent {
   private errorMessage: string = '';
   private subscription: Subscription;
   private courseDetails: any = {};
@@ -29,8 +29,6 @@ export class CreateComponent {
       this.subscription = this._courseService
       .createCourse(this.courseDetails)
     .subscribe( (result)=>{
-        console.log(result);
-      // success
       this._router.navigate(['../', result.courseNum], {relativeTo: this._route})
     }, (err)=>{
       this.errorMessage = err.error.message;

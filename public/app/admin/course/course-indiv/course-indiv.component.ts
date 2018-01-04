@@ -1,25 +1,23 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil'
 
 import { CourseService } from '../course.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
-//import { AuthenticationService } from '../../../authentication/authentication.service';
 
 import { Course } from '../../../interfaces/course.interface';
 import { Student } from '../../../interfaces/student.interface';
 import { Scenario } from '../../../interfaces/scenario.interface';
 
 @Component({
-  selector: 'course-indiv',
-  templateUrl: 'app/admin/course/indiv/indiv.template.html',
-  styleUrls: ['app/admin/course/indiv/indiv.style.css']
+  selector: 'course-indiv-cmp',
+  templateUrl: 'app/admin/course/course-indiv/course-indiv.template.html',
+  styleUrls: ['app/admin/course/course-indiv/course-indiv.style.css']
 })
 
-export class IndivComponent{
+export class CourseIndivComponent{
 
   private students: Student[] = [];
   private courseInfo: Course;

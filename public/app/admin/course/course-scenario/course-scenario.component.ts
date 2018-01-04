@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil'
 
@@ -14,12 +13,12 @@ import { Student } from '../../../interfaces/student.interface';
 import { Scenario } from '../../../interfaces/scenario.interface';
 
 @Component({
-  selector: 'course-scen-status',
-  templateUrl: 'app/admin/course/status/status.template.html',
-  styleUrls: ['app/admin/course/status/status.style.css']
+  selector: 'course-scen-smp',
+  templateUrl: 'app/admin/course/course-scenario/course-scenario.template.html',
+  styleUrls: ['app/admin/course/course-scenario/course-scenario.style.css']
 })
 
-export class StatusComponent{
+export class CourseScenarioComponent{
 
   private students: Student[] = [];
   private courseNum: string;
@@ -27,7 +26,6 @@ export class StatusComponent{
   private isDestroyed$: Subject<boolean>;
   private paramObserver: any;
 
-  //private courseNum: string;
   private errorMessage: string = '';
 
   constructor(private _router: Router,
