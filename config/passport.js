@@ -29,10 +29,17 @@ module.exports = function(){
       if(!user){
         return done(null, false, {message: 'Unknown user'});
       }
-      if(!user.authenticate(password)){
+      /*if(!user.authenticate(password)){
         return done(null, false, {message: 'Invalid password'});
-      }
-      return done(null, user);
+      }*/
+      user.authenticate(password, function(err, isMatch){
+        if(err)
+          return done(err)
+        else if(!isMatch)
+          return done(null, false, {message: 'Invalid password'});
+        return done(null, user);
+      })
+
     });
   }));
 }
