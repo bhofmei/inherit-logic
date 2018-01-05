@@ -19,6 +19,7 @@ export class SignupComponent implements OnDestroy {
   private courses: string[] = [];
     user: any = {};
   private isDestroyed$: Subject<boolean>;
+  private cPassword: string;
 
     constructor(private _authenticationService: AuthenticationService,
                  private _courseService: CourseService,
@@ -46,8 +47,11 @@ export class SignupComponent implements OnDestroy {
   }
 
     signup() {
+      console.log(this.user.password, this.cPassword);
       if(this.user.course === undefined){
         this.errorMessage = 'Select a course'
+      } else if(this.user.password !== this.cPassword){
+        this.errorMessage = 'Passwords must match'
       } else {
           this._authenticationService
           .signup(this.user)

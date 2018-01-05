@@ -19,18 +19,28 @@
   z-index: 2;
 }
 
-.form-signup input,
-.form-signup select
+.form-signup input.form-top,
+.form-signup input.form-middle,
+.form-signup select.form-middle
 {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
+.form-signup input.form-bottom,
+.form-signup input.form-middle,
+.form-signup select.form-middle
+{
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
 .form-signup input[type="text"],
 .form-signup input[type="email"],
+.form-signup input[type="password"]
 .form-signup select {
   margin-bottom: -1px;
 }
-.form-signup input[type="password"] {
+.form-signup input[type="password"]#confirmPassword {
   margin-bottom: 10px;
 }
