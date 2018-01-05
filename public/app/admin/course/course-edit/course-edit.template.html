@@ -1,12 +1,36 @@
 <div class="container-fluid">
   <div *ngIf="courseInfo" id="course-info">
-    <h4 class="">{{ courseInfo.courseNum }}</h4>
+    <h4 class="row">{{ courseInfo.courseNum }}</h4>
+
+    <div id="currInstructors">
+      <div class="text-secondary d-block">
+        Instructors
+      </div>
+      <div class="list-group">
+        <div *ngFor="let instr of courseInfo.instructors" class="ml-2">{{ instr.firstName }} {{ instr.lastName }}</div>
+      </div>
+    </div>
+
+    <div id="addInstructor">
+      <div class="text-secondary d-block">
+        Add Instructor
+      </div>
+      <div class="input-group input-group-sm">
+        <select class="form-control" [(ngModel)]="selectedAdd" name="addInstr">
+        <option value="undefined" disabled>Instructor to add</option>
+        <option *ngFor="let instr of possibleInstr" [value]="instr.userId">{{formatName (instr.firstName, instr.lastName) }}</option>
+      </select>
+        <div class="input-group-append">
+          <button class="btn btn-secondary" (click)="addInstructor()">Add</button>
+        </div>
+      </div>
+    </div>
 
     <form (ngSubmit)="update()">
       <div class="text-secondary d-block">
         Description
       </div>
-      <textarea type="text" id="desc-input" [(ngModel)]="courseInfo.description" placeholder="Course description" name="description"></textarea>
+      <textarea type="text" id="desc-input" class="form-control" [(ngModel)]="courseInfo.description" placeholder="Course description" name="description"></textarea>
 
       <button class="btn btn-primary" type="submit">Submit</button>
     </form>

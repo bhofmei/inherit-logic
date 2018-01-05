@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Course } from '../../interfaces/course.interface';
-import { Student } from '../../interfaces/student.interface';
+import { Student, AdminStudent } from '../../interfaces/student.interface';
 
 @Injectable()
 export class CourseService {
@@ -55,6 +55,16 @@ export class CourseService {
   getStudents(courseNum: string): Observable<any>{
     return this._http
       .get(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}/students`);
+  }
+
+  getPossibleInstructors(courseNum: string): Observable<AdminStudent[]>{
+    return this._http
+      .get<AdminStudent[]>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}/instructors`);
+  };
+
+  addInstructor(courseNum: string, newInstrId: number): Observable<Course> {
+    return this._http
+      .post<Course>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}/instructors/${newInstrId}`, {instructor: true})
   }
 
   /*editCourse(userId: number, courseNum: string, body: any): Observable<any>{

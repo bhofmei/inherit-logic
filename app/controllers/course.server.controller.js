@@ -25,7 +25,7 @@ exports.isInstructor = function (req, res, next) {
         message: 'Not instructor of this course'
       });
   } else {
-  next();
+    next();
   }
 }
 
@@ -62,12 +62,18 @@ exports.listCourses = function (req, res) {
   });
 };
 
-exports.listCourseNum = function(req, res){
-  Course.find({}, 'courseNum id', (err, courses)=>{
-    if(err){
-      return res.status(500).send({message: getErrorMessage(err)})
-    } else if (!courses){
-      return res.status(404).send({message: 'No courses found'})
+exports.listCourseNum = function (req, res) {
+  Course.find({}, 'courseNum id', (err, courses) => {
+    if (err) {
+      return res.status(500)
+        .send({
+          message: getErrorMessage(err)
+        })
+    } else if (!courses) {
+      return res.status(404)
+        .send({
+          message: 'No courses found'
+        })
     } else {
       res.json(courses);
     }
@@ -156,18 +162,18 @@ exports.getStudents = function (req, res) {
   let courseId = new ObjectId(course._id);
 
   User.find({
-    course: courseId
-  }, 'name userId accessGranted email',
-            (err, students) => {
-    if (err) {
-      return res.status(500)
-        .send({
-          message: getErrorMessage(err)
-        });
-    } else {
-      res.json(students);
-    }
-  });
+      course: courseId
+    }, 'name userId accessGranted email',
+    (err, students) => {
+      if (err) {
+        return res.status(500)
+          .send({
+            message: getErrorMessage(err)
+          });
+      } else {
+        res.json(students);
+      }
+    });
 };
 
 /**
@@ -189,6 +195,45 @@ exports.deleteCourseStudents = function (req, res) {
   });
 };
 
+exports.getPossibleInstructors = function (req, res) {
+  let admin = req.user;
+  let courseId = new ObjectId(req.course._id);
+
+  let currInstr = req.course.instructors.map((elm)=>{
+    return elm.userId;
+  });
+
+  let queryBuilder;
+
+  // if admin, get all users
+  if (admin.role === 'admin') {
+    queryBuilder = User.find({});
+  } else {
+    // instr -> get other instr and students in course
+    queryBuilder = User.find({})
+      .or([{
+        role: 'instr'
+      }, {
+        course: courseId
+      }])
+  }
+  queryBuilder.select('userId firstName lastName role')
+    .populate('course', 'courseNum')
+    .exec((err, users) => {
+      if (err) {
+        return res.status(500)
+          .send({
+            message: err
+          })
+      } else {
+        let out = users.filter((elm)=>{
+          return currInstr.indexOf(elm.userId) === -1;
+        })
+        res.json(out);
+      }
+    });
+}
+
 /**
  * add an instuctor to the course
  */
@@ -197,7 +242,7 @@ exports.setInstructor = function (req, res) {
   let course = req.course;
 
   // just return
-  if(req.body.instructor !== true){
+  if (req.body.instructor !== true) {
     return res.json(course);
   }
 
@@ -267,7 +312,8 @@ exports.getScenarioStatus = function (req, res) {
 exports.courseByNum = function (req, res, next, id) {
   Course.findOne({
     courseNum: id
-  }, (err, course) => {
+  }).populate('instructors', 'firstName lastName userId')
+    .exec((err, course) => {
     if (err) {
       return next(err);
     }

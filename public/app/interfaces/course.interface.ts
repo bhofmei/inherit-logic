@@ -4,4 +4,5 @@ export interface Course {
   courseNum: string;
   description: string;
   students?: [Student];
+  instructors?: [any]
 }

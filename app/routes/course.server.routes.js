@@ -21,7 +21,10 @@ module.exports = function (app) {
     .get(admin.hasAuthorization, course.isInstructor, course.getStudents)
     .delete(admin.isAdmin, course.deleteCourseStudents);
 
-  app.route('/api/admin/:userId/courses/:courseNum/students/:studentId')
+  app.route('/api/admin/:userId/courses/:courseNum/instructors')
+    .get(admin.hasAuthorization, course.isInstructor, course.getPossibleInstructors)
+
+  app.route('/api/admin/:userId/courses/:courseNum/instructors/:studentId')
     .post(admin.hasAuthorization, course.isInstructor, course.setInstructor)
 
   app.route('/api/admin/:userId/courses/:courseNum/:scenarioId')
