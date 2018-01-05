@@ -96,6 +96,7 @@ let AuthenticationService = class AuthenticationService {
     }
     setUser(user) {
         //this._user.next(user);
+        console.log(user);
         this._user2 = user;
     }
     getUser() {
@@ -2072,6 +2073,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const student_service_1 = __webpack_require__(69);
+const student_interface_1 = __webpack_require__(872);
 let StudentListComponent = class StudentListComponent {
     constructor(_studentService) {
         this._studentService = _studentService;
@@ -2080,10 +2082,18 @@ let StudentListComponent = class StudentListComponent {
     ngOnInit() {
         this.subscription = this._studentService.listStudents()
             .subscribe((students) => {
-            this.students = students;
+            this.students = students.sort(student_interface_1.sortStudents);
         }, (err) => {
             this.errorMessage = err.error.message;
         });
+    }
+    formatName(firstName, lastName) {
+        let outStr = lastName;
+        if (firstName !== '' && lastName !== '') {
+            outStr += ', ';
+        }
+        outStr += firstName;
+        return outStr;
     }
     ngOnDestroy() {
         if (this.subscription)
@@ -2123,7 +2133,7 @@ const Subject_1 = __webpack_require__(8);
 __webpack_require__(38);
 const student_service_1 = __webpack_require__(69);
 const scenario_service_1 = __webpack_require__(39);
-const student_roles_1 = __webpack_require__(872);
+const student_roles_1 = __webpack_require__(873);
 let StudentIndivComponent = class StudentIndivComponent {
     constructor(_router, _route, _studentService, _scenarioService) {
         this._router = _router;
@@ -2703,7 +2713,7 @@ const authentication_module_1 = __webpack_require__(860);
 const article_module_1 = __webpack_require__(862);
 const scenario_module_1 = __webpack_require__(864);
 const admin_module_1 = __webpack_require__(868);
-const nav_component_1 = __webpack_require__(875);
+const nav_component_1 = __webpack_require__(876);
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -3324,7 +3334,7 @@ const admin_route_module_1 = __webpack_require__(869);
 const admin_component_1 = __webpack_require__(410);
 const admin_home_component_1 = __webpack_require__(411);
 const not_auth_component_1 = __webpack_require__(412);
-const course_component_1 = __webpack_require__(873);
+const course_component_1 = __webpack_require__(874);
 const course_create_component_1 = __webpack_require__(402);
 const course_indiv_component_1 = __webpack_require__(403);
 const course_edit_component_1 = __webpack_require__(404);
@@ -3333,7 +3343,7 @@ const course_scenario_component_1 = __webpack_require__(406);
 const student_list_component_1 = __webpack_require__(407);
 const student_indiv_component_1 = __webpack_require__(408);
 const student_fridge_component_1 = __webpack_require__(409);
-const student_phage_component_1 = __webpack_require__(874);
+const student_phage_component_1 = __webpack_require__(875);
 const admin_guard_service_1 = __webpack_require__(401);
 const student_service_1 = __webpack_require__(69);
 let AdminModule = class AdminModule {
@@ -3502,6 +3512,23 @@ exports.StudentRoutes = [
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.sortStudents = function (a, b) {
+    var comparison = a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase());
+    if (comparison === 0) {
+        return a.firstName.toLowerCase().localeCompare(b.firstName.toLowerCase());
+    }
+    return comparison;
+};
+
+
+/***/ }),
+
+/***/ 873:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.StudentRolesArray = [
     {
         key: 'student',
@@ -3521,7 +3548,7 @@ exports.StudentRolesArray = [
 
 /***/ }),
 
-/***/ 873:
+/***/ 874:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3548,7 +3575,7 @@ exports.CourseComponent = CourseComponent;
 
 /***/ }),
 
-/***/ 874:
+/***/ 875:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3597,7 +3624,7 @@ exports.StudentPhageComponent = StudentPhageComponent;
 
 /***/ }),
 
-/***/ 875:
+/***/ 876:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -109,7 +109,6 @@ exports.signup = function (req, res) {
       let userInfo = getUserInfo(user);
       // Remove sensitive data before login
       user.password = undefined;
-      user.salt = undefined;
 
       req.login(user, function (err) {
         if (err) {
@@ -149,7 +148,7 @@ exports.grantAccess = function (req, res) {
             message: getErrorMessage(err)
           });
       }
-
+      updated.password = undefined;
       res.json(updated);
     });
   } else {
@@ -181,6 +180,7 @@ exports.userById = function (req, res, next, id) {
     else if (!user) return next(new Error('User not found'));
     // if user found -> next middleware
     // if req has user specified, use user prop
+    user.password = undefined;
     if (req.user) {
       req.student = user;
     } else {

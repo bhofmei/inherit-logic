@@ -14,7 +14,8 @@ const UserSchema = new Schema({
     index: true,
     min: 1
   },
-  name: String,
+  firstName: String,
+  lastName: String,
   email: {
     type: String,
     //index: true,
@@ -74,6 +75,15 @@ UserSchema.pre('save', function(next){
 UserSchema.methods.hashPassword = function(password){
   return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
 };
+
+UserSchema.virtual('name').get(function () {
+  let outStr = this.firstName;
+  if(this.firstName !== '' || this.lastName !== ''){
+    outStr += ' '
+  }
+  outStr += this.lastName
+  return outStr;
+});
 
 UserSchema.set('toJSON',{getters: true, virtuals: true});
 

@@ -1,7 +1,10 @@
 <form (ngSubmit)="signup()" class="form-signup">
   <h2 class="form-signup-heading">Sign up now</h2>
-  <label for="inputName" class="sr-only">Name</label>
-  <input type="text" id="inputName" class="form-control" required autofocus placeholder="Name" [(ngModel)]="user.name" name="name">
+  <label for="inputFirstName" class="sr-only">First name</label>
+  <input type="text" id="inputFirstName" class="form-control" required autofocus placeholder="First Name" [(ngModel)]="user.firstName" name="firstName">
+
+  <label for="inputLastName" class="sr-only">Last name</label>
+  <input type="text" id="inputLastName" class="form-control" required autofocus placeholder="Last Name" [(ngModel)]="user.lastName" name="lastName">
 
   <label for="inputCourse" class="sr-only">Course</label>
   <select class="form-control" [(ngModel)]="user.course" name="course" placeholder="Select a course">
