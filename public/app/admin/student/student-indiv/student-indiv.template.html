@@ -10,20 +10,34 @@
         </h4>
       </div>
 
-      <div class="row mb-2" id="student-email">
+      <div class="row mt-2" id="student-email">
         <!--<a [routerLink]="['mailto:', student.email]">{{ student.email }}</a>-->
-        {{ student.email }}
+        <div class="col-6 col-md-4 col-xl-2">
+          Email
+        </div>
+        <div class="col-6 col-md-8 col-xl-10 text-secondary">{{ student.email }}</div>
       </div>
 
-      <div class="row text-secondary mb-3" id="student-desc">
-        {{ getStudentDesc() }}
+      <div *ngIf="student.role==='student' || student.course" class="row" id="student-desc">
+        <div class="col-6 col-md-4 col-xl-2">
+          Course
+        </div>
+        <div class="col-6 col-md-8 col-xl-10 text-secondary">
+          <a *ngIf="student.course" [routerLink]="['/admin/courses', student.course.courseNum]" class="text-secondary">{{ student.course.courseNum }}</a>
+          <div *ngIf="student.course===undefined">No course</div>
+        </div>
+      </div>
+
+      <div class="row mb-2" id="student-role">
+        <div class="col-6 col-md-4 col-xl-2">Role</div>
+        <div class="btn-group col-6 col-md-8 col-xl-10">
+          <button *ngFor="let role of roles" [disabled]="roleDisabled(role.key)" [ngClass]="roleButtonClass(role.key)" (click)="newRole=role.key">
+          {{ role.label }}
+        </button>
+        </div>
       </div>
     </div>
     <!-- end student info -->
-
-    <div id="student-toolbar">
-
-    </div>
 
     <div id="student-scenarios">
       <h5>Scenarios</h5>

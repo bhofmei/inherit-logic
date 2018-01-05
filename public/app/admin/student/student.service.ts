@@ -50,10 +50,16 @@ export class StudentService {
             .get<AdminStudent>(`${this._baseURL}/${this.getAdmin()}/students/${studentId}`);
   }
 
-  setUserRole(userId: number, studentId: number, role: string): Observable<any>{
+  /*setUserRole(userId: number, studentId: number, role: string): Observable<any>{
     let body = {role: role};
     return this._http
             .post(`${this._baseURL}/${userId}/users/${studentId}`, body);
+  }*/
+
+  setStudentRole(studentId: number, role: string): Observable<any>{
+    let body = {role: role};
+    return this._http
+            .post(`${this._baseURL}/${this.getAdmin()}/students/${studentId}`, body);
   }
 
   deleteUser(userId: number, studentId: number): Observable<any>{

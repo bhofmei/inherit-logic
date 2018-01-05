@@ -7,7 +7,9 @@ import 'rxjs/add/operator/takeUntil'
 
 import { StudentService } from '../student.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
+import { StudentRolesArray } from '../student.roles';
 
+import { User } from '../../../interfaces/user.interface';
 import { Course } from '../../../interfaces/course.interface';
 import { AdminStudent } from '../../../interfaces/student.interface';
 import { Scenario } from '../../../interfaces/scenario.interface';
@@ -24,6 +26,9 @@ export class StudentIndivComponent{
   private scenarios: Scenario[];
   private isDestroyed$: Subject<boolean>;
   private paramObserver: any;
+  private _admin: any;
+  private roles = StudentRolesArray;
+  private newRole: string;
 
   //private courseNum: string;
   private errorMessage: string = '';
@@ -43,10 +48,15 @@ export class StudentIndivComponent{
         .takeUntil(this.isDestroyed$)
               .subscribe((info) => {
               this.student = info;
+              this.newRole = this.student.role;
               this._scenarioService.listScenarios()
                   .takeUntil(this.isDestroyed$)
                   .subscribe((scens)=>{
                     this.scenarios = scens;
+                  this._admin = {
+                    id: this._studentService.getAdmin(),
+                    role: this._studentService.getAdminRole()
+                  };
                 });
             },
                 (error) => {
@@ -67,17 +77,13 @@ export class StudentIndivComponent{
     }
   }
 
-  getStudentDesc(){
+  getStudentCourse(){
     let s: AdminStudent = this.student;
-    if(s.role === 'student'){
       if(s.course){
-        return s.course.courseNum;
+        return '<a [routlerLink]="[\'/admin/courses/\', "' + s.course.courseNum + ']">s.course.courseNum</a>';
       } else {
         return 'No course';
       }
-    } else {
-      return s.role;
-    }
   }
 
   accessButtonClass( scenCode: string ): Object{
@@ -107,22 +113,47 @@ export class StudentIndivComponent{
     });
   }
 
-  /*grantAccess(scenCode: string){
-    this._studentService.grantScenAccess(this.student.userId, scenCode)
-      .takeUntil(this.isDestroyed$)
-      .subscribe((res)=>{
-        if(res!==undefined && res !== null){
-          this.student.accessGranted[scenCode] = res.accessGranted[scenCode];
-        }
+  roleDisabled(src: string){
+    if(this._admin === undefined){
+      return false
+    } else if(this.student.userId === this._admin.id ){
+      return true;
+    } else if(src==='admin' && this._admin.role < 2){
+      return true;
+    } else if (src === 'instr' && this._admin.role < 1){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  roleButtonClass(src: string): Object{
+    return {
+      'btn btn-sm': true,
+      'btn-outline-secondary': src !== this.newRole,
+      'btn-secondary': src === this.newRole
+    }
+  }
+
+  ngOnDestroy(){
+    // update role is necessary
+    if(this.student.role !== this.newRole){
+      this._studentService
+        .setStudentRole(this.student.userId, this.newRole)
+        .takeUntil(this.isDestroyed$)
+        .subscribe((res)=>{
+        this.paramObserver.unsubscribe();
+        this.isDestroyed$.next(true);
+        this.isDestroyed$.unsubscribe();
     }, (err)=>{
       this.errorMessage = err.error.message;
     });
-  }*/
+    } else {
+      this.paramObserver.unsubscribe();
+        this.isDestroyed$.next(true);
+        this.isDestroyed$.unsubscribe();
+    }
 
-  ngOnDestroy(){
-    this.paramObserver.unsubscribe();
-    this.isDestroyed$.next(true);
-    this.isDestroyed$.unsubscribe();
   }
 
 }
