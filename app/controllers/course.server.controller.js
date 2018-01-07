@@ -163,7 +163,7 @@ exports.getStudents = function (req, res) {
 
   User.find({
       course: courseId
-    }, 'name userId accessGranted email',
+    }, 'firstName lastName userId accessGranted email',
     (err, students) => {
       if (err) {
         return res.status(500)
