@@ -263,8 +263,12 @@ let SignupComponent = class SignupComponent {
         });
     }
     signup() {
+        console.log(this.user.password, this.cPassword);
         if (this.user.course === undefined) {
             this.errorMessage = 'Select a course';
+        }
+        else if (this.user.password !== this.cPassword) {
+            this.errorMessage = 'Passwords must match';
         }
         else {
             this._authenticationService
@@ -1859,7 +1863,6 @@ let CourseEditComponent = class CourseEditComponent {
                 .takeUntil(this.isDestroyed$)
                 .subscribe((info) => {
                 this.courseInfo = info;
-                console.log(info);
                 this._courseService.getPossibleInstructors(course)
                     .takeUntil(this.isDestroyed$)
                     .subscribe((instrs) => {

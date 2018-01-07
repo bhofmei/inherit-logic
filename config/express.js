@@ -12,9 +12,11 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
+const gracefulExit = require('express-graceful-exit');
 
 module.exports = function(db){
   const app = express();
+  app.use(gracefulExit.middleware(app));
   const server = http.createServer(app);
 
   if(process.env.NODE_ENV === 'development'){

@@ -1616,6 +1616,12 @@ expand-range@^1.8.1:
   dependencies:
     fill-range "^2.1.0"
 
+express-graceful-exit@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/express-graceful-exit/-/express-graceful-exit-0.4.0.tgz#c0143cc698f9dbd0f1284a1ca2433f049f83c4f3"
+  dependencies:
+    underscore "^1.4.4"
+
 express-session@^1.14.1:
   version "1.15.6"
   resolved "https://registry.yarnpkg.com/express-session/-/express-session-1.15.6.tgz#47b4160c88f42ab70fe8a508e31cbff76757ab0a"
@@ -4664,6 +4670,10 @@ uid-safe@~2.1.5:
 uid2@0.0.x:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/uid2/-/uid2-0.0.3.tgz#483126e11774df2f71b8b639dcd799c376162b82"
+
+underscore@^1.4.4:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.8.3.tgz#4f3fb53b106e6097fcf9cb4109f2a5e9bdfa5022"
 
 union-value@^1.0.0:
   version "1.0.0"
