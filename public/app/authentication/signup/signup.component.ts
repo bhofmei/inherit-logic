@@ -47,7 +47,6 @@ export class SignupComponent implements OnDestroy {
   }
 
     signup() {
-      console.log(this.user.password, this.cPassword);
       if(this.user.course === undefined){
         this.errorMessage = 'Select a course'
       } else if(this.user.password !== this.cPassword){
