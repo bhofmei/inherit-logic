@@ -8,7 +8,7 @@ import { CourseService } from '../course.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
 
 import { Course } from '../../../interfaces/course.interface';
-import { Student } from '../../../interfaces/student.interface';
+import { Student, sortStudents } from '../../../interfaces/student.interface';
 import { Scenario } from '../../../interfaces/scenario.interface';
 
 @Component({
@@ -46,7 +46,7 @@ export class CourseIndivComponent{
               this._courseService.getStudents(course)
               .takeUntil(this.isDestroyed$)
               .subscribe((students)=>{
-                this.students = students;
+                this.students = students.sort(sortStudents);
                 this._scenarioService.listScenarios()
                   .takeUntil(this.isDestroyed$)
                   .subscribe((scens)=>{
