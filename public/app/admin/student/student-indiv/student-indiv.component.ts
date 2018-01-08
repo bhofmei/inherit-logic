@@ -130,29 +130,25 @@ export class StudentIndivComponent{
   roleButtonClass(src: string): Object{
     return {
       'btn btn-sm': true,
-      'btn-outline-secondary': src !== this.newRole,
-      'btn-secondary': src === this.newRole
+      'btn-outline-secondary': src !== this.student.role,
+      'btn-secondary': src === this.student.role
     }
   }
 
-  ngOnDestroy(){
-    // update role is necessary
-    if(this.student.role !== this.newRole){
-      this._studentService
-        .setStudentRole(this.student.userId, this.newRole)
-        .takeUntil(this.isDestroyed$)
-        .subscribe((res)=>{
-        this.paramObserver.unsubscribe();
-        this.isDestroyed$.next(true);
-        this.isDestroyed$.unsubscribe();
+  clickButton(src: string) {
+    this._studentService.setStudentRole(this.student.userId, src)
+      .takeUntil(this.isDestroyed$)
+      .subscribe((res)=>{
+        this.student = res;
     }, (err)=>{
       this.errorMessage = err.error.message;
     });
-    } else {
+  }
+
+  ngOnDestroy(){
       this.paramObserver.unsubscribe();
         this.isDestroyed$.next(true);
         this.isDestroyed$.unsubscribe();
-    }
 
   }
 

@@ -136,21 +136,16 @@ exports.deleteUser = function (req, res) {
 
 exports.setRole = function (req, res) {
   let body = req.body; // includes role
-  // admin is user, user to grant access is student
-  let student = req.student;
-  if (student.role !== body.role) {
-    student.role = body.role;
-    student.save((err) => {
-      if (err) {
-        return res.status(500)
-          .send({
-            message: getErrorMessage(err)
-          });
+  User.findOneAndUpdate(
+    {userId: student.userId},
+    {role: body.role},
+    {new: true},
+    (err, result)=>{
+      if(err){
+        return res.status(500).send({message: getErrorMessage(err)});
       } else {
-        res.json(student);
+        res.json(result);
       }
-    });
-  } else {
-    res.json(student);
-  }
+    }
+  );
 };
