@@ -2815,6 +2815,7 @@ const course_service_1 = __webpack_require__(55);
 const admin_module_1 = __webpack_require__(862);
 const authentication_module_1 = __webpack_require__(869);
 const article_module_1 = __webpack_require__(871);
+const help_module_1 = __webpack_require__(881);
 const home_module_1 = __webpack_require__(873);
 const scenario_module_1 = __webpack_require__(875);
 const nav_component_1 = __webpack_require__(879);
@@ -2827,6 +2828,7 @@ AppModule = __decorate([
             http_1.HttpClientModule,
             forms_1.FormsModule,
             home_module_1.HomeModule,
+            help_module_1.HelpModule,
             admin_module_1.AdminModule,
             authentication_module_1.AuthenticationModule,
             article_module_1.ArticleModule,
@@ -3875,6 +3877,110 @@ ArticleService = __decorate([
     __metadata("design:paramtypes", [http_1.HttpClient])
 ], ArticleService);
 exports.ArticleService = ArticleService;
+
+
+/***/ }),
+
+/***/ 880:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+let HelpComponent = class HelpComponent {
+    constructor() { }
+};
+HelpComponent = __decorate([
+    core_1.Component({
+        selector: 'help-cmp',
+        templateUrl: 'app/help/help.template.html',
+        styleUrls: ['app/help/help.style.css']
+    }),
+    __metadata("design:paramtypes", [])
+], HelpComponent);
+exports.HelpComponent = HelpComponent;
+
+
+/***/ }),
+
+/***/ 881:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const shared_module_1 = __webpack_require__(181);
+const help_route_module_1 = __webpack_require__(882);
+const help_component_1 = __webpack_require__(880);
+let HelpModule = class HelpModule {
+};
+HelpModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            shared_module_1.SharedModule,
+            help_route_module_1.HelpRouteModule
+        ],
+        declarations: [
+            help_component_1.HelpComponent
+        ]
+    })
+], HelpModule);
+exports.HelpModule = HelpModule;
+
+
+/***/ }),
+
+/***/ 882:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const router_1 = __webpack_require__(11);
+const help_component_1 = __webpack_require__(880);
+const helpRoute = [
+    {
+        path: 'help',
+        component: help_component_1.HelpComponent
+    }
+];
+let HelpRouteModule = class HelpRouteModule {
+};
+HelpRouteModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            router_1.RouterModule.forChild(helpRoute)
+        ],
+        exports: [
+            router_1.RouterModule
+        ]
+    })
+], HelpRouteModule);
+exports.HelpRouteModule = HelpRouteModule;
 
 
 /***/ })

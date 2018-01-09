@@ -17,6 +17,7 @@ import { CourseService } from './admin/course/course.service';
 import { AdminModule } from './admin/admin.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ArticleModule } from './articles/article.module';
+import { HelpModule } from './help/help.module';
 import { HomeModule } from './home/home.module';
 import { ScenarioModule } from './scenario/scenario.module';
 
@@ -28,6 +29,7 @@ import { NavComponent } from './nav/nav.component';
         HttpClientModule,
         FormsModule,
       HomeModule,
+      HelpModule,
       AdminModule,
         AuthenticationModule,
         ArticleModule,
