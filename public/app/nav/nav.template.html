@@ -1,13 +1,34 @@
-<nav class="navbar navbar-fixed-top navbar-dark bg-dark">
-  <div class="container">
+<!--<nav class="navbar navbar-fixed-top navbar-dark bg-dark">
+  <a class="navbar-brand" routerLink="/">
+    <img src="img/cricket-icon.png" width="20px" height="20px" class="d-inline-block">
+    Cricket
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapsed" aria-controls="navbarCollapsed" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-        <a class="navbar-brand" routerLink="/">
-          <img src="img/cricket-icon.png" width="20px" height="20px" class="d-inline-block">Cricket</a>
-        <!--<ul class="nav navbar-nav">
-            <li class="nav-item"><a class="nav-link" routerLink="/">Home</a></li>
-            <li *ngIf="user" class="nav-item"><a href="api/auth/signout" class="nav-link">Sign out</a></li>
-          <li *ngIf="!user" class="nav-item"><a class="nav-link" routerLink="authentication/signin">Sign in</a></li>
-          <li *ngIf="!user" class="nav-item"><a class="nav-link" routerLink="authentication/signup">Sign up</a></li>
-        </ul>-->
-    </div>
+  <div class="collapsed navbar-collapsed" id="navbarCollapsed">
+    <ul class="nav navbar-nav navbar-right mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="scenarios">Scenarios</a>
+      </li>
+    </ul>
+  </div>
+</nav>-->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <a class="navbar-brand" routerLink="/">
+    <img src="img/cricket-icon.png" width="30px" height="30px" class="d-inline-block">
+    Cricket
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav navbar-right ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="scenarios">Scenarios</a>
+      </li>
+    </ul>
+  </div>
 </nav>
