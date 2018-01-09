@@ -3374,7 +3374,7 @@ const router_1 = __webpack_require__(11);
 const home_component_1 = __webpack_require__(405);
 const homeRoute = [
     {
-        path: 'home',
+        path: '',
         component: home_component_1.HomeComponent
     }
 ];
@@ -3473,7 +3473,7 @@ const list_component_1 = __webpack_require__(407);
 const location_routes_1 = __webpack_require__(877);
 const scenarioRoutes = [
     {
-        path: '',
+        path: 'scenarios',
         //component: ScenarioComponent,
         children: [
             {

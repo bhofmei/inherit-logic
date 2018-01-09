@@ -3,6 +3,10 @@
   font-weight: 500;
 }
 
+#home-jumbotron{
+  padding-bottom: 2em;
+}
+
 #home-jumbotron h2{
   font-weight: bold;
 }

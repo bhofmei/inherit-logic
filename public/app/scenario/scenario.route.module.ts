@@ -7,7 +7,7 @@ import { ListComponent } from './list/list.component';
 import { LocationRoutes } from './location/location.routes';
 const scenarioRoutes: Routes = [
   {
-    path: '',
+    path: 'scenarios',
     //component: ScenarioComponent,
     children: [
       {
