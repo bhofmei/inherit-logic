@@ -32,6 +32,63 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const common_1 = __webpack_require__(16);
+const forms_1 = __webpack_require__(25);
+const ng2_dnd_1 = __webpack_require__(384);
+const ng_bootstrap_1 = __webpack_require__(115);
+let SharedModule = class SharedModule {
+};
+SharedModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            common_1.CommonModule,
+            forms_1.FormsModule,
+            ng2_dnd_1.DndModule.forRoot(),
+            ng_bootstrap_1.NgbModule.forRoot()
+        ],
+        exports: [
+            common_1.CommonModule,
+            forms_1.FormsModule,
+            ng2_dnd_1.DndModule,
+            ng_bootstrap_1.NgbModule
+        ],
+    })
+], SharedModule);
+exports.SharedModule = SharedModule;
+
+
+/***/ }),
+
+/***/ 182:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sortStudents = function (a, b) {
+    var comparison = a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase());
+    if (comparison === 0) {
+        return a.firstName.toLowerCase().localeCompare(b.firstName.toLowerCase());
+    }
+    return comparison;
+};
+
+
+/***/ }),
+
+/***/ 183:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
@@ -68,24 +125,7 @@ exports.ExperimentService = ExperimentService;
 
 /***/ }),
 
-/***/ 182:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.sortStudents = function (a, b) {
-    var comparison = a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase());
-    if (comparison === 0) {
-        return a.firstName.toLowerCase().localeCompare(b.firstName.toLowerCase());
-    }
-    return comparison;
-};
-
-
-/***/ }),
-
-/***/ 34:
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -149,32 +189,6 @@ exports.AuthenticationService = AuthenticationService;
 
 /***/ }),
 
-/***/ 384:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-let AuthenticationComponent = class AuthenticationComponent {
-};
-AuthenticationComponent = __decorate([
-    core_1.Component({
-        selector: 'authentication',
-        templateUrl: 'app/authentication/authentication.template.html'
-    })
-], AuthenticationComponent);
-exports.AuthenticationComponent = AuthenticationComponent;
-
-
-/***/ }),
-
 /***/ 385:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -191,41 +205,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const authentication_service_1 = __webpack_require__(34);
-let SigninComponent = class SigninComponent {
+const router_1 = __webpack_require__(11);
+const authentication_service_1 = __webpack_require__(30);
+let AdminGuard = class AdminGuard {
     constructor(_authenticationService, _router) {
         this._authenticationService = _authenticationService;
         this._router = _router;
-        this.credentials = {};
     }
-    signin() {
-        this.subscription = this._authenticationService
-            .signin(this.credentials)
-            .subscribe((result) => {
-            // TODO: update
-            this._authenticationService.setUser(result);
-            let redirect = this._authenticationService.redirectUrl ? this._authenticationService.redirectUrl : '/';
-            this._router.navigate([redirect]);
-        }, (error) => {
-            this.errorMessage = error.message;
-        });
+    canActivate(route, state) {
+        let url = state.url;
+        let isLoggedIn = this._authenticationService.isLoggedIn();
+        if (isLoggedIn)
+            return true;
+        else {
+            this._authenticationService.redirectUrl = url;
+            this._router.navigate(['authentication/signin']);
+            return false;
+        }
     }
-    ngOnDestroy() {
-        if (this.subscription)
-            this.subscription.unsubscribe();
+    canActivateChild(route, state) {
+        let url = state.url;
+        let role = this._authenticationService.canAccessAdmin();
+        if (role)
+            return true;
+        else {
+            this._authenticationService.redirectUrl = url;
+            this._router.navigate(['/admin/not-auth']);
+            return false;
+        }
     }
 };
-SigninComponent = __decorate([
-    core_1.Component({
-        selector: 'signin',
-        templateUrl: 'app/authentication/signin/signin.template.html',
-        styleUrls: ['app/authentication/signin/signin.style.css']
-    }),
-    __metadata("design:paramtypes", [authentication_service_1.AuthenticationService,
-        router_1.Router])
-], SigninComponent);
-exports.SigninComponent = SigninComponent;
+AdminGuard = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [authentication_service_1.AuthenticationService, router_1.Router])
+], AdminGuard);
+exports.AdminGuard = AdminGuard;
 
 
 /***/ }),
@@ -246,74 +260,47 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const Subject_1 = __webpack_require__(8);
-__webpack_require__(33);
-__webpack_require__(158);
-__webpack_require__(257);
-const authentication_service_1 = __webpack_require__(34);
+const router_1 = __webpack_require__(11);
 const course_service_1 = __webpack_require__(55);
-let SignupComponent = class SignupComponent {
-    constructor(_authenticationService, _courseService, _router) {
-        this._authenticationService = _authenticationService;
+let CourseCreateComponent = class CourseCreateComponent {
+    constructor(_courseService, _router, _route) {
         this._courseService = _courseService;
         this._router = _router;
-        this.courses = [];
-        this.user = {};
-        this.isDestroyed$ = new Subject_1.Subject();
+        this._route = _route;
+        this.errorMessage = '';
+        this.courseDetails = {};
     }
-    _reorderCourses(courses) {
-        let na = courses.filter((c) => { return c.courseNum === 'NA'; });
-        let other = courses.filter((c) => {
-            return c.courseNum !== 'NA';
-        });
-        return na.concat(other);
-    }
-    ngOnInit() {
-        this._courseService.getCourseList()
-            .takeUntil(this.isDestroyed$)
-            .subscribe((res) => {
-            let tmp = this._reorderCourses(res);
-            this.courses = tmp;
-        }, (err) => {
-            this.courses = [];
-        });
-    }
-    signup() {
-        if (this.user.course === undefined) {
-            this.errorMessage = 'Select a course';
-        }
-        else if (this.user.password !== this.cPassword) {
-            this.errorMessage = 'Passwords must match';
+    createCourse() {
+        //let newCourse = this.courseDetails.courseNum;
+        if (this.courseDetails.courseNum === '') {
+            this.errorMessage = 'Course number is required';
         }
         else {
-            this._authenticationService
-                .signup(this.user)
-                .takeUntil(this.isDestroyed$)
+            this.subscription = this._courseService
+                .createCourse(this.courseDetails)
                 .subscribe((result) => {
-                this._authenticationService.setUser(result);
-                this._router.navigate(['/']);
-            }, (error) => {
-                this.errorMessage = error.error.message;
+                this._router.navigate(['../', result.courseNum], { relativeTo: this._route });
+            }, (err) => {
+                this.errorMessage = err.error.message;
             });
         }
     }
-    ngOnDestroy() {
-        this.isDestroyed$.next(true);
-        this.isDestroyed$.unsubscribe();
+    ngOnDestory() {
+        if (this.subscription)
+            this.subscription.unsubscribe();
     }
 };
-SignupComponent = __decorate([
+CourseCreateComponent = __decorate([
     core_1.Component({
-        selector: 'signup',
-        templateUrl: 'app/authentication/signup/signup.template.html',
-        styleUrls: ['app/authentication/signup/signup.style.css']
+        selector: 'course-create-cmp',
+        templateUrl: 'app/admin/course/course-create/course-create.template.html',
+        styleUrls: ['app/admin/course/course-create/course-create.style.css']
     }),
-    __metadata("design:paramtypes", [authentication_service_1.AuthenticationService,
-        course_service_1.CourseService,
-        router_1.Router])
-], SignupComponent);
-exports.SignupComponent = SignupComponent;
+    __metadata("design:paramtypes", [course_service_1.CourseService,
+        router_1.Router,
+        router_1.ActivatedRoute])
+], CourseCreateComponent);
+exports.CourseCreateComponent = CourseCreateComponent;
 
 
 /***/ }),
@@ -329,19 +316,68 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const article_service_1 = __webpack_require__(88);
-let ArticleComponent = class ArticleComponent {
+const router_1 = __webpack_require__(11);
+const Subject_1 = __webpack_require__(8);
+__webpack_require__(34);
+const course_service_1 = __webpack_require__(55);
+const scenario_service_1 = __webpack_require__(39);
+const student_interface_1 = __webpack_require__(182);
+let CourseIndivComponent = class CourseIndivComponent {
+    constructor(_router, _route, _courseService, _scenarioService) {
+        this._router = _router;
+        this._route = _route;
+        this._courseService = _courseService;
+        this._scenarioService = _scenarioService;
+        this.students = [];
+        //private courseNum: string;
+        this.errorMessage = '';
+        this.isDestroyed$ = new Subject_1.Subject();
+    }
+    ngOnInit() {
+        this.paramObserver = this._route.params.subscribe(params => {
+            let course = params['courseNum'];
+            this._courseService.getCourse(course)
+                .takeUntil(this.isDestroyed$)
+                .subscribe((info) => {
+                this.courseInfo = info;
+                this._courseService.getStudents(course)
+                    .takeUntil(this.isDestroyed$)
+                    .subscribe((students) => {
+                    this.students = students.sort(student_interface_1.sortStudents);
+                    this._scenarioService.listScenarios()
+                        .takeUntil(this.isDestroyed$)
+                        .subscribe((scens) => {
+                        this.scenarios = scens;
+                    });
+                });
+            }, (error) => {
+                this.errorMessage = error.message;
+            });
+        });
+    }
+    ngOnDestroy() {
+        this.paramObserver.unsubscribe();
+        this.isDestroyed$.next(true);
+        this.isDestroyed$.unsubscribe();
+    }
 };
-ArticleComponent = __decorate([
+CourseIndivComponent = __decorate([
     core_1.Component({
-        selector: 'articles',
-        template: '<router-outlet></router-outlet>',
-        providers: [article_service_1.ArticleService]
-    })
-], ArticleComponent);
-exports.ArticleComponent = ArticleComponent;
+        selector: 'course-indiv-cmp',
+        templateUrl: 'app/admin/course/course-indiv/course-indiv.template.html',
+        styleUrls: ['app/admin/course/course-indiv/course-indiv.style.css']
+    }),
+    __metadata("design:paramtypes", [router_1.Router,
+        router_1.ActivatedRoute,
+        course_service_1.CourseService,
+        scenario_service_1.ScenarioService])
+], CourseIndivComponent);
+exports.CourseIndivComponent = CourseIndivComponent;
 
 
 /***/ }),
@@ -362,27 +398,90 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const article_service_1 = __webpack_require__(88);
-let CreateComponent = class CreateComponent {
-    constructor(_router, _articleService) {
+const router_1 = __webpack_require__(11);
+const Subject_1 = __webpack_require__(8);
+__webpack_require__(34);
+const course_service_1 = __webpack_require__(55);
+const student_interface_1 = __webpack_require__(182);
+let CourseEditComponent = class CourseEditComponent {
+    constructor(_router, _route, _courseService) {
         this._router = _router;
-        this._articleService = _articleService;
-        this.article = {};
+        this._route = _route;
+        this._courseService = _courseService;
+        this.errorMessage = '';
+        this.isDestroyed$ = new Subject_1.Subject();
     }
-    create() {
-        this._articleService.create(this.article).subscribe(createdArticle => this._router.navigate(['/articles', createdArticle._id]), error => this.errorMessage = error);
+    ngOnInit() {
+        this.paramObserver = this._route.params.subscribe(params => {
+            let course = params['courseNum'];
+            this._courseService.getCourse(course)
+                .takeUntil(this.isDestroyed$)
+                .subscribe((info) => {
+                this.courseInfo = info;
+                this._courseService.getPossibleInstructors(course)
+                    .takeUntil(this.isDestroyed$)
+                    .subscribe((instrs) => {
+                    this.possibleInstr = instrs.sort(student_interface_1.sortStudents);
+                }, (err2) => {
+                    this.errorMessage = err2.error.message;
+                    this.possibleInstr = [];
+                });
+            }, (error) => {
+                this.errorMessage = error.message;
+            });
+        });
+    }
+    update() {
+        this._courseService
+            .editCourse(this.courseInfo.courseNum, this.courseInfo)
+            .takeUntil(this.isDestroyed$)
+            .subscribe((result) => {
+            // success
+            this._router.navigate(['../'], { relativeTo: this._route });
+        }, (err) => {
+            this.errorMessage = err.error.message;
+        });
+    }
+    formatName(firstName, lastName) {
+        let outStr = lastName;
+        if (firstName !== '' && lastName !== '') {
+            outStr += ', ';
+        }
+        outStr += firstName;
+        return outStr;
+    }
+    addInstructor() {
+        if (this.selectedAdd) {
+            this._courseService
+                .addInstructor(this.courseInfo.courseNum, this.selectedAdd)
+                .takeUntil(this.isDestroyed$)
+                .subscribe((updated) => {
+                this.courseInfo = updated;
+                this.possibleInstr = this.possibleInstr.filter((elm) => {
+                    return elm.userId != this.selectedAdd;
+                });
+            }, (err) => {
+                this.errorMessage = err.error.message;
+            });
+        }
+    }
+    ngOnDestroy() {
+        this.paramObserver.unsubscribe();
+        this.isDestroyed$.next(true);
+        this.isDestroyed$.unsubscribe();
     }
 };
-CreateComponent = __decorate([
+CourseEditComponent = __decorate([
     core_1.Component({
-        selector: 'create',
-        templateUrl: 'app/articles/create/create.template.html'
+        selector: 'course-edit-cmp',
+        templateUrl: 'app/admin/course/course-edit/course-edit.template.html',
+        styleUrls: ['app/admin/course/course-edit/course-edit.style.css']
     }),
     __metadata("design:paramtypes", [router_1.Router,
-        article_service_1.ArticleService])
-], CreateComponent);
-exports.CreateComponent = CreateComponent;
+        router_1.ActivatedRoute,
+        course_service_1.CourseService])
+], CourseEditComponent);
+exports.CourseEditComponent = CourseEditComponent;
 
 
 /***/ }),
@@ -403,23 +502,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const article_service_1 = __webpack_require__(88);
-let ListComponent = class ListComponent {
-    constructor(_articleService) {
-        this._articleService = _articleService;
+const course_service_1 = __webpack_require__(55);
+let CourseListComponent = class CourseListComponent {
+    constructor(_courseService) {
+        this._courseService = _courseService;
     }
     ngOnInit() {
-        this._articleService.list().subscribe(articles => this.articles = articles);
+        this.subscription = this._courseService.listCourses()
+            .subscribe((courses) => {
+            this.courses = courses;
+        });
+    }
+    ngOnDestroy() {
+        if (this.subscription)
+            this.subscription.unsubscribe();
     }
 };
-ListComponent = __decorate([
+CourseListComponent = __decorate([
     core_1.Component({
-        selector: 'list',
-        templateUrl: 'app/articles/list/list.template.html'
+        selector: 'course-list-cmp',
+        templateUrl: './app/admin/course/course-list/course-list.template.html'
     }),
-    __metadata("design:paramtypes", [article_service_1.ArticleService])
-], ListComponent);
-exports.ListComponent = ListComponent;
+    __metadata("design:paramtypes", [course_service_1.CourseService])
+], CourseListComponent);
+exports.CourseListComponent = CourseListComponent;
 
 
 /***/ }),
@@ -538,8 +644,829 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const authentication_service_1 = __webpack_require__(34);
+const router_1 = __webpack_require__(11);
+const Subject_1 = __webpack_require__(8);
+__webpack_require__(34);
+const course_service_1 = __webpack_require__(55);
+const scenario_service_1 = __webpack_require__(39);
+const student_service_1 = __webpack_require__(69);
+let CourseScenarioComponent = class CourseScenarioComponent {
+    constructor(_router, _route, _courseService, _studentService, _scenarioService) {
+        this._router = _router;
+        this._route = _route;
+        this._courseService = _courseService;
+        this._studentService = _studentService;
+        this._scenarioService = _scenarioService;
+        this.students = [];
+        this.errorMessage = '';
+        this.isDestroyed$ = new Subject_1.Subject();
+    }
+    ngOnInit() {
+        this.paramObserver = this._route.params
+            .subscribe(params => {
+            let course = params['courseNum'];
+            let scenCode = params['scenId'];
+            this.courseNum = course.toUpperCase();
+            this._scenarioService.getScenario(scenCode)
+                .takeUntil(this.isDestroyed$)
+                .subscribe((res) => {
+                // success
+                this.scenario = res;
+                this._courseService.getScenarioStatus(course, scenCode)
+                    .takeUntil(this.isDestroyed$)
+                    .subscribe((stats) => {
+                    this.students = stats;
+                }, (err) => {
+                    this.errorMessage = err.error.message;
+                });
+            }, (err) => {
+                this.errorMessage = err.error.message;
+            });
+        });
+    }
+    formatAccess(isGranted) {
+        return (isGranted ? 'Access granted' : 'Access not granted');
+    }
+    accessButtonClass(isGranted) {
+        return {
+            'btn btn-sm': true,
+            'btn-outline-secondary': isGranted,
+            'btn-outline-dark': !isGranted
+        };
+    }
+    accessButtonText(isGranted) {
+        return (isGranted ? 'Revoke access' : 'Grant access');
+    }
+    toggleAccess(studentIndex) {
+        let curState = this.students[studentIndex].status;
+        let scenId = this.scenario.scenCode;
+        let studentId = this.students[studentIndex].userId;
+        this._studentService.grantScenAccess(studentId, scenId, !curState)
+            .takeUntil(this.isDestroyed$)
+            .subscribe((res) => {
+            if (res !== undefined && res !== null) {
+                this.students[studentIndex].status = res.accessGranted[scenId];
+            }
+        }, (err) => {
+            this.errorMessage = err.error.message;
+        });
+    }
+    /*grantAccess(studentIndex: number){
+      // will require studentService
+      let scenId = this.scenario.scenCode;
+      let studentId = this.students[studentIndex].userId;
+      this._studentService.grantScenAccess(studentId, scenId)
+        .takeUntil(this.isDestroyed$)
+        .subscribe((res)=>{
+          if(res !== undefined && res !== null){
+            this.students[studentIndex].status = res.accessGranted[scenId];
+          }
+      }, (err)=>{
+        this.errorMessage = err.error.message;
+      })
+    }*/
+    goToFridge(studentId) {
+        this._router.navigate(['/admin/students/', studentId, this.scenario.scenCode]);
+    }
+    ngOnDestroy() {
+        this.paramObserver.unsubscribe();
+        this.isDestroyed$.next(true);
+        this.isDestroyed$.unsubscribe();
+    }
+};
+CourseScenarioComponent = __decorate([
+    core_1.Component({
+        selector: 'course-scen-smp',
+        templateUrl: 'app/admin/course/course-scenario/course-scenario.template.html',
+        styleUrls: ['app/admin/course/course-scenario/course-scenario.style.css']
+    }),
+    __metadata("design:paramtypes", [router_1.Router,
+        router_1.ActivatedRoute,
+        course_service_1.CourseService,
+        student_service_1.StudentService,
+        scenario_service_1.ScenarioService])
+], CourseScenarioComponent);
+exports.CourseScenarioComponent = CourseScenarioComponent;
+
+
+/***/ }),
+
+/***/ 391:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const student_service_1 = __webpack_require__(69);
+const student_interface_1 = __webpack_require__(182);
+let StudentListComponent = class StudentListComponent {
+    constructor(_studentService) {
+        this._studentService = _studentService;
+        this.errorMessage = '';
+    }
+    ngOnInit() {
+        this.subscription = this._studentService.listStudents()
+            .subscribe((students) => {
+            this.students = students.sort(student_interface_1.sortStudents);
+        }, (err) => {
+            this.errorMessage = err.error.message;
+        });
+    }
+    formatName(firstName, lastName) {
+        let outStr = lastName;
+        if (firstName !== '' && lastName !== '') {
+            outStr += ', ';
+        }
+        outStr += firstName;
+        return outStr;
+    }
+    ngOnDestroy() {
+        if (this.subscription)
+            this.subscription.unsubscribe();
+    }
+};
+StudentListComponent = __decorate([
+    core_1.Component({
+        selector: 'student-list',
+        templateUrl: './app/admin/student/student-list/student-list.template.html'
+    }),
+    __metadata("design:paramtypes", [student_service_1.StudentService])
+], StudentListComponent);
+exports.StudentListComponent = StudentListComponent;
+
+
+/***/ }),
+
+/***/ 392:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const router_1 = __webpack_require__(11);
+const Subject_1 = __webpack_require__(8);
+__webpack_require__(34);
+const student_service_1 = __webpack_require__(69);
+const scenario_service_1 = __webpack_require__(39);
+const student_roles_1 = __webpack_require__(866);
+let StudentIndivComponent = class StudentIndivComponent {
+    constructor(_router, _route, _studentService, _scenarioService) {
+        this._router = _router;
+        this._route = _route;
+        this._studentService = _studentService;
+        this._scenarioService = _scenarioService;
+        this.roles = student_roles_1.StudentRolesArray;
+        //private courseNum: string;
+        this.errorMessage = '';
+        this.isDestroyed$ = new Subject_1.Subject();
+    }
+    ngOnInit() {
+        this.paramObserver = this._route.params.subscribe(params => {
+            let studentId = params['studentId'];
+            this._studentService.getStudent(studentId)
+                .takeUntil(this.isDestroyed$)
+                .subscribe((info) => {
+                this.student = info;
+                this.newRole = this.student.role;
+                this._scenarioService.listScenarios()
+                    .takeUntil(this.isDestroyed$)
+                    .subscribe((scens) => {
+                    this.scenarios = scens;
+                    this._admin = {
+                        id: this._studentService.getAdmin(),
+                        role: this._studentService.getAdminRole()
+                    };
+                });
+            }, (error) => {
+                console.error(error);
+                this.errorMessage = error.message;
+            });
+        });
+    }
+    getScenStatus(scenCode) {
+        let isGranted = this.student.accessGranted[scenCode];
+        if (isGranted === true) {
+            return 'Access granted';
+        }
+        else if (isGranted === false) {
+            return 'Access not granted';
+        }
+        else {
+            return 'NA';
+        }
+    }
+    getStudentCourse() {
+        let s = this.student;
+        if (s.course) {
+            return '<a [routlerLink]="[\'/admin/courses/\', "' + s.course.courseNum + ']">s.course.courseNum</a>';
+        }
+        else {
+            return 'No course';
+        }
+    }
+    accessButtonClass(scenCode) {
+        let isGranted = this.student.accessGranted[scenCode];
+        return {
+            'btn btn-sm': true,
+            'btn-outline-secondary': isGranted,
+            'btn-outline-dark': !isGranted
+        };
+    }
+    accessButtonText(scenCode) {
+        let isGranted = this.student.accessGranted[scenCode];
+        return (isGranted ? 'Revoke access' : 'Grant access');
+    }
+    toggleAccess(scenCode) {
+        let curState = this.student.accessGranted[scenCode];
+        this._studentService.grantScenAccess(this.student.userId, scenCode, !curState)
+            .takeUntil(this.isDestroyed$)
+            .subscribe((res) => {
+            if (res !== undefined && res !== null) {
+                this.student.accessGranted[scenCode] = res.accessGranted[scenCode];
+            }
+        }, (err) => {
+            this.errorMessage = err.error.message;
+        });
+    }
+    roleDisabled(src) {
+        if (this._admin === undefined) {
+            return false;
+        }
+        else if (this.student.userId === this._admin.id) {
+            return true;
+        }
+        else if (src === 'admin' && this._admin.role < 2) {
+            return true;
+        }
+        else if (src === 'instr' && this._admin.role < 1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    roleButtonClass(src) {
+        return {
+            'btn btn-sm': true,
+            'btn-outline-secondary': src !== this.student.role,
+            'btn-secondary': src === this.student.role
+        };
+    }
+    clickButton(src) {
+        this._studentService.setStudentRole(this.student.userId, src)
+            .takeUntil(this.isDestroyed$)
+            .subscribe((res) => {
+            this.student = res;
+        }, (err) => {
+            this.errorMessage = err.error.message;
+        });
+    }
+    ngOnDestroy() {
+        this.paramObserver.unsubscribe();
+        this.isDestroyed$.next(true);
+        this.isDestroyed$.unsubscribe();
+    }
+};
+StudentIndivComponent = __decorate([
+    core_1.Component({
+        selector: 'student-indiv',
+        templateUrl: 'app/admin/student/student-indiv/student-indiv.template.html',
+    }),
+    __metadata("design:paramtypes", [router_1.Router,
+        router_1.ActivatedRoute,
+        student_service_1.StudentService,
+        scenario_service_1.ScenarioService])
+], StudentIndivComponent);
+exports.StudentIndivComponent = StudentIndivComponent;
+
+
+/***/ }),
+
+/***/ 393:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const router_1 = __webpack_require__(11);
+const Subject_1 = __webpack_require__(8);
+__webpack_require__(34);
+__webpack_require__(158);
+const student_service_1 = __webpack_require__(69);
+let StudentFridgeComponent = class StudentFridgeComponent {
+    constructor(_router, _route, _studentService) {
+        this._router = _router;
+        this._route = _route;
+        this._studentService = _studentService;
+        this.hasFridge = false;
+        this.viewStrains = 'all';
+        this.errorMessage = '';
+        this.isDestroyed$ = new Subject_1.Subject();
+    }
+    ngOnInit() {
+        this.paramObserver = this._route.params.subscribe(params => {
+            let studentId = params['studentId'];
+            let scenId = params['scenId'];
+            this._studentService.getFridge(studentId, scenId)
+                .takeUntil(this.isDestroyed$)
+                .subscribe((fridge) => {
+                this.fridge = fridge;
+                this.hasFridge = (fridge.strains !== undefined);
+                if (this.hasFridge) {
+                    this.fridge.strains.sort((a, b) => { return a.strainNum - b.strainNum; });
+                }
+                this.setPhage('all');
+            }, (error) => {
+                console.log(error);
+                this.errorMessage = error.message;
+            });
+        });
+    }
+    getButtonClass(src) {
+        return {
+            'btn btn-sm': true,
+            'btn-primary': (src === this.viewStrains),
+            'btn-outline-primary': (src !== this.viewStrains)
+        };
+    }
+    setPhage(src) {
+        this.viewStrains = src;
+        if (this.viewStrains === 'all') {
+            this.strainList = this.fridge.strains;
+        }
+        else {
+            this.strainList = this.fridge.strains.filter((strain) => {
+                if (strain.phageType === 'unknown') {
+                    return true;
+                }
+                else if (strain.phageType === 'user' && strain.submitted) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            });
+        }
+    }
+    ngOnDestroy() {
+        this.paramObserver.unsubscribe();
+        this.isDestroyed$.next(true);
+        this.isDestroyed$.unsubscribe();
+    }
+};
+StudentFridgeComponent = __decorate([
+    core_1.Component({
+        selector: 'student-fridge',
+        templateUrl: 'app/admin/student/student-fridge/student-fridge.template.html',
+    }),
+    __metadata("design:paramtypes", [router_1.Router,
+        router_1.ActivatedRoute,
+        student_service_1.StudentService])
+], StudentFridgeComponent);
+exports.StudentFridgeComponent = StudentFridgeComponent;
+
+
+/***/ }),
+
+/***/ 394:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+__webpack_require__(34);
+const authentication_service_1 = __webpack_require__(30);
+const course_service_1 = __webpack_require__(55);
+const student_service_1 = __webpack_require__(69);
+let AdminComponent = class AdminComponent {
+    //private isDestroyed$: Subject<boolean>
+    constructor(_authenticationService, _courseService, _studentService) {
+        this._authenticationService = _authenticationService;
+        this._courseService = _courseService;
+        this._studentService = _studentService;
+        this.errorMessage = '';
+    }
+    ngOnInit() {
+        /*this._authenticationService.getUser
+          .takeUntil(this.isDestroyed$)
+          .subscribe( (res) =>{
+          this.adminUser = res;
+
+          this._courseService.setAdmin(userId);
+          this.errorMessage = '';
+        }, (err)=>{
+          this.errorMessage = JSON.stringify(err);
+        }); */
+        this.adminUser = this._authenticationService.getUser();
+        let userId = this.adminUser.id;
+        let userRole = this.adminUser.role;
+        this._courseService.setAdmin(userId);
+        this._studentService.setAdmin(userId, userRole);
+    }
+    ngOnDestroy() {
+        this._courseService.setAdmin(-1);
+        this._studentService.setAdmin(-1, -1);
+    }
+};
+AdminComponent = __decorate([
+    core_1.Component({
+        selector: 'admin-cmp',
+        templateUrl: 'app/admin/admin.template.html'
+    }),
+    __metadata("design:paramtypes", [authentication_service_1.AuthenticationService,
+        course_service_1.CourseService,
+        student_service_1.StudentService])
+], AdminComponent);
+exports.AdminComponent = AdminComponent;
+
+
+/***/ }),
+
+/***/ 395:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+let AdminHomeComponent = class AdminHomeComponent {
+};
+AdminHomeComponent = __decorate([
+    core_1.Component({
+        selector: 'admin-home',
+        templateUrl: 'app/admin/admin-home/admin-home.template.html'
+    })
+], AdminHomeComponent);
+exports.AdminHomeComponent = AdminHomeComponent;
+
+
+/***/ }),
+
+/***/ 396:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+let NotAuthComponent = class NotAuthComponent {
+};
+NotAuthComponent = __decorate([
+    core_1.Component({
+        selector: 'not-auth-cmp',
+        templateUrl: 'app/admin/not-auth/not-auth.template.html'
+    })
+], NotAuthComponent);
+exports.NotAuthComponent = NotAuthComponent;
+
+
+/***/ }),
+
+/***/ 397:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+let AuthenticationComponent = class AuthenticationComponent {
+};
+AuthenticationComponent = __decorate([
+    core_1.Component({
+        selector: 'authentication',
+        templateUrl: 'app/authentication/authentication.template.html'
+    })
+], AuthenticationComponent);
+exports.AuthenticationComponent = AuthenticationComponent;
+
+
+/***/ }),
+
+/***/ 398:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const router_1 = __webpack_require__(11);
+const authentication_service_1 = __webpack_require__(30);
+let SigninComponent = class SigninComponent {
+    constructor(_authenticationService, _router) {
+        this._authenticationService = _authenticationService;
+        this._router = _router;
+        this.credentials = {};
+    }
+    signin() {
+        this.subscription = this._authenticationService
+            .signin(this.credentials)
+            .subscribe((result) => {
+            // TODO: update
+            this._authenticationService.setUser(result);
+            let redirect = this._authenticationService.redirectUrl ? this._authenticationService.redirectUrl : '/';
+            this._router.navigate([redirect]);
+        }, (error) => {
+            this.errorMessage = error.message;
+        });
+    }
+    ngOnDestroy() {
+        if (this.subscription)
+            this.subscription.unsubscribe();
+    }
+};
+SigninComponent = __decorate([
+    core_1.Component({
+        selector: 'signin',
+        templateUrl: 'app/authentication/signin/signin.template.html',
+        styleUrls: ['app/authentication/signin/signin.style.css']
+    }),
+    __metadata("design:paramtypes", [authentication_service_1.AuthenticationService,
+        router_1.Router])
+], SigninComponent);
+exports.SigninComponent = SigninComponent;
+
+
+/***/ }),
+
+/***/ 399:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const router_1 = __webpack_require__(11);
+const Subject_1 = __webpack_require__(8);
+__webpack_require__(34);
+__webpack_require__(158);
+__webpack_require__(258);
+const authentication_service_1 = __webpack_require__(30);
+const course_service_1 = __webpack_require__(55);
+let SignupComponent = class SignupComponent {
+    constructor(_authenticationService, _courseService, _router) {
+        this._authenticationService = _authenticationService;
+        this._courseService = _courseService;
+        this._router = _router;
+        this.courses = [];
+        this.user = {};
+        this.isDestroyed$ = new Subject_1.Subject();
+    }
+    _reorderCourses(courses) {
+        let na = courses.filter((c) => { return c.courseNum === 'NA'; });
+        let other = courses.filter((c) => {
+            return c.courseNum !== 'NA';
+        });
+        return na.concat(other);
+    }
+    ngOnInit() {
+        this._courseService.getCourseList()
+            .takeUntil(this.isDestroyed$)
+            .subscribe((res) => {
+            let tmp = this._reorderCourses(res);
+            this.courses = tmp;
+        }, (err) => {
+            this.courses = [];
+        });
+    }
+    signup() {
+        if (this.user.course === undefined) {
+            this.errorMessage = 'Select a course';
+        }
+        else if (this.user.password !== this.cPassword) {
+            this.errorMessage = 'Passwords must match';
+        }
+        else {
+            this._authenticationService
+                .signup(this.user)
+                .takeUntil(this.isDestroyed$)
+                .subscribe((result) => {
+                this._authenticationService.setUser(result);
+                this._router.navigate(['/']);
+            }, (error) => {
+                this.errorMessage = error.error.message;
+            });
+        }
+    }
+    ngOnDestroy() {
+        this.isDestroyed$.next(true);
+        this.isDestroyed$.unsubscribe();
+    }
+};
+SignupComponent = __decorate([
+    core_1.Component({
+        selector: 'signup',
+        templateUrl: 'app/authentication/signup/signup.template.html',
+        styleUrls: ['app/authentication/signup/signup.style.css']
+    }),
+    __metadata("design:paramtypes", [authentication_service_1.AuthenticationService,
+        course_service_1.CourseService,
+        router_1.Router])
+], SignupComponent);
+exports.SignupComponent = SignupComponent;
+
+
+/***/ }),
+
+/***/ 400:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const article_service_1 = __webpack_require__(88);
+let ArticleComponent = class ArticleComponent {
+};
+ArticleComponent = __decorate([
+    core_1.Component({
+        selector: 'articles',
+        template: '<router-outlet></router-outlet>',
+        providers: [article_service_1.ArticleService]
+    })
+], ArticleComponent);
+exports.ArticleComponent = ArticleComponent;
+
+
+/***/ }),
+
+/***/ 401:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const router_1 = __webpack_require__(11);
+const article_service_1 = __webpack_require__(88);
+let CreateComponent = class CreateComponent {
+    constructor(_router, _articleService) {
+        this._router = _router;
+        this._articleService = _articleService;
+        this.article = {};
+    }
+    create() {
+        this._articleService.create(this.article).subscribe(createdArticle => this._router.navigate(['/articles', createdArticle._id]), error => this.errorMessage = error);
+    }
+};
+CreateComponent = __decorate([
+    core_1.Component({
+        selector: 'create',
+        templateUrl: 'app/articles/create/create.template.html'
+    }),
+    __metadata("design:paramtypes", [router_1.Router,
+        article_service_1.ArticleService])
+], CreateComponent);
+exports.CreateComponent = CreateComponent;
+
+
+/***/ }),
+
+/***/ 402:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const article_service_1 = __webpack_require__(88);
+let ListComponent = class ListComponent {
+    constructor(_articleService) {
+        this._articleService = _articleService;
+    }
+    ngOnInit() {
+        this._articleService.list().subscribe(articles => this.articles = articles);
+    }
+};
+ListComponent = __decorate([
+    core_1.Component({
+        selector: 'list',
+        templateUrl: 'app/articles/list/list.template.html'
+    }),
+    __metadata("design:paramtypes", [article_service_1.ArticleService])
+], ListComponent);
+exports.ListComponent = ListComponent;
+
+
+/***/ }),
+
+/***/ 403:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const router_1 = __webpack_require__(11);
+const authentication_service_1 = __webpack_require__(30);
 const article_service_1 = __webpack_require__(88);
 let ViewComponent = class ViewComponent {
     constructor(_router, _route, _authenticationService, _articleService) {
@@ -583,7 +1510,7 @@ exports.ViewComponent = ViewComponent;
 
 /***/ }),
 
-/***/ 391:
+/***/ 404:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -599,7 +1526,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
+const router_1 = __webpack_require__(11);
 const article_service_1 = __webpack_require__(88);
 let EditComponent = class EditComponent {
     constructor(_router, _route, _articleService) {
@@ -637,7 +1564,7 @@ exports.EditComponent = EditComponent;
 
 /***/ }),
 
-/***/ 392:
+/***/ 405:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -648,36 +1575,37 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const common_1 = __webpack_require__(16);
-const forms_1 = __webpack_require__(25);
-const ng2_dnd_1 = __webpack_require__(383);
-const ng_bootstrap_1 = __webpack_require__(115);
-let SharedModule = class SharedModule {
+const authentication_service_1 = __webpack_require__(30);
+let HomeComponent = class HomeComponent {
+    constructor(_authenticationService) {
+        this._authenticationService = _authenticationService;
+    }
+    ngOnInit() {
+        this.user = this._authenticationService.getUser();
+    }
+    ngOnDestroy() {
+        this.user = undefined;
+    }
 };
-SharedModule = __decorate([
-    core_1.NgModule({
-        imports: [
-            common_1.CommonModule,
-            forms_1.FormsModule,
-            ng2_dnd_1.DndModule.forRoot(),
-            ng_bootstrap_1.NgbModule.forRoot()
-        ],
-        exports: [
-            common_1.CommonModule,
-            forms_1.FormsModule,
-            ng2_dnd_1.DndModule,
-            ng_bootstrap_1.NgbModule
-        ],
-    })
-], SharedModule);
-exports.SharedModule = SharedModule;
+HomeComponent = __decorate([
+    core_1.Component({
+        selector: 'home',
+        templateUrl: 'app/home/home.template.html',
+        styleUrls: ['app/home/home.style.css']
+    }),
+    __metadata("design:paramtypes", [authentication_service_1.AuthenticationService])
+], HomeComponent);
+exports.HomeComponent = HomeComponent;
 
 
 /***/ }),
 
-/***/ 393:
+/***/ 406:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -703,7 +1631,7 @@ exports.ScenarioComponent = ScenarioComponent;
 
 /***/ }),
 
-/***/ 394:
+/***/ 407:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -719,7 +1647,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const authentication_service_1 = __webpack_require__(34);
+const authentication_service_1 = __webpack_require__(30);
 const scenario_service_1 = __webpack_require__(39);
 let ListComponent = class ListComponent {
     constructor(_authenticationService, _scenarioService) {
@@ -749,7 +1677,7 @@ exports.ListComponent = ListComponent;
 
 /***/ }),
 
-/***/ 395:
+/***/ 408:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -776,7 +1704,7 @@ exports.LocationComponent = LocationComponent;
 
 /***/ }),
 
-/***/ 396:
+/***/ 409:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -792,8 +1720,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const authentication_service_1 = __webpack_require__(34);
+const router_1 = __webpack_require__(11);
+const authentication_service_1 = __webpack_require__(30);
 let LocationGuard = class LocationGuard {
     constructor(_authenticationService, _router) {
         this._authenticationService = _authenticationService;
@@ -820,7 +1748,7 @@ exports.LocationGuard = LocationGuard;
 
 /***/ }),
 
-/***/ 397:
+/***/ 410:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -837,9 +1765,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const Subject_1 = __webpack_require__(8);
-__webpack_require__(33);
+__webpack_require__(34);
 const scenario_globals_1 = __webpack_require__(118);
-const experiment_service_1 = __webpack_require__(181);
+const experiment_service_1 = __webpack_require__(183);
 const scenario_service_1 = __webpack_require__(39);
 let LabRoomComponent = class LabRoomComponent {
     constructor(_experimentService, _scenarioService) {
@@ -1227,7 +2155,7 @@ exports.LabRoomComponent = LabRoomComponent;
 
 /***/ }),
 
-/***/ 398:
+/***/ 411:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1244,7 +2172,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const scenario_globals_1 = __webpack_require__(118);
-const experiment_service_1 = __webpack_require__(181);
+const experiment_service_1 = __webpack_require__(183);
 const scenario_service_1 = __webpack_require__(39);
 let PlexerRoomComponent = class PlexerRoomComponent {
     constructor(_experimentService, _scenarioService) {
@@ -1451,7 +2379,7 @@ exports.PlexerRoomComponent = PlexerRoomComponent;
 
 /***/ }),
 
-/***/ 399:
+/***/ 412:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1467,10 +2395,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
+const router_1 = __webpack_require__(11);
 const Subject_1 = __webpack_require__(8);
-__webpack_require__(33);
-const authentication_service_1 = __webpack_require__(34);
+__webpack_require__(34);
+const authentication_service_1 = __webpack_require__(30);
 const scenario_service_1 = __webpack_require__(39);
 const scenario_globals_1 = __webpack_require__(118);
 let ModelRoomComponent = class ModelRoomComponent {
@@ -1561,7 +2489,7 @@ exports.ModelRoomComponent = ModelRoomComponent;
 
 /***/ }),
 
-/***/ 400:
+/***/ 413:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1577,7 +2505,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
+const router_1 = __webpack_require__(11);
 const scenario_service_1 = __webpack_require__(39);
 let LandingRoomComponent = class LandingRoomComponent {
     constructor(_router, _route, _scenarioService) {
@@ -1611,7 +2539,7 @@ exports.LandingRoomComponent = LandingRoomComponent;
 
 /***/ }),
 
-/***/ 401:
+/***/ 414:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1647,899 +2575,6 @@ PhageDialogComponent = __decorate([
     __metadata("design:paramtypes", [ng_bootstrap_1.NgbActiveModal])
 ], PhageDialogComponent);
 exports.PhageDialogComponent = PhageDialogComponent;
-
-
-/***/ }),
-
-/***/ 402:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const authentication_service_1 = __webpack_require__(34);
-let AdminGuard = class AdminGuard {
-    constructor(_authenticationService, _router) {
-        this._authenticationService = _authenticationService;
-        this._router = _router;
-    }
-    canActivate(route, state) {
-        let url = state.url;
-        let isLoggedIn = this._authenticationService.isLoggedIn();
-        if (isLoggedIn)
-            return true;
-        else {
-            this._authenticationService.redirectUrl = url;
-            this._router.navigate(['authentication/signin']);
-            return false;
-        }
-    }
-    canActivateChild(route, state) {
-        let url = state.url;
-        let role = this._authenticationService.canAccessAdmin();
-        if (role)
-            return true;
-        else {
-            this._authenticationService.redirectUrl = url;
-            this._router.navigate(['/admin/not-auth']);
-            return false;
-        }
-    }
-};
-AdminGuard = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [authentication_service_1.AuthenticationService, router_1.Router])
-], AdminGuard);
-exports.AdminGuard = AdminGuard;
-
-
-/***/ }),
-
-/***/ 403:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const course_service_1 = __webpack_require__(55);
-let CourseCreateComponent = class CourseCreateComponent {
-    constructor(_courseService, _router, _route) {
-        this._courseService = _courseService;
-        this._router = _router;
-        this._route = _route;
-        this.errorMessage = '';
-        this.courseDetails = {};
-    }
-    createCourse() {
-        //let newCourse = this.courseDetails.courseNum;
-        if (this.courseDetails.courseNum === '') {
-            this.errorMessage = 'Course number is required';
-        }
-        else {
-            this.subscription = this._courseService
-                .createCourse(this.courseDetails)
-                .subscribe((result) => {
-                this._router.navigate(['../', result.courseNum], { relativeTo: this._route });
-            }, (err) => {
-                this.errorMessage = err.error.message;
-            });
-        }
-    }
-    ngOnDestory() {
-        if (this.subscription)
-            this.subscription.unsubscribe();
-    }
-};
-CourseCreateComponent = __decorate([
-    core_1.Component({
-        selector: 'course-create-cmp',
-        templateUrl: 'app/admin/course/course-create/course-create.template.html',
-        styleUrls: ['app/admin/course/course-create/course-create.style.css']
-    }),
-    __metadata("design:paramtypes", [course_service_1.CourseService,
-        router_1.Router,
-        router_1.ActivatedRoute])
-], CourseCreateComponent);
-exports.CourseCreateComponent = CourseCreateComponent;
-
-
-/***/ }),
-
-/***/ 404:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const Subject_1 = __webpack_require__(8);
-__webpack_require__(33);
-const course_service_1 = __webpack_require__(55);
-const scenario_service_1 = __webpack_require__(39);
-const student_interface_1 = __webpack_require__(182);
-let CourseIndivComponent = class CourseIndivComponent {
-    constructor(_router, _route, _courseService, _scenarioService) {
-        this._router = _router;
-        this._route = _route;
-        this._courseService = _courseService;
-        this._scenarioService = _scenarioService;
-        this.students = [];
-        //private courseNum: string;
-        this.errorMessage = '';
-        this.isDestroyed$ = new Subject_1.Subject();
-    }
-    ngOnInit() {
-        this.paramObserver = this._route.params.subscribe(params => {
-            let course = params['courseNum'];
-            this._courseService.getCourse(course)
-                .takeUntil(this.isDestroyed$)
-                .subscribe((info) => {
-                this.courseInfo = info;
-                this._courseService.getStudents(course)
-                    .takeUntil(this.isDestroyed$)
-                    .subscribe((students) => {
-                    this.students = students.sort(student_interface_1.sortStudents);
-                    this._scenarioService.listScenarios()
-                        .takeUntil(this.isDestroyed$)
-                        .subscribe((scens) => {
-                        this.scenarios = scens;
-                    });
-                });
-            }, (error) => {
-                this.errorMessage = error.message;
-            });
-        });
-    }
-    ngOnDestroy() {
-        this.paramObserver.unsubscribe();
-        this.isDestroyed$.next(true);
-        this.isDestroyed$.unsubscribe();
-    }
-};
-CourseIndivComponent = __decorate([
-    core_1.Component({
-        selector: 'course-indiv-cmp',
-        templateUrl: 'app/admin/course/course-indiv/course-indiv.template.html',
-        styleUrls: ['app/admin/course/course-indiv/course-indiv.style.css']
-    }),
-    __metadata("design:paramtypes", [router_1.Router,
-        router_1.ActivatedRoute,
-        course_service_1.CourseService,
-        scenario_service_1.ScenarioService])
-], CourseIndivComponent);
-exports.CourseIndivComponent = CourseIndivComponent;
-
-
-/***/ }),
-
-/***/ 405:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const Subject_1 = __webpack_require__(8);
-__webpack_require__(33);
-const course_service_1 = __webpack_require__(55);
-const student_interface_1 = __webpack_require__(182);
-let CourseEditComponent = class CourseEditComponent {
-    constructor(_router, _route, _courseService) {
-        this._router = _router;
-        this._route = _route;
-        this._courseService = _courseService;
-        this.errorMessage = '';
-        this.isDestroyed$ = new Subject_1.Subject();
-    }
-    ngOnInit() {
-        this.paramObserver = this._route.params.subscribe(params => {
-            let course = params['courseNum'];
-            this._courseService.getCourse(course)
-                .takeUntil(this.isDestroyed$)
-                .subscribe((info) => {
-                this.courseInfo = info;
-                this._courseService.getPossibleInstructors(course)
-                    .takeUntil(this.isDestroyed$)
-                    .subscribe((instrs) => {
-                    this.possibleInstr = instrs.sort(student_interface_1.sortStudents);
-                }, (err2) => {
-                    this.errorMessage = err2.error.message;
-                    this.possibleInstr = [];
-                });
-            }, (error) => {
-                this.errorMessage = error.message;
-            });
-        });
-    }
-    update() {
-        this._courseService
-            .editCourse(this.courseInfo.courseNum, this.courseInfo)
-            .takeUntil(this.isDestroyed$)
-            .subscribe((result) => {
-            // success
-            this._router.navigate(['../'], { relativeTo: this._route });
-        }, (err) => {
-            this.errorMessage = err.error.message;
-        });
-    }
-    formatName(firstName, lastName) {
-        let outStr = lastName;
-        if (firstName !== '' && lastName !== '') {
-            outStr += ', ';
-        }
-        outStr += firstName;
-        return outStr;
-    }
-    addInstructor() {
-        if (this.selectedAdd) {
-            this._courseService
-                .addInstructor(this.courseInfo.courseNum, this.selectedAdd)
-                .takeUntil(this.isDestroyed$)
-                .subscribe((updated) => {
-                this.courseInfo = updated;
-                this.possibleInstr = this.possibleInstr.filter((elm) => {
-                    return elm.userId != this.selectedAdd;
-                });
-            }, (err) => {
-                this.errorMessage = err.error.message;
-            });
-        }
-    }
-    ngOnDestroy() {
-        this.paramObserver.unsubscribe();
-        this.isDestroyed$.next(true);
-        this.isDestroyed$.unsubscribe();
-    }
-};
-CourseEditComponent = __decorate([
-    core_1.Component({
-        selector: 'course-edit-cmp',
-        templateUrl: 'app/admin/course/course-edit/course-edit.template.html',
-        styleUrls: ['app/admin/course/course-edit/course-edit.style.css']
-    }),
-    __metadata("design:paramtypes", [router_1.Router,
-        router_1.ActivatedRoute,
-        course_service_1.CourseService])
-], CourseEditComponent);
-exports.CourseEditComponent = CourseEditComponent;
-
-
-/***/ }),
-
-/***/ 406:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const course_service_1 = __webpack_require__(55);
-let CourseListComponent = class CourseListComponent {
-    constructor(_courseService) {
-        this._courseService = _courseService;
-    }
-    ngOnInit() {
-        this.subscription = this._courseService.listCourses()
-            .subscribe((courses) => {
-            this.courses = courses;
-        });
-    }
-    ngOnDestroy() {
-        if (this.subscription)
-            this.subscription.unsubscribe();
-    }
-};
-CourseListComponent = __decorate([
-    core_1.Component({
-        selector: 'course-list-cmp',
-        templateUrl: './app/admin/course/course-list/course-list.template.html'
-    }),
-    __metadata("design:paramtypes", [course_service_1.CourseService])
-], CourseListComponent);
-exports.CourseListComponent = CourseListComponent;
-
-
-/***/ }),
-
-/***/ 407:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const Subject_1 = __webpack_require__(8);
-__webpack_require__(33);
-const course_service_1 = __webpack_require__(55);
-const scenario_service_1 = __webpack_require__(39);
-const student_service_1 = __webpack_require__(69);
-let CourseScenarioComponent = class CourseScenarioComponent {
-    constructor(_router, _route, _courseService, _studentService, _scenarioService) {
-        this._router = _router;
-        this._route = _route;
-        this._courseService = _courseService;
-        this._studentService = _studentService;
-        this._scenarioService = _scenarioService;
-        this.students = [];
-        this.errorMessage = '';
-        this.isDestroyed$ = new Subject_1.Subject();
-    }
-    ngOnInit() {
-        this.paramObserver = this._route.params
-            .subscribe(params => {
-            let course = params['courseNum'];
-            let scenCode = params['scenId'];
-            this.courseNum = course.toUpperCase();
-            this._scenarioService.getScenario(scenCode)
-                .takeUntil(this.isDestroyed$)
-                .subscribe((res) => {
-                // success
-                this.scenario = res;
-                this._courseService.getScenarioStatus(course, scenCode)
-                    .takeUntil(this.isDestroyed$)
-                    .subscribe((stats) => {
-                    this.students = stats;
-                }, (err) => {
-                    this.errorMessage = err.error.message;
-                });
-            }, (err) => {
-                this.errorMessage = err.error.message;
-            });
-        });
-    }
-    formatAccess(isGranted) {
-        return (isGranted ? 'Access granted' : 'Access not granted');
-    }
-    accessButtonClass(isGranted) {
-        return {
-            'btn btn-sm': true,
-            'btn-outline-secondary': isGranted,
-            'btn-outline-dark': !isGranted
-        };
-    }
-    accessButtonText(isGranted) {
-        return (isGranted ? 'Revoke access' : 'Grant access');
-    }
-    toggleAccess(studentIndex) {
-        let curState = this.students[studentIndex].status;
-        let scenId = this.scenario.scenCode;
-        let studentId = this.students[studentIndex].userId;
-        this._studentService.grantScenAccess(studentId, scenId, !curState)
-            .takeUntil(this.isDestroyed$)
-            .subscribe((res) => {
-            if (res !== undefined && res !== null) {
-                this.students[studentIndex].status = res.accessGranted[scenId];
-            }
-        }, (err) => {
-            this.errorMessage = err.error.message;
-        });
-    }
-    /*grantAccess(studentIndex: number){
-      // will require studentService
-      let scenId = this.scenario.scenCode;
-      let studentId = this.students[studentIndex].userId;
-      this._studentService.grantScenAccess(studentId, scenId)
-        .takeUntil(this.isDestroyed$)
-        .subscribe((res)=>{
-          if(res !== undefined && res !== null){
-            this.students[studentIndex].status = res.accessGranted[scenId];
-          }
-      }, (err)=>{
-        this.errorMessage = err.error.message;
-      })
-    }*/
-    goToFridge(studentId) {
-        this._router.navigate(['/admin/students/', studentId, this.scenario.scenCode]);
-    }
-    ngOnDestroy() {
-        this.paramObserver.unsubscribe();
-        this.isDestroyed$.next(true);
-        this.isDestroyed$.unsubscribe();
-    }
-};
-CourseScenarioComponent = __decorate([
-    core_1.Component({
-        selector: 'course-scen-smp',
-        templateUrl: 'app/admin/course/course-scenario/course-scenario.template.html',
-        styleUrls: ['app/admin/course/course-scenario/course-scenario.style.css']
-    }),
-    __metadata("design:paramtypes", [router_1.Router,
-        router_1.ActivatedRoute,
-        course_service_1.CourseService,
-        student_service_1.StudentService,
-        scenario_service_1.ScenarioService])
-], CourseScenarioComponent);
-exports.CourseScenarioComponent = CourseScenarioComponent;
-
-
-/***/ }),
-
-/***/ 408:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const student_service_1 = __webpack_require__(69);
-const student_interface_1 = __webpack_require__(182);
-let StudentListComponent = class StudentListComponent {
-    constructor(_studentService) {
-        this._studentService = _studentService;
-        this.errorMessage = '';
-    }
-    ngOnInit() {
-        this.subscription = this._studentService.listStudents()
-            .subscribe((students) => {
-            this.students = students.sort(student_interface_1.sortStudents);
-        }, (err) => {
-            this.errorMessage = err.error.message;
-        });
-    }
-    formatName(firstName, lastName) {
-        let outStr = lastName;
-        if (firstName !== '' && lastName !== '') {
-            outStr += ', ';
-        }
-        outStr += firstName;
-        return outStr;
-    }
-    ngOnDestroy() {
-        if (this.subscription)
-            this.subscription.unsubscribe();
-    }
-};
-StudentListComponent = __decorate([
-    core_1.Component({
-        selector: 'student-list',
-        templateUrl: './app/admin/student/student-list/student-list.template.html'
-    }),
-    __metadata("design:paramtypes", [student_service_1.StudentService])
-], StudentListComponent);
-exports.StudentListComponent = StudentListComponent;
-
-
-/***/ }),
-
-/***/ 409:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const Subject_1 = __webpack_require__(8);
-__webpack_require__(33);
-const student_service_1 = __webpack_require__(69);
-const scenario_service_1 = __webpack_require__(39);
-const student_roles_1 = __webpack_require__(873);
-let StudentIndivComponent = class StudentIndivComponent {
-    constructor(_router, _route, _studentService, _scenarioService) {
-        this._router = _router;
-        this._route = _route;
-        this._studentService = _studentService;
-        this._scenarioService = _scenarioService;
-        this.roles = student_roles_1.StudentRolesArray;
-        //private courseNum: string;
-        this.errorMessage = '';
-        this.isDestroyed$ = new Subject_1.Subject();
-    }
-    ngOnInit() {
-        this.paramObserver = this._route.params.subscribe(params => {
-            let studentId = params['studentId'];
-            this._studentService.getStudent(studentId)
-                .takeUntil(this.isDestroyed$)
-                .subscribe((info) => {
-                this.student = info;
-                this.newRole = this.student.role;
-                this._scenarioService.listScenarios()
-                    .takeUntil(this.isDestroyed$)
-                    .subscribe((scens) => {
-                    this.scenarios = scens;
-                    this._admin = {
-                        id: this._studentService.getAdmin(),
-                        role: this._studentService.getAdminRole()
-                    };
-                });
-            }, (error) => {
-                console.error(error);
-                this.errorMessage = error.message;
-            });
-        });
-    }
-    getScenStatus(scenCode) {
-        let isGranted = this.student.accessGranted[scenCode];
-        if (isGranted === true) {
-            return 'Access granted';
-        }
-        else if (isGranted === false) {
-            return 'Access not granted';
-        }
-        else {
-            return 'NA';
-        }
-    }
-    getStudentCourse() {
-        let s = this.student;
-        if (s.course) {
-            return '<a [routlerLink]="[\'/admin/courses/\', "' + s.course.courseNum + ']">s.course.courseNum</a>';
-        }
-        else {
-            return 'No course';
-        }
-    }
-    accessButtonClass(scenCode) {
-        let isGranted = this.student.accessGranted[scenCode];
-        return {
-            'btn btn-sm': true,
-            'btn-outline-secondary': isGranted,
-            'btn-outline-dark': !isGranted
-        };
-    }
-    accessButtonText(scenCode) {
-        let isGranted = this.student.accessGranted[scenCode];
-        return (isGranted ? 'Revoke access' : 'Grant access');
-    }
-    toggleAccess(scenCode) {
-        let curState = this.student.accessGranted[scenCode];
-        this._studentService.grantScenAccess(this.student.userId, scenCode, !curState)
-            .takeUntil(this.isDestroyed$)
-            .subscribe((res) => {
-            if (res !== undefined && res !== null) {
-                this.student.accessGranted[scenCode] = res.accessGranted[scenCode];
-            }
-        }, (err) => {
-            this.errorMessage = err.error.message;
-        });
-    }
-    roleDisabled(src) {
-        if (this._admin === undefined) {
-            return false;
-        }
-        else if (this.student.userId === this._admin.id) {
-            return true;
-        }
-        else if (src === 'admin' && this._admin.role < 2) {
-            return true;
-        }
-        else if (src === 'instr' && this._admin.role < 1) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    roleButtonClass(src) {
-        return {
-            'btn btn-sm': true,
-            'btn-outline-secondary': src !== this.newRole,
-            'btn-secondary': src === this.newRole
-        };
-    }
-    ngOnDestroy() {
-        // update role is necessary
-        if (this.student.role !== this.newRole) {
-            this._studentService
-                .setStudentRole(this.student.userId, this.newRole)
-                .takeUntil(this.isDestroyed$)
-                .subscribe((res) => {
-                this.paramObserver.unsubscribe();
-                this.isDestroyed$.next(true);
-                this.isDestroyed$.unsubscribe();
-            }, (err) => {
-                this.errorMessage = err.error.message;
-            });
-        }
-        else {
-            this.paramObserver.unsubscribe();
-            this.isDestroyed$.next(true);
-            this.isDestroyed$.unsubscribe();
-        }
-    }
-};
-StudentIndivComponent = __decorate([
-    core_1.Component({
-        selector: 'student-indiv',
-        templateUrl: 'app/admin/student/student-indiv/student-indiv.template.html',
-    }),
-    __metadata("design:paramtypes", [router_1.Router,
-        router_1.ActivatedRoute,
-        student_service_1.StudentService,
-        scenario_service_1.ScenarioService])
-], StudentIndivComponent);
-exports.StudentIndivComponent = StudentIndivComponent;
-
-
-/***/ }),
-
-/***/ 410:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const Subject_1 = __webpack_require__(8);
-__webpack_require__(33);
-__webpack_require__(158);
-const student_service_1 = __webpack_require__(69);
-let StudentFridgeComponent = class StudentFridgeComponent {
-    constructor(_router, _route, _studentService) {
-        this._router = _router;
-        this._route = _route;
-        this._studentService = _studentService;
-        this.hasFridge = false;
-        this.viewStrains = 'all';
-        this.errorMessage = '';
-        this.isDestroyed$ = new Subject_1.Subject();
-    }
-    ngOnInit() {
-        this.paramObserver = this._route.params.subscribe(params => {
-            let studentId = params['studentId'];
-            let scenId = params['scenId'];
-            this._studentService.getFridge(studentId, scenId)
-                .takeUntil(this.isDestroyed$)
-                .subscribe((fridge) => {
-                this.fridge = fridge;
-                this.hasFridge = (fridge.strains !== undefined);
-                if (this.hasFridge) {
-                    this.fridge.strains.sort((a, b) => { return a.strainNum - b.strainNum; });
-                }
-                this.setPhage('all');
-            }, (error) => {
-                console.log(error);
-                this.errorMessage = error.message;
-            });
-        });
-    }
-    getButtonClass(src) {
-        return {
-            'btn btn-sm': true,
-            'btn-primary': (src === this.viewStrains),
-            'btn-outline-primary': (src !== this.viewStrains)
-        };
-    }
-    setPhage(src) {
-        this.viewStrains = src;
-        if (this.viewStrains === 'all') {
-            this.strainList = this.fridge.strains;
-        }
-        else {
-            this.strainList = this.fridge.strains.filter((strain) => {
-                if (strain.phageType === 'unknown') {
-                    return true;
-                }
-                else if (strain.phageType === 'user' && strain.submitted) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            });
-        }
-    }
-    ngOnDestroy() {
-        this.paramObserver.unsubscribe();
-        this.isDestroyed$.next(true);
-        this.isDestroyed$.unsubscribe();
-    }
-};
-StudentFridgeComponent = __decorate([
-    core_1.Component({
-        selector: 'student-fridge',
-        templateUrl: 'app/admin/student/student-fridge/student-fridge.template.html',
-    }),
-    __metadata("design:paramtypes", [router_1.Router,
-        router_1.ActivatedRoute,
-        student_service_1.StudentService])
-], StudentFridgeComponent);
-exports.StudentFridgeComponent = StudentFridgeComponent;
-
-
-/***/ }),
-
-/***/ 411:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-__webpack_require__(33);
-const authentication_service_1 = __webpack_require__(34);
-const course_service_1 = __webpack_require__(55);
-const student_service_1 = __webpack_require__(69);
-let AdminComponent = class AdminComponent {
-    //private isDestroyed$: Subject<boolean>
-    constructor(_authenticationService, _courseService, _studentService) {
-        this._authenticationService = _authenticationService;
-        this._courseService = _courseService;
-        this._studentService = _studentService;
-        this.errorMessage = '';
-    }
-    ngOnInit() {
-        /*this._authenticationService.getUser
-          .takeUntil(this.isDestroyed$)
-          .subscribe( (res) =>{
-          this.adminUser = res;
-
-          this._courseService.setAdmin(userId);
-          this.errorMessage = '';
-        }, (err)=>{
-          this.errorMessage = JSON.stringify(err);
-        }); */
-        this.adminUser = this._authenticationService.getUser();
-        let userId = this.adminUser.id;
-        let userRole = this.adminUser.role;
-        this._courseService.setAdmin(userId);
-        this._studentService.setAdmin(userId, userRole);
-    }
-    ngOnDestroy() {
-        this._courseService.setAdmin(-1);
-        this._studentService.setAdmin(-1, -1);
-    }
-};
-AdminComponent = __decorate([
-    core_1.Component({
-        selector: 'admin-cmp',
-        templateUrl: 'app/admin/admin.template.html'
-    }),
-    __metadata("design:paramtypes", [authentication_service_1.AuthenticationService,
-        course_service_1.CourseService,
-        student_service_1.StudentService])
-], AdminComponent);
-exports.AdminComponent = AdminComponent;
-
-
-/***/ }),
-
-/***/ 412:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-let AdminHomeComponent = class AdminHomeComponent {
-};
-AdminHomeComponent = __decorate([
-    core_1.Component({
-        selector: 'admin-home',
-        templateUrl: 'app/admin/admin-home/admin-home.template.html'
-    })
-], AdminHomeComponent);
-exports.AdminHomeComponent = AdminHomeComponent;
-
-
-/***/ }),
-
-/***/ 413:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-let NotAuthComponent = class NotAuthComponent {
-};
-NotAuthComponent = __decorate([
-    core_1.Component({
-        selector: 'not-auth-cmp',
-        templateUrl: 'app/admin/not-auth/not-auth.template.html'
-    })
-], NotAuthComponent);
-exports.NotAuthComponent = NotAuthComponent;
 
 
 /***/ }),
@@ -2740,20 +2775,20 @@ exports.StudentService = StudentService;
 
 /***/ }),
 
-/***/ 857:
+/***/ 858:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const platform_browser_dynamic_1 = __webpack_require__(231);
-const app_module_1 = __webpack_require__(858);
+const platform_browser_dynamic_1 = __webpack_require__(232);
+const app_module_1 = __webpack_require__(859);
 platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(app_module_1.AppModule);
 
 
 /***/ }),
 
-/***/ 858:
+/***/ 859:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2768,20 +2803,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const platform_browser_1 = __webpack_require__(67);
 const forms_1 = __webpack_require__(25);
-const router_1 = __webpack_require__(12);
+const router_1 = __webpack_require__(11);
 const http_1 = __webpack_require__(54);
 //import { DndModule } from 'ng2-dnd';
-const app_component_1 = __webpack_require__(859);
-const app_routes_1 = __webpack_require__(860);
+const app_component_1 = __webpack_require__(860);
+const app_routes_1 = __webpack_require__(861);
 //import { HomeModule } from './home/home.module';
-const authentication_service_1 = __webpack_require__(34);
+const authentication_service_1 = __webpack_require__(30);
 const scenario_service_1 = __webpack_require__(39);
 const course_service_1 = __webpack_require__(55);
-const authentication_module_1 = __webpack_require__(861);
-const article_module_1 = __webpack_require__(863);
-const scenario_module_1 = __webpack_require__(865);
-const admin_module_1 = __webpack_require__(869);
-const nav_component_1 = __webpack_require__(876);
+const admin_module_1 = __webpack_require__(862);
+const authentication_module_1 = __webpack_require__(869);
+const article_module_1 = __webpack_require__(871);
+const home_module_1 = __webpack_require__(873);
+const scenario_module_1 = __webpack_require__(875);
+const nav_component_1 = __webpack_require__(879);
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -2790,6 +2826,7 @@ AppModule = __decorate([
             platform_browser_1.BrowserModule,
             http_1.HttpClientModule,
             forms_1.FormsModule,
+            home_module_1.HomeModule,
             admin_module_1.AdminModule,
             authentication_module_1.AuthenticationModule,
             article_module_1.ArticleModule,
@@ -2813,7 +2850,7 @@ exports.AppModule = AppModule;
 
 /***/ }),
 
-/***/ 859:
+/***/ 860:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2829,8 +2866,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const authentication_service_1 = __webpack_require__(34);
-const router_1 = __webpack_require__(12);
+const authentication_service_1 = __webpack_require__(30);
+const router_1 = __webpack_require__(11);
 let AppComponent = class AppComponent {
     constructor(_authenticationService, router) {
         this._authenticationService = _authenticationService;
@@ -2849,7 +2886,7 @@ exports.AppComponent = AppComponent;
 
 /***/ }),
 
-/***/ 860:
+/***/ 861:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2863,7 +2900,298 @@ exports.AppRoutes = [{
 
 /***/ }),
 
-/***/ 861:
+/***/ 862:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const shared_module_1 = __webpack_require__(181);
+const admin_route_module_1 = __webpack_require__(863);
+const admin_component_1 = __webpack_require__(394);
+const admin_home_component_1 = __webpack_require__(395);
+const not_auth_component_1 = __webpack_require__(396);
+const course_component_1 = __webpack_require__(867);
+const course_create_component_1 = __webpack_require__(386);
+const course_indiv_component_1 = __webpack_require__(387);
+const course_edit_component_1 = __webpack_require__(388);
+const course_list_component_1 = __webpack_require__(389);
+const course_scenario_component_1 = __webpack_require__(390);
+const student_list_component_1 = __webpack_require__(391);
+const student_indiv_component_1 = __webpack_require__(392);
+const student_fridge_component_1 = __webpack_require__(393);
+const student_phage_component_1 = __webpack_require__(868);
+const admin_guard_service_1 = __webpack_require__(385);
+const student_service_1 = __webpack_require__(69);
+let AdminModule = class AdminModule {
+};
+AdminModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            shared_module_1.SharedModule,
+            admin_route_module_1.AdminRouteModule
+        ],
+        declarations: [
+            admin_component_1.AdminComponent,
+            admin_home_component_1.AdminHomeComponent,
+            not_auth_component_1.NotAuthComponent,
+            course_component_1.CourseComponent,
+            course_create_component_1.CourseCreateComponent,
+            course_indiv_component_1.CourseIndivComponent,
+            course_edit_component_1.CourseEditComponent,
+            course_list_component_1.CourseListComponent,
+            course_scenario_component_1.CourseScenarioComponent,
+            student_list_component_1.StudentListComponent,
+            student_indiv_component_1.StudentIndivComponent,
+            student_fridge_component_1.StudentFridgeComponent,
+            student_phage_component_1.StudentPhageComponent
+        ],
+        providers: [
+            admin_guard_service_1.AdminGuard,
+            student_service_1.StudentService
+        ]
+    })
+], AdminModule);
+exports.AdminModule = AdminModule;
+
+
+/***/ }),
+
+/***/ 863:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const router_1 = __webpack_require__(11);
+const admin_guard_service_1 = __webpack_require__(385);
+const course_routes_1 = __webpack_require__(864);
+const student_routes_1 = __webpack_require__(865);
+const admin_component_1 = __webpack_require__(394);
+const admin_home_component_1 = __webpack_require__(395);
+const not_auth_component_1 = __webpack_require__(396);
+const adminRoutes = [
+    {
+        path: 'admin',
+        canActivate: [admin_guard_service_1.AdminGuard],
+        canActivateChild: [admin_guard_service_1.AdminGuard],
+        component: admin_component_1.AdminComponent,
+        children: [
+            {
+                path: 'courses',
+                //component: CourseComponent,
+                children: course_routes_1.CourseRoutes
+            },
+            {
+                path: 'students',
+                children: student_routes_1.StudentRoutes
+            },
+            {
+                path: '',
+                component: admin_home_component_1.AdminHomeComponent
+            }
+        ]
+    },
+    {
+        path: 'admin/not-auth',
+        component: not_auth_component_1.NotAuthComponent
+    }
+];
+let AdminRouteModule = class AdminRouteModule {
+};
+AdminRouteModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            router_1.RouterModule.forChild(adminRoutes)
+        ],
+        exports: [
+            router_1.RouterModule
+        ]
+    })
+], AdminRouteModule);
+exports.AdminRouteModule = AdminRouteModule;
+
+
+/***/ }),
+
+/***/ 864:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const course_create_component_1 = __webpack_require__(386);
+const course_indiv_component_1 = __webpack_require__(387);
+const course_edit_component_1 = __webpack_require__(388);
+const course_list_component_1 = __webpack_require__(389);
+const course_scenario_component_1 = __webpack_require__(390);
+exports.CourseRoutes = [
+    {
+        path: 'create',
+        component: course_create_component_1.CourseCreateComponent
+    },
+    { path: ':courseNum',
+        component: course_indiv_component_1.CourseIndivComponent
+    },
+    { path: ':courseNum/edit',
+        component: course_edit_component_1.CourseEditComponent
+    },
+    {
+        path: ':courseNum/:scenId',
+        component: course_scenario_component_1.CourseScenarioComponent
+    },
+    {
+        path: '',
+        component: course_list_component_1.CourseListComponent
+    }
+];
+
+
+/***/ }),
+
+/***/ 865:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const student_list_component_1 = __webpack_require__(391);
+const student_indiv_component_1 = __webpack_require__(392);
+const student_fridge_component_1 = __webpack_require__(393);
+exports.StudentRoutes = [
+    {
+        path: ':studentId',
+        component: student_indiv_component_1.StudentIndivComponent
+    },
+    {
+        path: ':studentId/:scenId',
+        component: student_fridge_component_1.StudentFridgeComponent
+    },
+    {
+        path: '',
+        component: student_list_component_1.StudentListComponent
+    }
+];
+
+
+/***/ }),
+
+/***/ 866:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StudentRolesArray = [
+    {
+        key: 'student',
+        label: 'Student',
+        value: 0
+    }, {
+        key: 'instr',
+        label: 'Instructor',
+        value: 1
+    }, {
+        key: 'admin',
+        label: 'Administrator',
+        value: 2
+    }
+];
+
+
+/***/ }),
+
+/***/ 867:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+__webpack_require__(34);
+let CourseComponent = class CourseComponent {
+};
+CourseComponent = __decorate([
+    core_1.Component({
+        selector: 'course-cmp',
+        templateUrl: 'app/admin/course/course.template.html'
+    })
+], CourseComponent);
+exports.CourseComponent = CourseComponent;
+
+
+/***/ }),
+
+/***/ 868:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+let StudentPhageComponent = class StudentPhageComponent {
+    constructor() { }
+    formatPhageType() {
+        if (this.phage) {
+            let t = this.phage.phageType;
+            if (this.phage.phageType === 'user' && this.phage.submitted) {
+                return 'SUBMISSION';
+            }
+            else {
+                return this.phage.phageType.toUpperCase();
+            }
+        }
+        else {
+            return '';
+        }
+    }
+};
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], StudentPhageComponent.prototype, "phage", void 0);
+StudentPhageComponent = __decorate([
+    core_1.Component({
+        selector: 'student-phage',
+        templateUrl: 'app/admin/student/student-fridge/student-phage.template.html'
+    }),
+    __metadata("design:paramtypes", [])
+], StudentPhageComponent);
+exports.StudentPhageComponent = StudentPhageComponent;
+
+
+/***/ }),
+
+/***/ 869:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2878,11 +3206,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const forms_1 = __webpack_require__(25);
 const common_1 = __webpack_require__(16);
-const router_1 = __webpack_require__(12);
-const authentication_routes_1 = __webpack_require__(862);
-const authentication_component_1 = __webpack_require__(384);
-const signin_component_1 = __webpack_require__(385);
-const signup_component_1 = __webpack_require__(386);
+const router_1 = __webpack_require__(11);
+const authentication_routes_1 = __webpack_require__(870);
+const authentication_component_1 = __webpack_require__(397);
+const signin_component_1 = __webpack_require__(398);
+const signup_component_1 = __webpack_require__(399);
 let AuthenticationModule = class AuthenticationModule {
 };
 AuthenticationModule = __decorate([
@@ -2904,15 +3232,15 @@ exports.AuthenticationModule = AuthenticationModule;
 
 /***/ }),
 
-/***/ 862:
+/***/ 870:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const authentication_component_1 = __webpack_require__(384);
-const signin_component_1 = __webpack_require__(385);
-const signup_component_1 = __webpack_require__(386);
+const authentication_component_1 = __webpack_require__(397);
+const signin_component_1 = __webpack_require__(398);
+const signup_component_1 = __webpack_require__(399);
 exports.AuthenticationRoutes = [{
         path: 'authentication',
         component: authentication_component_1.AuthenticationComponent,
@@ -2925,7 +3253,7 @@ exports.AuthenticationRoutes = [{
 
 /***/ }),
 
-/***/ 863:
+/***/ 871:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2940,13 +3268,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const common_1 = __webpack_require__(16);
 const forms_1 = __webpack_require__(25);
-const router_1 = __webpack_require__(12);
-const article_routes_1 = __webpack_require__(864);
-const article_component_1 = __webpack_require__(387);
-const create_component_1 = __webpack_require__(388);
-const list_component_1 = __webpack_require__(389);
-const view_component_1 = __webpack_require__(390);
-const edit_component_1 = __webpack_require__(391);
+const router_1 = __webpack_require__(11);
+const article_routes_1 = __webpack_require__(872);
+const article_component_1 = __webpack_require__(400);
+const create_component_1 = __webpack_require__(401);
+const list_component_1 = __webpack_require__(402);
+const view_component_1 = __webpack_require__(403);
+const edit_component_1 = __webpack_require__(404);
 let ArticleModule = class ArticleModule {
 };
 ArticleModule = __decorate([
@@ -2970,17 +3298,17 @@ exports.ArticleModule = ArticleModule;
 
 /***/ }),
 
-/***/ 864:
+/***/ 872:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const article_component_1 = __webpack_require__(387);
-const create_component_1 = __webpack_require__(388);
-const list_component_1 = __webpack_require__(389);
-const view_component_1 = __webpack_require__(390);
-const edit_component_1 = __webpack_require__(391);
+const article_component_1 = __webpack_require__(400);
+const create_component_1 = __webpack_require__(401);
+const list_component_1 = __webpack_require__(402);
+const view_component_1 = __webpack_require__(403);
+const edit_component_1 = __webpack_require__(404);
 exports.ArticleRoutes = [{
         path: 'articles',
         component: article_component_1.ArticleComponent,
@@ -2995,7 +3323,7 @@ exports.ArticleRoutes = [{
 
 /***/ }),
 
-/***/ 865:
+/***/ 873:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3008,19 +3336,91 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const shared_module_1 = __webpack_require__(392);
-const scenario_route_module_1 = __webpack_require__(866);
-const scenario_component_1 = __webpack_require__(393);
-const list_component_1 = __webpack_require__(394);
-const location_guard_service_1 = __webpack_require__(396);
-const experiment_service_1 = __webpack_require__(181);
-const fridge_component_1 = __webpack_require__(868);
-const phage_dialog_component_1 = __webpack_require__(401);
-const location_component_1 = __webpack_require__(395);
-const landing_room_component_1 = __webpack_require__(400);
-const lab_room_component_1 = __webpack_require__(397);
-const plexer_room_component_1 = __webpack_require__(398);
-const model_room_component_1 = __webpack_require__(399);
+const shared_module_1 = __webpack_require__(181);
+const home_route_module_1 = __webpack_require__(874);
+const home_component_1 = __webpack_require__(405);
+let HomeModule = class HomeModule {
+};
+HomeModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            shared_module_1.SharedModule,
+            home_route_module_1.HomeRouteModule
+        ],
+        declarations: [
+            home_component_1.HomeComponent
+        ]
+    })
+], HomeModule);
+exports.HomeModule = HomeModule;
+
+
+/***/ }),
+
+/***/ 874:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const router_1 = __webpack_require__(11);
+const home_component_1 = __webpack_require__(405);
+const homeRoute = [
+    {
+        path: 'home',
+        component: home_component_1.HomeComponent
+    }
+];
+let HomeRouteModule = class HomeRouteModule {
+};
+HomeRouteModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            router_1.RouterModule.forChild(homeRoute)
+        ],
+        exports: [
+            router_1.RouterModule
+        ]
+    })
+], HomeRouteModule);
+exports.HomeRouteModule = HomeRouteModule;
+
+
+/***/ }),
+
+/***/ 875:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const shared_module_1 = __webpack_require__(181);
+const scenario_route_module_1 = __webpack_require__(876);
+const scenario_component_1 = __webpack_require__(406);
+const list_component_1 = __webpack_require__(407);
+const location_guard_service_1 = __webpack_require__(409);
+const experiment_service_1 = __webpack_require__(183);
+const fridge_component_1 = __webpack_require__(878);
+const phage_dialog_component_1 = __webpack_require__(414);
+const location_component_1 = __webpack_require__(408);
+const landing_room_component_1 = __webpack_require__(413);
+const lab_room_component_1 = __webpack_require__(410);
+const plexer_room_component_1 = __webpack_require__(411);
+const model_room_component_1 = __webpack_require__(412);
 let ScenarioModule = class ScenarioModule {
 };
 ScenarioModule = __decorate([
@@ -3054,7 +3454,7 @@ exports.ScenarioModule = ScenarioModule;
 
 /***/ }),
 
-/***/ 866:
+/***/ 876:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3067,10 +3467,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const scenario_component_1 = __webpack_require__(393);
-const list_component_1 = __webpack_require__(394);
-const location_routes_1 = __webpack_require__(867);
+const router_1 = __webpack_require__(11);
+const scenario_component_1 = __webpack_require__(406);
+const list_component_1 = __webpack_require__(407);
+const location_routes_1 = __webpack_require__(877);
 const scenarioRoutes = [
     {
         path: '',
@@ -3105,18 +3505,18 @@ exports.ScenarioRouterModule = ScenarioRouterModule;
 
 /***/ }),
 
-/***/ 867:
+/***/ 877:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const location_component_1 = __webpack_require__(395);
-const location_guard_service_1 = __webpack_require__(396);
-const lab_room_component_1 = __webpack_require__(397);
-const plexer_room_component_1 = __webpack_require__(398);
-const model_room_component_1 = __webpack_require__(399);
-const landing_room_component_1 = __webpack_require__(400);
+const location_component_1 = __webpack_require__(408);
+const location_guard_service_1 = __webpack_require__(409);
+const lab_room_component_1 = __webpack_require__(410);
+const plexer_room_component_1 = __webpack_require__(411);
+const model_room_component_1 = __webpack_require__(412);
+const landing_room_component_1 = __webpack_require__(413);
 exports.LocationRoutes = [
     {
         path: '',
@@ -3135,7 +3535,7 @@ exports.LocationRoutes = [
 
 /***/ }),
 
-/***/ 868:
+/***/ 878:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3151,13 +3551,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
+const router_1 = __webpack_require__(11);
 const ng_bootstrap_1 = __webpack_require__(115);
 const Subject_1 = __webpack_require__(8);
 const scenario_service_1 = __webpack_require__(39);
-const authentication_service_1 = __webpack_require__(34);
+const authentication_service_1 = __webpack_require__(30);
 const scenario_globals_1 = __webpack_require__(118);
-const phage_dialog_component_1 = __webpack_require__(401);
+const phage_dialog_component_1 = __webpack_require__(414);
 let FridgeComponent = class FridgeComponent {
     constructor(_router, _route, _authenticationService, _scenarioService, _modalService) {
         this._router = _router;
@@ -3384,298 +3784,7 @@ exports.FridgeComponent = FridgeComponent;
 
 /***/ }),
 
-/***/ 869:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const shared_module_1 = __webpack_require__(392);
-const admin_route_module_1 = __webpack_require__(870);
-const admin_component_1 = __webpack_require__(411);
-const admin_home_component_1 = __webpack_require__(412);
-const not_auth_component_1 = __webpack_require__(413);
-const course_component_1 = __webpack_require__(874);
-const course_create_component_1 = __webpack_require__(403);
-const course_indiv_component_1 = __webpack_require__(404);
-const course_edit_component_1 = __webpack_require__(405);
-const course_list_component_1 = __webpack_require__(406);
-const course_scenario_component_1 = __webpack_require__(407);
-const student_list_component_1 = __webpack_require__(408);
-const student_indiv_component_1 = __webpack_require__(409);
-const student_fridge_component_1 = __webpack_require__(410);
-const student_phage_component_1 = __webpack_require__(875);
-const admin_guard_service_1 = __webpack_require__(402);
-const student_service_1 = __webpack_require__(69);
-let AdminModule = class AdminModule {
-};
-AdminModule = __decorate([
-    core_1.NgModule({
-        imports: [
-            shared_module_1.SharedModule,
-            admin_route_module_1.AdminRouteModule
-        ],
-        declarations: [
-            admin_component_1.AdminComponent,
-            admin_home_component_1.AdminHomeComponent,
-            not_auth_component_1.NotAuthComponent,
-            course_component_1.CourseComponent,
-            course_create_component_1.CourseCreateComponent,
-            course_indiv_component_1.CourseIndivComponent,
-            course_edit_component_1.CourseEditComponent,
-            course_list_component_1.CourseListComponent,
-            course_scenario_component_1.CourseScenarioComponent,
-            student_list_component_1.StudentListComponent,
-            student_indiv_component_1.StudentIndivComponent,
-            student_fridge_component_1.StudentFridgeComponent,
-            student_phage_component_1.StudentPhageComponent
-        ],
-        providers: [
-            admin_guard_service_1.AdminGuard,
-            student_service_1.StudentService
-        ]
-    })
-], AdminModule);
-exports.AdminModule = AdminModule;
-
-
-/***/ }),
-
-/***/ 870:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(12);
-const admin_guard_service_1 = __webpack_require__(402);
-const course_routes_1 = __webpack_require__(871);
-const student_routes_1 = __webpack_require__(872);
-const admin_component_1 = __webpack_require__(411);
-const admin_home_component_1 = __webpack_require__(412);
-const not_auth_component_1 = __webpack_require__(413);
-const adminRoutes = [
-    {
-        path: 'admin',
-        canActivate: [admin_guard_service_1.AdminGuard],
-        canActivateChild: [admin_guard_service_1.AdminGuard],
-        component: admin_component_1.AdminComponent,
-        children: [
-            {
-                path: 'courses',
-                //component: CourseComponent,
-                children: course_routes_1.CourseRoutes
-            },
-            {
-                path: 'students',
-                children: student_routes_1.StudentRoutes
-            },
-            {
-                path: '',
-                component: admin_home_component_1.AdminHomeComponent
-            }
-        ]
-    },
-    {
-        path: 'admin/not-auth',
-        component: not_auth_component_1.NotAuthComponent
-    }
-];
-let AdminRouteModule = class AdminRouteModule {
-};
-AdminRouteModule = __decorate([
-    core_1.NgModule({
-        imports: [
-            router_1.RouterModule.forChild(adminRoutes)
-        ],
-        exports: [
-            router_1.RouterModule
-        ]
-    })
-], AdminRouteModule);
-exports.AdminRouteModule = AdminRouteModule;
-
-
-/***/ }),
-
-/***/ 871:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const course_create_component_1 = __webpack_require__(403);
-const course_indiv_component_1 = __webpack_require__(404);
-const course_edit_component_1 = __webpack_require__(405);
-const course_list_component_1 = __webpack_require__(406);
-const course_scenario_component_1 = __webpack_require__(407);
-exports.CourseRoutes = [
-    {
-        path: 'create',
-        component: course_create_component_1.CourseCreateComponent
-    },
-    { path: ':courseNum',
-        component: course_indiv_component_1.CourseIndivComponent
-    },
-    { path: ':courseNum/edit',
-        component: course_edit_component_1.CourseEditComponent
-    },
-    {
-        path: ':courseNum/:scenId',
-        component: course_scenario_component_1.CourseScenarioComponent
-    },
-    {
-        path: '',
-        component: course_list_component_1.CourseListComponent
-    }
-];
-
-
-/***/ }),
-
-/***/ 872:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const student_list_component_1 = __webpack_require__(408);
-const student_indiv_component_1 = __webpack_require__(409);
-const student_fridge_component_1 = __webpack_require__(410);
-exports.StudentRoutes = [
-    {
-        path: ':studentId',
-        component: student_indiv_component_1.StudentIndivComponent
-    },
-    {
-        path: ':studentId/:scenId',
-        component: student_fridge_component_1.StudentFridgeComponent
-    },
-    {
-        path: '',
-        component: student_list_component_1.StudentListComponent
-    }
-];
-
-
-/***/ }),
-
-/***/ 873:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.StudentRolesArray = [
-    {
-        key: 'student',
-        label: 'Student',
-        value: 0
-    }, {
-        key: 'instr',
-        label: 'Instructor',
-        value: 1
-    }, {
-        key: 'admin',
-        label: 'Administrator',
-        value: 2
-    }
-];
-
-
-/***/ }),
-
-/***/ 874:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-__webpack_require__(33);
-let CourseComponent = class CourseComponent {
-};
-CourseComponent = __decorate([
-    core_1.Component({
-        selector: 'course-cmp',
-        templateUrl: 'app/admin/course/course.template.html'
-    })
-], CourseComponent);
-exports.CourseComponent = CourseComponent;
-
-
-/***/ }),
-
-/***/ 875:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-let StudentPhageComponent = class StudentPhageComponent {
-    constructor() { }
-    formatPhageType() {
-        if (this.phage) {
-            let t = this.phage.phageType;
-            if (this.phage.phageType === 'user' && this.phage.submitted) {
-                return 'SUBMISSION';
-            }
-            else {
-                return this.phage.phageType.toUpperCase();
-            }
-        }
-        else {
-            return '';
-        }
-    }
-};
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object)
-], StudentPhageComponent.prototype, "phage", void 0);
-StudentPhageComponent = __decorate([
-    core_1.Component({
-        selector: 'student-phage',
-        templateUrl: 'app/admin/student/student-fridge/student-phage.template.html'
-    }),
-    __metadata("design:paramtypes", [])
-], StudentPhageComponent);
-exports.StudentPhageComponent = StudentPhageComponent;
-
-
-/***/ }),
-
-/***/ 876:
+/***/ 879:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3770,5 +3879,5 @@ exports.ArticleService = ArticleService;
 
 /***/ })
 
-},[857]);
+},[858]);
 //# sourceMappingURL=bootstrap.js.map

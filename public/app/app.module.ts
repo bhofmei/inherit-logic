@@ -14,10 +14,12 @@ import { AuthenticationService } from './authentication/authentication.service';
 import { ScenarioService } from './scenario/scenario.service';
 import { CourseService } from './admin/course/course.service';
 
+import { AdminModule } from './admin/admin.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ArticleModule } from './articles/article.module';
+import { HomeModule } from './home/home.module';
 import { ScenarioModule } from './scenario/scenario.module';
-import { AdminModule } from './admin/admin.module';
+
 import { NavComponent } from './nav/nav.component';
 
 @NgModule({
@@ -25,6 +27,7 @@ import { NavComponent } from './nav/nav.component';
         BrowserModule,
         HttpClientModule,
         FormsModule,
+      HomeModule,
       AdminModule,
         AuthenticationModule,
         ArticleModule,

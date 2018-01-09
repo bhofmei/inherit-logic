@@ -1,0 +1,14 @@
+.larger-link{
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+#home-jumbotron h2{
+  font-weight: bold;
+}
+
+#jumbotron-contents{
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
