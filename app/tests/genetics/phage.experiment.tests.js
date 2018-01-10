@@ -3,9 +3,10 @@ const should = require('should');
 const clone = require('clone');
 const scenDefaults = require('../../../config/scenario.config');
 const scenarios = require('../../../config/scenario.data');
-const phageScen = require('../../utility/phage.scenario');
-const phageExp = require('../../utility/phage.experiment');
-const pEnum = require('../../utility/phage.enum')
+const phageScen = require('../../genetics/phage.scenario');
+const phageExp = require('../../genetics/phage.experiment');
+const pEnum = require('../../genetics/phage.enum');
+const debug = require('debug')('genetics');
 
 var scenario = {
   id: 0,
@@ -40,16 +41,17 @@ describe('Phage experiments unit tests', () => {
     for (let i = 0; i < phages.length; i++) {
       var phageDetails = phageScen.makePhage(JSON.parse(phages[i]), i, pEnum.PHAGETYPE.REF, scenData);
       scenData = phageDetails.scenData;
+      debug('original  phage', phageDetails.phage);
       phageList.push(phageDetails.phage);
     }
     done();
   });
   /* PHAGE:
   0. WT
-  1. mutationList: [ { kind: 'minusOne', location: 143 } ]
-  2. deletion: [ 110, 205 ]
-  3. mutationList: [ { kind: 'plusOne', location: 193 } ]
-  4. [ { kind: 'minusOne', location: 6 }, { kind: 'minusOne', location: 82 } ]
+  1. mutationList: [ { kind: 'minusOne', location: 240 } ]
+  2. deletion: [ 110, 210 ]
+  3. mutationList: [ { kind: 'plusOne', location: 86 } ]
+  4. [ { kind: 'minusOne', location: 211 }, { kind: 'minusOne', location: 287 } ]
   */
 
   describe('Test mutagenize', () => {
@@ -58,7 +60,7 @@ describe('Phage experiments unit tests', () => {
       let newPhage = phageExp.mutagenize(wtPhage.mutationList, 2);
       /* newPhage = [ [ { kind: 'minusOne', location: 41 } ],
   [ { kind: 'plusOne', location: 346 } ] ] */
-      console.log(newPhage);
+      debug(newPhage);
       newPhage.should.be.an.Array()
         .and.have.lengthOf(2);
       newPhage[0].should.have.length(1); // should have one mutation
@@ -69,22 +71,21 @@ describe('Phage experiments unit tests', () => {
     it('Should be able to mutagenize frameshift', () => {
       let fsPhage = phageList[1];
       let newPhage = phageExp.mutagenize(fsPhage.mutationList, 2);
-      /* newPhage = [ [ { kind: 'minusOne', location: 143 },
-    { kind: 'plusOne', location: 226 } ],
+      /* newPhage = [ [ { kind: 'plusOne', location: 226 }, { kind: 'minusOne', location: 240 }],
   [ { kind: 'minusOne', location: 23 },
-    { kind: 'minusOne', location: 143 } ] ]*/
-      console.log(newPhage);
+    { kind: 'minusOne', location: 240 } ] ]*/
+      debug(newPhage);
       newPhage.should.be.an.Array()
         .and.have.lengthOf(2);
       newPhage[0].should.have.length(2); // should have two mutations
-      newPhage[0][1].should.have.property('location',226);
+      newPhage[0][0].should.have.property('location',226);
       newPhage[1][0].should.have.property('location',23);
     });
   });
 
   describe('Test recombining', ()=>{
 
-    it('should recombine WT and FS, single crossover', ()=>{
+    it('Should recombine WT and FS, single crossover', ()=>{
       let wt = {shifts: phageList[0].mutationList, deletion: phageList[0].deletion};
       let fs = {shifts: phageList[1].mutationList, deletion: phageList[1].deletion};
       let rec = phageExp.recombine(wt, fs, 1, 2);

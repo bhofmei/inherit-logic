@@ -4,6 +4,8 @@ const randGen = require('./random.generator');
 const randEngine = randGen.getEngine();
 const scenConfig = require('../../config/scenario.config');
 const pEnum = require('./phage.enum');
+const debug = require('debug')('genetics'),
+      debugExt = require('debug','genetics:ext')
 
 exports.resetEngine = function(){
   randGen.reset(randEngine);
@@ -116,7 +118,7 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
     // check for multi-deletes
     if(newPhageDeletes.length > 1){
       // randomly pick a delete
-      let pickDel = randGen.pick(newPhageDeletes, randEngine);
+      let pickDel = randGen.randPick(newPhageDeletes, randEngine);
       newPhageDeletes = pickDel;
     } else if(newPhageDeletes.length === 1){
       newPhageDeletes = newPhageDeletes[0];
