@@ -1091,7 +1091,7 @@ let AdminComponent = class AdminComponent {
           .takeUntil(this.isDestroyed$)
           .subscribe( (res) =>{
           this.adminUser = res;
-
+    
           this._courseService.setAdmin(userId);
           this.errorMessage = '';
         }, (err)=>{
