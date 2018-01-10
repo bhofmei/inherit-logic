@@ -1,5 +1,7 @@
 const pEnum = require('./phage.enum');
 const randGen = require('./random.generator');
+const debug = require('debug')('genetics'),
+      debugExt = require('debug')('genetics:ext');
 /*exports.howManyToMake = function(randGen, inList){
   if(inList.length === 1){
     return inList[0];
@@ -57,19 +59,26 @@ exports.expand = function(inList, guesses){
 }
 
 exports.gaussRand = function(engine, inNum){
+  debug('guassRand start %d', inNum);
   var notGood = true;
-  var r, v, w;
+  var r, v, w, n1, n2;
   while(notGood){
-    v = (2 * (randGen.randDie(999, engine)/1000.0)) - 1;
-    w = (2 * (randGen.randDie(999, engine)/1000.0)) - 1
+    n1 = randGen.randDie(999, engine);
+    n2 = randGen.randDie(999, engine);
+    v = (2 * (n1/1000.0)) - 1;
+    w = (2 * (n2/1000.0)) - 1
     r = (v*v) + (w*w);
+    debugExt('guassRand vals %o', {n1: n1, n2: n2, v: v, w: w, r:r})
     if(r < 1 && r !== 0)
       notGood = false
   } // end while notGood
 
   var fac = Math.sqrt((-2.0 * Math.log10(r)) / r);
   var gauss = fac * w;
-  return Math.floor(inNum * gauss);
+  debugExt('fac guass %d %d', fac, gauss);
+  var outVal = inNum * gauss;
+  debug('guassRand out %d', outVal);
+  return outVal
 }
 
 exports.identicalGenotypes = function( phage1, phage2){
