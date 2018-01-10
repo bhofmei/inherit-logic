@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-//import { DndModule } from 'ng2-dnd';
+import { McBreadcrumbsConfig } from 'ngx-breadcrumbs';
 
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routes';
+
+import { SharedModule } from './shared/shared.module';
 
 //import { HomeModule } from './home/home.module';
 import { AuthenticationService } from './authentication/authentication.service';
@@ -28,8 +29,8 @@ import { NavComponent } from './nav/nav.component';
 @NgModule({
     imports: [
         BrowserModule,
+      SharedModule,
         HttpClientModule,
-        FormsModule,
       HomeModule,
       HelpModule,
       AdminModule,
@@ -51,4 +52,25 @@ import { NavComponent } from './nav/nav.component';
     ],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+constructor(breadcrumbsConfig: McBreadcrumbsConfig) {
+
+    breadcrumbsConfig.postProcess = (x) => {
+
+      // Ensure that the first breadcrumb always points to home
+
+      let y = x;
+
+      if(x.length && x[0].text !== 'Home') {
+        y = [
+          {
+            text: 'Home',
+            path: ''
+          }
+        ].concat(x);
+      }
+
+      return y;
+    };
+  }
+}
