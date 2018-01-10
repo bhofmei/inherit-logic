@@ -13,6 +13,9 @@ import { NotAuthComponent } from './not-auth/not-auth.component';
 const adminRoutes: Routes = [
   {
     path: 'admin',
+    data: {
+      breadcrumbs: 'Admin'
+    },
     canActivate:[AdminGuard],
     canActivateChild: [AdminGuard],
     component: AdminComponent,
@@ -20,11 +23,17 @@ const adminRoutes: Routes = [
       {
         path: 'courses',
         //component: CourseComponent,
-        children: CourseRoutes
+        children: CourseRoutes,
+        data: {
+          breadcrumbs: 'Courses'
+        }
       },
       {
         path: 'students',
-        children: StudentRoutes
+        children: StudentRoutes,
+        data: {
+          breadcrumbs: 'Students'
+        }
       },
       {
         path: '',

@@ -5,27 +5,6 @@ webpackJsonp([1],{
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ScenarioGlobals = {
-    numPhage: 1000000,
-    plateCapacity: 1500,
-    plexerCapacity: 200,
-    nFridgeShelf: 32,
-    nFridgeSpots: 16,
-    defaultLabDilution: 10,
-    defaultPlexerDilution: 5,
-    geneLength: 350,
-    deletionGuessLength: 10
-};
-
-
-/***/ }),
-
-/***/ 183:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -58,6 +37,27 @@ ScenarioResolver = __decorate([
     __metadata("design:paramtypes", [scenario_service_1.ScenarioService])
 ], ScenarioResolver);
 exports.ScenarioResolver = ScenarioResolver;
+
+
+/***/ }),
+
+/***/ 121:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ScenarioGlobals = {
+    numPhage: 1000000,
+    plateCapacity: 1500,
+    plexerCapacity: 200,
+    nFridgeShelf: 32,
+    nFridgeSpots: 16,
+    defaultLabDilution: 10,
+    defaultPlexerDilution: 5,
+    geneLength: 350,
+    deletionGuessLength: 10
+};
 
 
 /***/ }),
@@ -691,7 +691,7 @@ const Subject_1 = __webpack_require__(8);
 __webpack_require__(34);
 const course_service_1 = __webpack_require__(47);
 const scenario_service_1 = __webpack_require__(35);
-const student_service_1 = __webpack_require__(70);
+const student_service_1 = __webpack_require__(65);
 let CourseScenarioComponent = class CourseScenarioComponent {
     constructor(_router, _route, _courseService, _studentService, _scenarioService) {
         this._router = _router;
@@ -809,7 +809,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const student_service_1 = __webpack_require__(70);
+const student_service_1 = __webpack_require__(65);
 const student_interface_1 = __webpack_require__(184);
 let StudentListComponent = class StudentListComponent {
     constructor(_studentService) {
@@ -868,7 +868,7 @@ const core_1 = __webpack_require__(1);
 const router_1 = __webpack_require__(9);
 const Subject_1 = __webpack_require__(8);
 __webpack_require__(34);
-const student_service_1 = __webpack_require__(70);
+const student_service_1 = __webpack_require__(65);
 const scenario_service_1 = __webpack_require__(35);
 const student_roles_1 = __webpack_require__(874);
 let StudentIndivComponent = class StudentIndivComponent {
@@ -1024,7 +1024,7 @@ const router_1 = __webpack_require__(9);
 const Subject_1 = __webpack_require__(8);
 __webpack_require__(34);
 __webpack_require__(115);
-const student_service_1 = __webpack_require__(70);
+const student_service_1 = __webpack_require__(65);
 let StudentFridgeComponent = class StudentFridgeComponent {
     constructor(_router, _route, _studentService) {
         this._router = _router;
@@ -1119,7 +1119,7 @@ const core_1 = __webpack_require__(1);
 __webpack_require__(34);
 const authentication_service_1 = __webpack_require__(30);
 const course_service_1 = __webpack_require__(47);
-const student_service_1 = __webpack_require__(70);
+const student_service_1 = __webpack_require__(65);
 let AdminComponent = class AdminComponent {
     //private isDestroyed$: Subject<boolean>
     constructor(_authenticationService, _courseService, _studentService) {
@@ -1317,7 +1317,7 @@ const router_1 = __webpack_require__(9);
 const Subject_1 = __webpack_require__(8);
 __webpack_require__(34);
 __webpack_require__(115);
-__webpack_require__(159);
+__webpack_require__(160);
 const authentication_service_1 = __webpack_require__(30);
 const course_service_1 = __webpack_require__(47);
 let SignupComponent = class SignupComponent {
@@ -1873,7 +1873,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const Subject_1 = __webpack_require__(8);
 __webpack_require__(34);
-const scenario_globals_1 = __webpack_require__(120);
+const scenario_globals_1 = __webpack_require__(121);
 const experiment_service_1 = __webpack_require__(185);
 const scenario_service_1 = __webpack_require__(35);
 let LabRoomComponent = class LabRoomComponent {
@@ -2278,7 +2278,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const scenario_globals_1 = __webpack_require__(120);
+const scenario_globals_1 = __webpack_require__(121);
 const experiment_service_1 = __webpack_require__(185);
 const scenario_service_1 = __webpack_require__(35);
 let PlexerRoomComponent = class PlexerRoomComponent {
@@ -2507,7 +2507,7 @@ const Subject_1 = __webpack_require__(8);
 __webpack_require__(34);
 const authentication_service_1 = __webpack_require__(30);
 const scenario_service_1 = __webpack_require__(35);
-const scenario_globals_1 = __webpack_require__(120);
+const scenario_globals_1 = __webpack_require__(121);
 let ModelRoomComponent = class ModelRoomComponent {
     constructor(_router, _route, _authenticationService, _scenarioService) {
         this._router = _router;
@@ -2791,7 +2791,7 @@ exports.CourseService = CourseService;
 
 /***/ }),
 
-/***/ 70:
+/***/ 65:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2908,7 +2908,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
-const platform_browser_1 = __webpack_require__(68);
+const platform_browser_1 = __webpack_require__(69);
 const forms_1 = __webpack_require__(25);
 const router_1 = __webpack_require__(9);
 const http_1 = __webpack_require__(55);
@@ -2919,15 +2919,15 @@ const app_routes_1 = __webpack_require__(869);
 const authentication_service_1 = __webpack_require__(30);
 const scenario_service_1 = __webpack_require__(35);
 const course_service_1 = __webpack_require__(47);
-const scenario_resolver_1 = __webpack_require__(183);
+const scenario_resolver_1 = __webpack_require__(120);
 const admin_module_1 = __webpack_require__(870);
-const authentication_module_1 = __webpack_require__(877);
-const article_module_1 = __webpack_require__(879);
-const help_module_1 = __webpack_require__(881);
-const home_module_1 = __webpack_require__(883);
-const profile_module_1 = __webpack_require__(885);
-const scenario_module_1 = __webpack_require__(888);
-const nav_component_1 = __webpack_require__(892);
+const authentication_module_1 = __webpack_require__(878);
+const article_module_1 = __webpack_require__(880);
+const help_module_1 = __webpack_require__(882);
+const home_module_1 = __webpack_require__(884);
+const profile_module_1 = __webpack_require__(886);
+const scenario_module_1 = __webpack_require__(889);
+const nav_component_1 = __webpack_require__(893);
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -3031,7 +3031,7 @@ const admin_route_module_1 = __webpack_require__(871);
 const admin_component_1 = __webpack_require__(405);
 const admin_home_component_1 = __webpack_require__(406);
 const not_auth_component_1 = __webpack_require__(407);
-const course_component_1 = __webpack_require__(875);
+const course_component_1 = __webpack_require__(876);
 const course_create_component_1 = __webpack_require__(397);
 const course_indiv_component_1 = __webpack_require__(398);
 const course_edit_component_1 = __webpack_require__(399);
@@ -3040,10 +3040,11 @@ const course_scenario_component_1 = __webpack_require__(401);
 const student_list_component_1 = __webpack_require__(402);
 const student_indiv_component_1 = __webpack_require__(403);
 const student_fridge_component_1 = __webpack_require__(404);
-const student_phage_component_1 = __webpack_require__(876);
+const student_phage_component_1 = __webpack_require__(877);
 const admin_guard_service_1 = __webpack_require__(395);
-const student_service_1 = __webpack_require__(70);
+const student_service_1 = __webpack_require__(65);
 const course_resolver_1 = __webpack_require__(396);
+const student_resolver_1 = __webpack_require__(875);
 let AdminModule = class AdminModule {
 };
 AdminModule = __decorate([
@@ -3070,7 +3071,8 @@ AdminModule = __decorate([
         providers: [
             admin_guard_service_1.AdminGuard,
             student_service_1.StudentService,
-            course_resolver_1.CourseResolver
+            course_resolver_1.CourseResolver,
+            student_resolver_1.StudentResolver
         ]
     })
 ], AdminModule);
@@ -3159,7 +3161,7 @@ exports.AdminRouteModule = AdminRouteModule;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const course_resolver_1 = __webpack_require__(396);
-const scenario_resolver_1 = __webpack_require__(183);
+const scenario_resolver_1 = __webpack_require__(120);
 const course_create_component_1 = __webpack_require__(397);
 const course_indiv_component_1 = __webpack_require__(398);
 const course_edit_component_1 = __webpack_require__(399);
@@ -3206,14 +3208,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const student_list_component_1 = __webpack_require__(402);
 const student_indiv_component_1 = __webpack_require__(403);
 const student_fridge_component_1 = __webpack_require__(404);
+const scenario_resolver_1 = __webpack_require__(120);
+const student_resolver_1 = __webpack_require__(875);
 exports.StudentRoutes = [
     {
         path: ':studentId',
-        component: student_indiv_component_1.StudentIndivComponent
-    },
-    {
-        path: ':studentId/:scenId',
-        component: student_fridge_component_1.StudentFridgeComponent
+        resolve: { student: student_resolver_1.StudentResolver },
+        data: { breadcrumbs: '{{ student.firstName }} {{ student.lastName }}' },
+        children: [
+            {
+                path: ':scenId',
+                component: student_fridge_component_1.StudentFridgeComponent,
+                resolve: { scenario: scenario_resolver_1.ScenarioResolver },
+                data: { breadcrumbs: '{{ scenario.label }}' }
+            },
+            { path: '',
+                component: student_indiv_component_1.StudentIndivComponent
+            }
+        ]
     },
     {
         path: '',
@@ -3260,6 +3272,47 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const Observable_1 = __webpack_require__(0);
+const student_service_1 = __webpack_require__(65);
+let StudentResolver = class StudentResolver {
+    constructor(_studentService) {
+        this._studentService = _studentService;
+    }
+    resolve(route, state) {
+        const studentNum = route.params['studentId'];
+        if (studentNum) {
+            return this._studentService.getStudent(studentNum);
+        }
+        else {
+            return new Observable_1.Observable();
+        }
+    }
+};
+StudentResolver = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [student_service_1.StudentService])
+], StudentResolver);
+exports.StudentResolver = StudentResolver;
+
+
+/***/ }),
+
+/***/ 876:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 __webpack_require__(34);
@@ -3276,7 +3329,7 @@ exports.CourseComponent = CourseComponent;
 
 /***/ }),
 
-/***/ 876:
+/***/ 877:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3325,7 +3378,7 @@ exports.StudentPhageComponent = StudentPhageComponent;
 
 /***/ }),
 
-/***/ 877:
+/***/ 878:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3341,7 +3394,7 @@ const core_1 = __webpack_require__(1);
 const forms_1 = __webpack_require__(25);
 const common_1 = __webpack_require__(16);
 const router_1 = __webpack_require__(9);
-const authentication_routes_1 = __webpack_require__(878);
+const authentication_routes_1 = __webpack_require__(879);
 const authentication_component_1 = __webpack_require__(408);
 const signin_component_1 = __webpack_require__(409);
 const signup_component_1 = __webpack_require__(410);
@@ -3366,7 +3419,7 @@ exports.AuthenticationModule = AuthenticationModule;
 
 /***/ }),
 
-/***/ 878:
+/***/ 879:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3387,7 +3440,7 @@ exports.AuthenticationRoutes = [{
 
 /***/ }),
 
-/***/ 879:
+/***/ 880:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3403,7 +3456,7 @@ const core_1 = __webpack_require__(1);
 const common_1 = __webpack_require__(16);
 const forms_1 = __webpack_require__(25);
 const router_1 = __webpack_require__(9);
-const article_routes_1 = __webpack_require__(880);
+const article_routes_1 = __webpack_require__(881);
 const article_component_1 = __webpack_require__(411);
 const create_component_1 = __webpack_require__(412);
 const list_component_1 = __webpack_require__(413);
@@ -3432,7 +3485,7 @@ exports.ArticleModule = ArticleModule;
 
 /***/ }),
 
-/***/ 880:
+/***/ 881:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3457,7 +3510,7 @@ exports.ArticleRoutes = [{
 
 /***/ }),
 
-/***/ 881:
+/***/ 882:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3471,7 +3524,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const shared_module_1 = __webpack_require__(89);
-const help_route_module_1 = __webpack_require__(882);
+const help_route_module_1 = __webpack_require__(883);
 const help_component_1 = __webpack_require__(416);
 let HelpModule = class HelpModule {
 };
@@ -3491,7 +3544,7 @@ exports.HelpModule = HelpModule;
 
 /***/ }),
 
-/***/ 882:
+/***/ 883:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3529,7 +3582,7 @@ exports.HelpRouteModule = HelpRouteModule;
 
 /***/ }),
 
-/***/ 883:
+/***/ 884:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3543,7 +3596,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const shared_module_1 = __webpack_require__(89);
-const home_route_module_1 = __webpack_require__(884);
+const home_route_module_1 = __webpack_require__(885);
 const home_component_1 = __webpack_require__(417);
 let HomeModule = class HomeModule {
 };
@@ -3563,7 +3616,7 @@ exports.HomeModule = HomeModule;
 
 /***/ }),
 
-/***/ 884:
+/***/ 885:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3601,7 +3654,7 @@ exports.HomeRouteModule = HomeRouteModule;
 
 /***/ }),
 
-/***/ 885:
+/***/ 886:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3615,8 +3668,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const shared_module_1 = __webpack_require__(89);
-const profile_route_module_1 = __webpack_require__(886);
-const profile_service_1 = __webpack_require__(887);
+const profile_route_module_1 = __webpack_require__(887);
+const profile_service_1 = __webpack_require__(888);
 const profile_component_1 = __webpack_require__(418);
 let ProfileModule = class ProfileModule {
 };
@@ -3639,7 +3692,7 @@ exports.ProfileModule = ProfileModule;
 
 /***/ }),
 
-/***/ 886:
+/***/ 887:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3677,7 +3730,7 @@ exports.ProfileRouteModule = ProfileRouteModule;
 
 /***/ }),
 
-/***/ 887:
+/***/ 888:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3703,7 +3756,7 @@ exports.ProfileService = ProfileService;
 
 /***/ }),
 
-/***/ 888:
+/***/ 889:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3717,12 +3770,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const shared_module_1 = __webpack_require__(89);
-const scenario_route_module_1 = __webpack_require__(889);
+const scenario_route_module_1 = __webpack_require__(890);
 const scenario_component_1 = __webpack_require__(419);
 const list_component_1 = __webpack_require__(420);
 const location_guard_service_1 = __webpack_require__(422);
 const experiment_service_1 = __webpack_require__(185);
-const fridge_component_1 = __webpack_require__(891);
+const fridge_component_1 = __webpack_require__(892);
 const phage_dialog_component_1 = __webpack_require__(427);
 const location_component_1 = __webpack_require__(421);
 const landing_room_component_1 = __webpack_require__(426);
@@ -3758,68 +3811,6 @@ ScenarioModule = __decorate([
     })
 ], ScenarioModule);
 exports.ScenarioModule = ScenarioModule;
-
-
-/***/ }),
-
-/***/ 889:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-const router_1 = __webpack_require__(9);
-const scenario_component_1 = __webpack_require__(419);
-const scenario_resolver_1 = __webpack_require__(183);
-const list_component_1 = __webpack_require__(420);
-const location_routes_1 = __webpack_require__(890);
-const scenarioRoutes = [
-    {
-        path: 'scenarios',
-        data: {
-            // Uses static text (Home)
-            breadcrumbs: 'Scenarios'
-        },
-        component: scenario_component_1.ScenarioComponent,
-        children: [
-            {
-                path: ':scenId',
-                //component: ScenarioComponent,
-                children: location_routes_1.LocationRoutes,
-                resolve: {
-                    scenario: scenario_resolver_1.ScenarioResolver
-                },
-                data: {
-                    breadcrumbs: '{{ scenario.label }}'
-                }
-            },
-            {
-                path: '',
-                component: list_component_1.ListComponent
-            }
-        ]
-    }
-];
-let ScenarioRouterModule = class ScenarioRouterModule {
-};
-ScenarioRouterModule = __decorate([
-    core_1.NgModule({
-        imports: [
-            router_1.RouterModule.forChild(scenarioRoutes)
-        ],
-        exports: [
-            router_1.RouterModule
-        ]
-    })
-], ScenarioRouterModule);
-exports.ScenarioRouterModule = ScenarioRouterModule;
 
 
 /***/ }),
@@ -3872,6 +3863,68 @@ exports.SharedModule = SharedModule;
 
 "use strict";
 
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+const router_1 = __webpack_require__(9);
+const scenario_component_1 = __webpack_require__(419);
+const scenario_resolver_1 = __webpack_require__(120);
+const list_component_1 = __webpack_require__(420);
+const location_routes_1 = __webpack_require__(891);
+const scenarioRoutes = [
+    {
+        path: 'scenarios',
+        data: {
+            // Uses static text (Home)
+            breadcrumbs: 'Scenarios'
+        },
+        component: scenario_component_1.ScenarioComponent,
+        children: [
+            {
+                path: ':scenId',
+                //component: ScenarioComponent,
+                children: location_routes_1.LocationRoutes,
+                resolve: {
+                    scenario: scenario_resolver_1.ScenarioResolver
+                },
+                data: {
+                    breadcrumbs: '{{ scenario.label }}'
+                }
+            },
+            {
+                path: '',
+                component: list_component_1.ListComponent
+            }
+        ]
+    }
+];
+let ScenarioRouterModule = class ScenarioRouterModule {
+};
+ScenarioRouterModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            router_1.RouterModule.forChild(scenarioRoutes)
+        ],
+        exports: [
+            router_1.RouterModule
+        ]
+    })
+], ScenarioRouterModule);
+exports.ScenarioRouterModule = ScenarioRouterModule;
+
+
+/***/ }),
+
+/***/ 891:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 Object.defineProperty(exports, "__esModule", { value: true });
 const location_component_1 = __webpack_require__(421);
 const location_guard_service_1 = __webpack_require__(422);
@@ -3915,7 +3968,7 @@ exports.LocationRoutes = [
 
 /***/ }),
 
-/***/ 891:
+/***/ 892:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3936,7 +3989,7 @@ const ng_bootstrap_1 = __webpack_require__(117);
 const Subject_1 = __webpack_require__(8);
 const scenario_service_1 = __webpack_require__(35);
 const authentication_service_1 = __webpack_require__(30);
-const scenario_globals_1 = __webpack_require__(120);
+const scenario_globals_1 = __webpack_require__(121);
 const phage_dialog_component_1 = __webpack_require__(427);
 let FridgeComponent = class FridgeComponent {
     constructor(_router, _route, _authenticationService, _scenarioService, _modalService) {
@@ -4164,7 +4217,7 @@ exports.FridgeComponent = FridgeComponent;
 
 /***/ }),
 
-/***/ 892:
+/***/ 893:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

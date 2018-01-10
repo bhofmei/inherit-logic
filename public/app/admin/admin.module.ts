@@ -21,6 +21,8 @@ import { StudentPhageComponent } from './student/student-fridge/student-phage.co
 import { AdminGuard } from './admin-guard.service';
 
 import { StudentService } from './student/student.service';
+import { CourseResolver } from './course/course.resolver';
+import { StudentResolver } from './student/student.resolver';
 
 @NgModule({
   imports: [
@@ -44,7 +46,9 @@ import { StudentService } from './student/student.service';
   ],
   providers: [
     AdminGuard,
-    StudentService
+    StudentService,
+    CourseResolver,
+    StudentResolver
   ]
 })
 export class AdminModule {}
