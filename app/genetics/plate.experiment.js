@@ -9,6 +9,10 @@ const phageLogic = require('./phage.logic');
 const plateEnum = require('./plate.enum');
 const bacteria = require('../models/bacteria.server.model');
 
+const debug = require('debug')('genetics'),
+      debugExt = require('debug')('genetics:ext'),
+      debugTest = require('debug')('genetics:test');
+
 exports.resetEngine = function(){
   randGen.reset(randEngine);
 }
@@ -22,17 +26,18 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
   if(lawnType===null || lawnType === undefined)
     throw new Error('No bacteria specified');
   var phagePlate = this.createPlatePhage(phage1, phage2, lawnType, specials, capacity, whoCalled, scenData);
+  debug('createPlate');
   phagePlate.genoList.forEach((geno)=>{
-  //console.log(geno.shifts);
+    debug(geno.shifts);
   });
   // has: full, smallPlaque, largePlaque, genotypes
-  var plate = this.generatePlate(lawnType, phagePlate.genoList, phagePlate.strainList, scenData);
+  var plate = this.generatePlate(lawnType, phagePlate.genoList, phagePlate.strainList, capacity, scenData);
   return plate;
 }
 
-exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData) {
-  // returns genoLista and strainList
-  var startGenotypes, genoList;
+exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capacity, whoCalled, scenData) {
+  var lawnType = bacteria[lawnTypeStr];
+  var startGenotypes, genoList, nPhage2Larger;
   var replicaStrainList = [];
   var deletesInPlay = false;
   var mutagenized = (specials === 'irrad');
@@ -79,16 +84,17 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
         startGenotypes = [newPhage2.genome, newPhage2.genome];
       } else {
         phageRatio = newPhage2.numPhage / newPhage1.numPhage;
-        startGenotypes = [newPhage1.genome, newPhage2.genome];
+        startGenotypes = [newPhage2.genome, newPhage1.genome];
       }
     } else {
       // newPhage1.numPhage >= newPhage2.numPhage
+      nPhage2Larger = false;
       if (newPhage2.numPhage === 0) {
         phageRatio = 1;
         startGenotypes = [newPhage1.genome, newPhage1.genome];
       } else {
         phageRatio = newPhage1.numPhage / newPhage2.numPhage;
-        startGenotypes = [newPhage2.genome, newPhage1.genome]
+        startGenotypes = [newPhage1.genome, newPhage2.genome]
       }
     } // end if newPhage1.numPhage < newPhage2.numPhage
     deletesInPlay = (newPhage1.mutag || newPhage2.mutag);
@@ -112,7 +118,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
       let numWT = scenConfig.probRadSurvive * newPhage1.numPhage;
       // number of deletions
       let numDeletes = newPhage1.numPhage * scenConfig.probRadSurvive * scenConfig.probDeletion;
-      if (numWT + numDeletes > capacity) {
+      if ((numWT + numDeletes > capacity) && (lawnType.kind === plateEnum.BACTTYPE.PERM)) {
         // too many phage
         return {
           genoList: genoList,
@@ -141,13 +147,15 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
       } // end for j
     } else {
       // not mutagenized
-      let changePhage = Math.floor(scenData.mutationFreq * newPhage1.numPhage);
+      let changePhage = Math.round(scenData.mutationFreq * newPhage1.numPhage);
+      debug('change phage %d', changePhage);
       changePhage = changePhage + util.gaussRand(randEngine, 2 * Math.sqrt(changePhage));
-      //console.log('numMut', changePhage);
-      if ((newPhage1.numPhage > capacity) || (newPhage1.numPhage + changePhage > capacity)) {
+      changePhage = Math.abs(Math.round(changePhage));
+      debugTest('numMut single %d', changePhage);
+      if ((newPhage1.numPhage + changePhage > capacity) && (lawnType.kind === plateEnum.BACTTYPE.PERM)) {
         // if too many, return so we don't waste time computing
         return {
-          genoList: genoList,
+          genoList: [startGenotypes[0]],
           strainList: false
         };
       }
@@ -155,8 +163,10 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
         replicaStrainList.push(0);
       }
       let getMutes = phageExper.mutagenize(startGenotypes[0].shifts, changePhage);
+
       for (let j = 0; j < changePhage; j++) {
         numNewGenos++;
+        debugExt('mut phage single %o', getMutes[j]);
         replicaStrainList.push(numNewGenos);
         genoList.push({
           shifts: getMutes[j],
@@ -171,9 +181,9 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
     numNewGenos = 1;
     // compute offspring counts
     var nOffspring = computeNumOffspring(newPhage1.numPhage, newPhage2.numPhage, phageRatio, scenData.mutationFreq, scenData.recombinationFreq, identical);
-  //console.log(nOffspring);
-    // check capacity
-    if (nOffspring.total > capacity) {
+  debugTest('num offspring double %o', nOffspring);
+    // check capacity for PERM bact
+    if (nOffspring.total > capacity && (lawnType.kind === plateEnum.BACTTYPE.PERM)) {
       return {
         genoList: genoList,
         strainList: false
@@ -190,6 +200,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
       let getMutes = phageExper.mutagenize(startGenotypes[j].shifts, nOffspring.numMut[j]);
       for (let k = 0; k < getMutes.length; k++) {
         numNewGenos++;
+        debugExt('mut phage double %o', getMutes[j]);
         replicaStrainList.push(numNewGenos);
         genoList.push({
           shifts: getMutes[k],
@@ -206,6 +217,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
           // add to plate
           for (let k = 0; k < newGenoList.length; k++) {
             numNewGenos++;
+            debugExt('recomb %d phage double %o', j, newGenoList[k]);
             replicaStrainList.push(numNewGenos);
             genoList.push(newGenoList[k]);
           } // end for k
@@ -220,7 +232,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnType, specials, capacit
   }
 } // end createPlage
 
-exports.generatePlate = function (lawnTypeStr, genoList, strainList, scenData) {
+exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, scenData) {
   // return full, smallPlaque, largePlaque, genotypes
   // lawn type is "B" or "K"
 
@@ -267,7 +279,16 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, scenData) {
       if (phenoList[strain] === plateEnum.PLAQUETYPE.SMALL)
         smallPlaqueList.push({i:strain, pheno: plateEnum.PLAQUETYPE.SMALL});
       // else it's dead - do nothing
-    })
+    });
+    // check capacity
+    if(smallPlaqueList.length + largePlaqueList.length > capacity){
+      return {
+      full: true,
+      smallPlaque: [],
+      largePlaque: [],
+      genotypes: genoList
+    }
+    }
   }
   // shuffle plaques
   randGen.randShuffle(smallPlaqueList, randEngine);
@@ -303,13 +324,13 @@ const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
   let f1 = (nR) / (nR + 1);
   let f2 = 1 - f1;
   let numRecomb = (identical ? [0, 0, 0] : computeRecombParameters(f1, f2, recFreq, numOffspring));
-  let numGeno = [Math.floor(f1 * numOffspring), Math.floor(f2 * numOffspring)];
+  let numGeno = [Math.round(f1 * numOffspring), Math.round(f2 * numOffspring)];
   let numMut = numGeno.map((nGeno) => {
-    let nMut = mutFreq * nGeno;
-    nMut = (nMut < 1 ? 0 : nMut);
-    nMut = nMut + util.gaussRand(randEngine, (2 * Math.sqrt(nMut)));
-
-    return Math.round(Math.abs(nMut));
+    let nMut = Math.round(mutFreq * nGeno);
+    let changeBy = util.gaussRand(randEngine, (2 * Math.sqrt(nMut)))
+    nMut = Math.round(nMut + changeBy);
+    debug(nMut);
+    return nMut < 0 ? 0 : nMut;
   });
   let total = numGeno[0] + numGeno[1] + numRecomb[0] + numRecomb[1] + numRecomb[2] + numMut[0] + numMut[1];
   // return results
