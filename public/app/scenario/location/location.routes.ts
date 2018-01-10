@@ -14,10 +14,28 @@ export const LocationRoutes: Routes = [
     component: LocationComponent,
     canActivate: [LocationGuard],
     children: [
-      { path: 'lab-room', component: LabRoomComponent },
-      { path: 'plexer-room', component: PlexerRoomComponent },
-      { path: 'model-room', component: ModelRoomComponent},
-      {path: 'info', component: LandingRoomComponent},
+      {
+        path: 'lab-room',
+        component: LabRoomComponent,
+        data: {
+          breadcrumbs: 'Lab'
+        }
+      },
+      {
+        path: 'plexer-room',
+        component: PlexerRoomComponent,
+        data: {
+          breadcrumbs: 'Plexer'
+        }
+      },
+      {
+        path: 'model-room',
+        component: ModelRoomComponent,
+        data: {
+          breadcrumbs: 'Model'
+        }
+      },
+      { path: 'info', component: LandingRoomComponent},
       { path: '', component: LandingRoomComponent}
     ]
   }

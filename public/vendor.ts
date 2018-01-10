@@ -10,3 +10,4 @@ import 'rxjs';
 //import 'tslib';
 import '@ng-bootstrap/ng-bootstrap';
 import 'ng2-dnd';
+import 'ngx-breadcrumbs';

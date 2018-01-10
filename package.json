@@ -15,7 +15,7 @@
     "start": "concurrently \"npm run tsc:w\" \"npm run app\" ",
     "start:w": "concurrently \"npm run webpack\" \"npm run app\" ",
     "test:back": "NODE_ENV=test mocha --reporter spec app/tests",
-    "test:genetics": "NODE_ENV=test mocha --reporter spec app/tests/genetics"
+    "test:genetics": "NODE_ENV=test DEBUG=genetics mocha --reporter spec app/tests/genetics"
   },
   "keywords": [
     "genetics"
@@ -58,6 +58,8 @@
     "morgan": "^1.7.0",
     "ng2-dnd": "^5.0.2",
     "ng2-dragula": "^1.5.0",
+    "ngx-breadcrumbs": "^0.0.3",
+    "ngx-scrollspy": "^1.2.0",
     "open-iconic": "https://github.com/iconic/open-iconic.git",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",

@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
+import { McBreadcrumbsConfig } from 'ngx-breadcrumbs';
 
 import { ScenarioRouterModule } from './scenario.route.module';
+import { ScenarioResolver } from './scenario.resolver';
 import { ScenarioComponent } from './scenario.component';
 import { ListComponent } from './list/list.component';
 
@@ -37,7 +39,29 @@ import { ModelRoomComponent } from './location/model-room/model-room.component';
   ],
   providers: [
     LocationGuard,
-    ExperimentService
+    ExperimentService,
+    ScenarioResolver
   ]
 })
-export class ScenarioModule {}
+export class ScenarioModule {
+
+  constructor(breadcrumbsConfig: McBreadcrumbsConfig) {
+
+    breadcrumbsConfig.postProcess = (x) => {
+
+      // Ensure the first breadcrumb points to home
+      let y = x;
+
+      if(x.length && x[0].text !== 'Home') {
+        y = [
+          {
+            text: 'Home',
+            path: ''
+          }
+        ].concat(x);
+      }
+
+      return y;
+    };
+  }
+}
