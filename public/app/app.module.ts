@@ -13,12 +13,14 @@ import { AppRoutes } from './app.routes';
 import { AuthenticationService } from './authentication/authentication.service';
 import { ScenarioService } from './scenario/scenario.service';
 import { CourseService } from './admin/course/course.service';
+import { ScenarioResolver } from './scenario/scenario.resolver';
 
 import { AdminModule } from './admin/admin.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ArticleModule } from './articles/article.module';
 import { HelpModule } from './help/help.module';
 import { HomeModule } from './home/home.module';
+import { ProfileModule } from './profile/profile.module';
 import { ScenarioModule } from './scenario/scenario.module';
 
 import { NavComponent } from './nav/nav.component';
@@ -31,6 +33,7 @@ import { NavComponent } from './nav/nav.component';
       HomeModule,
       HelpModule,
       AdminModule,
+      ProfileModule,
         AuthenticationModule,
         ArticleModule,
       ScenarioModule,
@@ -43,7 +46,8 @@ import { NavComponent } from './nav/nav.component';
     providers: [
         AuthenticationService,
         ScenarioService,
-      CourseService
+      CourseService,
+    ScenarioResolver
     ],
     bootstrap: [AppComponent]
 })

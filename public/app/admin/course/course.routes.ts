@@ -1,5 +1,8 @@
 import { Routes } from '@angular/router';
 
+import { CourseResolver } from './course.resolver';
+import { ScenarioResolver } from '../../scenario/scenario.resolver';
+
 import { CourseComponent } from './course.component';
 import { CourseCreateComponent } from './course-create/course-create.component';
 import { CourseIndivComponent } from './course-indiv/course-indiv.component';
@@ -10,17 +13,25 @@ import { CourseScenarioComponent } from './course-scenario/course-scenario.compo
 export const CourseRoutes: Routes = [
   {
     path: 'create',
-    component: CourseCreateComponent
+    component: CourseCreateComponent,
+    data: {breadcrumbs: 'Create new course'}
   },
   { path: ':courseNum',
-    component: CourseIndivComponent
-  },
-  { path: ':courseNum/edit',
+   resolve: {course: CourseResolver},
+   data: {breadcrumbs: '{{course.courseNum}}' },
+   children: [
+     { path: 'edit',
     component: CourseEditComponent
   },
   {
-    path: ':courseNum/:scenId',
-    component: CourseScenarioComponent
+    path: ':scenId',
+    component: CourseScenarioComponent,
+    resolve: {scenario: ScenarioResolver},
+    data: {breadcrumbs: '{{ scenario.label }}'}
+  },
+     {path: '',
+     component: CourseIndivComponent}
+   ]
   },
   {
     path: '',
