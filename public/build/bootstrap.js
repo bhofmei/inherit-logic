@@ -870,7 +870,7 @@ const Subject_1 = __webpack_require__(8);
 __webpack_require__(34);
 const student_service_1 = __webpack_require__(65);
 const scenario_service_1 = __webpack_require__(35);
-const student_roles_1 = __webpack_require__(874);
+const student_roles_1 = __webpack_require__(875);
 let StudentIndivComponent = class StudentIndivComponent {
     constructor(_router, _route, _studentService, _scenarioService) {
         this._router = _router;
@@ -1045,6 +1045,7 @@ let StudentFridgeComponent = class StudentFridgeComponent {
                 this.fridge = fridge;
                 this.hasFridge = (fridge.strains !== undefined);
                 if (this.hasFridge) {
+                    console.log(this.fridge.guesses);
                     this.fridge.strains.sort((a, b) => { return a.strainNum - b.strainNum; });
                 }
                 this.setPhage('all');
@@ -1301,6 +1302,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const router_1 = __webpack_require__(9);
 const authentication_service_1 = __webpack_require__(30);
+const read_error_1 = __webpack_require__(411);
 let SigninComponent = class SigninComponent {
     constructor(_authenticationService, _router) {
         this._authenticationService = _authenticationService;
@@ -1314,9 +1316,10 @@ let SigninComponent = class SigninComponent {
             // TODO: update
             this._authenticationService.setUser(result);
             let redirect = this._authenticationService.redirectUrl ? this._authenticationService.redirectUrl : '/';
+            console.log(redirect);
             this._router.navigate([redirect]);
         }, (error) => {
-            this.errorMessage = error.message;
+            this.errorMessage = read_error_1.readErrorMessage(error);
         });
     }
     ngOnDestroy() {
@@ -1339,6 +1342,29 @@ exports.SigninComponent = SigninComponent;
 /***/ }),
 
 /***/ 411:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.readErrorMessage = function (error) {
+    console.log(error);
+    let errorMessage = 'Unknown error';
+    if (error.error && error.error.message) {
+        errorMessage = error.error.message;
+    }
+    else if (error && error.message) {
+        errorMessage = error.message;
+    }
+    else if (error)
+        console.error(errorMessage);
+    return errorMessage;
+};
+
+
+/***/ }),
+
+/***/ 412:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1426,7 +1452,7 @@ exports.SignupComponent = SignupComponent;
 
 /***/ }),
 
-/***/ 412:
+/***/ 413:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1454,7 +1480,7 @@ exports.ArticleComponent = ArticleComponent;
 
 /***/ }),
 
-/***/ 413:
+/***/ 414:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1495,7 +1521,7 @@ exports.CreateComponent = CreateComponent;
 
 /***/ }),
 
-/***/ 414:
+/***/ 415:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1532,7 +1558,7 @@ exports.ListComponent = ListComponent;
 
 /***/ }),
 
-/***/ 415:
+/***/ 416:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1593,7 +1619,7 @@ exports.ViewComponent = ViewComponent;
 
 /***/ }),
 
-/***/ 416:
+/***/ 417:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1647,7 +1673,7 @@ exports.EditComponent = EditComponent;
 
 /***/ }),
 
-/***/ 417:
+/***/ 418:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1679,7 +1705,7 @@ exports.HelpComponent = HelpComponent;
 
 /***/ }),
 
-/***/ 418:
+/***/ 419:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1720,7 +1746,7 @@ exports.HomeComponent = HomeComponent;
 
 /***/ }),
 
-/***/ 419:
+/***/ 420:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1746,7 +1772,7 @@ exports.ScenarioComponent = ScenarioComponent;
 
 /***/ }),
 
-/***/ 420:
+/***/ 421:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1792,7 +1818,7 @@ exports.ListComponent = ListComponent;
 
 /***/ }),
 
-/***/ 421:
+/***/ 422:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1819,7 +1845,7 @@ exports.LocationComponent = LocationComponent;
 
 /***/ }),
 
-/***/ 422:
+/***/ 423:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1863,7 +1889,7 @@ exports.LocationGuard = LocationGuard;
 
 /***/ }),
 
-/***/ 423:
+/***/ 424:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2270,7 +2296,7 @@ exports.LabRoomComponent = LabRoomComponent;
 
 /***/ }),
 
-/***/ 424:
+/***/ 425:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2494,7 +2520,7 @@ exports.PlexerRoomComponent = PlexerRoomComponent;
 
 /***/ }),
 
-/***/ 425:
+/***/ 426:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2604,7 +2630,7 @@ exports.ModelRoomComponent = ModelRoomComponent;
 
 /***/ }),
 
-/***/ 426:
+/***/ 427:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2654,7 +2680,7 @@ exports.LandingRoomComponent = LandingRoomComponent;
 
 /***/ }),
 
-/***/ 427:
+/***/ 428:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2825,10 +2851,12 @@ let StudentService = class StudentService {
         this._adminRole = new BehaviorSubject_1.BehaviorSubject(-1);
     }
     setAdmin(id, role) {
+        console.log('set admin', id);
         this._adminId.next(id);
         this._adminRole.next(role);
     }
     getAdmin() {
+        console.log('get admin', this._adminId.getValue());
         return this._adminId.getValue();
     }
     getAdminRole() {
@@ -2847,6 +2875,7 @@ let StudentService = class StudentService {
               .get(`${this._baseURL}/${userId}/users/${studentId}`);
     }*/
     getStudent(studentId) {
+        console.log('get student', this.getAdmin());
         return this._http
             .get(`${this._baseURL}/${this.getAdmin()}/students/${studentId}`);
     }
@@ -2890,20 +2919,20 @@ exports.StudentService = StudentService;
 
 /***/ }),
 
-/***/ 866:
+/***/ 867:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const platform_browser_dynamic_1 = __webpack_require__(235);
-const app_module_1 = __webpack_require__(867);
+const app_module_1 = __webpack_require__(868);
 platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(app_module_1.AppModule);
 
 
 /***/ }),
 
-/***/ 867:
+/***/ 868:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2923,22 +2952,22 @@ const platform_browser_1 = __webpack_require__(69);
 const router_1 = __webpack_require__(9);
 const http_1 = __webpack_require__(55);
 const ngx_breadcrumbs_1 = __webpack_require__(184);
-const app_component_1 = __webpack_require__(868);
-const app_routes_1 = __webpack_require__(869);
+const app_component_1 = __webpack_require__(869);
+const app_routes_1 = __webpack_require__(870);
 const shared_module_1 = __webpack_require__(89);
 //import { HomeModule } from './home/home.module';
 const authentication_service_1 = __webpack_require__(30);
 const scenario_service_1 = __webpack_require__(35);
 const course_service_1 = __webpack_require__(47);
 const scenario_resolver_1 = __webpack_require__(120);
-const admin_module_1 = __webpack_require__(870);
-const authentication_module_1 = __webpack_require__(877);
-const article_module_1 = __webpack_require__(879);
-const help_module_1 = __webpack_require__(881);
-const home_module_1 = __webpack_require__(883);
+const admin_module_1 = __webpack_require__(871);
+const authentication_module_1 = __webpack_require__(878);
+const article_module_1 = __webpack_require__(880);
+const help_module_1 = __webpack_require__(882);
+const home_module_1 = __webpack_require__(884);
 //import { ProfileModule } from './profile/profile.module';
-const scenario_module_1 = __webpack_require__(885);
-const nav_component_1 = __webpack_require__(889);
+const scenario_module_1 = __webpack_require__(886);
+const nav_component_1 = __webpack_require__(890);
 let AppModule = class AppModule {
     constructor(breadcrumbsConfig) {
         breadcrumbsConfig.postProcess = (x) => {
@@ -2990,7 +3019,7 @@ exports.AppModule = AppModule;
 
 /***/ }),
 
-/***/ 868:
+/***/ 869:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3026,7 +3055,7 @@ exports.AppComponent = AppComponent;
 
 /***/ }),
 
-/***/ 869:
+/***/ 870:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3040,7 +3069,7 @@ exports.AppRoutes = [{
 
 /***/ }),
 
-/***/ 870:
+/***/ 871:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3054,11 +3083,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const shared_module_1 = __webpack_require__(89);
-const admin_route_module_1 = __webpack_require__(871);
+const admin_route_module_1 = __webpack_require__(872);
 const admin_component_1 = __webpack_require__(406);
 const admin_home_component_1 = __webpack_require__(407);
 const not_auth_component_1 = __webpack_require__(408);
-const course_component_1 = __webpack_require__(875);
+const course_component_1 = __webpack_require__(876);
 const course_create_component_1 = __webpack_require__(397);
 const course_indiv_component_1 = __webpack_require__(398);
 const course_edit_component_1 = __webpack_require__(399);
@@ -3067,7 +3096,7 @@ const course_scenario_component_1 = __webpack_require__(401);
 const student_list_component_1 = __webpack_require__(402);
 const student_indiv_component_1 = __webpack_require__(403);
 const student_fridge_component_1 = __webpack_require__(404);
-const student_phage_component_1 = __webpack_require__(876);
+const student_phage_component_1 = __webpack_require__(877);
 const admin_guard_service_1 = __webpack_require__(395);
 const student_service_1 = __webpack_require__(65);
 const course_resolver_1 = __webpack_require__(396);
@@ -3108,7 +3137,7 @@ exports.AdminModule = AdminModule;
 
 /***/ }),
 
-/***/ 871:
+/***/ 872:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3123,8 +3152,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const router_1 = __webpack_require__(9);
 const admin_guard_service_1 = __webpack_require__(395);
-const course_routes_1 = __webpack_require__(872);
-const student_routes_1 = __webpack_require__(873);
+const course_routes_1 = __webpack_require__(873);
+const student_routes_1 = __webpack_require__(874);
 const admin_component_1 = __webpack_require__(406);
 const admin_home_component_1 = __webpack_require__(407);
 const not_auth_component_1 = __webpack_require__(408);
@@ -3181,7 +3210,7 @@ exports.AdminRouteModule = AdminRouteModule;
 
 /***/ }),
 
-/***/ 872:
+/***/ 873:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3226,7 +3255,7 @@ exports.CourseRoutes = [
 
 /***/ }),
 
-/***/ 873:
+/***/ 874:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3263,7 +3292,7 @@ exports.StudentRoutes = [
 
 /***/ }),
 
-/***/ 874:
+/***/ 875:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3288,7 +3317,7 @@ exports.StudentRolesArray = [
 
 /***/ }),
 
-/***/ 875:
+/***/ 876:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3315,7 +3344,7 @@ exports.CourseComponent = CourseComponent;
 
 /***/ }),
 
-/***/ 876:
+/***/ 877:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3364,7 +3393,7 @@ exports.StudentPhageComponent = StudentPhageComponent;
 
 /***/ }),
 
-/***/ 877:
+/***/ 878:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3380,10 +3409,10 @@ const core_1 = __webpack_require__(1);
 const forms_1 = __webpack_require__(27);
 const common_1 = __webpack_require__(16);
 const router_1 = __webpack_require__(9);
-const authentication_routes_1 = __webpack_require__(878);
+const authentication_routes_1 = __webpack_require__(879);
 const authentication_component_1 = __webpack_require__(409);
 const signin_component_1 = __webpack_require__(410);
-const signup_component_1 = __webpack_require__(411);
+const signup_component_1 = __webpack_require__(412);
 let AuthenticationModule = class AuthenticationModule {
 };
 AuthenticationModule = __decorate([
@@ -3405,7 +3434,7 @@ exports.AuthenticationModule = AuthenticationModule;
 
 /***/ }),
 
-/***/ 878:
+/***/ 879:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3413,7 +3442,7 @@ exports.AuthenticationModule = AuthenticationModule;
 Object.defineProperty(exports, "__esModule", { value: true });
 const authentication_component_1 = __webpack_require__(409);
 const signin_component_1 = __webpack_require__(410);
-const signup_component_1 = __webpack_require__(411);
+const signup_component_1 = __webpack_require__(412);
 exports.AuthenticationRoutes = [{
         path: 'authentication',
         component: authentication_component_1.AuthenticationComponent,
@@ -3426,7 +3455,7 @@ exports.AuthenticationRoutes = [{
 
 /***/ }),
 
-/***/ 879:
+/***/ 880:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3442,12 +3471,12 @@ const core_1 = __webpack_require__(1);
 const common_1 = __webpack_require__(16);
 const forms_1 = __webpack_require__(27);
 const router_1 = __webpack_require__(9);
-const article_routes_1 = __webpack_require__(880);
-const article_component_1 = __webpack_require__(412);
-const create_component_1 = __webpack_require__(413);
-const list_component_1 = __webpack_require__(414);
-const view_component_1 = __webpack_require__(415);
-const edit_component_1 = __webpack_require__(416);
+const article_routes_1 = __webpack_require__(881);
+const article_component_1 = __webpack_require__(413);
+const create_component_1 = __webpack_require__(414);
+const list_component_1 = __webpack_require__(415);
+const view_component_1 = __webpack_require__(416);
+const edit_component_1 = __webpack_require__(417);
 let ArticleModule = class ArticleModule {
 };
 ArticleModule = __decorate([
@@ -3471,17 +3500,17 @@ exports.ArticleModule = ArticleModule;
 
 /***/ }),
 
-/***/ 880:
+/***/ 881:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const article_component_1 = __webpack_require__(412);
-const create_component_1 = __webpack_require__(413);
-const list_component_1 = __webpack_require__(414);
-const view_component_1 = __webpack_require__(415);
-const edit_component_1 = __webpack_require__(416);
+const article_component_1 = __webpack_require__(413);
+const create_component_1 = __webpack_require__(414);
+const list_component_1 = __webpack_require__(415);
+const view_component_1 = __webpack_require__(416);
+const edit_component_1 = __webpack_require__(417);
 exports.ArticleRoutes = [{
         path: 'articles',
         component: article_component_1.ArticleComponent,
@@ -3496,7 +3525,7 @@ exports.ArticleRoutes = [{
 
 /***/ }),
 
-/***/ 881:
+/***/ 882:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3510,8 +3539,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const shared_module_1 = __webpack_require__(89);
-const help_route_module_1 = __webpack_require__(882);
-const help_component_1 = __webpack_require__(417);
+const help_route_module_1 = __webpack_require__(883);
+const help_component_1 = __webpack_require__(418);
 let HelpModule = class HelpModule {
 };
 HelpModule = __decorate([
@@ -3530,7 +3559,7 @@ exports.HelpModule = HelpModule;
 
 /***/ }),
 
-/***/ 882:
+/***/ 883:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3544,7 +3573,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const router_1 = __webpack_require__(9);
-const help_component_1 = __webpack_require__(417);
+const help_component_1 = __webpack_require__(418);
 const helpRoute = [
     {
         path: 'help',
@@ -3569,7 +3598,7 @@ exports.HelpRouteModule = HelpRouteModule;
 
 /***/ }),
 
-/***/ 883:
+/***/ 884:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3583,8 +3612,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const shared_module_1 = __webpack_require__(89);
-const home_route_module_1 = __webpack_require__(884);
-const home_component_1 = __webpack_require__(418);
+const home_route_module_1 = __webpack_require__(885);
+const home_component_1 = __webpack_require__(419);
 let HomeModule = class HomeModule {
 };
 HomeModule = __decorate([
@@ -3603,7 +3632,7 @@ exports.HomeModule = HomeModule;
 
 /***/ }),
 
-/***/ 884:
+/***/ 885:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3617,7 +3646,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const router_1 = __webpack_require__(9);
-const home_component_1 = __webpack_require__(418);
+const home_component_1 = __webpack_require__(419);
 const homeRoute = [
     {
         path: '',
@@ -3641,7 +3670,7 @@ exports.HomeRouteModule = HomeRouteModule;
 
 /***/ }),
 
-/***/ 885:
+/***/ 886:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3655,18 +3684,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const shared_module_1 = __webpack_require__(89);
-const scenario_route_module_1 = __webpack_require__(886);
-const scenario_component_1 = __webpack_require__(419);
-const list_component_1 = __webpack_require__(420);
-const location_guard_service_1 = __webpack_require__(422);
+const scenario_route_module_1 = __webpack_require__(887);
+const scenario_component_1 = __webpack_require__(420);
+const list_component_1 = __webpack_require__(421);
+const location_guard_service_1 = __webpack_require__(423);
 const experiment_service_1 = __webpack_require__(186);
-const fridge_component_1 = __webpack_require__(888);
-const phage_dialog_component_1 = __webpack_require__(427);
-const location_component_1 = __webpack_require__(421);
-const landing_room_component_1 = __webpack_require__(426);
-const lab_room_component_1 = __webpack_require__(423);
-const plexer_room_component_1 = __webpack_require__(424);
-const model_room_component_1 = __webpack_require__(425);
+const fridge_component_1 = __webpack_require__(889);
+const phage_dialog_component_1 = __webpack_require__(428);
+const location_component_1 = __webpack_require__(422);
+const landing_room_component_1 = __webpack_require__(427);
+const lab_room_component_1 = __webpack_require__(424);
+const plexer_room_component_1 = __webpack_require__(425);
+const model_room_component_1 = __webpack_require__(426);
 let ScenarioModule = class ScenarioModule {
 };
 ScenarioModule = __decorate([
@@ -3700,7 +3729,7 @@ exports.ScenarioModule = ScenarioModule;
 
 /***/ }),
 
-/***/ 886:
+/***/ 887:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3714,10 +3743,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(1);
 const router_1 = __webpack_require__(9);
-const scenario_component_1 = __webpack_require__(419);
+const scenario_component_1 = __webpack_require__(420);
 const scenario_resolver_1 = __webpack_require__(120);
-const list_component_1 = __webpack_require__(420);
-const location_routes_1 = __webpack_require__(887);
+const list_component_1 = __webpack_require__(421);
+const location_routes_1 = __webpack_require__(888);
 const scenarioRoutes = [
     {
         path: 'scenarios',
@@ -3762,18 +3791,18 @@ exports.ScenarioRouterModule = ScenarioRouterModule;
 
 /***/ }),
 
-/***/ 887:
+/***/ 888:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const location_component_1 = __webpack_require__(421);
-const location_guard_service_1 = __webpack_require__(422);
-const lab_room_component_1 = __webpack_require__(423);
-const plexer_room_component_1 = __webpack_require__(424);
-const model_room_component_1 = __webpack_require__(425);
-const landing_room_component_1 = __webpack_require__(426);
+const location_component_1 = __webpack_require__(422);
+const location_guard_service_1 = __webpack_require__(423);
+const lab_room_component_1 = __webpack_require__(424);
+const plexer_room_component_1 = __webpack_require__(425);
+const model_room_component_1 = __webpack_require__(426);
+const landing_room_component_1 = __webpack_require__(427);
 exports.LocationRoutes = [
     {
         path: '',
@@ -3810,7 +3839,7 @@ exports.LocationRoutes = [
 
 /***/ }),
 
-/***/ 888:
+/***/ 889:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3832,7 +3861,8 @@ const Subject_1 = __webpack_require__(8);
 const scenario_service_1 = __webpack_require__(35);
 const authentication_service_1 = __webpack_require__(30);
 const scenario_globals_1 = __webpack_require__(121);
-const phage_dialog_component_1 = __webpack_require__(427);
+const phage_dialog_component_1 = __webpack_require__(428);
+const read_error_1 = __webpack_require__(411);
 let FridgeComponent = class FridgeComponent {
     constructor(_router, _route, _authenticationService, _scenarioService, _modalService) {
         this._router = _router;
@@ -3923,6 +3953,15 @@ let FridgeComponent = class FridgeComponent {
             this._currStrains();
         }
     }
+    getPhageClass(src) {
+        let phage = this.strains[src];
+        return {
+            'col-7 col-xl-8 p-0 strain-image': true,
+            'strain-image-reference': phage.phageType === 'reference',
+            'strain-image-unknown': phage.phageType === 'unknown',
+            'strain-image-submitted': phage.submitted
+        };
+    }
     /**
      * Set visible shelf to a specific number;
      * used to jump to the beginning and end
@@ -3990,7 +4029,7 @@ let FridgeComponent = class FridgeComponent {
             };
             this._currStrains();
         }, (err) => {
-            this.errorMessage = err.message;
+            this.errorMessage = read_error_1.readErrorMessage(err);
         });
     }
     /**
@@ -4059,38 +4098,6 @@ exports.FridgeComponent = FridgeComponent;
 
 /***/ }),
 
-/***/ 889:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(1);
-let NavComponent = class NavComponent {
-    constructor() {
-    }
-};
-NavComponent = __decorate([
-    core_1.Component({
-        selector: 'cricket-nav',
-        templateUrl: './app/nav/nav.template.html',
-    }),
-    __metadata("design:paramtypes", [])
-], NavComponent);
-exports.NavComponent = NavComponent;
-
-
-/***/ }),
-
 /***/ 89:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4130,6 +4137,38 @@ SharedModule = __decorate([
     })
 ], SharedModule);
 exports.SharedModule = SharedModule;
+
+
+/***/ }),
+
+/***/ 890:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(1);
+let NavComponent = class NavComponent {
+    constructor() {
+    }
+};
+NavComponent = __decorate([
+    core_1.Component({
+        selector: 'cricket-nav',
+        templateUrl: './app/nav/nav.template.html',
+    }),
+    __metadata("design:paramtypes", [])
+], NavComponent);
+exports.NavComponent = NavComponent;
 
 
 /***/ }),
@@ -4197,5 +4236,5 @@ exports.ArticleService = ArticleService;
 
 /***/ })
 
-},[866]);
+},[867]);
 //# sourceMappingURL=bootstrap.js.map
