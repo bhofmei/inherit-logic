@@ -18,7 +18,7 @@ var scenario = {
   minStops: scenDefaults.minStops,
   intraMuteDist: scenDefaults.intraMuteDist,
   interMuteDist: scenDefaults.interMuteDist,
-  referencePhage: [scenDefaults.wildtypePhage, scenDefaults.frameShiftPhage, '{"numToMake": 1, "isWildType": false, "deletion": true, "comment": "Deletion phage"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Mutant phage containing a single +1 frameshift mutation"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "never", "readable": "any", "frameChoice": -1}, "deletion": false, "comment": "Mutant phage containing a two -1 frameshift mutation"}'],
+  referencePhage: [scenDefaults.wildtypePhage, scenDefaults.frameShiftPhage, '{"numToMake": 1, "isWildType": false, "deletion": true, "comment": "Deletion phage"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Mutant phage containing a single +1 frameshift mutation"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "never", "readable": "any", "frameChoice": -1}, "deletion": false, "comment": "Mutant phage containing a two -1 frameshift mutation"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "always", "readable": "can", "frameChoice": 0}, "deletion": false, "comment": "Mutant phage bearing compensating +1 and -1 frameshifts resulting in successful translation and a wild type phenotype"}'],
   otherPhage: []
 };
 
@@ -54,6 +54,7 @@ describe('Plate experiments unit tests', () => {
   2. deletion: [ 110, 210 ]
   3. mutationList: [ { kind: 'plusOne', location: 86 } ]
   4. [ { kind: 'minusOne', location: 211 }, { kind: 'minusOne', location: 287 } ]
+  5. [ { kind: 'plusOne', location: 201 }, { kind: 'minusOne', location: 226 } ]
   */
 
   describe('Testing create phage list for single phage input', () => {
