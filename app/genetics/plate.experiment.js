@@ -17,6 +17,10 @@ exports.resetEngine = function(){
   randGen.reset(randEngine);
 }
 
+exports.seedEngine = function(num){
+  randGen.setSeed(randEngine, num)
+}
+
 exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData){
   // combines createPlatePhage and generatePlate into one function
   // has: genoList and strainList

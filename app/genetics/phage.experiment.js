@@ -5,10 +5,14 @@ const randEngine = randGen.getEngine();
 const scenConfig = require('../../config/scenario.config');
 const pEnum = require('./phage.enum');
 const debug = require('debug')('genetics'),
-      debugExt = require('debug','genetics:ext')
+      debugExt = require('debug','genetics:ext');
 
 exports.resetEngine = function(){
   randGen.reset(randEngine);
+}
+
+exports.seedEngine = function(num){
+  randGen.setSeed(randEngine, num)
 }
 
 exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {

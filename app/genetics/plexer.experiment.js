@@ -16,6 +16,10 @@ exports.resetEngine = function(){
   plateExper.resetEngine();
 }
 
+exports.seedEngine = function(num){
+  randGen.setSeed(randEngine, num)
+}
+
 exports.createPlexerPlate = function (rowPhage, colPhage, lawnType, specials, capacity, whoCalled, scenData){
   var outMat = {};
   // loop through rowPhage
