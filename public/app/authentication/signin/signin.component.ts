@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AuthenticationService } from '../authentication.service';
+import { readErrorMessage } from '../../shared/read-error';
 
 @Component({
     selector: 'signin',
@@ -27,7 +28,7 @@ export class SigninComponent {
           this._router.navigate([redirect]);
         },
             (error) => {
-          this.errorMessage = error.message
+          this.errorMessage = readErrorMessage(error)
         });
     }
 
