@@ -23,9 +23,11 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
     if (randGen.randBool(randEngine)) {
       startGeno = clone(phageGeno1);
       endGeno = clone(phageGeno2);
+      debugExt('parents 1, 2');
     } else {
       startGeno = clone(phageGeno2);
       endGeno = clone(phageGeno1);
+      debugExt('parents 2, 1');
     }
 
     let recSpot = [];
@@ -53,7 +55,7 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
         okRecSpots.push(checkRec); // add to okay recombination spots
     } // end for i
     okRecSpots.sort(function(a, b){return a-b});
-
+    debug('recombination spots %o, accepted', recSpot, okRecSpots);
     if (okRecSpots.length === 0) {
       // no recombinations successful, return parent
       //if (randGen.bool()) {

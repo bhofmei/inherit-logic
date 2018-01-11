@@ -204,7 +204,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
       let getMutes = phageExper.mutagenize(startGenotypes[j].shifts, nOffspring.numMut[j]);
       for (let k = 0; k < getMutes.length; k++) {
         numNewGenos++;
-        debugExt('mut phage double %o', getMutes[j]);
+        debugExt('mut phage double %o', getMutes[k]);
         replicaStrainList.push(numNewGenos);
         genoList.push({
           shifts: getMutes[k],
@@ -217,11 +217,11 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
       for (let j = 0; j < nOffspring.numRecomb.length; j++) {
         let nRec = nOffspring.numRecomb[j];
         if (nRec > 0) {
-          let newGenoList = phageExper.recombine(startGenotypes[0], startGenotypes[1], j, nRec);
+          let newGenoList = phageExper.recombine(startGenotypes[0], startGenotypes[1], j+1, nRec);
           // add to plate
           for (let k = 0; k < newGenoList.length; k++) {
             numNewGenos++;
-            debugExt('recomb %d phage double %o', j, newGenoList[k]);
+            debugExt('recomb %d phage %o', j+1, newGenoList[k]);
             replicaStrainList.push(numNewGenos);
             genoList.push(newGenoList[k]);
           } // end for k
@@ -306,16 +306,19 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
 } // end generatePlage
 
 const computeRecombParameters = function (f1, f2, p, n) {
-  // r = phageRatio
+  // f1 = fraction phage 1
+  // f2 = fraction phage 2
   // p = recombFreq
   // n = numOffspring
   var numRecomb = [];
   for (let i = 0; i < 3; i++) {
     let pR = Math.pow(p, i + 1) * n * f1 * f2;
-    pR = Math.sqrt(2 * Math.floor(pR))
+    pR = Math.sqrt(2 * Math.round(pR))
     let nR = pR + util.gaussRand(randEngine, pR);
+    debugExt('prob %d recomb %d adjusted %d', i, pR, nR);
     numRecomb.push(nR < 0 ? 0 : Math.round(nR));
   }
+  debugExt('nrecomb %o', numRecomb);
   return numRecomb;
 }
 
@@ -333,7 +336,7 @@ const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
     let nMut = Math.round(mutFreq * nGeno);
     let changeBy = util.gaussRand(randEngine, (2 * Math.sqrt(nMut)))
     nMut = Math.round(nMut + changeBy);
-    debug(nMut);
+    debugExt('nmut %d', nMut);
     return nMut < 0 ? 0 : nMut;
   });
   let total = numGeno[0] + numGeno[1] + numRecomb[0] + numRecomb[1] + numRecomb[2] + numMut[0] + numMut[1];

@@ -1,7 +1,6 @@
 const pEnum = require('./phage.enum');
 const randGen = require('./random.generator');
-const debug = require('debug')('genetics'),
-      debugExt = require('debug')('genetics:ext');
+const debug = require('debug')('genetics:util');
 /*exports.howManyToMake = function(randGen, inList){
   if(inList.length === 1){
     return inList[0];
@@ -68,14 +67,14 @@ exports.gaussRand = function(engine, inNum){
     v = (2 * (n1/1000.0)) - 1;
     w = (2 * (n2/1000.0)) - 1
     r = (v*v) + (w*w);
-    debugExt('guassRand vals %o', {n1: n1, n2: n2, v: v, w: w, r:r})
+    debug('guassRand vals %o', {n1: n1, n2: n2, v: v, w: w, r:r})
     if(r < 1 && r !== 0)
       notGood = false
   } // end while notGood
 
   var fac = Math.sqrt((-2.0 * Math.log10(r)) / r);
   var gauss = fac * w;
-  debugExt('fac guass %d %d', fac, gauss);
+  debug('fac guass %d %d', fac, gauss);
   var outVal = inNum * gauss;
   debug('guassRand out %d', outVal);
   return outVal
