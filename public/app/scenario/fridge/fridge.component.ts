@@ -11,6 +11,7 @@ import { PhageDialogComponent } from './phage-dialog.component';
 import { User } from '../../interfaces/user.interface';
 import { Fridge } from '../../interfaces/fridge.interface';
 import { FridgePhage, GenotypePhage } from '../../interfaces/phage.interface';
+import { readErrorMessage } from '../../shared/read-error';
 
 @Component({
     selector: 'fridge',
@@ -204,7 +205,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
       this._currStrains();
     },
               (err)=>{
-      this.errorMessage = err.message;
+      this.errorMessage = readErrorMessage(err);
     })
   }
 

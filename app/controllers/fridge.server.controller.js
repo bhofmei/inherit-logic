@@ -1,5 +1,6 @@
 // Load the module dependencies
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const Fridge = mongoose.model('Fridge');
 const Phage = mongoose.model('Phage');
 const phageScen = require('../genetics/phage.scenario');
@@ -239,11 +240,21 @@ exports.addPhageToFridge = function (req, res) {
           message: getErrorMessage(err)
         });
     } else {
-      fridge.strains.push(newPhage);
-      fridge.save(() => {
+      Fridge.findByIdAndUpdate(
+        fridge._id,
+        {$push: {
+          strains: newPhage._id
+        }},
+        (err2, updated) => {
+        if(err2){
+          res.status(500)
+        .send({
+          message: getErrorMessage(err2)
+        })
+        } else {
         res.json(newPhage);
+        }
       });
-
     }
   });
 };
