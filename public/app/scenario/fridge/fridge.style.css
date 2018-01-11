@@ -34,6 +34,10 @@
   height: 20px;
 }
 
+.strain-image-submitted{
+  background-image: url(../../../img/dna-orange.svg)
+}
+
 .strain-image-unknown{
   background-image: url(../../../img/dna-purple.svg)
 }

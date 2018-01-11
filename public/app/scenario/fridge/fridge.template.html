@@ -11,7 +11,7 @@
        <div class="strain-list">
          <div *ngFor="let strain of currStrains" class="ls-strain m-0 row" dnd-droppable [allowDrop]="canDrop(strain.strainNum)" (onDropSuccess)="dropStrain($event, strain.strainNum)">
           <span class="strain-num text-secondary col-3 col-xl-2 p-0">{{ strain.strainNum + 1 }}</span>
-          <span [class]="'col-7 col-xl-8 p-0 strain-image strain-image-'+strain.phageType" *ngIf="strain.phageType !== 'empty'" dnd-draggable [dragEnabled]="strain.phageType !== 'empty'" [dragData]="strain" [title]="strain.comment"></span>
+          <span [ngClass]="getPhageClass(strain.strainNum)" *ngIf="strain.phageType !== 'empty'" dnd-draggable [dragEnabled]="strain.phageType !== 'empty'" [dragData]="strain" [title]="strain.comment"></span>
            <div class="col-2 p-0">
            <span *ngIf="strain.phageType !== 'empty'" class="oi oi-ellipses edit-phage-btn align-bottom" aria-hidden="true" (click)="editPhage(strain.strainNum)"></span>
              </div>

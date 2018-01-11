@@ -124,6 +124,16 @@ export class FridgeComponent implements OnInit, OnDestroy{
     }
   }
 
+  getPhageClass(src: number): Object{
+    let phage = this.strains[src];
+    return {
+      'col-7 col-xl-8 p-0 strain-image': true,
+      'strain-image-reference': phage.phageType === 'reference',
+      'strain-image-unknown': phage.phageType === 'unknown',
+      'strain-image-submitted': phage.submitted
+    }
+  }
+
   /**
    * Set visible shelf to a specific number;
    * used to jump to the beginning and end
@@ -159,7 +169,6 @@ export class FridgeComponent implements OnInit, OnDestroy{
     return out;
   };
 }
-
 
   /**
    * Adds a new strain to a fridge
