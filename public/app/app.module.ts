@@ -21,7 +21,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { ArticleModule } from './articles/article.module';
 import { HelpModule } from './help/help.module';
 import { HomeModule } from './home/home.module';
-import { ProfileModule } from './profile/profile.module';
+//import { ProfileModule } from './profile/profile.module';
 import { ScenarioModule } from './scenario/scenario.module';
 
 import { NavComponent } from './nav/nav.component';
@@ -34,7 +34,7 @@ import { NavComponent } from './nav/nav.component';
       HomeModule,
       HelpModule,
       AdminModule,
-      ProfileModule,
+      //ProfileModule,
         AuthenticationModule,
         ArticleModule,
       ScenarioModule,
