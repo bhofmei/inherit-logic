@@ -137,7 +137,7 @@ exports.deleteUser = function (req, res) {
 exports.setRole = function (req, res) {
   let body = req.body; // includes role
   User.findOneAndUpdate(
-    {userId: student.userId},
+    {userId: req.student.userId},
     {role: body.role},
     {new: true},
     (err, result)=>{
