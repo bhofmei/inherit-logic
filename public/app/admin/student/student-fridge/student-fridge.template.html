@@ -5,7 +5,7 @@
   <div *ngIf="fridge">
     <div class="row" id="student-name">
       <a [routerLink]="['../']" class="text-dark">
-        <h4>{{ fridge.owner.firstName }} {{ fridge.owner.lastName }}</h4>
+        <h4>{{ fridge.owner | studentName }}</h4>
       </a>
     </div>
 
