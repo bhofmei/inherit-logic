@@ -28,7 +28,8 @@ const getErrorMessage = function (err) {
 const getUserInfo = function (user) {
   return {
     id: user.userId,
-    name: user.name,
+    firstName: user.firstName,
+    lastName: user.lastName,
     email: user.email,
     role: roles.indexOf(user.role)
   }

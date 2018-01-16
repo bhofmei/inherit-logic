@@ -147,14 +147,14 @@ exports.getStudentFridge = function(req, res){
     owner: student._id,
     scenario: scen._id
   }).populate('strains', 'strainNum comment phageType id mutationList deletion parents submitted')
-  .populate('owner', 'name userId')
+  .populate('owner', 'firstName lastName userId')
   .populate('scenario', 'scenCode label')
   .exec((err, fridge)=>{
     if(err){
       return res.status(500).send({message: getErrorMessage(err)});
     } else if(!fridge){
       let out = {
-        owner: {name: student.name, userId: student.userId},
+        owner: {firstName: student.firstName, lastName: student.lastName, userId: student.userId},
         scenario: {scenCode: scen.scenCode, label: scen.label}
       };
       res.json(out);

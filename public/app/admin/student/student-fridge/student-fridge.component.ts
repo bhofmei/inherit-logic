@@ -51,7 +51,6 @@ export class StudentFridgeComponent{
         .takeUntil(this.isDestroyed$)
               .subscribe((fridge) => {
               this.fridge = fridge;
-              console.log(this.fridge.owner);
               this.hasFridge = (fridge.strains !== undefined);
               if(this.hasFridge){
                 this.fridge.strains.sort((a,b)=>{return a.strainNum - b.strainNum});
