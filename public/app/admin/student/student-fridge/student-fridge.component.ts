@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil'
-import 'rxjs/add/operator/filter';
 
 import { StudentService } from '../student.service';
+import { AuthenticationService } from '../../../authentication/authentication.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
 
 import { Course } from '../../../interfaces/course.interface';
@@ -15,6 +14,7 @@ import { Scenario } from '../../../interfaces/scenario.interface';
 import { StudentPhage } from '../../../interfaces/phage.interface';
 import { StudentFridge } from '../../../interfaces/fridge.interface';
 
+import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
   selector: 'student-fridge',
@@ -36,7 +36,8 @@ export class StudentFridgeComponent{
 
   constructor(private _router: Router,
         private _route: ActivatedRoute,
-               private _studentService: StudentService){
+               private _studentService: StudentService,
+              private _authService: AuthenticationService){
     this.isDestroyed$ = new Subject<boolean>();
   }
 
@@ -44,11 +45,13 @@ export class StudentFridgeComponent{
     this.paramObserver = this._route.params.subscribe(params => {
             let studentId = params['studentId'];
       let scenId = params['scenId'];
+      let admin = this._authService.getUser();
 
-            this._studentService.getFridge(studentId, scenId)
+            this._studentService.getFridge(admin.id, studentId, scenId)
         .takeUntil(this.isDestroyed$)
               .subscribe((fridge) => {
               this.fridge = fridge;
+              console.log(this.fridge.owner);
               this.hasFridge = (fridge.strains !== undefined);
               if(this.hasFridge){
                 this.fridge.strains.sort((a,b)=>{return a.strainNum - b.strainNum});
@@ -56,8 +59,7 @@ export class StudentFridgeComponent{
               this.setPhage('all');
             },
                 (error) => {
-              console.log(error);
-              this.errorMessage = error.message;
+              this.errorMessage = readErrorMessage(error);
             });
         });
   }

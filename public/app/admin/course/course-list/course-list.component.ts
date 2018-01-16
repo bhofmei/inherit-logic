@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+
 import { CourseService } from '../course.service';
+import { AuthenticationService } from '../../../authentication/authentication.service';
 
 import { Course } from '../../../interfaces/course.interface';
+import { User } from '../../../interfaces/user.interface';
 
 @Component({
     selector: 'course-list-cmp',
@@ -12,12 +15,16 @@ export class CourseListComponent implements OnInit, OnDestroy{
     private courses: Course[];
   private subscription: Subscription;
 
-    constructor(private _courseService: CourseService) {
+    constructor(
+      private _courseService: CourseService,
+      private _authService: AuthenticationService
+    ) {
 
     }
 
     ngOnInit() {
-      this.subscription = this._courseService.listCourses()
+      let admin: User = this._authService.getUser();
+      this.subscription = this._courseService.listCourses(admin.id)
         .subscribe((courses) => {
         this.courses = courses
       });

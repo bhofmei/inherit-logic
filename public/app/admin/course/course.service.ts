@@ -10,72 +10,78 @@ import { Student, AdminStudent } from '../../interfaces/student.interface';
 export class CourseService {
 
   private _baseURL = 'api/admin';
-  private _adminId = new BehaviorSubject<number>(-1);
 
   constructor(private _http: HttpClient) {
   }
 
-  setAdmin(id: number){
-    this._adminId.next(id);
-  }
-
-  getAdmin(): number{
-    return this._adminId.getValue();
-  }
-
-  /*listCourses(userId: number): Observable<any>{
+  listCourses(adminId: number): Observable<Course[]>{
     return this._http
-      .get(`${this._baseURL}/${userId}/courses`);
-  }*/
+      .get<Course[]>(`${this._baseURL}/${adminId}/courses`);
+  }
 
-  listCourses(): Observable<any>{
+  /*listCourses(): Observable<any>{
     return this._http
       .get(`${this._baseURL}/${this.getAdmin()}/courses`);
+  }*/
+
+  createCourse(adminId: number, body: any): Observable<Course>{
+    return this._http
+      .post<Course>(`${this._baseURL}/${adminId}/courses`, body);
   }
 
-  /*createCourse(userId: number, body: any): Observable<any>{
-    return this._http
-      .post(`${this._baseURL}/${userId}/courses`, body);
-  }*/
-  createCourse(body: any): Observable<Course>{
+  /*createCourse(body: any): Observable<Course>{
     return this._http
       .post<Course>(`${this._baseURL}/${this.getAdmin()}/courses`, body);
+  }*/
+
+  getCourse(adminId: number, courseNum: string): Observable<Course>{
+    return this._http
+      .get<Course>(`${this._baseURL}/${adminId}/courses/${courseNum}`);
   }
 
-
-  /*getCourse(userId: number, courseNum: string): Observable<any>{
-    return this._http
-      .get(`${this._baseURL}/${userId}/courses/${courseNum}`);
-  }*/
-  getCourse(courseNum: string): Observable<Course>{
+  /*getCourse(courseNum: string): Observable<Course>{
     return this._http
       .get<Course>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}`);
-  }
-
-  getStudents(courseNum: string): Observable<any>{
-    return this._http
-      .get(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}/students`);
-  }
-
-  getPossibleInstructors(courseNum: string): Observable<AdminStudent[]>{
-    return this._http
-      .get<AdminStudent[]>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}/instructors`);
-  };
-
-  addInstructor(courseNum: string, newInstrId: number): Observable<Course> {
-    return this._http
-      .post<Course>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}/instructors/${newInstrId}`, {instructor: true})
-  }
-
-  /*editCourse(userId: number, courseNum: string, body: any): Observable<any>{
-    return this._http
-      .post(`${this._baseURL}/${userId}/courses/${courseNum}`, body);
   }*/
 
-  editCourse(courseNum: string, body: any): Observable<Course>{
+  getStudents(adminId: number, courseNum: string): Observable<any>{
+    return this._http
+      .get(`${this._baseURL}/${adminId}/courses/${courseNum}/students`);
+  }
+
+  /*getStudents(courseNum: string): Observable<any>{
+    return this._http
+      .get(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}/students`);
+  }*/
+
+  /*getPossibleInstructors(courseNum: string): Observable<AdminStudent[]>{
+    return this._http
+      .get<AdminStudent[]>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}/instructors`);
+  };*/
+  getPossibleInstructors(adminId: number, courseNum: string): Observable<AdminStudent[]>{
+    return this._http
+      .get<AdminStudent[]>(`${this._baseURL}/${adminId}/courses/${courseNum}/instructors`);
+  };
+
+  /*addInstructor(courseNum: string, newInstrId: number): Observable<Course> {
+    return this._http
+      .post<Course>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}/instructors/${newInstrId}`, {instructor: true})
+  }*/
+
+  addInstructor(adminId: number, courseNum: string, newInstrId: number): Observable<Course> {
+    return this._http
+      .post<Course>(`${this._baseURL}/${adminId}/courses/${courseNum}/instructors/${newInstrId}`, {instructor: true})
+  }
+
+  editCourse(adminId: number, courseNum: string, body: any): Observable<Course>{
+    return this._http
+      .post<Course>(`${this._baseURL}/${adminId}/courses/${courseNum}`, body);
+  }
+
+  /*editCourse(courseNum: string, body: any): Observable<Course>{
     return this._http
       .post<Course>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}`, body);
-  }
+  }*/
 
   deleteCourse(userId: number, courseNum: string): Observable<any>{
     return this._http
@@ -87,15 +93,15 @@ export class CourseService {
       .delete(`${this._baseURL}/${userId}/courses/${courseNum}/users`);
   }
 
-  /*getScenarioStatus(userId: number, courseNum: string, scenId: string): Observable<any>{
+  getScenarioStatus(adminId: number, courseNum: string, scenId: string): Observable<Student[]>{
     return this._http
-      .get(`${this._baseURL}/${userId}/courses/${courseNum}/${scenId}`);
-  }*/
+      .get<Student[]>(`${this._baseURL}/${adminId}/courses/${courseNum}/${scenId}`);
+  }
 
-  getScenarioStatus(courseNum: string, scenId: string): Observable<Student[]>{
+  /*getScenarioStatus(courseNum: string, scenId: string): Observable<Student[]>{
     return this._http
       .get<Student[]>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}/${scenId}`);
-  }
+  }*/
 
   getCourseList(): Observable<any>{
     return this._http

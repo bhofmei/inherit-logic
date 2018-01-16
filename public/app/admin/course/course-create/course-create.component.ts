@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { CourseService } from '../course.service';
+import { AuthenticationService } from '../../../authentication/authentication.service';
+import { User } from '../../../interfaces/user.interface';
 
 @Component({
   selector: 'course-create-cmp',
@@ -14,12 +16,18 @@ export class CourseCreateComponent {
   private errorMessage: string = '';
   private subscription: Subscription;
   private courseDetails: any = {};
+  private admin: User;
 
   constructor(
     private _courseService: CourseService,
     private _router: Router,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+     private _authService: AuthenticationService
   ){}
+
+  ngOnInit(){
+    this.admin = this._authService.getUser();
+  }
 
   createCourse(){
     //let newCourse = this.courseDetails.courseNum;
@@ -27,7 +35,7 @@ export class CourseCreateComponent {
       this.errorMessage = 'Course number is required'
     } else {
       this.subscription = this._courseService
-      .createCourse(this.courseDetails)
+      .createCourse(this.admin.id, this.courseDetails)
     .subscribe( (result)=>{
       this._router.navigate(['../', result.courseNum], {relativeTo: this._route})
     }, (err)=>{

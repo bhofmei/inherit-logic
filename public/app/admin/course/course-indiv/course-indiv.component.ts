@@ -6,10 +6,12 @@ import 'rxjs/add/operator/takeUntil'
 
 import { CourseService } from '../course.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
+import { AuthenticationService } from '../../../authentication/authentication.service';
 
 import { Course } from '../../../interfaces/course.interface';
 import { Student, sortStudents } from '../../../interfaces/student.interface';
 import { Scenario } from '../../../interfaces/scenario.interface';
+import { User } from '../../../interfaces/user.interface';
 
 @Component({
   selector: 'course-indiv-cmp',
@@ -31,19 +33,21 @@ export class CourseIndivComponent{
   constructor(private _router: Router,
         private _route: ActivatedRoute,
                private _courseService: CourseService,
+               private _authService: AuthenticationService,
               private _scenarioService: ScenarioService){
     this.isDestroyed$ = new Subject<boolean>();
   }
 
   ngOnInit(){
+    let admin: User = this._authService.getUser();
     this.paramObserver = this._route.params.subscribe(params => {
             let course = params['courseNum'];
 
-            this._courseService.getCourse(course)
+            this._courseService.getCourse(admin.id, course)
         .takeUntil(this.isDestroyed$)
               .subscribe((info) => {
               this.courseInfo = info;
-              this._courseService.getStudents(course)
+              this._courseService.getStudents(admin.id, course)
               .takeUntil(this.isDestroyed$)
               .subscribe((students)=>{
                 this.students = students.sort(sortStudents);

@@ -11,83 +11,66 @@ import { StudentFridge } from '../../interfaces/fridge.interface';
 export class StudentService {
 
   private _baseURL = 'api/admin';
-  private _adminId = new BehaviorSubject<number>(-1);
-  private _adminRole = new BehaviorSubject<number>(-1);
 
   constructor(private _http: HttpClient) {
   }
 
-  setAdmin(id: number, role: number){
-    //console.log('set admin', id);
-    this._adminId.next(id);
-    this._adminRole.next(role);
-  }
-
-  getAdmin(): number{
-    //console.log('get admin', this._adminId.getValue());
-    return this._adminId.getValue();
-  }
-
-  getAdminRole(): number{
-    return this._adminRole.getValue();
-  }
-
-  /*listStudents(userId: number): Observable<any>{
+  listStudents(adminId: number): Observable<AdminStudent[]>{
     return this._http
-            .get(`${this._baseURL}/${userId}/users`);
-  }*/
+            .get<AdminStudent[]>(`${this._baseURL}/${adminId}/students`);
+  }
 
-  listStudents(): Observable<AdminStudent[]>{
+ /* listStudents(): Observable<AdminStudent[]>{
     return this._http
             .get<AdminStudent[]>(`${this._baseURL}/${this.getAdmin()}/students`);
-  }
-
-  /*getUser(userId: number, studentId: number): Observable<any>{
-    return this._http
-            .get(`${this._baseURL}/${userId}/users/${studentId}`);
   }*/
 
-  getStudent(studentId: number): Observable<AdminStudent>{
+  getStudent(adminId: number, studentId: number): Observable<AdminStudent>{
+    return this._http
+            .get<AdminStudent>(`${this._baseURL}/${adminId}/students/${studentId}`);
+  }
+
+  /*getStudent(studentId: number): Observable<AdminStudent>{
     //console.log('get student', this.getAdmin());
     return this._http
             .get<AdminStudent>(`${this._baseURL}/${this.getAdmin()}/students/${studentId}`);
-  }
-
-  /*setUserRole(userId: number, studentId: number, role: string): Observable<any>{
-    let body = {role: role};
-    return this._http
-            .post(`${this._baseURL}/${userId}/users/${studentId}`, body);
   }*/
 
-  setStudentRole(studentId: number, role: string): Observable<any>{
+  setStudentRole(adminId: number, studentId: number, role: string): Observable<any>{
+    let body = {role: role};
+    return this._http
+            .post(`${this._baseURL}/${adminId}/students/${studentId}`, body);
+  }
+
+  /*setStudentRole(studentId: number, role: string): Observable<any>{
     let body = {role: role};
     return this._http
             .post(`${this._baseURL}/${this.getAdmin()}/students/${studentId}`, body);
-  }
+  }*/
 
   deleteUser(userId: number, studentId: number): Observable<any>{
     return this._http
             .delete(`${this._baseURL}/${userId}/users/${studentId}`);
   }
 
-  /*getFridge(userId: number, studentId: number, scenId: string): Observable<any>{
+  getFridge(adminId: number, studentId: number, scenId: string): Observable<StudentFridge>{
     return this._http
-            .get(`${this._baseURL}/${userId}/users/${studentId}/${scenId}`);
-  }*/
+            .get<StudentFridge>(`${this._baseURL}/${adminId}/students/${studentId}/${scenId}`);
+  }
 
-  getFridge(studentId: number, scenId: string): Observable<StudentFridge>{
+  /*getFridge(studentId: number, scenId: string): Observable<StudentFridge>{
     return this._http
             .get<StudentFridge>(`${this._baseURL}/${this.getAdmin()}/students/${studentId}/${scenId}`);
-  }
-
-  /*grantScenAccess(userId: number, studentId: number, scenId: string): Observable<any>{
-    return this._http
-            .post(`${this._baseURL}/${userId}/users/${studentId}/${scenId}`, {});
   }*/
-  grantScenAccess(studentId: number, scenId: string, updatedState: boolean): Observable<AdminStudent>{
+
+  grantScenAccess(adminId: number, studentId: number, scenId: string, updatedState: boolean): Observable<AdminStudent>{
+    return this._http
+            .post<AdminStudent>(`${this._baseURL}/${adminId}/students/${studentId}/${scenId}`, {access: updatedState});
+  }
+  /*grantScenAccess(studentId: number, scenId: string, updatedState: boolean): Observable<AdminStudent>{
     return this._http
             .post<AdminStudent>(`${this._baseURL}/${this.getAdmin()}/students/${studentId}/${scenId}`, {access: updatedState});
-  }
+  }*/
 
 
 }

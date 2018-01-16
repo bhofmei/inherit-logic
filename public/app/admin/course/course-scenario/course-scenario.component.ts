@@ -6,11 +6,15 @@ import 'rxjs/add/operator/takeUntil'
 
 import { CourseService } from '../course.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
+import { AuthenticationService } from '../../../authentication/authentication.service';
 import { StudentService } from '../../student/student.service';
 
 import { Course } from '../../../interfaces/course.interface';
 import { Student } from '../../../interfaces/student.interface';
 import { Scenario } from '../../../interfaces/scenario.interface';
+import { User } from '../../../interfaces/user.interface';
+
+import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
   selector: 'course-scen-smp',
@@ -25,11 +29,13 @@ export class CourseScenarioComponent{
   private scenario: Scenario;
   private isDestroyed$: Subject<boolean>;
   private paramObserver: any;
+  private admin: User;
 
   private errorMessage: string = '';
 
   constructor(private _router: Router,
         private _route: ActivatedRoute,
+               private _authService: AuthenticationService,
                private _courseService: CourseService,
                private _studentService: StudentService,
               private _scenarioService: ScenarioService
@@ -38,6 +44,7 @@ export class CourseScenarioComponent{
   }
 
   ngOnInit() {
+    this.admin = this._authService.getUser();
     this.paramObserver = this._route.params
       .subscribe(params => {
             let course = params['courseNum'];
@@ -48,17 +55,17 @@ export class CourseScenarioComponent{
         .subscribe((res)=>{
           // success
           this.scenario = res;
-        this._courseService.getScenarioStatus(course, scenCode)
+        this._courseService.getScenarioStatus(this.admin.id, course, scenCode)
           .takeUntil(this.isDestroyed$)
           .subscribe((stats)=>{
 
             this.students = stats;
-        }, (err)=>{
-          this.errorMessage = err.error.message;
+        }, (err2)=>{
+          this.errorMessage = readErrorMessage(err2);
         });
 
       }, (err)=>{
-        this.errorMessage = err.error.message;
+        this.errorMessage = readErrorMessage(err);
       });
         });
   }
@@ -83,7 +90,7 @@ export class CourseScenarioComponent{
     let curState = this.students[studentIndex].status;
     let scenId = this.scenario.scenCode;
     let studentId = this.students[studentIndex].userId;
-    this._studentService.grantScenAccess(studentId, scenId, !curState)
+    this._studentService.grantScenAccess(this.admin.id, studentId, scenId, !curState)
       .takeUntil(this.isDestroyed$)
       .subscribe((res)=>{
         if(res !== undefined && res !== null){
@@ -93,21 +100,6 @@ export class CourseScenarioComponent{
       this.errorMessage = err.error.message;
     })
   }
-
-  /*grantAccess(studentIndex: number){
-    // will require studentService
-    let scenId = this.scenario.scenCode;
-    let studentId = this.students[studentIndex].userId;
-    this._studentService.grantScenAccess(studentId, scenId)
-      .takeUntil(this.isDestroyed$)
-      .subscribe((res)=>{
-        if(res !== undefined && res !== null){
-          this.students[studentIndex].status = res.accessGranted[scenId];
-        }
-    }, (err)=>{
-      this.errorMessage = err.error.message;
-    })
-  }*/
 
   goToFridge(studentId: number){
     this._router.navigate(['/admin/students/', studentId, this.scenario.scenCode]);

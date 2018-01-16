@@ -1,6 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
+
 import { StudentService } from '../student.service';
+import { AuthenticationService } from '../../../authentication/authentication.service';
+import { readErrorMessage } from '../../../shared/read-error';
 
 import { AdminStudent, sortStudents } from '../../../interfaces/student.interface';
 
@@ -8,35 +11,31 @@ import { AdminStudent, sortStudents } from '../../../interfaces/student.interfac
     selector: 'student-list',
     templateUrl: './app/admin/student/student-list/student-list.template.html'
 })
-export class StudentListComponent implements OnInit, OnDestroy{
+export class StudentListComponent implements OnInit, OnDestroy {
     private students: AdminStudent[];
-    private subscription: Subscription;
+    private isDestroyed$: Subject<boolean>;
     private errorMessage: string = '';
 
-    constructor(private _studentService: StudentService) {
-
+    constructor(
+        private _studentService: StudentService,
+        private _authService: AuthenticationService
+    ) {
+        this.isDestroyed$ = new Subject<boolean>();
     }
 
     ngOnInit() {
-      this.subscription = this._studentService.listStudents()
-        .subscribe((students) => {
-        this.students = students.sort(sortStudents);
-      }, (err)=>{
-        this.errorMessage = err.error.message
-      });
+        let admin = this._authService.getUser();
+        this._studentService.listStudents(admin.id)
+            .takeUntil(this.isDestroyed$)
+            .subscribe((students) => {
+                this.students = students.sort(sortStudents);
+            }, (err) => {
+                this.errorMessage = readErrorMessage(err);
+            });
     }
 
-  formatName(firstName: string, lastName: string): string{
-    let outStr = lastName;
-    if(firstName !== '' && lastName !== ''){
-      outStr += ', '
+    ngOnDestroy() {
+        this.isDestroyed$.next(true);
+        this.isDestroyed$.unsubscribe();
     }
-    outStr += firstName;
-    return outStr;
-  }
-
-  ngOnDestroy(){
-    if(this.subscription)
-      this.subscription.unsubscribe();
-  }
 }
