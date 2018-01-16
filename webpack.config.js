@@ -13,6 +13,7 @@ module.exports = {
     extensions: ['.js', '.ts']
   },
   output: {
+    chunkFilename: '[name]-chunk.js',
     path:  path.resolve(__dirname, 'public/build'),
     filename: '[name].js'
   },
@@ -20,7 +21,10 @@ module.exports = {
     loaders: [
       {
         test: /\.ts$/,
-        loaders: ['awesome-typescript-loader']
+        loaders: [
+          'awesome-typescript-loader',
+          'angular-router-loader'
+        ]
       }
     ]
   },
