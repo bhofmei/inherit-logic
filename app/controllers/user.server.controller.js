@@ -34,7 +34,7 @@ const getUserInfo = function (user) {
   }
 };
 
-const getStudentInfo = function(user){
+const getStudentInfo = function (user) {
 
 };
 
@@ -45,6 +45,53 @@ exports.getUser = function (req, res) {
   let user = req.user;
   delete user.password;
   res.json(user);
+};
+
+exports.editUser = function (req, res) {
+  // can update firstName, lastName, email
+  let body = req.body;
+  let user = req.user;
+  User.findOneAndUpdate({
+      userId: user.userId
+    }, {
+      firstName: body.firstName,
+      lastName: body.lastName,
+      email: body.email
+    }, {
+      new: true
+    },
+    (err, updated) => {
+      if (err) {
+        return res.status(500)
+          .send({
+            message: getErrorMessage(err)
+          })
+      } else if (!updated) {
+        return res.status(404)
+          .send({
+            message: 'User not found'
+          })
+      } else {
+        updated.password = undefined;
+        res.json(updated);
+      }
+    });
+};
+
+exports.updatePassword = function(req, res){
+  passport.authenticate('local', (err, user, info)=>{
+    if(err || !user){
+      res.status(400).send(info)
+    } else {
+      user.password = req.body.newPassword;
+      user.save((err)=>{
+        if(!err){
+          user.password = undefined;
+          res.json(user);
+        }
+      });
+    }
+  });
 };
 
 // Create a new controller method that signin users
@@ -59,7 +106,7 @@ exports.signin = function (req, res, next) {
       req.login(user, (err) => {
         if (err) {
           res.status(400)
-            .send(err);
+            .send({message: getErrorMessage(err)});
         } else {
           user.lastLogin = Date.now();
           user.save((err) => {
@@ -113,7 +160,9 @@ exports.signup = function (req, res) {
       req.login(user, function (err) {
         if (err) {
           res.status(400)
-            .send(err);
+            .send({
+          message: getErrorMessage(err)
+        });
         } else {
           res.json(userInfo);
         }
