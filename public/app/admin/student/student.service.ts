@@ -18,11 +18,13 @@ export class StudentService {
   }
 
   setAdmin(id: number, role: number){
+    //console.log('set admin', id);
     this._adminId.next(id);
     this._adminRole.next(role);
   }
 
   getAdmin(): number{
+    //console.log('get admin', this._adminId.getValue());
     return this._adminId.getValue();
   }
 
@@ -46,6 +48,7 @@ export class StudentService {
   }*/
 
   getStudent(studentId: number): Observable<AdminStudent>{
+    //console.log('get student', this.getAdmin());
     return this._http
             .get<AdminStudent>(`${this._baseURL}/${this.getAdmin()}/students/${studentId}`);
   }
