@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { DndModule } from 'ng2-dnd';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { McBreadcrumbsModule } from 'ngx-breadcrumbs';
+import { PersonNamePipe } from '../pipes/person-name.pipe';
 
 @NgModule({
     imports: [
@@ -13,12 +14,16 @@ import { McBreadcrumbsModule } from 'ngx-breadcrumbs';
       NgbModule.forRoot(),
       McBreadcrumbsModule.forRoot()
     ],
+  declarations: [
+    PersonNamePipe
+  ],
     exports: [
       CommonModule,
       FormsModule,
       DndModule,
       NgbModule,
-      McBreadcrumbsModule
+      McBreadcrumbsModule,
+      PersonNamePipe
     ],
 })
 export class SharedModule {

@@ -7,7 +7,7 @@
         Instructors
       </div>
       <div class="list-group">
-        <div *ngFor="let instr of courseInfo.instructors" class="ml-2">{{ instr.firstName }} {{ instr.lastName }}</div>
+        <div *ngFor="let instr of courseInfo.instructors" class="ml-2">{{ instr | personName }}</div>
       </div>
     </div>
 
@@ -18,7 +18,7 @@
       <div class="input-group input-group-sm">
         <select class="form-control" [(ngModel)]="selectedAdd" name="addInstr">
         <option value="undefined" disabled>Instructor to add</option>
-        <option *ngFor="let instr of possibleInstr" [value]="instr.userId">{{formatName (instr.firstName, instr.lastName) }}</option>
+        <option *ngFor="let instr of possibleInstr" [value]="instr.userId">{{instr | personName:true }}</option>
       </select>
         <div class="input-group-append">
           <button class="btn btn-secondary" (click)="addInstructor()">Add</button>

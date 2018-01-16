@@ -7,7 +7,6 @@ import { StudentListComponent } from './student-list/student-list.component';
 import { StudentIndivComponent } from './student-indiv/student-indiv.component';
 import { StudentFridgeComponent } from './student-fridge/student-fridge.component';
 import { StudentPhageComponent } from './student-fridge/student-phage.component';
-import { StudentNamePipe } from './student-name.pipe';
 
 import { StudentResolver } from './student.resolver';
 
@@ -20,8 +19,7 @@ import { StudentResolver } from './student.resolver';
     StudentListComponent,
     StudentIndivComponent,
     StudentFridgeComponent,
-    StudentPhageComponent,
-    StudentNamePipe
+    StudentPhageComponent
   ],
   providers: [
     StudentResolver

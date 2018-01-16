@@ -16,7 +16,7 @@
         <div class="list-group">
           <a *ngFor="let student of students"
              [routerLink]="['/admin/students', student.userId]"
-              class="list-group-item list-group-item-action">{{ student.firstName }} {{ student.lastName }}</a>
+              class="list-group-item list-group-item-action">{{ student | personName:true }}</a>
         </div>
         <!-- end students -->
       </div>

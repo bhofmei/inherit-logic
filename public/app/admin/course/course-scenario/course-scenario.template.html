@@ -15,7 +15,7 @@
     <div class="list-group">
       <div *ngFor="let student of students; let i = index" class="list-group-item justify-content-between d-flex">
         <div class="">
-        <span class="text-primary student-label">{{student.name}}:</span> {{ formatAccess(student.status) }}
+        <span class="text-primary student-label">{{student | personName}}:</span> {{ formatAccess(student.status) }}
         </div>
         <div class="btn-group" role="group">
           <button [ngClass]="accessButtonClass(student.status)" (click)="toggleAccess(i)">{{ accessButtonText(student.status) }}</button>
