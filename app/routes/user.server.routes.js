@@ -9,6 +9,14 @@ module.exports = function(app){
 
   //TODO: add verification route and get user route
 
+  // get/update information for specific user
+    app.route('/api/users/:userId')
+      .get(user.requiresLogin, user.getUser)
+      .post(user.requiresLogin, user.editUser);
+
+  app.route('/api/users/:userId/update-password')
+    .post(user.requiresLogin, user.updatePassword);
+
   // cricket paths
   //app.route('/api/cricket/:userId').get(scenarios.list);
 
