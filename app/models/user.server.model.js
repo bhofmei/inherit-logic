@@ -19,7 +19,7 @@ const UserSchema = new Schema({
   email: {
     type: String,
     //index: true,
-    required: true,
+    required: 'Email is required',
     match: /.+\@.+\..+/
   },
   password: {
@@ -71,10 +71,6 @@ UserSchema.pre('save', function(next){
     });
   }
 });
-
-UserSchema.methods.hashPassword = function(password){
-  return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
-};
 
 UserSchema.virtual('name').get(function () {
   let outStr = this.firstName;
