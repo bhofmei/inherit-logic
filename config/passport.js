@@ -27,7 +27,7 @@ module.exports = function(){
       if(err)
         return done(err);
       if(!user){
-        return done(null, false, {message: 'Unknown user'});
+        return done(null, false, {message: 'User not found'});
       }
       /*if(!user.authenticate(password)){
         return done(null, false, {message: 'Invalid password'});

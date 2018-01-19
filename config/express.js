@@ -35,10 +35,11 @@ module.exports = function(db){
   });
 
   app.use(session({
-    saveUninitialized: true,
+    saveUninitialized: false,
     resave: true,
     secret: config.sessionSecret,
-    store: mongoStore
+    store: mongoStore,
+    unset: 'destroy'
   }));
 
   //app.set('views', './app/views');
