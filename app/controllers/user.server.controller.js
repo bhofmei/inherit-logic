@@ -43,7 +43,7 @@ const getStudentInfo = function (user) {
  * return full user object
  */
 exports.getUser = function (req, res) {
-  let user = req.user;
+  let user = req.curUser;
   delete user.password;
   res.json(user);
 };
@@ -51,7 +51,7 @@ exports.getUser = function (req, res) {
 exports.editUser = function (req, res) {
   // can update firstName, lastName, email
   let body = req.body;
-  let user = req.user;
+  let user = req.curUser;
   User.findOneAndUpdate({
       userId: user.userId
     }, {
@@ -80,15 +80,21 @@ exports.editUser = function (req, res) {
 };
 
 exports.updatePassword = function(req, res){
+  console.log('update', req.body);
   passport.authenticate('local', (err, user, info)=>{
+    console.log(err, user, info);
     if(err || !user){
-      res.status(400).send(info)
+      return res.status(400).send(info)
     } else {
+      console.log('authenticated');
       user.password = req.body.newPassword;
-      user.save((err)=>{
-        if(!err){
-          user.password = undefined;
-          res.json(user);
+      user.save((err2, updated)=>{
+        console.log('saved');
+        if(!err2){
+          updated.password = undefined;
+          res.json(updated);
+        } else {
+          return res.status(500).send(getErrorMessage(err2));
         }
       });
     }
@@ -219,22 +225,22 @@ exports.requiresLogin = function (req, res, next) {
 exports.userById = function (req, res, next, id) {
   // check for negative id -> send error
   if (id < 0) {
-    return next(new Error('Invalid user'))
+    return next('Invalid user')
   }
   User.findOne({
     userId: id
-  }, (err, user) => {
+  }, (err, curUser) => {
     // if error
     if (err) return next(err);
     // if user not found
-    else if (!user) return next(new Error('User not found'));
+    else if (!curUser) return next('User not found');
     // if user found -> next middleware
     // if req has user specified, use user prop
-    user.password = undefined;
-    if (req.user) {
-      req.student = user;
+    curUser.password = undefined;
+    if (req.curUser) {
+      req.student = curUser;
     } else {
-      req.user = user;
+      req.curUser = curUser;
     }
     next();
   });

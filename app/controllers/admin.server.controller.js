@@ -19,7 +19,7 @@ const getErrorMessage = function (err) {
  * user must be instructor or admin
  */
 exports.hasAuthorization = function (req, res, next) {
-  if (!(req.user.role === 'instr' || req.user.role === 'admin')) {
+  if (!(req.curUser.role === 'instr' || req.curUser.role === 'admin')) {
     return res.status(403)
       .send({
         message: 'Not authorized'
@@ -33,7 +33,7 @@ exports.hasAuthorization = function (req, res, next) {
  * user must be admin
  */
 exports.isAdmin = function (req, res, next) {
-  if (req.user.role !== 'admin') {
+  if (req.curUser.role !== 'admin') {
     return res.status(403)
       .send({
         message: 'Not authorized'
@@ -48,7 +48,7 @@ exports.isAdmin = function (req, res, next) {
  */
 exports.listUsers = function (req, res) {
 
-  let user = req.user;
+  let user = req.curUser;
   let userId = new ObjectId(user._id);
   //let query;
   if (user.role === 'instr') {

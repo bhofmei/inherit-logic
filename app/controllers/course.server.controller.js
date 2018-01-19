@@ -14,7 +14,7 @@ const getErrorMessage = function (err) {
 };
 
 exports.isInstructor = function (req, res, next) {
-  let instr = req.user;
+  let instr = req.curUser;
   let course = req.course;
   // search for this user in list of instructors
   if (instr.role === 'admin') {
@@ -35,7 +35,7 @@ exports.isInstructor = function (req, res, next) {
  * if user is instructor, list courses for teacher
  */
 exports.listCourses = function (req, res) {
-  let user = req.user;
+  let user = req.curUser;
   let userId = new ObjectId(user._id);
   let query;
   if (user.role === 'instr') {
@@ -88,7 +88,7 @@ exports.createCourse = function (req, res) {
   const course = new Course(req.body);
 
   // Set the course's 'instructor' property
-  course.instructors = [req.user];
+  course.instructors = [req.curUser];
 
   // Try saving the course
   course.save((err) => {
@@ -196,7 +196,7 @@ exports.deleteCourseStudents = function (req, res) {
 };
 
 exports.getPossibleInstructors = function (req, res) {
-  let admin = req.user;
+  let admin = req.curUser;
   let courseId = new ObjectId(req.course._id);
 
   let currInstr = req.course.instructors.map((elm)=>{

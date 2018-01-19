@@ -40,7 +40,7 @@ const getFridgeInfo = function(fridge){
 }
 
 exports.stockFridge = function (req, res) {
-  var user = req.user;
+  var user = req.curUser;
   var scen = req.scenario;
   // determine if access granted -> default true bc of testing
   let accessGranted = user.get('accessGranted');
@@ -115,7 +115,7 @@ exports.stockFridge = function (req, res) {
 };
 
 exports.getFridge = function (req, res) {
-  var user = req.user;
+  var user = req.curUser;
   var scen = req.scenario;
 
   Fridge.findOne({
@@ -226,7 +226,7 @@ exports.deleteStudentFridge = function(req, res, next){
 exports.addPhageToFridge = function (req, res) {
   let fridge = req.fridge;
   let strain = req.body;
-  let user = req.user;
+  let user = req.curUser;
   let scen = req.scenario;
   // create the phage
   strain.owner = user;
@@ -322,7 +322,7 @@ exports.phageById = function (req, res, next, id) {
 };
 
 exports.findFridgeByScenOwner = function (req, res, next) {
-  var user = req.user;
+  var user = req.curUser;
   var scen = req.scenario;
   //console.log(user, scen);
   Fridge.findOne({
@@ -343,7 +343,7 @@ exports.findFridgeByScenOwner = function (req, res, next) {
 // authorization
 exports.hasFridgeAuthorization = function (req, res, next) {
   // current user must be owner of fridge
-  if (req.fridge.owner._id !== req.user._id) {
+  if (req.fridge.owner._id !== req.curUser._id) {
     return res.status(403)
       .send({
         message: 'User is not authorized'
@@ -355,7 +355,7 @@ exports.hasFridgeAuthorization = function (req, res, next) {
 
 exports.hasPhageAuthorization = function(req, res, next){
   let ownerId = req.strain.owner.toString();
-  if(ownerId !== req.user.id){
+  if(ownerId !== req.curUser.id){
     return res.status(403)
       .send({
         message: 'User is not authorized'
