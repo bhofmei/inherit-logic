@@ -54,6 +54,26 @@ UserSchema.methods.authenticate = function(candidatePassword, callback){
   });
 };
 
+UserSchema.methods.changePassword = function(oldPassword, newPassword, callback){
+  if(!oldPassword || !newPassword){
+    return callback('Missing password');
+  }
+  this.authenticate(oldPassword, (err, isMatch)=>{
+    if(err)
+      return callback(err);
+    else if(!isMatch)
+      return callback('Incorrect password');
+    else{
+      this.password = newPassword;
+      this.save((err2)=>{
+        if(err2)
+          return callback(err2);
+        callback(null, this);
+      });
+    }
+  });
+};
+
 UserSchema.pre('save', function(next){
   const SALT_FACTOR=10;
   if(!this.isModified('password'))

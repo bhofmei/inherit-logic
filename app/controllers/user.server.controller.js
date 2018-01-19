@@ -35,10 +35,6 @@ const getUserInfo = function (user) {
   }
 };
 
-const getStudentInfo = function (user) {
-
-};
-
 /**
  * return full user object
  */
@@ -80,24 +76,23 @@ exports.editUser = function (req, res) {
 };
 
 exports.updatePassword = function(req, res){
-  console.log('update', req.body);
-  passport.authenticate('local', (err, user, info)=>{
-    console.log(err, user, info);
-    if(err || !user){
-      return res.status(400).send(info)
-    } else {
-      console.log('authenticated');
-      user.password = req.body.newPassword;
-      user.save((err2, updated)=>{
-        console.log('saved');
-        if(!err2){
-          updated.password = undefined;
-          res.json(updated);
-        } else {
-          return res.status(500).send(getErrorMessage(err2));
-        }
-      });
-    }
+
+  let curUser = req.curUser;
+  let oldPassword = req.body.password;
+  let newPassword = req.body.newPassword;
+  User.findOne({userId: curUser.userId},
+              (err, user)=>{
+    if(err)
+      return res.status(400).send({message: getErrorMessage(err)});
+    user.changePassword(oldPassword, newPassword,
+                       (err2, updated)=>{
+      if(err2){
+        return res.status(400).send({message: getErrorMessage(err2)});
+      } else {
+        updated.password = undefined;
+        res.json(updated);
+      }
+    });
   });
 };
 
@@ -142,16 +137,6 @@ exports.signup = function (req, res) {
 
   tmp.accessGranted = access;
   const user = new User(tmp);
-  // check course number
-  /*var cExist = Course.courseExists(user.course);
-  if (cExist === -1) {
-    res.status(400)
-      .send({
-        message: 'Course number does not exist'
-      });
-  } else if (cExist === 0) {
-    user.course = '0000'
-  }*/
 
   user.save((err) => {
     if (err) {
