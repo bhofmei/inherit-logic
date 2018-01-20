@@ -8,10 +8,10 @@ import { User } from '../interfaces/user.interface';
 
 @Injectable()
 export class AuthenticationService {
-    //private _user: BehaviorSubject<User> = new BehaviorSubject<User>(null);
-    //public getUser = this._user.asObservable();
+    private _user: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+    getUser$ = this._user.asObservable();
 
-    private _user2: User;
+    //private _user2: User;
 
     private _signinURL = 'api/auth/signin';
     private _signupURL = 'api/auth/signup';
@@ -19,25 +19,23 @@ export class AuthenticationService {
     public redirectUrl: string = '/';
 
     constructor(private http: HttpClient) {
-      //this._user = new BehaviorSubject<User>(null);
     }
 
   setUser(user: User){
-    //this._user.next(user);
-    this._user2 = user;
+    this._user.next(user);
   }
 
   getUser(): User{
-    return this._user2;
+    return this._user.getValue();
   }
 
   isLoggedIn(){
-    return (!!this._user2);
+    return (!!this.getUser());
   }
 
   canAccessAdmin(){
-    if(this._user2){
-      return this._user2.role > 0
+    if(this.getUser()){
+      return this.getUser().role > 0
     }
     else{
       return false;
@@ -57,9 +55,4 @@ export class AuthenticationService {
 
       return this.http.post<User>(this._signupURL, body, { headers: headers })
   }
-
-    /*private handleError(error: Response) {
-        console.error(error);
-        return Observable.throw(error.json().message || 'Server error');
-    }*/
 }
