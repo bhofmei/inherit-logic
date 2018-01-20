@@ -5,7 +5,6 @@ import { ScenarioComponent } from './scenario.component';
 import { ScenarioResolver } from './scenario.resolver';
 import { ListComponent } from './list/list.component';
 
-//import { LocationRoutes } from './location/location.routes';
 const ScenarioRoutes: Routes = [
   {
     path: 'scenarios',

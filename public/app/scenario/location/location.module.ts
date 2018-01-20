@@ -3,7 +3,6 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { LocationRouteModule } from './location.route.module';
 
-import { LocationGuard } from './location-guard.service';
 import { ExperimentService } from './experiment.service';
 
 import { FridgeComponent } from '../fridge/fridge.component';
@@ -33,7 +32,6 @@ import { ModelRoomComponent } from './model-room/model-room.component';
     PhageDialogComponent
   ],
   providers: [
-    LocationGuard,
     ExperimentService
   ]
 })

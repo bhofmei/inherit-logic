@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LocationComponent } from './location.component';
-import { LocationGuard } from './location-guard.service';
+import { LoggedInGuard } from '../../authentication/logged-in.guard.service';
 
 import { LabRoomComponent } from './lab-room/lab-room.component';
 import { PlexerRoomComponent } from './plexer-room/plexer-room.component';
@@ -13,7 +13,7 @@ export const LocationRoutes: Routes = [
   {
     path: '',
     component: LocationComponent,
-    canActivate: [LocationGuard],
+    canActivate: [LoggedInGuard],
     children: [
       {
         path: 'lab-room',

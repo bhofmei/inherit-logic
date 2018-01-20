@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AdminGuard } from './admin-guard.service';
+import { AdminGuard } from './admin.guard.service';
+import { LoggedInGuard } from '../authentication/logged-in.guard.service';
 
 import { AdminComponent } from './admin.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { NotAuthComponent } from './not-auth/not-auth.component';
 
-const adminRoutes: Routes = [
+const AdminRoutes: Routes = [
   {
     path: 'admin',
     data: {
       breadcrumbs: 'Admin'
     },
-    canActivate:[AdminGuard],
+    canActivate:[LoggedInGuard],
     canActivateChild: [AdminGuard],
     component: AdminComponent,
     children: [
@@ -45,7 +46,7 @@ const adminRoutes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forChild(adminRoutes)
+    RouterModule.forChild(AdminRoutes)
   ],
   exports: [
     RouterModule

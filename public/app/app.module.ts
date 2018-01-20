@@ -12,6 +12,7 @@ import { SharedModule } from './shared/shared.module';
 
 //import { HomeModule } from './home/home.module';
 import { AuthenticationService } from './authentication/authentication.service';
+import { LoggedInGuard } from './authentication/logged-in.guard.service';
 import { ScenarioService } from './scenario/scenario.service';
 import { CourseService } from './admin/course/course.service';
 import { ScenarioResolver } from './scenario/scenario.resolver';
@@ -46,6 +47,7 @@ import { NavComponent } from './nav/nav.component';
     ],
     providers: [
         AuthenticationService,
+      LoggedInGuard,
         ScenarioService,
       CourseService,
     ScenarioResolver
