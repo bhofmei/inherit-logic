@@ -11,7 +11,7 @@
         <a *ngIf="user.role==2" class="larger-link" [routerLink]="['/admin']">Administrator Page</a>
       </div>
       <div class="col-12 col-md-6 text-md-left">
-        <a class="larger-link float-md-right" href="api/auth/signout">Sign out</a>
+        <a class="larger-link float-md-right" [routerLink]="['/authentication/signout']">Sign out</a>
       </div>
     </div>
     <!-- end user -->

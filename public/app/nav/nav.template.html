@@ -35,7 +35,7 @@
         <li *ngIf="user" class="nav-item navlinks-container">
         <a class="nav-link navlinks-parent" routerLink="profile"><span class="d-none d-md-inline oi oi-person" title="Profile"></span><span class="d-inline d-md-none">Profile</span></a>
           <div class="navlinks-children">
-            <a class="navlinks-children-links nav-link " href="/api/auth/signout"><span>Sign out</span></a>
+            <a class="navlinks-children-links nav-link" routerLink="authentication/signout"><span>Sign out</span></a>
           </div>
       </li>
     </ul>

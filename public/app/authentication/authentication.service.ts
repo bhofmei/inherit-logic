@@ -12,9 +12,7 @@ export class AuthenticationService {
     getUser$ = this._user.asObservable();
 
     //private _user2: User;
-
-    private _signinURL = 'api/auth/signin';
-    private _signupURL = 'api/auth/signup';
+    private _baseUrl = '/api/auth/'
 
     public redirectUrl: string = '/';
 
@@ -46,13 +44,17 @@ export class AuthenticationService {
       let body = JSON.stringify(credentials);
       let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-      return this.http.post<User>(this._signinURL, body, { headers: headers });
+      return this.http.post<User>(this._baseUrl + 'signin', body, { headers: headers });
   }
 
   signup(user: any): Observable<User> {
       let body = JSON.stringify(user);
       let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-      return this.http.post<User>(this._signupURL, body, { headers: headers })
+      return this.http.post<User>(this._baseUrl + 'signup', body, { headers: headers });
+  }
+
+  signout(): Observable<any>{
+    return this.http.get(this._baseUrl + 'signout');
   }
 }
