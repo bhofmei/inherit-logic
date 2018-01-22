@@ -2,12 +2,16 @@ const User = require('mongoose')
   .model('User');
 const passport = require('passport');
 const scenData = require('../../config/scenario.data');
+const debug = require('debug')('user');
 
 const roles = ['student', 'instr', 'admin']
 
 const getErrorMessage = function (err) {
   let message = '';
 
+  if(typeof err === 'string'){
+    return err;
+  }
   if (err.code) {
     switch (err.code) {
       case 11000:
@@ -36,24 +40,24 @@ const getUserInfo = function (user) {
 };
 
 /**
- * return full user object
+ * return user object
  */
 exports.getUser = function (req, res) {
-  let user = req.curUser;
-  delete user.password;
+  let user = getUserInfo(req.curUser);
   res.json(user);
 };
 
 exports.editUser = function (req, res) {
   // can update firstName, lastName, email
+  debug('edit %d - %o', req.curUser.userId, req.body);
   let body = req.body;
   let user = req.curUser;
   User.findOneAndUpdate({
       userId: user.userId
     }, {
-      firstName: body.firstName,
-      lastName: body.lastName,
-      email: body.email
+      firstName: (body.firstName ? body.firstName : user.firstName),
+      lastName: (body.lastName ? body.lastName : user.lastName),
+      email: (body.email ? body.email : user.email)
     }, {
       new: true
     },
@@ -69,28 +73,32 @@ exports.editUser = function (req, res) {
             message: 'User not found'
           })
       } else {
-        updated.password = undefined;
-        res.json(updated);
+        debug('updated %o', updated);
+        res.json(getUserInfo(updated));
       }
     });
 };
 
 exports.updatePassword = function(req, res){
+  debug('update password %d - %o', req.curUser.userId, req.body);
 
   let curUser = req.curUser;
   let oldPassword = req.body.password;
   let newPassword = req.body.newPassword;
   User.findOne({userId: curUser.userId},
               (err, user)=>{
-    if(err)
-      return res.status(400).send({message: getErrorMessage(err)});
+    if(err){
+      debug('find user error', err)
+        return res.status(404).send({message: getErrorMessage(err)});
+    }
     user.changePassword(oldPassword, newPassword,
                        (err2, updated)=>{
       if(err2){
-        return res.status(400).send({message: getErrorMessage(err2)});
+        debug('change password error', err2);
+        return res.status(401).send({message: getErrorMessage(err2)});
       } else {
-        updated.password = undefined;
-        res.json(updated);
+        debug('updated password %o', updated);
+        res.json(getUserInfo(updated));
       }
     });
   });
@@ -189,8 +197,7 @@ exports.grantAccess = function (req, res) {
             message: getErrorMessage(err)
           });
       }
-      updated.password = undefined;
-      res.json(updated);
+      res.json(getUserInfo(updated));
     });
   } else {
     return res.status(200);

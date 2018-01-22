@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Schema = mongoose.Schema;
+const debug = require('debug')('user');
 
 const rolesEnum = {
   values: ['admin', 'instr', 'student'],
@@ -56,18 +57,25 @@ UserSchema.methods.authenticate = function(candidatePassword, callback){
 
 UserSchema.methods.changePassword = function(oldPassword, newPassword, callback){
   if(!oldPassword || !newPassword){
+    debug('missing')
     return callback('Missing password');
   }
   this.authenticate(oldPassword, (err, isMatch)=>{
-    if(err)
-      return callback(err);
-    else if(!isMatch)
-      return callback('Incorrect password');
+    if(err){
+      debug('auth error', err);
+        return callback(err);
+    }
+    else if(!isMatch){
+      debug('no match');
+        return callback('Incorrect password');
+    }
     else{
       this.password = newPassword;
       this.save((err2)=>{
-        if(err2)
+        if(err2){
+          debug('save error', err2);
           return callback(err2);
+        }
         callback(null, this);
       });
     }
