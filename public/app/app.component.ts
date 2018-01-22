@@ -3,7 +3,7 @@ import { AuthenticationService } from './authentication/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'genetics-app',
+    selector: 'cricket-app',
     template: '<cricket-nav></cricket-nav><router-outlet></router-outlet>',
 })
 export class AppComponent {

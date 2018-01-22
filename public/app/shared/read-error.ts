@@ -1,12 +1,14 @@
 
-export const readErrorMessage = function(error: any) {
-  console.log(error);
+export const readErrorMessage = function(error: any): string {
+  console.log(JSON.stringify(error));
   let errorMessage = 'Unknown error';
   if(error.error && error.error.message){
-    errorMessage = error.error.message
+   return error.error.message
   } else if (error && error.message){
-   errorMessage = error.message;
-  } else if(error)
-  console.error(errorMessage);
+   return error.message;
+  } else if(error){
+    return error;
+  }
+  //console.error(errorMessage);
   return errorMessage;
 }

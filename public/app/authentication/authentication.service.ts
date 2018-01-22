@@ -29,11 +29,11 @@ export class AuthenticationService {
     return this._user.getValue();
   }
 
-  isLoggedIn(){
+  isLoggedIn(): boolean{
     return (!!this.getUser());
   }
 
-  canAccessAdmin(){
+  canAccessAdmin(): boolean{
     if(this.getUser()){
       return this.getUser().role > 0
     }
