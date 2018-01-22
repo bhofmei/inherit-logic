@@ -29,12 +29,14 @@
       <li class="nav-item mr-4">
         <a class="nav-link" routerLink="scenarios">Scenarios</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item ">
         <a class="nav-link" routerLink="help"><span class="d-none d-md-inline oi oi-question-mark" title="Help" style="top:0px;"></span><span class="d-inline d-md-none">Help</span></a>
         </li>
-        <li *ngIf="user" class="nav-item">
-        <a class="nav-link" routerLink="profile"><span class="d-none d-md-inline oi oi-person" title="Profile"></span><span class="d-inline d-md-none">Profile</span></a>
-
+        <li *ngIf="user" class="nav-item navlinks-container">
+        <a class="nav-link navlinks-parent" routerLink="profile"><span class="d-none d-md-inline oi oi-person" title="Profile"></span><span class="d-inline d-md-none">Profile</span></a>
+          <div class="navlinks-children">
+            <a class="navlinks-children-links nav-link " href="/api/auth/signout"><span>Sign out</span></a>
+          </div>
       </li>
     </ul>
   </div>
