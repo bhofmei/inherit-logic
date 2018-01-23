@@ -174,7 +174,8 @@ exports.signup = function (req, res) {
 // Create a new controller method for signing out
 exports.signout = function (req, res) {
   req.logout();
-  res.redirect('/');
+  return res.status(200).send(true);
+  //res.redirect('/');
 };
 
 /**
