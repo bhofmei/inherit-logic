@@ -8,3 +8,6 @@ public/app/**/*.js.map
 !public/app/system.config.js
 npm-debug.log
 /typings/
+
+/config/credentials/*.js
+!/config/credentials/*public.js

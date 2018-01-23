@@ -180,10 +180,11 @@ describe('User Controller Unit Tests:', () => {
 
       it('Should signout', (done) => {
         authAgent.get('/api/auth/signout')
-          .expect(302)
+          .expect(200)
           .end((err, res) => {
             should.not.exist(err);
             res.error.should.equal(false);
+          console.log(res.body);
             done();
           });
       }); // end Should signout
@@ -195,6 +196,21 @@ describe('User Controller Unit Tests:', () => {
 
     }); // end Test signout
   }); // end Testing Authentication methods
+
+  describe('Testing password reset methods', ()=>{
+    it('Should send reset email', (done)=>{
+
+      nonAuth.post('/api/auth/forget')
+          .send({email: userDetails.email})
+          //.expect(200)
+          .end((err, res)=>{
+            should.not.exist(err);
+        res.body.message.should.equal('An email has been sent to ' + userDetails.email + ' with further instructions.')
+        done();
+      });
+    }); // end Should send reset email
+
+  }); // end Testing password reset methods
 
   describe('Testing GET methods', () => {
 

@@ -3,5 +3,6 @@ module.exports = {
   db: 'mongodb://localhost/cricket-dev',
   sessionSecret : 'developmentSessionSecret',
   loadScenario: true,
-  phageSeed: 100
+  phageSeed: 100,
+  email: require('./credentials/email.test.js')
 };
