@@ -23,6 +23,7 @@ module.exports = {
   probDeletion: 0.005,
   probRadSurvive: 0.01,
   plateCapacity: 1500, // only used for testing
+  plexerCapcaity: 200, // only used for testing
   /* fridge config */
   fridge: {
     nShelves: 32,
