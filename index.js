@@ -9,10 +9,12 @@ const appServers = configureExpress(db);
 const server = appServers.server; // regular http server
 const secureServer = appServers.secureServer; // https server
 const passport = configurePassport();
-server.listen(3001);
+
 /* HTTPS server exists */
 if (secureServer !== null) {
   secureServer.listen(8443);
+} else {
+  server.listen(3001);
 }
 module.exports = (secureServer === null ? server : secureServer );
 

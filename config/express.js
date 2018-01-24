@@ -19,19 +19,6 @@ const helmet = require('helmet');
 
 module.exports = function (db) {
   const app = express();
-  if (process.env.NODE_ENV === 'production') {
-    console.log('redirect');
-    app.use(function (req, res, next) {
-      if (!req.secure) {
-        var secureUrl = "https://" + req.headers['host'] + req.url;
-        res.writeHead(301, {
-          "Location": secureUrl
-        });
-        res.end();
-      }
-      next();
-    });
-  }
   app.use(gracefulExit.middleware(app));
   const server = http.createServer(app);
   // generate servers
