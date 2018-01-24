@@ -10,4 +10,6 @@ npm-debug.log
 /typings/
 
 /config/credentials/*
-!/config/credentials/*public
+!/config/credentials/*public*
+
+/config/env.production.js

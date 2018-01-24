@@ -4,6 +4,7 @@ const path = require('path');
 const config = require('./config');
 const http = require('http');
 const https = require('https');
+const fs = require('fs');
 const express = require('express');
 const morgan = require('morgan');
 const compress = require('compression');
@@ -18,7 +19,6 @@ const helmet = require('helmet');
 
 module.exports = function (db) {
   const app = express();
-  console.log(process.env.NODE_ENV);
   if (process.env.NODE_ENV === 'production') {
     console.log('redirect');
     app.use(function (req, res, next) {
@@ -33,7 +33,22 @@ module.exports = function (db) {
     });
   }
   app.use(gracefulExit.middleware(app));
-  //const server = http.createServer(app);
+  const server = http.createServer(app);
+  // generate servers
+  let out = {
+    server: server,
+    secureServer: null
+  };
+  if (process.env.NODE_ENV === 'production') {
+    // get options
+    let options = {
+      key: fs.readFileSync(config.pathToKey),
+      cert: fs.readFileSync(config.pathToCert)
+    };
+    const secureServer = https.createServer(options, app);
+    out.secureServer = secureServer;
+  }
+  //
 
   if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
@@ -73,6 +88,6 @@ module.exports = function (db) {
 
   require('./express.routes')(app)
 
-  return app;
+  return out; // return the servers
   //return server;
 };
