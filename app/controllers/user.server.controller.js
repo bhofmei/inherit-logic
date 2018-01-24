@@ -199,28 +199,43 @@ exports.resetPassword = function (req, res) {
   let confirmPassword = req.body.confirmPassword;
   User.findOne({
     resetPasswordToken: token
-  }, (err, user)=>{
+  }, (err, user) => {
     debugPass('user %d', (user ? user.userId : -1));
-    if(err){
-      return res.status(400).send({message: getErrorMessage(err)});
-    } else if (!user){
-      return res.status(404).send({message: 'Invalid token.'})
-    } else if(Date.now() > user.resetPasswordExpires){
-      return res.status(403).send({message: 'Token has expired.'})
-    } else if(newPassword !== confirmPassword){
-      return res.status(400).send({message: 'Confirm password does not match.'})
+    if (err) {
+      return res.status(400)
+        .send({
+          message: getErrorMessage(err)
+        });
+    } else if (!user) {
+      return res.status(404)
+        .send({
+          message: 'Invalid token.'
+        })
+    } else if (Date.now() > user.resetPasswordExpires) {
+      return res.status(403)
+        .send({
+          message: 'Token has expired.'
+        })
+    } else if (newPassword !== confirmPassword) {
+      return res.status(400)
+        .send({
+          message: 'Confirm password does not match.'
+        })
     } else {
       debugPass('able to update');
       user.password = newPassword;
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
-      user.save((err2)=>{
+      user.save((err2) => {
         debugPass('saved');
-        if(err2){
-          return res.status(400).send(getErrorMessage(err2))
+        if (err2) {
+          return res.status(400)
+            .send(getErrorMessage(err2))
         } else {
           // successful
-          res.json({message: 'Password has been reset.'});
+          res.json({
+            message: 'Password has been reset.'
+          });
         }
       });
     }
@@ -311,21 +326,27 @@ exports.grantAccess = function (req, res) {
   let scenario = req.scenario;
   let scenId = scenario.scenCode;
   let user = req.student;
-
   let access = req.body; // this has {access: boolean}
 
   if (user.accessGranted !== null && user.accessGranted !== undefined) {
     user.accessGranted[scenId] = access.access;
-    user.markModified('accessGranted');
-    user.save((err, updated) => {
+    User.findOneAndUpdate({
+      userId: user.userId
+    }, {
+      accessGranted: user.accessGranted
+    }, {
+      new: true
+    }, (err, updated) => {
       if (err) {
         return res.status(500)
           .send({
             message: getErrorMessage(err)
           });
+      } else {
+        delete updated.password;
+        return res.json(updated);
       }
-      res.json(getUserInfo(updated));
-    });
+    })
   } else {
     return res.status(200);
   }
