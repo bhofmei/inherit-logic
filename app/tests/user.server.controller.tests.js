@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const nonAuth = request(app);
 
-let user, userDetails, user2, userDetails2;
+let user, userDetails, user2, userDetails2, user3, userDetails3;
 describe('User Controller Unit Tests:', () => {
 
   before((done) => {
@@ -24,8 +24,15 @@ describe('User Controller Unit Tests:', () => {
       lastName: 'Last2',
       password: 'another-password'
     };
+    userDetails3 = {
+      email: 'test4@test.com',
+      firstName: 'First3',
+      lastName: 'Last3',
+      password: 'next-password'
+    };
     user = new User(userDetails);
     user2 = new User(userDetails2);
+    user3 = new User(userDetails3);
     user.save((err) => {
       if (err) {
         throw err;
@@ -33,8 +40,14 @@ describe('User Controller Unit Tests:', () => {
         user2.save((err2) => {
           if (err2)
             throw err2
-          else
-            done();
+          else {
+            user3.save((err3) => {
+              if (err3) {
+                throw err3
+              } else
+                done();
+            })
+          }
         });
       }
     });
@@ -184,7 +197,7 @@ describe('User Controller Unit Tests:', () => {
           .end((err, res) => {
             should.not.exist(err);
             res.error.should.equal(false);
-          console.log(res.body);
+            res.body.should.equal(true);
             done();
           });
       }); // end Should signout
@@ -197,18 +210,133 @@ describe('User Controller Unit Tests:', () => {
     }); // end Test signout
   }); // end Testing Authentication methods
 
-  describe('Testing password reset methods', ()=>{
-    it('Should send reset email', (done)=>{
-
-      nonAuth.post('/api/auth/forget')
-          .send({email: userDetails.email})
-          //.expect(200)
-          .end((err, res)=>{
-            should.not.exist(err);
-        res.body.message.should.equal('An email has been sent to ' + userDetails.email + ' with further instructions.')
-        done();
-      });
+  describe('Testing password reset methods', () => {
+    it('Should send reset email', (done) => {
+      nonAuth.post('/api/auth/forget-password')
+        .send({
+          email: userDetails3.email
+        })
+        //.expect(200)
+        .end((err, res) => {
+          should.not.exist(err);
+          res.body.message.should.equal('An email has been sent to ' + userDetails3.email + ' with further instructions.');
+          done();
+        });
     }); // end Should send reset email
+
+    it('Should not send reset email to non-existant user', (done) => {
+
+      nonAuth.post('/api/auth/forget-password')
+        .send({
+          email: 'fake-user@test.com'
+        })
+        .expect(404)
+        .end((err, res) => {
+          should.not.exist(err);
+          res.error.should.have.property('status', 404);
+          res.error.text.should.match(/No account with that email/i);
+          done();
+        });
+    }); // end Should not send reset email to non-existant user
+
+    describe('Testing password reset', () => {
+      let token = 'MY-FAKE-TOKEN';
+      beforeEach((done) => {
+        // generate token
+        User.findOneAndUpdate({
+          email: userDetails3.email
+        }, {
+          resetPasswordToken: token,
+          resetPasswordExpires: Date.now() + 360000
+        }, (err, user) => {
+          if (!err && user) {
+            done();
+          } else {
+            console.log('ERROR')
+          }
+        });
+      }); // end before
+
+      it('Should update password', (done) => {
+        let body = {
+          password: 'new-password',
+          confirmPassword: 'new-password',
+          token: token
+        };
+        console.log(body);
+        nonAuth.post('/api/auth/reset-password')
+          .send(body)
+          .expect(200)
+          .end((err, res) => {
+            should.not.exist(err);
+            res.body.message.should.equal('Password reset');
+            done();
+          });
+      }); // end Should update password
+
+      it('Should not update password for invalid token', (done) => {
+        let body = {
+          password: 'new-password',
+          confirmPassword: 'new-password',
+          token: token + '10'
+        };
+        nonAuth.post('/api/auth/reset-password')
+          .send(body)
+          .expect(404)
+          .end((err, res) => {
+            should.not.exist(err);
+            should.not.exist(err);
+            res.error.should.have.property('status', 404);
+            res.error.text.should.match(/Invalid token/i);
+            done();
+          });
+      }); // end Should not update password for invalid token
+
+      it('Should not update password for expired token', (done) => {
+        let body = {
+          password: 'new-password',
+          confirmPassword: 'new-password',
+          token: token
+        };
+        User.findOneAndUpdate({
+          email: userDetails3.email
+        }, {
+          resetPasswordExpires: 100
+        }, (err, user) => {
+          if (err) {
+            console.log(err)
+            done();
+          } else {
+            nonAuth.post('/api/auth/reset-password')
+              .send(body)
+              .expect(403)
+              .end((err, res) => {
+                should.not.exist(err);
+                should.not.exist(err);
+                res.error.should.have.property('status', 403);
+                res.error.text.should.match(/Token has expired/i);
+                done();
+              });
+          }
+        });
+      }); // end Should not update password for expired token
+
+      afterEach((done) => {
+        User.findOneAndUpdate({
+          email: userDetails3.email
+        }, {
+          resetPasswordToken: undefined,
+          resetPasswordExpires: undefined
+        }, (err, user) => {
+          if (!err && user) {
+            done();
+          } else {
+            console.log('ERROR')
+          }
+        });
+      })
+
+    }); // end Testing password reset
 
   }); // end Testing password reset methods
 
@@ -405,32 +533,36 @@ describe('User Controller Unit Tests:', () => {
           });
       }); // end before
 
-      it('Should sign in with new password', (done)=>{
+      it('Should sign in with new password', (done) => {
         nonAuth.post('/api/auth/signin')
-          .send({username: userDetails2.email,
-                password: newPassword})
+          .send({
+            username: userDetails2.email,
+            password: newPassword
+          })
           .expect(200)
-          .end((err, res)=>{
+          .end((err, res) => {
             should.not.exist(err);
             res.body.should.have.property('firstName', userDetails2.firstName);
-          done();
-        });
+            done();
+          });
       }); // end Should sign in with new password
 
-      it('Should not sign in with old password', (done)=>{
+      it('Should not sign in with old password', (done) => {
         nonAuth.post('/api/auth/signin')
-          .send({username: userDetails2.email,
-                password: userDetails2.password})
+          .send({
+            username: userDetails2.email,
+            password: userDetails2.password
+          })
           .expect(200)
-          .end((err, res)=>{
+          .end((err, res) => {
             should.exist(res.error);
-          res.error.should.have.property('status', 400);
-          res.error.text.should.match(/Invalid password/i)
-          done();
-        });
+            res.error.should.have.property('status', 400);
+            res.error.text.should.match(/Invalid password/i)
+            done();
+          });
       }); // end Should sign in with new password
 
-      after((done)=>{
+      after((done) => {
         authAgent = null;
         done();
       })

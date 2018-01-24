@@ -8,7 +8,8 @@ module.exports = function(app){
     app.route('/api/auth/signout').get(user.signout);
 
     // functions to reset password
-  app.route('/api/auth/forget').post(user.resetPasswordEmail);
+  app.route('/api/auth/forget-password').post(user.resetPasswordEmail);
+  app.route('/api/auth/reset-password').post(user.resetPassword);
 
   //TODO: add verification route and get user route
 

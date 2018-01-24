@@ -15,7 +15,7 @@
     "start": "concurrently \"npm run tsc:w\" \"npm run app\" ",
     "start:w": "concurrently \"npm run webpack\" \"npm run app\" ",
     "build": "webpack --config webpack.prod.js",
-    "test:back": "NODE_ENV=test mocha --reporter spec -t 100000 app/tests",
+    "test:back": "NODE_ENV=test mocha --reporter spec -t 5000 app/tests",
     "test:genetics": "NODE_ENV=test DEBUG=genetics mocha --reporter spec app/tests/genetics"
   },
   "keywords": [

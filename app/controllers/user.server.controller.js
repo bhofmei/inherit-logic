@@ -171,7 +171,7 @@ exports.resetPasswordEmail = function (req, res, next) {
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       transporter.sendMail(mailOptions, (err) => {
-        let message = 'An email has been sent to ' + user.email + ' with further instructions.'
+        let message = 'An email has been sent to ' + user.email + ' with further instructions.';
         debugPass('sendMail error %o', err);
         //done(err, 'done')
         if (!err) {
@@ -183,17 +183,6 @@ exports.resetPasswordEmail = function (req, res, next) {
         }
       });
     },
-    /*function(err){
-      debugPass('ending error %o', err);
-      if(err){
-        return res.status(400).send({message: getErrorMessage(err)});
-      } else {
-        res.json({message: true});
-      }
-      if(err)
-        next(err);
-      next();
-    }*/
 
   ], function (err) {
     return res.status(422)
@@ -204,7 +193,38 @@ exports.resetPasswordEmail = function (req, res, next) {
 };
 
 exports.resetPassword = function (req, res) {
-
+  let token = req.body.token;
+  debugPass('token %s', token);
+  let newPassword = req.body.password;
+  let confirmPassword = req.body.confirmPassword;
+  User.findOne({
+    resetPasswordToken: token
+  }, (err, user)=>{
+    debugPass('user %d', (user ? user.userId : -1));
+    if(err){
+      return res.status(400).send({message: getErrorMessage(err)});
+    } else if (!user){
+      return res.status(404).send({message: 'Invalid token'})
+    } else if(Date.now() > user.resetPasswordExpires){
+      return res.status(403).send({message: 'Token has expired'})
+    } else if(newPassword !== confirmPassword){
+      return res.status(400).send({message: 'Confirm password does not match'})
+    } else {
+      debugPass('able to update');
+      user.password = newPassword;
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
+      user.save((err2)=>{
+        debugPass('saved');
+        if(err2){
+          return res.status(400).send(getErrorMessage(err2))
+        } else {
+          // successful
+          res.json({message: 'Password reset'});
+        }
+      });
+    }
+  });
 };
 
 // Create a new controller method that signin users
