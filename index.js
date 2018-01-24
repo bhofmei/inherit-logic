@@ -12,9 +12,8 @@ const passport = configurePassport();
 server.listen(3001);
 /* HTTPS server exists */
 if (secureServer !== null) {
-  let securePort = (process.env.NODE_ENV === 'production' ? 443 : 8443);
-  secureServer.listen(securePort);
+  secureServer.listen(8443);
 }
-module.exports = server;
+module.exports = (secureServer === null ? server : secureServer );
 
 console.log('Server running at http://localhost:3001/');
