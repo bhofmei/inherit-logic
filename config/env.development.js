@@ -4,5 +4,5 @@ module.exports = {
   sessionSecret : 'developmentSessionSecret',
   loadScenario: true,
   phageSeed: 100,
-  email: require('./credentials/email.test.js')
+  email: require('./credentials/email.production.js')
 };
