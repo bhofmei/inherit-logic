@@ -15,7 +15,7 @@
     "start": "concurrently \"npm run tsc:w\" \"npm run app\" ",
     "start:w": "concurrently \"npm run webpack\" \"npm run app\" ",
     "build": "webpack --config webpack.prod.js",
-    "test:back": "NODE_ENV=test mocha --reporter spec app/tests",
+    "test:back": "NODE_ENV=test mocha --reporter spec -t 100000 app/tests",
     "test:genetics": "NODE_ENV=test DEBUG=genetics mocha --reporter spec app/tests/genetics"
   },
   "keywords": [
@@ -36,6 +36,7 @@
     "@angular/platform-server": "^5.0.0",
     "@angular/router": "^5.0.0",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.6",
+    "async": "^2.6.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.15.2",
     "bootstrap": "^4.0.0-beta.3",
@@ -62,6 +63,7 @@
     "ng2-dragula": "^1.5.0",
     "ngx-breadcrumbs": "^0.0.3",
     "ngx-scrollspy": "^1.2.0",
+    "nodemailer": "^4.4.2",
     "open-iconic": "https://github.com/iconic/open-iconic.git",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",

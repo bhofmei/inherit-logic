@@ -44,7 +44,9 @@ const UserSchema = new Schema({
   lastLogin: {
     type: Date,
     default: Date.now()
-  }
+  },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
 });
 
 UserSchema.methods.authenticate = function(candidatePassword, callback){
