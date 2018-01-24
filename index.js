@@ -5,9 +5,15 @@ const configureExpress = require('./config/express');
 const configurePassport = require('./config/passport');
 
 const db = configureMongoose();
-const app = configureExpress(db);
+const appServers = configureExpress(db);
+const server = appServers.server; // regular http server
+const secureServer = appServers.secureServer; // https server
 const passport = configurePassport();
-app.listen(3000);
-module.exports = app;
+server.listen(3001);
+/* HTTPS server exists */
+if (secureServer !== null) {
+  secureServer.listen(8443);
+}
+module.exports = (secureServer === null ? server : secureServer );
 
-console.log('Server running at http://localhost:3000/');
+console.log('Server running at http://localhost:3001/');
