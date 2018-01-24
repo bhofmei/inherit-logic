@@ -151,7 +151,7 @@ exports.resetPasswordEmail = function (req, res, next) {
           } else if (!user) {
             return res.status(404)
               .send({
-                message: 'No account with that email'
+                message: 'No account with that email.'
               })
           } else {
             debugPass('update user error %o', user);
@@ -204,11 +204,11 @@ exports.resetPassword = function (req, res) {
     if(err){
       return res.status(400).send({message: getErrorMessage(err)});
     } else if (!user){
-      return res.status(404).send({message: 'Invalid token'})
+      return res.status(404).send({message: 'Invalid token.'})
     } else if(Date.now() > user.resetPasswordExpires){
-      return res.status(403).send({message: 'Token has expired'})
+      return res.status(403).send({message: 'Token has expired.'})
     } else if(newPassword !== confirmPassword){
-      return res.status(400).send({message: 'Confirm password does not match'})
+      return res.status(400).send({message: 'Confirm password does not match.'})
     } else {
       debugPass('able to update');
       user.password = newPassword;
@@ -220,7 +220,7 @@ exports.resetPassword = function (req, res) {
           return res.status(400).send(getErrorMessage(err2))
         } else {
           // successful
-          res.json({message: 'Password reset'});
+          res.json({message: 'Password has been reset.'});
         }
       });
     }

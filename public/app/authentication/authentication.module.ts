@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { AuthenticationRoutes } from './authentication.routes';
-import { AuthenticationComponent } from './authentication.component';
 import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
 import { SignoutComponent } from './signout/signout.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
     imports: [
@@ -16,10 +17,11 @@ import { SignoutComponent } from './signout/signout.component';
         RouterModule.forChild(AuthenticationRoutes)
     ],
     declarations: [
-        AuthenticationComponent,
         SigninComponent,
         SignupComponent,
-      SignoutComponent
+      SignoutComponent,
+      ForgetPasswordComponent,
+      ResetPasswordComponent
     ]
 })
 export class AuthenticationModule { }

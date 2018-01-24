@@ -57,4 +57,13 @@ export class AuthenticationService {
   signout(): Observable<any>{
     return this.http.get(this._baseUrl + 'signout');
   }
+
+  forgetPassword(body: any): Observable<any>{
+    console.log(body);
+    return this.http.post(this._baseUrl + 'forget-password', body);
+  }
+
+  resetPassword(credentials: any): Observable<any>{
+    return this.http.post(this._baseUrl + 'reset-password', credentials);
+  }
 }
