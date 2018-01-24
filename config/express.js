@@ -3,6 +3,7 @@
 const path = require('path');
 const config = require('./config');
 const http = require('http');
+const https = require('https');
 const express = require('express');
 const morgan = require('morgan');
 const compress = require('compression');
@@ -13,15 +14,30 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 const gracefulExit = require('express-graceful-exit');
+const helmet = require('helmet');
 
-module.exports = function(db){
+module.exports = function (db) {
   const app = express();
+  console.log(process.env.NODE_ENV);
+  if (process.env.NODE_ENV === 'production') {
+    console.log('redirect');
+    app.use(function (req, res, next) {
+      if (!req.secure) {
+        var secureUrl = "https://" + req.headers['host'] + req.url;
+        res.writeHead(301, {
+          "Location": secureUrl
+        });
+        res.end();
+      }
+      next();
+    });
+  }
   app.use(gracefulExit.middleware(app));
-  const server = http.createServer(app);
+  //const server = http.createServer(app);
 
-  if(process.env.NODE_ENV === 'development'){
+  if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
-  } else if (process.env.NODE_ENV === 'production'){
+  } else if (process.env.NODE_ENV === 'production') {
     app.use(compress());
   }
   app.use(bodyParser.urlencoded({
@@ -29,6 +45,7 @@ module.exports = function(db){
   }));
   app.use(bodyParser.json());
   app.use(methodOverride());
+  app.use(helmet());
 
   const mongoStore = new MongoStore({
     mongooseConnection: db.connection
@@ -39,7 +56,8 @@ module.exports = function(db){
     resave: true,
     secret: config.sessionSecret,
     store: mongoStore,
-    unset: 'destroy'
+    unset: 'destroy',
+    name: 'sId'
   }));
 
   //app.set('views', './app/views');
@@ -55,5 +73,6 @@ module.exports = function(db){
 
   require('./express.routes')(app)
 
-  return server;
+  return app;
+  //return server;
 };
