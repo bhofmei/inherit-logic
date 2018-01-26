@@ -19,7 +19,7 @@ import { ScenarioResolver } from './scenario/scenario.resolver';
 
 import { AdminModule } from './admin/admin.module';
 import { AuthenticationModule } from './authentication/authentication.module';
-import { ArticleModule } from './articles/article.module';
+//import { ArticleModule } from './articles/article.module';
 import { HelpModule } from './help/help.module';
 import { HomeModule } from './home/home.module';
 import { ProfileModule } from './profile/profile.module';
@@ -37,7 +37,7 @@ import { NavComponent } from './nav/nav.component';
       AdminModule,
       ProfileModule,
         AuthenticationModule,
-        ArticleModule,
+        //ArticleModule,
       ScenarioModule,
       RouterModule.forRoot(AppRoutes)
     ],
