@@ -24,4 +24,5 @@ export interface GenotypePhage {
 export interface StudentPhage extends FridgePhage{
   mutationList: any[];
   deletion: number[];
+  guesses?: boolean[];
 }

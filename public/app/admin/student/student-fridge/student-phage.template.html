@@ -32,6 +32,13 @@
     </div>
   </div>
   <!-- end phage-row-deletion -->
+  <div class="row phage-row-guesses" *ngIf="phage.guesses.length > 0">
+    <label for="phageGuess" class="col-sm-3 text-secondary col-label">Guess</label>
+    <div class="col-sm-9" id="phageGuess">
+      {{ phage.guesses | phageGuesses }}
+    </div>
+  </div>
+  <!-- end phage-row-deletion -->
 </div>
 <!-- end phage-details -->
 </div>

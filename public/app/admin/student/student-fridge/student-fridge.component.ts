@@ -53,6 +53,15 @@ export class StudentFridgeComponent{
               this.fridge = fridge;
               this.hasFridge = (fridge.strains !== undefined);
               if(this.hasFridge){
+                let guesses = JSON.parse(this.fridge.guesses);
+                for(let strain of this.fridge.strains){
+                  let x = guesses[strain.strainNum];
+                  if(x){
+                    strain.guesses = x;
+                  } else{
+                    strain.guesses = [];
+                  }
+                }
                 this.fridge.strains.sort((a,b)=>{return a.strainNum - b.strainNum});
               }
               this.setPhage('all');

@@ -9,6 +9,7 @@ import { StudentFridgeComponent } from './student-fridge/student-fridge.componen
 import { StudentPhageComponent } from './student-fridge/student-phage.component';
 
 import { StudentResolver } from './student.resolver';
+import { PhageGuessesPipe } from '../../pipes/phage-guesses.pipe';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { StudentResolver } from './student.resolver';
     StudentListComponent,
     StudentIndivComponent,
     StudentFridgeComponent,
-    StudentPhageComponent
+    StudentPhageComponent,
+    PhageGuessesPipe
   ],
   providers: [
     StudentResolver
