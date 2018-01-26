@@ -6,6 +6,7 @@ const randEngine = randGen.getEngine();
 const scenConfig = require('../../config/scenario.config');
 const pEnum = require('./phage.enum');
 const phageLogic = require('./phage.logic');
+const debug = require('debug')('genetics');
 
 exports.resetEngine = function(){
   randGen.reset(randEngine);
@@ -268,6 +269,7 @@ exports.makeFrameshiftPhage = function (phage, strainNum, phageType, scenData) {
   }
   if (muteList.length > 0) {
     scenData.usedShiftSpots = scenData.usedShiftSpots.concat(muteList);
+    debug('fs phage %o', muteList);
     return {
       phage: {
         strainNum: strainNum,
@@ -459,6 +461,7 @@ exports.makeDeletionPhage = function (phage, strainNum, phageType, scenData) {
     // add deletion
     scenData.usedDeleteSpots.push(realDelete);
     // return new phage
+    debug('del phage %o', realDelete);
     return {
       phage: {
         strainNum: strainNum,
