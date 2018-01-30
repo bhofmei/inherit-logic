@@ -1,6 +1,6 @@
 {
   "name": "cricket",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Cricket application",
   "main": "index.js",
   "directories": {
@@ -50,6 +50,8 @@
     "ejs": "^2.5.2",
     "eslint": "^4.1.1",
     "express": "^4.14.0",
+    "express-brute": "^1.0.1",
+    "express-brute-memcached": "^0.0.1",
     "express-graceful-exit": "^0.4.0",
     "express-session": "^1.14.1",
     "helmet": "^3.10.0",

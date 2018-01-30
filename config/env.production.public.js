@@ -7,5 +7,6 @@ module.exports = {
   loadScenario: true,
   email: require('./credentials/email.production.js'),
   pathToKey: '/path/to/ssl/private/key',
-  pathToCert: '/path/to/ssl/certificate'
+  pathToCert: '/path/to/ssl/certificate',
+  limiter: require('./rate-limit/rate-limit.development.js')
 };

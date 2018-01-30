@@ -4,5 +4,6 @@ module.exports = {
 	sessionSecret: 'testSessionSecret',
   loadScenario: false,
   phageSeed: 100,
-  email: require('./credentials/email.test.js')
+  email: require('./credentials/email.test.js'),
+  limiter: require('./rate-limit/rate-limit.development.js')
 };
