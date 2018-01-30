@@ -9,6 +9,7 @@ const phageLogic = require('./phage.logic');
 const plateEnum = require('./plate.enum');
 const bacteria = require('../models/bacteria.server.model');
 const plateExper = require('./plate.experiment');
+const debug = require('debug')('genetics');
 
 exports.resetEngine = function(){
   //randGen.reset(randEngine);
@@ -28,7 +29,7 @@ exports.createPlexerPlate = function (rowPhage, colPhage, lawnType, specials, ca
     outMat[i] = {};
     // loop through colPhage
     for(let j = 0; j < colPhage.length; j++){
-      //console.log('**', i, ',', j, '**');
+      debug('**', i, ',', j, '**');
 
       let cPhage = colPhage[j];
       // generate the plate; has genoList and strainList
@@ -65,8 +66,8 @@ exports.generatePlexerPlate = function (lawnTypeStr, genoList, strainList, scenD
   }
 
   // loop through geno elements
-  //console.log(genoList);
-  var phenoList = genoList.map((genoElmt) => {
+  var phenoList = genoList.map((genoElmt, i) => {
+    debug(i, genoElmt.shifts, genoElmt.deletion)
     let pheno = phageLogic.doPheno(genoElmt, scenData.realStops);
     let rType = (pheno === phageEnum.FRAMEPHENOTYPE.ALLTRANSLATED ? readOkay : readBad);
     return rType;

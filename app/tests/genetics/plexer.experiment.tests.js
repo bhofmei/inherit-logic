@@ -8,6 +8,7 @@ const phageExp = require('../../genetics/phage.experiment');
 const plexerExp = require('../../genetics/plexer.experiment');
 const phageEnum = require('../../genetics/phage.enum');
 const plateEnum = require('../../genetics/plate.enum');
+const debug = require('debug')('genetics:plexer');
 
 var scenario = {
   id: 0,
@@ -42,10 +43,9 @@ before((done) => {
   let tmp = phageScen.generateScenario(scenario);
   scenData = tmp.scenData;
   phageList = tmp.strainList;
-  //console.log(phageList);
-  for (let i = 0; i < phageList.length; i++) {
-    //console.log(i, phageList[i].mutationList, phageList[i].deletion);
-  }
+  phageList.forEach((phage, i)=>{
+    debug(i, phage.mutationList, phage.deletion);
+  })
   done();
 });
 /* PHAGE:
@@ -64,7 +64,7 @@ before((done) => {
 describe('Testing generate plates for multiplexer', () => {
 
   it('Should create multiplexer for all WT input, PERM bacteria', () => {
-    let mPhage = 10000;
+    let mPhage = 150;
     let rowPhage = [];
     let colPhage = [];
     for (let i = 0; i < 2; i++) {
@@ -77,20 +77,20 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, 20000, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
     /*
-      0, 0: 4 mut, 9800 WT    1, 0: 1 mut, 10200 WT
-      0, 1: 6 mut, 9800 WT    1, 1: 2 mut, 10200 WT
-      0, 2: 5 mut, 10200 WT   1, 2: 4 mut, 9800 WT
-      0, 3: 5 mut, 10200 WT   1, 3: 6 mut, 10200 WT
-      0, 4: 2 mut, 10200 WT   1, 4: 1 mut, 10200 WT
-      0, 5: 2 mut, 9800 WT    1, 5: 3 mut, 9800 WT
-      0, 6: 6 mut, 10200 WT   1, 6: 3 mut, 9800 WT
-      0, 7: 4 mut, 10200 WT   1, 7: 6 mut, 10200 WT
+      0, 0: 126 WT    1, 0: 174 WT
+      0, 1: 126 WT    1, 1: 174 WT
+      0, 2: 174 WT    1, 2: 126 WT
+      0, 3: 174 WT    1, 3: 174 WT
+      0, 4: 174 WT    1, 4: 174 WT
+      0, 5: 126 WT    1, 5: 126 WT
+      0, 6: 174 WT    1, 6: 126 WT
+      0, 7: 174 WT    1, 7: 174 WT
     */
-    let expectedMut = [4, 6, 5, 5, 2, 2, 6, 4, 1, 2, 4, 6, 1, 3, 3, 6];
-    let expectedWT = [9800, 9800, 10200, 10200, 10200, 9800, 10200, 10200, 10200, 10200, 9800, 10200, 10200, 9800, 9800, 10200];
-    //console.log(plate);
+    let expectedMut = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let expectedWT = [126, 126, 174, 174, 174, 126, 174, 174, 174, 174, 126, 174, 174, 126, 126, 174];
+    debug(plate);
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 8; j++) {
         let exp = i * 8 + j;
@@ -101,7 +101,7 @@ describe('Testing generate plates for multiplexer', () => {
   });
 
   it('Should create multiplexer for all WT input, REST bacteria', () => {
-    let mPhage = 11000;
+    let mPhage = 154;
     let rowPhage = [];
     let colPhage = [];
     for (let i = 0; i < 2; i++) {
@@ -114,19 +114,19 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, 20000, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
     /*
-      0, 0: 1 mut, 10790 WT   1, 0: 1 mut, 10790 WT
-      0, 1: 1 mut, 10790 WT   1, 1: 4 mut, 10790 WT
-      0, 2: 4 mut, 10790 WT   1, 2: 3 mut, 11208 WT
-      0, 3: 3 mut, 10790 WT   1, 3: 3 mut, 10790 WT
-      0, 4: 8 mut, 11208 WT   1, 4: 1 mut, 11208 WT
-      0, 5: 5 mut, 10790 WT   1, 5: 1 mut, 10790 WT
-      0, 6: 3 mut, 11208 WT   1, 6: 2 mut, 11208 WT
-      0, 7: 7 mut, 10790 WT   1, 7: 1 mut, 10790 WT
+      0, 0: 130 WT    1, 0: 130 WT
+      0, 1: 130 WT    1, 1: 130 WT
+      0, 2: 130 WT    1, 2: 178 WT
+      0, 3: 130 WT    1, 3: 130 WT
+      0, 4: 178 WT    1, 4: 178 WT
+      0, 5: 130 WT    1, 5: 130 WT
+      0, 6: 178 WT    1, 6: 178 WT
+      0, 7: 130 WT    1, 7: 130 WT
     */
-    let expectedWT = [10790, 10790, 10790, 10790, 11208, 10790, 11208, 10790, 10790, 10790, 11208, 10790, 11208, 10790, 11208, 10790];
-    //console.log(plate);
+    let expectedWT = [130, 130, 130, 130, 178, 130, 178, 130, 130, 130, 178, 130, 178, 130, 178, 130];
+    debug(plate);
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 8; j++) {
         let exp = i * 8 + j;
@@ -137,7 +137,7 @@ describe('Testing generate plates for multiplexer', () => {
   });
 
   it('Should create multiplexer for WT X FS input, PERM bacteria', () => {
-    let mPhage = 10500;
+    let mPhage = 152;
     let rowPhage = [];
     let colPhage = [];
     for (let i = 0; i < 2; i++) {
@@ -154,28 +154,28 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, 20000, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
     /*
-      0, 0: 5147 FS, 5147 WT, 1 mut, 1 mWT, 5 recomb, 6 rWT
-      0, 1: 5147 FS, 5147 WT, 1 mut, 1 mWT, 3 recomb, 4 rWT
-      0, 2: 5352 FS, 5352 WT, 2 mut, 1 mWT, 3 recomb, 0 rWT
-      0, 3: 5147 FS, 5147 WT, 1 mut, 0 mWT, 6 recomb, 13 rWT
-      0, 4: 5147 FS, 5147 WT, 0 mut, 3 mWT, 8 recomb, 10 rWT
-      0, 5: 5352 FS, 5352 WT, 4 mut, 2 mWT, 8 recomb, 5 rWT
-      0, 6: 0 FS, 10704 WT, 3 mut, 0 mWT, 2 recomb, 4 rWT
-      0, 7: 5147 FS, 5147 WT, 1 mut, 0 mWT, 5 recomb, 13 rWT
-      1, 0: 5352 FS, 5352 WT, 3 mut, 0 mWT, 12 recomb, 25 rWT
-      1, 1: 5147 FS, 5147 WT, 0 mut, 0 mWT, 1 recomb, 2 rWT
-      1, 2: 5147 FS, 5147 WT, 6 mut, 0 mWT, 15 recomb, 12 rWT
-      1, 3: 5352 FS, 5352 WT, 0 mut, 1 mWT, 25 recomb, 14 rWT
-      1, 4: 5352 FS, 5352 WT, 2 mut, 2 mWT, 12 recomb, 15 rWT
-      1, 5: 5352 FS, 5352 WT, 3 mut, 0 mWT, 6 recomb, 3 rWT
-      1, 6: 0 FS, 10704 WT, 4 mut, 0 mWT, 1 recomb, 21 rWT
-      1, 7: 5147 FS, 5147 WT, 3 mut, 1 mWT, 8 recomb, 12 rWT
+      0, 0: 64 WT, 64 FS, 1 rFS
+      0, 1: 64 WT, 64 FS
+      0, 2: 88 WT, 88 FS
+      0, 3: 64 WT, 64 FS, 2 rFS
+      0, 4: 64 WT, 64 FS, 1 rFS
+      0, 5: 88 WT, 88 FS, 1 rWT
+      0, 6: 88 WT 88 mutWT
+      0, 7: 64 WT, 64 FS, 2 rWT
+      1, 0: 88 WT, 88 FS, 5 rWT
+      1, 1: 64 WT, 64 FS
+      1, 2: 64 WT, 64 FS, 2 rFS
+      1, 3: 88 WT, 88 FS, 2 rWT, 3 rFS,
+      1, 4: 88 WT, 88 FS, 3 rFS
+      1, 5: 88 WT, 88 FS, 1 rFS
+      1, 6: 88 WT, 88 mutWT, 2 rWT
+      1, 7: 64 WT, 64 FS, 1 rFS, 1 rWT
     */
-    let expectedMut = [5153, 5151, 5357, 5154, 5155, 5364, 5, 5153, 5367, 5148, 5168, 5377, 5366, 5361, 5, 5158];
-    let expectedWT = [5154, 5152, 5353, 5160, 5160, 5359, 10708, 5160, 5377, 5149, 5159, 5367, 5369, 5355, 10725, 5160];
-    //console.log(plate);
+    let expectedMut = [65, 64, 88, 66, 65, 88, 0, 64, 88, 64, 66, 91, 91, 89, 0, 65];
+    let expectedWT = [64, 64, 88, 64, 64, 89, 176, 66, 93, 64, 64, 90, 88, 88, 178, 65];
+    debug(plate);
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 8; j++) {
         let exp = i * 8 + j;
@@ -186,7 +186,7 @@ describe('Testing generate plates for multiplexer', () => {
   });
 
   it('Should create multiplexer for WT X FS input, REST bacteria', () => {
-    let mPhage = 10600;
+    let mPhage = 160;
     let rowPhage = [];
     let colPhage = [];
     for (let i = 0; i < 2; i++) {
@@ -203,27 +203,27 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, 20000, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
     /*
-      0, 0: 5197 FS, 5197 WT, 3 mut, 1 mWT, 1 recomb, 2 rWT
-      0, 1: 5197 FS, 5197 WT, 2 mut, 0 mWT, 6 recomb, 11 rWT
-      0, 2: 5402 FS, 5402 WT, 7 mut, 1 mWT, 19 recomb, 8 rWT
-      0, 3: 5402 FS, 5402 WT, 3 mut, 3 mWT, 10 recomb, 9 rWT
-      0, 4: 5197 FS, 5197 WT, 3 mut, 1 mWT, 11 recomb, 2 rWT
-      0, 5: 5402 FS, 5402 WT, 1 mut, 0 mWT, 18 recomb, 17 rWT
-      0, 6: 0 FS, 10804 WT, 5 mut, 0 mWT, 1 recomb, 20 rWT
-      0, 7: 5402 FS, 5402 WT, 2 mut, 1 mWT, 9 recomb, 15 rWT
-      1, 0: 5402 FS, 5402 WT, 3 mut, 2 mWT, 6 recomb, 3 rWT
-      1, 1: 5402 FS, 5402 WT, 2 mut, 1 mWT, 11 recomb, 10 rWT
-      1, 2: 5402 FS, 5402 WT, 3 mut, 0 mWT, 9 recomb, 6 rWT
-      1, 3: 5197 FS, 5197 WT, 4 mut, 2 mWT, 1 recomb, 1 rWT
-      1, 4: 5402 FS, 5402 WT, 2 mut, 3 mWT, 15 recomb, 11 rWT
-      1, 5: 5197 FS, 5197 WT, 2 mut, 2 mWT, 7 recomb, 7 rWT
-      1, 6: 0 FS, 10394 WT, 7 mut, 0 mWT, 1 recomb, 3 rWT
-      1, 7: 5402 FS, 5402 WT, 2 mut, 1 mWT, 14 recomb, 19 rWT
+      0, 0: 67 WT, 67 FS
+      0, 1: 67 WT, 67 FS, 1 rWT
+      0, 2: 93 WT, 93 FS, 1 rWT, 3 rFS
+      0, 3: 93 WT, 93 FS, 2 rFS
+      0, 4: 67 WT, 67 FS, 1 rFS
+      0, 5: 93 WT, 93 FS, 2 rFS, 3 rWT
+      0, 6: 93 WT 93 mutWT, 2 rWT
+      0, 7: 93 WT, 93 FS, 1 rWT, 2 rFS
+      1, 0: 93 WT, 93 FS, 1 rWT
+      1, 1: 93 WT, 93 FS, 1 rWT, 2 rFS
+      1, 2: 93 WT, 93 FS, 2 rFS
+      1, 3: 67 WT, 67 FS
+      1, 4: 93 WT, 93 FS, 3 rFS
+      1, 5: 67 WT, 67 FS, 1 rFS
+      1, 6: 67 WT, 67 mutWT
+      1, 7: 93 WT, 93 FS, 3 rFS, 1 rWT
     */
-    let expectedWT = [5200, 5208, 5411, 5414, 5200, 5419, 10824, 5418, 5407, 5413, 5408, 5200, 5416, 5206, 10397, 5422];
-    //console.log(plate);
+    let expectedWT = [67, 68, 94, 93, 67, 96, 189, 94, 94, 94, 93, 67, 93, 67, 134, 94];
+    debug(plate);
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 8; j++) {
         let exp = i * 8 + j;
@@ -234,7 +234,7 @@ describe('Testing generate plates for multiplexer', () => {
   });
 
   it('Should create multiplexer for FS X FS input, PERM bacteria', () => {
-    let mPhage = 12300;
+    let mPhage = 123;
     let rowPhage = [];
     let colPhage = [];
     for (let i = 1; i < 4; i += 2) {
@@ -251,28 +251,28 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, 20000, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
     /*
-      0, 0: 12520 FS, 0 WT, 1 mut, 0 mWT, 0 recomb, 0 rWT
-      0, 1: 12520 FS, 0 WT, 3 mut, 1 mWT, 36 recomb, 0 rWT
-      0, 2: 12078 FS, 0 WT, 5 mut, 1 mWT, 9 recomb, 0 rWT
-      0, 3: 12078 FS, 0 WT, 1 mut, 0 mWT, 36 recomb, 0 rWT
-      0, 4: 12078 FS, 0 WT, 3 mut, 2 mWT, 1 recomb, 0 rWT
-      0, 5: 12078 FS, 0 WT, 0 mut, 0 mWT, 4 recomb, 2 rWT
-      0, 6: 6039 FS, 6039 WT, 0 mut, 4 mWT, 8 recomb, 9 rWT
-      0, 7: 12520 FS, 0 WT, 2 mut, 3 mWT, 16 recomb, 0 rWT
-      1, 0: 12520 FS, 0 WT, 4 mut, 4 mWT, 1 recomb, 2 rWT
-      1, 1: 12520 FS, 0 WT, 3 mut, 2 mWT, 0 recomb, 0 rWT
-      1, 2: 12078 FS, 0 WT, 0 mut, 2 mWT, 3 recomb, 0 rWT
-      1, 3: 12520 FS, 0 WT, 3 mut, 2 mWT, 3 recomb, 0 rWT
-      1, 4: 12078 FS, 0 WT, 3 mut, 1 mWT, 6 recomb, 1 rWT
-      1, 5: 12078 FS, 0 WT, 2 mut, 1 mWT, 27 recomb, 0 rWT
-      1, 6: 6260 FS, 6260 WT, 7 mut, 1 mWT, 8 recomb, 13 rWT
-      1, 7: 12078 FS, 0 WT, 2 mut, 0 mWT, 14 recomb, 2 rWT
+      0, 0: 73 FS1 WT, 73 FS2
+      0, 1: 73 FS1 WT, 73 FS2, 2 rWT, 1 rFS
+      0, 2: 50 FS1, 50 FS2
+      0, 3: 50 FS1, 50 FS2, 1 rWT, 2 rFS
+      0, 4: 50 FS1, 50 FS2
+      0, 5: 50 FS1, 50 FS2
+      0, 6: 50 FS1, 50 mutWT, 1 rFS
+      0, 7: 73 FS1, 73 FS2, 1 rFS
+      1, 0: 73 FS1, 73 FS2
+      1, 1: 73 FS1, 73 FS2
+      1, 2: 50 FS1, 50 FS2
+      1, 3: 73 FS1, 73 FS2
+      1, 4: 50 FS1, 50 FS2, 1 rWT
+      1, 5: 50 FS1, 50 FS2, 2 rFS
+      1, 6: 73 FS1, 73 mutWT, 1 rWT
+      1, 7: 50 FS1, 50 FS2, 1 rWT
     */
-    let expectedMut = [12521, 12559, 12092, 12115, 12082, 12082, 6047, 12538, 12525, 12523, 12081, 12526, 12087, 12107, 6275, 12094];
-    let expectedWT = [0, 1, 1, 0, 2, 2, 6052, 3, 6, 2, 2, 2, 2, 1, 6274, 2];
-    //console.log(plate);
+    let expectedMut = [146, 147, 100, 102, 100, 100, 51, 147, 146, 146, 100, 146, 100, 102, 73, 100];
+    let expectedWT = [0, 2, 0, 1, 0, 0, 50, 0, 0, 0, 0, 0, 1, 0, 74, 1];
+    debug(plate);
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 8; j++) {
         let exp = i * 8 + j;
@@ -283,7 +283,7 @@ describe('Testing generate plates for multiplexer', () => {
   }); // end Should create multiplexer for FS X FS input, PERM bacteria
 
     it('Should create multiplexer for FS X FS input, REST bacteria', () => {
-    let mPhage = 12600;
+    let mPhage = 126;
     let rowPhage = [];
     let colPhage = [];
     for (let i = 1; i < 4; i += 2) {
@@ -300,27 +300,27 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, 20000, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
     /*
-      0, 0: 12374 FS, 0 WT, 0 mut, 2 mWT, 0 recomb, 0 rWT
-      0, 1: 12374 FS, 0 WT, 1 mut, 2 mWT, 15 recomb, 1 rWT
-      0, 2: 12374 FS, 0 WT, 2 mut, 4 mWT, 5 recomb, 0 rWT
-      0, 3: 12824 FS, 0 WT, 2 mut, 5 mWT, 41 recomb, 0 rWT
-      0, 4: 12824 FS, 0 WT, 3 mut, 4 mWT, 25 recomb, 0 rWT
-      0, 5: 12824 FS, 0 WT, 3 mut, 2 mWT, 0 recomb, 0 rWT
-      0, 6: 6187 FS, 6187 WT, 1 mut, 0 mWT, 10 recomb, 4 rWT
-      0, 7: 12824 FS, 0 WT, 4 mut, 6 mWT, 12 recomb, 0 rWT
-      1, 0: 12824 FS, 0 WT, 0 mut, 6 mWT, 28 recomb, 1 rWT
-      1, 1: 12374 FS, 0 WT, 4 mut, 1 mWT, 0 recomb, 0 rWT
-      1, 2: 12824 FS, 0 WT, 0 mut, 2 mWT, 3 recomb, 0 rWT
-      1, 3: 12374 FS, 0 WT, 2 mut, 1 mWT, 39 recomb, 0 rWT
-      1, 4: 12374 FS, 0 WT, 1 mut, 1 mWT, 9 recomb, 1 rWT
-      1, 5: 12824 FS, 0 WT, 4 mut, 1 mWT, 15 recomb, 0 rWT
-      1, 6: 6187 FS, 6187 WT, 2 mut, 0 mWT, 13 recomb, 12 rWT
-      1, 7: 12824 FS, 0 WT, 2 mut, 5 mWT, 10 recomb, 2 rWT
+      0, 0: 52 FS1, 52 FS2
+      0, 1: 52 FS1, 52 FS2, 1 rWT
+      0, 2: 52 FS1, 52 FS2
+      0, 3: 74 FS1, 74 FS2, 3 rFS
+      0, 4: 74 FS1, 74 FS2, 2 rFS
+      0, 5: 74 FS1, 74 FS2
+      0, 6: 52 FS1, 52 mutWT, 1 rWT
+      0, 7: 74 FS1, 74 FS2, 1 rFS
+      1, 0: 74 FS1, 74 FS2, 1 rWT, 2 rFS
+      1, 1: 52 FS1, 52 FS2
+      1, 2: 74 FS1, 74 FS2
+      1, 3: 52 FS1, 52 FS2, 3 rFS
+      1, 4: 52 FS1, 52 FS2, 1 rFS
+      1, 5: 74 FS1, 74 FS2, 1 rFS
+      1, 6: 52 FS1, 52 mutWT, 2 rFS
+      1, 7: 74 FS1, 74 FS2, 1 rFS
     */
-    let expectedWT = [2, 3, 4, 5, 4, 2, 6191, 6, 7, 1, 2, 1, 2, 1, 6199, 7];
-    //console.log(plate);
+    let expectedWT = [0, 1, 0, 0, 0, 0, 53, 0, 1, 0, 0, 0, 0, 0, 52, 0];
+    debug(plate);
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 8; j++) {
         let exp = i * 8 + j;
