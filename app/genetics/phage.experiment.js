@@ -5,13 +5,13 @@ const randEngine = randGen.getEngine();
 const scenConfig = require('../../config/scenario.config');
 const pEnum = require('./phage.enum');
 const debug = require('debug')('genetics'),
-      debugExt = require('debug','genetics:ext');
+  debugExt = require('debug', 'genetics:ext');
 
-exports.resetEngine = function(){
+exports.resetEngine = function () {
   randGen.reset(randEngine);
 }
 
-exports.seedEngine = function(num){
+exports.seedEngine = function (num) {
   randGen.setSeed(randEngine, num)
 }
 
@@ -40,9 +40,9 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
     var newPhageDeletes = [];
     var okRecSpots = [];
     for (let i = 0; i < recSpot.length; i++) {
-      let recOk = true;
+      //let recOk = true;
       let checkRec = recSpot[i];
-      if (startGeno.deletion.length > 0) {
+      /*if (startGeno.deletion.length > 0) {
         // if chosen recobmination point is in a delete, skip
         if (checkRec >= startGeno.deletion[0] && checkRec <= startGeno.deletion[1])
           recOk = false;
@@ -50,11 +50,16 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
       if (endGeno.deletion.length > 0) {
         if (checkRec >= endGeno.deletion[0] && checkRec <= endGeno.deletion[1])
           recOk = false;
-      }
-      if (recOk)
+      }*/
+      // check recombin point within parent deletions
+      let validStart = _validRecombDel(checkRec, startGeno.deletion);
+      let validEnd = _validRecombDel(checkRec, endGeno.deletion);
+      if (validStart && validEnd)
         okRecSpots.push(checkRec); // add to okay recombination spots
     } // end for i
-    okRecSpots.sort(function(a, b){return a-b});
+    okRecSpots.sort(function (a, b) {
+      return a - b
+    });
     debug('recombination spots %o, accepted', recSpot, okRecSpots);
     if (okRecSpots.length === 0) {
       // no recombinations successful, return parent
@@ -99,7 +104,7 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
             [okRecSpots[2], 5000]
           ];
       } // end switch
-      newPhageDeletes = [];
+      let tmpDeletes = [];
       startGenoPieces.forEach((copyZone) => {
         for (let j = 0; j < startGeno.shifts.length; j++) {
           let shiftElt = startGeno.shifts[j];
@@ -107,8 +112,9 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
             newPhageShiftList.push(clone(shiftElt));
         } // end for j
         // copy deletion
-        if (startGeno.deletion.length !== 0 && startGeno.deletion[0] >= copyZone[0] && startGeno.deletion[1] < copyZone[1])
-          newPhageDeletes.push(clone(startGeno.deletion));
+        if (startGeno.deletion.length > 0) {
+          tmpDeletes.push.apply(tmpDeletes, _copyDeletion(copyZone[0], copyZone[1], startGeno.deletion));
+        }
       }); // end for copyZone
       endGenoPieces.forEach((copyZone) => {
         for (let j = 0; j < endGeno.shifts.length; j++) {
@@ -116,19 +122,23 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
           if (shiftElt.location >= copyZone[0] && shiftElt.location < copyZone[1])
             newPhageShiftList.push(clone(shiftElt));
         } // end for j
-        if (endGeno.deletion.length !== 0 && endGeno.deletion[0] >= copyZone[0] && endGeno.deletion[1] < copyZone[1])
-          newPhageDeletes.push(clone(endGeno.deletion));
+        if (endGeno.deletion.length > 0) {
+          tmpDeletes.push.apply(tmpDeletes, _copyDeletion(copyZone[0], copyZone[1], endGeno.deletion));
+        }
       }); // end for copyZone
+      // sort and flatten deletions
+      debugExt('copied deletes', tmpDeletes);
+      newPhageDeletes = [];
+      if (tmpDeletes.length > 0) {
+        tmpDeletes.sort(util.locSort);
+        tmpDeletes.forEach((del) => {
+          newPhageDeletes.push(del.location, del.locationEnd);
+        });
+      }
     } // end if okRecSpots
     newPhageShiftList.sort(util.locSort);
     // check for multi-deletes
-    if(newPhageDeletes.length > 1){
-      // randomly pick a delete
-      let pickDel = randGen.randPick(newPhageDeletes, randEngine);
-      newPhageDeletes = pickDel;
-    } else if(newPhageDeletes.length === 1){
-      newPhageDeletes = newPhageDeletes[0];
-    }
+    debugExt('deletes %o', newPhageDeletes);
     recGenos.push({
       shifts: newPhageShiftList,
       deletion: newPhageDeletes
@@ -175,3 +185,37 @@ exports.mutagenize = function (inList, numDesired) {
   } // end for i
   return muteGuys;
 } // end mutagenize
+
+/**
+ * check if recombination position is within a deletion
+ * return true if deletion is okay, false otherwise
+ */
+const _validRecombDel = function (checkPos, delList) {
+  if (delList.length === 0) {
+    return true;
+  } else if (delList.length % 2 !== 0) {
+    return false;
+  }
+  for (let i = 0; i < delList.length; i += 2) {
+    if (checkPos >= delList[i] && checkPos <= delList[i + 1]) {
+      return false;
+    }
+  } // end for
+  return true;
+};
+
+const _copyDeletion = function (sPos, ePos, delList) {
+  let outDel = [];
+  let mLength = (delList.length % 2 === 0 ? delList.length : delList.length - 1);
+  // loop through
+  for (let i = 0; i < mLength; i += 2) {
+    if (delList[i] >= sPos && delList[i + 1] <= ePos) {
+      outDel.push({
+        location: delList[i],
+        locationEnd: delList[i + 1]
+      });
+    }
+  }
+  debugExt('copy', sPos, ePos, delList, outDel);
+  return outDel;
+}
