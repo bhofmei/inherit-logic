@@ -18,16 +18,17 @@ exports.seedEngine = function (num) {
 exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
   var recGenos = [];
   for (let k = 0; k < numToDo; k++) {
+    let debugText = '';
     let startGeno, endGeno;
     //if (randGen.bool()) {
     if (randGen.randBool(randEngine)) {
       startGeno = clone(phageGeno1);
       endGeno = clone(phageGeno2);
-      debugExt('parents 1, 2');
+      debugText += 'geno 1, 2 - ';
     } else {
       startGeno = clone(phageGeno2);
       endGeno = clone(phageGeno1);
-      debugExt('parents 2, 1');
+      debugText += 'geno 2, 1 - ';
     }
 
     let recSpot = [];
@@ -39,31 +40,29 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
     var newPhageShiftList = [];
     var newPhageDeletes = [];
     var okRecSpots = [];
+    var notOk = [];
     for (let i = 0; i < recSpot.length; i++) {
-      //let recOk = true;
       let checkRec = recSpot[i];
-      /*if (startGeno.deletion.length > 0) {
-        // if chosen recobmination point is in a delete, skip
-        if (checkRec >= startGeno.deletion[0] && checkRec <= startGeno.deletion[1])
-          recOk = false;
-      }
-      if (endGeno.deletion.length > 0) {
-        if (checkRec >= endGeno.deletion[0] && checkRec <= endGeno.deletion[1])
-          recOk = false;
-      }*/
       // check recombin point within parent deletions
       let validStart = _validRecombDel(checkRec, startGeno.deletion);
       let validEnd = _validRecombDel(checkRec, endGeno.deletion);
       if (validStart && validEnd)
         okRecSpots.push(checkRec); // add to okay recombination spots
+      else
+        notOk.push(checkRec);
     } // end for i
     okRecSpots.sort(function (a, b) {
       return a - b
     });
-    debug('recombination spots %o, accepted', recSpot, okRecSpots);
+
+    debugText += 'Xover ';
+    if(notOk.length > 0){
+      notOk.sort();
+      debugText += ' (' + notOk + ') ';
+    }
+    debugText += okRecSpots + ' - ';
     if (okRecSpots.length === 0) {
       // no recombinations successful, return parent
-      //if (randGen.bool()) {
       if (randGen.randBool(randEngine)) {
         newPhageShiftList = startGeno.shifts;
         newPhageDeletes = startGeno.deletion;
@@ -143,6 +142,7 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
       shifts: newPhageShiftList,
       deletion: newPhageDeletes
     });
+    debug('%s - %s', k, debugText);
   } // end for k
   return recGenos;
 
