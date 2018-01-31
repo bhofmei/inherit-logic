@@ -5,6 +5,7 @@ const fridge = require('../controllers/fridge.server.controller');
 
 module.exports = function (app) {
 
+  app.route('/api/admin/*').all(user.requiresLogin)
   /* admin user routes */
   app.route('/api/admin/:userId/students')
     .get(admin.hasAuthorization, admin.listUsers);
