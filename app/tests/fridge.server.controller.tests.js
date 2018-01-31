@@ -45,7 +45,8 @@ describe('Fridge Controller Unit Tests:', () => {
     fridge = new Fridge({
       owner: user,
       scenario: scenario,
-      strains: []
+      strains: [],
+      guesses: ''
     });
 
     // Save the new 'User' model instances
@@ -79,31 +80,14 @@ describe('Fridge Controller Unit Tests:', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-          res.body.should.be.an.Object()
-            .and.have.property('scenario');
-          res.body.scenario.should.have.property('scenCode', scenario.scenCode);
-          res.body.strains.should.be.an.Array()
+        let f = res.body;
+        f.should.have.property('userId', user.userId);
+          f.should.have.property('scenCode', scenario.scenCode);
+          f.strains.should.be.an.Array()
             .and.have.lengthOf(0);
           done();
         });
     });
-
-    /*it('Should be able to create fridge for null user', (done)=>{
-      request(app).get('/api/cricket/' +scenario2.scenCode)
-				.set('Accept', 'application/json')
-				.expect('Content-Type', /json/)
-				.expect(200)
-				.end((err, res) => {
-					res.body.should.be.an.Object();
-        res.body.should.have.property('owner', null);
-        res.body.scenario.should.have.property('scenCode', scenario2.scenCode);
-					done();
-				});
-    });*/
-
-  });
-
-  describe('Test create scenario', () => {
 
     it('Should be able to create fridge for user', (done) => {
       request(app)
@@ -112,9 +96,10 @@ describe('Fridge Controller Unit Tests:', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-          res.body.should.be.an.Object();
-          res.body.scenario.should.have.property('scenCode', scenario2.scenCode);
-          res.body.strains.should.be.an.Array()
+        let f = res.body;
+          f.should.be.an.Object();
+          f.should.have.property('scenCode', scenario2.scenCode);
+          f.strains.should.be.an.Array()
             .and.have.lengthOf(1);
           done();
         });
@@ -203,6 +188,20 @@ describe('Fridge Controller Unit Tests:', () => {
         done();
         });
     }); // end Should be able to update phage
+
+    it('Should be able to update guesses', (done)=>{
+      let body = {1:'', 2:'a'};
+      request(app)
+        .post('/api/cricket/'+user.userId + '/'+scenario.scenCode + '/deletions')
+        .send(body)
+        .expect(200)
+        .end((err, res)=>{
+          let b = res.body;
+          should.not.exist(err);
+          b.should.equal(JSON.stringify(body));
+        done();
+      });
+    }); // end Should be able to update guesses
   });
 
   describe('Test DELETE methods', () => {
@@ -230,9 +229,10 @@ describe('Fridge Controller Unit Tests:', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-          // returns fridge
-        let fridge = res.body;
-        fridge.strains.should.have.lengthOf(0);
+          // returns strain
+        let p = res.body;
+        p.should.have.property('strainNum', phageToDelete.strainNum);
+        should.not.exist(err);
         done()
         });
     });

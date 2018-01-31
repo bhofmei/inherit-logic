@@ -6,23 +6,29 @@ const User = mongoose.model('User');
 const Fridge = mongoose.model('Fridge');
 const Scenario = mongoose.model('Scenario');
 
-let user, scen;
+let user, user2, scen;
 // Create an 'Fridge' model test suite
 describe('Fridge Model Unit Tests:', () => {
   beforeEach((done)=>{
     user = new User({
-        name: 'Name',
+        firstName: 'Name',
         email: 'test@test.com',
-        password: 'password',
-        course: 'TEST001'
+        password: 'password'
       });
+    user2 = new User({
+      firstName: 'First',
+      email: 'test2@test.com',
+      password: 'password2'
+    });
     scen = new Scenario({
         scenCode: 'Scen1',
         label: 'Test scenario'
       });
       user.save(()=>{
+        user2.save(()=>{
         scen.save(()=>{
           done();
+          });
         });
       });
   });
@@ -45,12 +51,12 @@ describe('Fridge Model Unit Tests:', () => {
     });
   }); // end describe save method
 
-  describe('Testing the delete method', () => {
+  describe('Testing the find method', ()=>{
     let fridge2;
     // create course to test delete
     beforeEach((done) => {
       fridge2 = new Fridge({
-          owner: user,
+          owner: user2,
           scenario: scen
       });
       fridge2.save(() => {
@@ -58,8 +64,43 @@ describe('Fridge Model Unit Tests:', () => {
       });
     });
 
+    it('Should be able to find fridge', ()=>{
+      Fridge.findOne({
+        owner: user2._id,
+        scenario: scen._id
+      }, (err, res)=>{
+        should.not.exist(err);
+        res.should.have.property('id', fridge2.id);
+      })
+    }); // end Should be able to find fridge
+
+    it('Should not be able to find non-existent fridge', ()=>{
+      Fridge.findOne({
+        owner: user._id,
+        scenario: scen._id
+      }, (err, res)=>{
+        should.not.exist(err);
+        should.not.exist(res);
+      })
+    }); // end Should not be able to find non-existent fridge
+
+  }); // end Testing the find method
+
+  describe('Testing the delete method', () => {
+    let fridge3;
+    // create course to test delete
+    beforeEach((done) => {
+      fridge3 = new Fridge({
+          owner: user,
+          scenario: scen
+      });
+      fridge3.save(() => {
+        done();
+      });
+    });
+
     it('Should be able to delete directly', () => {
-      fridge2.remove((err) => {
+      fridge3.remove((err) => {
         should.not.exist(err);
       });
     });
@@ -70,30 +111,6 @@ describe('Fridge Model Unit Tests:', () => {
       });
     });
   }); // end test delete
-
-  /*describe('Testing the find method', () => {
-    let course3, courseNum3;
-    courseNum3 = 'TEST003';
-    // create course
-    beforeEach((done) => {
-      course3 = new Course({
-        courseNum: courseNum3,
-        instructor: instructor
-      });
-      course3.save(() => {
-        done();
-      });
-    });
-
-    it('Should be able to find by num', () => {
-      Course.findOneByNum({
-        courseNum: courseNum3
-      }, (err, res) => {
-        should.not.exist(err);
-        res.should.be.an.Object();
-      });
-    });
-  }); // end test find*/
 
   // Define a post-tests function
   afterEach((done) => {
