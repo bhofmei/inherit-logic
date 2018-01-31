@@ -2,6 +2,12 @@
 
 ## [unreleased]
 
+## [v1.0.5]
+- ADDED rate limiting
+    - genetics routes
+    - user auth/update routes
+- UPDATED backend genetics testing
+
 ## [v1.0.4] - 2018-01-24
 - ADDED Ability to reset password
   - sends email to user if user exists
@@ -13,11 +19,11 @@
 
 
 ## [v1.0.3] - 2018-01-23
-- Added User profile and update password pages
-- Added user controller tests
+- ADDED User profile and update password pages
+- ADDED user controller tests
 
 ## [v1.0.2] - 2018-01-10
-- corrected issues with genetics logic
+- FIXED issues with genetics logic
   - overflow on REST bact
   - num phage generated with uneven input phage numbers
   - updated corresponding tests

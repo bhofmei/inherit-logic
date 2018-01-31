@@ -5,7 +5,7 @@ const scenDefaults = require('../../../config/scenario.config');
 const scenarios = require('../../../config/scenario.data');
 const phageScen = require('../../genetics/phage.scenario.js');
 const pEnum = require('../../genetics/phage.enum')
-const debug = require('debug')('genetics');
+const debug = require('debug')('genetics:phage');
 
 var scenario = {
   id: 0,

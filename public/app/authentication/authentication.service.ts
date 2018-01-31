@@ -59,7 +59,6 @@ export class AuthenticationService {
   }
 
   forgetPassword(body: any): Observable<any>{
-    console.log(body);
     return this.http.post(this._baseUrl + 'forget-password', body);
   }
 

@@ -24,12 +24,10 @@ export class ForgetPasswordComponent {
         this.subscription = this._authenticationService
           .forgetPassword(body)
           .subscribe((result) => {
-          console.log(result);
           // if successful, should get success message
           this.successMessage = result.message;
         },
             (error) => {
-          console.log(error);
           this.errorMessage = readErrorMessage(error)
         });
     }
