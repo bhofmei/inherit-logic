@@ -10,6 +10,8 @@ import { StudentPhageComponent } from './student-fridge/student-phage.component'
 
 import { StudentResolver } from './student.resolver';
 import { PhageGuessesPipe } from '../../pipes/phage-guesses.pipe';
+import { PhageMutationsPipe } from '../../pipes/phage-mutations.pipe';
+import { PhageDeletionsPipe } from '../../pipes/phage-deletions.pipe';
 
 @NgModule({
   imports: [
@@ -21,7 +23,9 @@ import { PhageGuessesPipe } from '../../pipes/phage-guesses.pipe';
     StudentIndivComponent,
     StudentFridgeComponent,
     StudentPhageComponent,
-    PhageGuessesPipe
+    PhageGuessesPipe,
+    PhageMutationsPipe,
+    PhageDeletionsPipe
   ],
   providers: [
     StudentResolver

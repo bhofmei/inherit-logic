@@ -18,17 +18,18 @@
   </div>
   <div class="row phage-row-mutations" *ngIf="phage.mutationList.length > 0">
     <label for="phageMutations" class="col-sm-3 text-secondary col-label">Mutations</label>
-    <div class="col-sm-9 d-flex flex-wrap" id="phageMutations">
-      <div *ngFor="let mutation of phage.mutationList" class="border border-secondary">
+    <div class="col-sm-9" id="phageMutations">
+      <!--<div *ngFor="let mutation of phage.mutationList" class="mr-1">
         {{mutation.kind}} at {{mutation.location}}
-      </div>
+      </div>-->
+      {{ phage.mutationList | phageMutations }}
     </div>
   </div>
   <!-- end phage-row-mutations -->
   <div class="row phage-row-deletions" *ngIf="phage.deletion.length > 0">
     <label for="phageDeletion" class="col-sm-3 text-secondary col-label">Deletion</label>
     <div class="col-sm-9" id="phageDeletion">
-      {{phage.deletion[0]}} - {{phage.deletion[1]}}
+      {{phage.deletion | phageDeletions}}
     </div>
   </div>
   <!-- end phage-row-deletion -->

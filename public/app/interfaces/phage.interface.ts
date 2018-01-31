@@ -26,3 +26,8 @@ export interface StudentPhage extends FridgePhage{
   deletion: number[];
   guesses?: boolean[];
 }
+
+export interface Mutation {
+  kind: string;
+  location: number
+}
