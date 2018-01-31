@@ -270,8 +270,6 @@ exports.signin = function (req, res, next) {
   })(req, res, next);
 };
 
-// TODO: add verify method for making major changes
-
 // Create a new controller method that creates new 'regular' users
 exports.signup = function (req, res) {
   let tmp = req.body;
@@ -385,5 +383,3 @@ exports.userById = function (req, res, next, id) {
     next();
   });
 };
-
-// functions for updating user info

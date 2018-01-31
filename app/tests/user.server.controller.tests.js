@@ -222,7 +222,7 @@ describe('User Controller Unit Tests:', () => {
           res.body.message.should.equal('An email has been sent to ' + userDetails3.email + ' with further instructions.');
           done();
         });
-    }); // end Should send reset email
+    }).timeout(5000); // end Should send reset email
 
     it('Should not send reset email to non-existant user', (done) => {
 
@@ -263,13 +263,12 @@ describe('User Controller Unit Tests:', () => {
           confirmPassword: 'new-password',
           token: token
         };
-        console.log(body);
         nonAuth.post('/api/auth/reset-password')
           .send(body)
           .expect(200)
           .end((err, res) => {
             should.not.exist(err);
-            res.body.message.should.equal('Password reset');
+            res.body.message.should.equal('Password has been reset.');
             done();
           });
       }); // end Should update password
