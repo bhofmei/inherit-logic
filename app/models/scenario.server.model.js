@@ -20,24 +20,9 @@ const ScenarioSchema = new Schema({
   purpose: String,
   relevance: String,
   startingPoint: String,
-  /* location info */
- /* defaultRoom: {
-    type: String,
-    default: 'Lab'
-  },
-  availableRooms: {
-    type: [String],
-    default: ['Lab', 'MultiPlexer', 'SuperPlexer']
-  },*/
   /* default phage info */
   referencePhage: [String],
   otherPhage: [String]
 });
-
-ScenarioSchema.statics.findOneByCode = function (code, callback) {
-  this.findOne({
-    scenCode: code
-  }, callback);
-};
 
 mongoose.model('Scenario', ScenarioSchema);
