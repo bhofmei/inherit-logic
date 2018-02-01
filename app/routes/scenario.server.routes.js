@@ -11,7 +11,6 @@ module.exports = function (app) {
 
   app.route('/api/cricket/:userId/:scenarioId')
     .get(fridge.getFridge)
-  .delete(fridge.findFridgeByScenOwner, fridge.deleteFridge);
 
   app.route('/api/cricket/:userId/:scenarioId/new-fridge')
     .get(fridge.stockFridge);
