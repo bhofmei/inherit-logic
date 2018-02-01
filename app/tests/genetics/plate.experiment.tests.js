@@ -1531,9 +1531,9 @@ describe('Plate experiments unit tests', () => {
       let lPhage = plate.smallPlaque.length;
       let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
-//      lPhage.should.equal(0);
-//      bPhage.should.equal(0);
-//      nGeno.should.equal(2);
+      lPhage.should.equal(0);
+      bPhage.should.equal(0);
+      nGeno.should.equal(2);
     }); // end Should not create plate FS x FS over capacity, PERM bacteria
 
     it('Should not create plate WT x FS over capacity, REST bacteria', () => {

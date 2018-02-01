@@ -21,7 +21,7 @@ describe('Genetics Controller Unit Tests:', () => {
   // Define a pre-tests function
   before((done) => {
     // create scenario
-    scenario = {
+    let tmpscenario = {
       mutationFreq: scenDefaults.mutationFreq,
       recombinationFreq: scenDefaults.recombinationFreq,
       gcProb: scenDefaults.gcProb,
@@ -31,8 +31,12 @@ describe('Genetics Controller Unit Tests:', () => {
       referencePhage: [scenDefaults.wildtypePhage, scenDefaults.frameShiftPhage, '{"numToMake": 1, "isWildType": false, "deletion": true, "comment": "Deletion phage"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Mutant phage containing a single +1 frameshift mutation"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "never", "readable": "any", "frameChoice": -1}, "deletion": false, "comment": "Mutant phage containing a two -1 frameshift mutation"}'],
       otherPhage: []
     };
-    scenario2 = clone(scenario);
-    scenario2.id = 1;
+    scenario = clone(tmpscenario);
+    scenario.id = 1;
+    scenario.referencePhage.push('{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "always", "readable": "can", "frameChoice": 0}, "deletion": false, "comment": "Mutant phage bearing compensating +1 and -1 frameshifts resulting in successful translation and a wild type phenotype"}');
+    scenario.referencePhage.push('{"numToMake": 1, "isWildType": false, "deletion": true, "comment": "Deletion phage"}');
+    scenario2 = clone(tmpscenario);
+    scenario2.id = 2;
     scenario2.referencePhage.push('{"numToMake": 5, "isWildType": false, "frameshifts": {"howMany": [1,2], "mixed": "sometimes", "readable": "any", "frameChoice": 0}, "deletion": false, "comment": "Mutant phage containing a one to two frameshifts"}');
     done();
   });
@@ -287,8 +291,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1100,
           mPhage2: 1400,
-          nMut: 4,
-          nMutWT: 6,
+          nMut: 9,
+          nMutWT: 2,
           nPhage1: 649,
           nPhage2: 826
         };
@@ -330,7 +334,7 @@ describe('Genetics Controller Unit Tests:', () => {
           mPhage1: 1200,
           mPhage2: 1500,
           nMut: 5,
-          nMutWT: 0,
+          nMutWT: 6,
           nPhage1: 632,
           nPhage2: 790
         };
@@ -371,8 +375,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1400,
           mPhage2: 1400,
-          nMut: 8,
-          nMutWT: 0,
+          nMut: 5,
+          nMutWT: 4,
           nPhage1: 663,
           nPhage2: 663
         };
@@ -412,8 +416,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1500,
           mPhage2: 1400,
-          nMut: 6,
-          nMutWT: 0,
+          nMut: 2,
+          nMutWT: 2,
           nPhage1: 736,
           nPhage2: 687
         };
@@ -449,6 +453,258 @@ describe('Genetics Controller Unit Tests:', () => {
             done();
           });
       }); // end Should create plate for FSxFS, REST bacteria
+
+      it('Should create plate for WTx2FS, PERM bacteria', (done) => {
+        let exp = {
+          mPhage1: 1100,
+          mPhage2: 1400,
+          nMut: 0,
+          nMutWT: 7,
+          nPhage1: 583,
+          nPhage2: 742
+        };
+        let req = {
+          phage1: {
+            id: phageList[0],
+            numPhage: exp.mPhage1
+          },
+          phage2: {
+            id: phageList[5],
+            numPhage: exp.mPhage2
+          },
+          lawnType: bactPerm,
+          location: 'lab',
+          capacity: scenDefaults.plateCapacity,
+          scenarioData: scenDat
+        };
+        request(app)
+          .post('/api/cricket/plate')
+          .send(req)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res) => {
+            let results = res.body;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
+            let nGeno = results.genotypes.length;
+            results.should.be.an.Object();
+            results.full.should.equal(false);
+            lPhage.should.equal(exp.nPhage1 + exp.nPhage2 + exp.nMutWT);
+            bPhage.should.equal(exp.nMut);
+            nGeno.should.equal(exp.nMut + exp.nMutWT + 2);
+            done();
+          });
+      }); // end Should create plate for WTx2FS, PERM bacteria
+
+      it('Should create plate for WTx2FS, REST bacteria', (done) => {
+        let exp = {
+          mPhage1: 1200,
+          mPhage2: 1400,
+          nMut: 2,
+          nMutWT: 5,
+          nPhage1: 681,
+          nPhage2: 794
+        };
+        let req = {
+          phage1: {
+            id: phageList[0],
+            numPhage: exp.mPhage1
+          },
+          phage2: {
+            id: phageList[5],
+            numPhage: exp.mPhage2
+          },
+          lawnType: bactRest,
+          location: 'lab',
+          capacity: scenDefaults.plateCapacity,
+          scenarioData: scenDat
+        };
+        request(app)
+          .post('/api/cricket/plate')
+          .send(req)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res) => {
+            let results = res.body;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
+            let nGeno = results.genotypes.length;
+            results.should.be.an.Object();
+            results.full.should.equal(false);
+            lPhage.should.equal(exp.nPhage1 + exp.nPhage2 + exp.nMutWT);
+            bPhage.should.equal(0);
+            nGeno.should.equal(exp.nMut + exp.nMutWT + 2);
+            done();
+          });
+      }); // end Should create plate for WTx2FS, REST bacteria
+
+      it('Should create plate for WTxDEL, PERM bacteria', (done) => {
+        let exp = {
+          mPhage1: 1200,
+          mPhage2: 1300,
+          nMut: 2,
+          nMutWT: 6,
+          nPhage1: 589,
+          nPhage2: 639
+        };
+        let req = {
+          phage1: {
+            id: phageList[0],
+            numPhage: exp.mPhage1
+          },
+          phage2: {
+            id: phageList[6],
+            numPhage: exp.mPhage2
+          },
+          lawnType: bactPerm,
+          location: 'lab',
+          capacity: scenDefaults.plateCapacity,
+          scenarioData: scenDat
+        };
+        request(app)
+          .post('/api/cricket/plate')
+          .send(req)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res) => {
+            let results = res.body;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
+            let nGeno = results.genotypes.length;
+            results.should.be.an.Object();
+            results.full.should.equal(false);
+            lPhage.should.equal(exp.nPhage1 + exp.nMutWT);
+            bPhage.should.equal(exp.nPhage2 + exp.nMut);
+            nGeno.should.equal(exp.nMut + exp.nMutWT + 2);
+            done();
+          });
+      }); // end Should create plate for WTxDEL, PERM bacteria
+
+      it('Should create plate for WTxDEL, REST bacteria', (done) => {
+        let exp = {
+          mPhage1: 1100,
+          mPhage2: 1300,
+          nMut: 0,
+          nMutWT: 2,
+          nPhage1: 563,
+          nPhage2: 665
+        };
+        let req = {
+          phage1: {
+            id: phageList[0],
+            numPhage: exp.mPhage1
+          },
+          phage2: {
+            id: phageList[6],
+            numPhage: exp.mPhage2
+          },
+          lawnType: bactRest,
+          location: 'lab',
+          capacity: scenDefaults.plateCapacity,
+          scenarioData: scenDat
+        };
+        request(app)
+          .post('/api/cricket/plate')
+          .send(req)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res) => {
+            let results = res.body;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
+            let nGeno = results.genotypes.length;
+            results.should.be.an.Object();
+            results.full.should.equal(false);
+            lPhage.should.equal(exp.nPhage1 + exp.nMutWT);
+            bPhage.should.equal(0);
+            nGeno.should.equal(exp.nMut + exp.nMutWT + 2);
+            done();
+          });
+      }); // end Should create plate for WTxDEL, REST bacteria
+
+      it('Should create plate for DELxDEL, PERM bacteria', (done) => {
+        let exp = {
+          mPhage1: 1200,
+          mPhage2: 1250,
+          nMut: 2,
+          nMutWT: 0,
+          nPhage1: 578,
+          nPhage2: 602
+        };
+        let req = {
+          phage1: {
+            id: phageList[2],
+            numPhage: exp.mPhage1
+          },
+          phage2: {
+            id: phageList[6],
+            numPhage: exp.mPhage2
+          },
+          lawnType: bactPerm,
+          location: 'lab',
+          capacity: scenDefaults.plateCapacity,
+          scenarioData: scenDat
+        };
+        request(app)
+          .post('/api/cricket/plate')
+          .send(req)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res) => {
+            let results = res.body;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
+            let nGeno = results.genotypes.length;
+            results.should.be.an.Object();
+            results.full.should.equal(false);
+            lPhage.should.equal(exp.nMutWT);
+            bPhage.should.equal(exp.nPhage1 + exp.nPhage2 + exp.nMut);
+            nGeno.should.equal(exp.nMut + exp.nMutWT + 2);
+            done();
+          });
+      }); // end Should create plate for WTxDEL, PERM bacteria
+
+      it('Should create plate for DELxDEL, REST bacteria', (done) => {
+        let exp = {
+          mPhage1: 1350,
+          mPhage2: 1200,
+          nMut: 10,
+          nMutWT: 0,
+          nPhage1: 754,
+          nPhage2: 670
+        };
+        let req = {
+          phage1: {
+            id: phageList[2],
+            numPhage: exp.mPhage1
+          },
+          phage2: {
+            id: phageList[6],
+            numPhage: exp.mPhage2
+          },
+          lawnType: bactRest,
+          location: 'lab',
+          capacity: scenDefaults.plateCapacity,
+          scenarioData: scenDat
+        };
+        request(app)
+          .post('/api/cricket/plate')
+          .send(req)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res) => {
+            let results = res.body;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
+            let nGeno = results.genotypes.length;
+            results.should.be.an.Object();
+            results.full.should.equal(false);
+            lPhage.should.equal(exp.nMutWT);
+            bPhage.should.equal(0);
+            nGeno.should.equal(exp.nMut + exp.nMutWT + 2);
+            done();
+          });
+      }); // end Should create plate for WTxDEL, REST bacteria
 
     }); // end Test cross input
 
@@ -495,8 +751,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 3000,
           mPhage2: 2500,
-          nMut: 6,
-          nMutWT: 8
+          nMut: 8,
+          nMutWT: 6
         };
         let req = {
           phage1: {
@@ -529,7 +785,48 @@ describe('Genetics Controller Unit Tests:', () => {
             nGeno.should.equal(2+exp.nMut+exp.nMutWT);
             done();
           });
-      }); // end Should not create plate for over capacity, REST bacteria
+      }); // end Should not create plate for WT x FS over capacity, REST bacteria
+
+      it('Should not create plate for WT x DEL over capacity, REST bacteria', (done) => {
+        let exp = {
+          mPhage1: 3000,
+          mPhage2: 2700,
+          nMut: 6,
+          nMutWT: 3
+        };
+        let req = {
+          phage1: {
+            id: phageList[0],
+            numPhage: exp.mPhage1
+          },
+          phage2: {
+            id: phageList[2],
+            numPhage: exp.mPhage2
+          },
+          lawnType: bactRest,
+          location: 'lab',
+          capacity: scenDefaults.plateCapacity,
+          scenarioData: scenDat
+        };
+        request(app)
+          .post('/api/cricket/plate')
+          .send(req)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res) => {
+            let results = res.body;
+            let lPhage = results.smallPlaque.length;
+            let bPhage = results.largePlaque.length;
+            let nGeno = results.genotypes.length;
+            results.should.be.an.Object();
+            results.full.should.equal(true);
+            lPhage.should.equal(0);
+            bPhage.should.equal(0);
+            nGeno.should.equal(2+exp.nMut+exp.nMutWT);
+            done();
+          });
+      }); // end Should not create plate for WT x DEL over capacity, REST bacteria
+
     }); // end Test over capacity
     after((done) => {
       // Clean the database
@@ -539,7 +836,7 @@ describe('Genetics Controller Unit Tests:', () => {
     });
   }); // end Testing the Plate POST methods
 
-  /*describe('Testing the Plexer POST methods', () => {
+  describe('Testing the Plexer POST methods', () => {
     before((done) => {
       phageExp.resetEngine();
       phageScen.resetEngine();
@@ -579,9 +876,9 @@ describe('Genetics Controller Unit Tests:', () => {
 
     describe('Testing multiplexer', () => {
       it('Should create multiplexer for all WT input, PERM bacteria', (done) => {
-        let mPhage = 10000;
-        let expectedMut = [4, 6, 5, 5, 2, 2, 6, 4, 1, 2, 4, 6, 1, 3, 3, 6];
-        let expectedWT = [9800, 9800, 10200, 10200, 10200, 9800, 10200, 10200, 10200, 10200, 9800, 10200, 10200, 9800, 9800, 10200];
+        let mPhage = 150;
+         let expectedMut = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let expectedWT = [126, 126, 174, 174, 174, 126, 174, 174, 174, 174, 126, 174, 174, 126, 126, 174];
         let rowPhage = [];
         let colPhage = [];
         for (let i = 0; i < 2; i++) {
@@ -601,19 +898,9 @@ describe('Genetics Controller Unit Tests:', () => {
           colPhage: colPhage,
           lawnType: bactPerm,
           location: 'multiplexer',
-          capacity: 20000,
+          capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };
-
-        //0, 0: 4 mut, 9800 WT    1, 0: 1 mut, 10200 WT
-        //0, 1: 6 mut, 9800 WT    1, 1: 2 mut, 10200 WT
-        //0, 2: 5 mut, 10200 WT   1, 2: 4 mut, 9800 WT
-        //0, 3: 5 mut, 10200 WT   1, 3: 6 mut, 10200 WT
-        //0, 4: 2 mut, 10200 WT   1, 4: 1 mut, 10200 WT
-        //0, 5: 2 mut, 9800 WT    1, 5: 3 mut, 9800 WT
-        //0, 6: 6 mut, 10200 WT   1, 6: 3 mut, 9800 WT
-        //0, 7: 4 mut, 10200 WT   1, 7: 6 mut, 10200 WT
-
         request(app)
           .post('/api/cricket/plexer')
           .send(req)
@@ -634,8 +921,8 @@ describe('Genetics Controller Unit Tests:', () => {
       }); // end Should create multiplexer for all WT input, PERM bacteria
 
       it('Should create multiplexer for all WT input, REST bacteria', (done) => {
-        let mPhage = 11000;
-        let expectedWT = [10790, 10790, 10790, 10790, 11208, 10790, 11208, 10790, 10790, 10790, 11208, 10790, 11208, 10790, 11208, 10790];
+        let mPhage = 154;
+        let expectedWT = [130, 130, 130, 130, 178, 130, 178, 130, 130, 130, 178, 130, 178, 130, 178, 130];
         let rowPhage = [];
         let colPhage = [];
         for (let i = 0; i < 2; i++) {
@@ -655,19 +942,9 @@ describe('Genetics Controller Unit Tests:', () => {
           colPhage: colPhage,
           lawnType: bactRest,
           location: 'multiplexer',
-          capacity: 20000,
+          capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };
-
-        //0, 0: 1 mut, 10790 WT   1, 0: 1 mut, 10790 WT
-        //0, 1: 1 mut, 10790 WT   1, 1: 4 mut, 10790 WT
-        //0, 2: 4 mut, 10790 WT   1, 2: 3 mut, 11208 WT
-        //0, 3: 3 mut, 10790 WT   1, 3: 3 mut, 10790 WT
-        //0, 4: 8 mut, 11208 WT   1, 4: 1 mut, 11208 WT
-        //0, 5: 5 mut, 10790 WT   1, 5: 1 mut, 10790 WT
-        //0, 6: 3 mut, 11208 WT   1, 6: 2 mut, 11208 WT
-        //0, 7: 7 mut, 10790 WT   1, 7: 1 mut, 10790 WT
-
         request(app)
           .post('/api/cricket/plexer')
           .send(req)
@@ -688,9 +965,9 @@ describe('Genetics Controller Unit Tests:', () => {
       }); // end Should create multiplexer for all WT input, REST bacteria
 
       it('Should create multiplexer for WT X FS input, PERM bacteria', (done) => {
-        let mPhage = 10500;
-        let expectedMut = [5153, 5151, 5357, 5154, 5155, 5364, 5, 5153, 5367, 5148, 5168, 5377, 5366, 5361, 5, 5158];
-        let expectedWT = [5154, 5152, 5353, 5160, 5160, 5359, 10708, 5160, 5377, 5149, 5159, 5367, 5369, 5355, 10725, 5160];
+        let mPhage = 152;
+        let expectedMut = [65, 64, 88, 66, 65, 88, 0, 64, 88, 64, 66, 91, 91, 89, 0, 65];
+    let expectedWT = [64, 64, 88, 64, 64, 89, 176, 66, 93, 64, 64, 90, 88, 88, 178, 65];
         let rowPhage = [];
         let colPhage = [];
         for (let i = 0; i < 2; i++) {
@@ -705,7 +982,6 @@ describe('Genetics Controller Unit Tests:', () => {
             tmp = phageList2[1];
           else
             tmp = phageList2[i + 2];
-          //tmp.numPhage = mPhage;
           colPhage.push({
             id: tmp,
             numPhage: mPhage
@@ -716,27 +992,9 @@ describe('Genetics Controller Unit Tests:', () => {
           colPhage: colPhage,
           lawnType: bactPerm,
           location: 'multiplexer',
-          capacity: 20000,
+          capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };
-        //let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, 20000, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
-
-        //0, 0: 5147 FS, 5147 WT, 1 mut, 1 mWT, 5 recomb, 6 rWT
-        //0, 1: 5147 FS, 5147 WT, 1 mut, 1 mWT, 3 recomb, 4 rWT
-        //0, 2: 5352 FS, 5352 WT, 2 mut, 1 mWT, 3 recomb, 0 rWT
-        //0, 3: 5147 FS, 5147 WT, 1 mut, 0 mWT, 6 recomb, 13 rWT
-        //0, 4: 5147 FS, 5147 WT, 0 mut, 3 mWT, 8 recomb, 10 rWT
-        //0, 5: 5352 FS, 5352 WT, 4 mut, 2 mWT, 8 recomb, 5 rWT
-        //0, 6: 0 FS, 10704 WT, 3 mut, 0 mWT, 2 recomb, 4 rWT
-        //0, 7: 5147 FS, 5147 WT, 1 mut, 0 mWT, 5 recomb, 13 rWT
-        //1, 0: 5352 FS, 5352 WT, 3 mut, 0 mWT, 12 recomb, 25 rWT
-        //1, 1: 5147 FS, 5147 WT, 0 mut, 0 mWT, 1 recomb, 2 rWT
-        //1, 2: 5147 FS, 5147 WT, 6 mut, 0 mWT, 15 recomb, 12 rWT
-        //1, 3: 5352 FS, 5352 WT, 0 mut, 1 mWT, 25 recomb, 14 rWT
-        //1, 4: 5352 FS, 5352 WT, 2 mut, 2 mWT, 12 recomb, 15 rWT
-        //1, 5: 5352 FS, 5352 WT, 3 mut, 0 mWT, 6 recomb, 3 rWT
-        //1, 6: 0 FS, 10704 WT, 4 mut, 0 mWT, 1 recomb, 21 rWT
-        //1, 7: 5147 FS, 5147 WT, 3 mut, 1 mWT, 8 recomb, 12 rWT
 
         request(app)
           .post('/api/cricket/plexer')
@@ -758,8 +1016,8 @@ describe('Genetics Controller Unit Tests:', () => {
       }); // end Should create multiplexer for WT X FS input, PERM bacteria
 
       it('Should create multiplexer for WT X FS input, REST bacteria', (done) => {
-        let mPhage = 10600;
-        let expectedWT = [5200, 5208, 5411, 5414, 5200, 5419, 10824, 5418, 5407, 5413, 5408, 5200, 5416, 5206, 10397, 5422];
+        let mPhage = 160;
+        let expectedWT = [67, 68, 94, 93, 67, 96, 189, 94, 94, 94, 93, 67, 93, 67, 134, 94];
         let rowPhage = [];
         let colPhage = [];
         for (let i = 0; i < 2; i++) {
@@ -785,28 +1043,9 @@ describe('Genetics Controller Unit Tests:', () => {
           colPhage: colPhage,
           lawnType: bactRest,
           location: 'multiplexer',
-          capacity: 20000,
+          capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };
-
-        //0, 0: 5197 FS, 5197 WT, 3 mut, 1 mWT, 1 recomb, 2 rWT
-        //0, 1: 5197 FS, 5197 WT, 2 mut, 0 mWT, 6 recomb, 11 rWT
-        //0, 2: 5402 FS, 5402 WT, 7 mut, 1 mWT, 19 recomb, 8 rWT
-        //0, 3: 5402 FS, 5402 WT, 3 mut, 3 mWT, 10 recomb, 9 rWT
-        //0, 4: 5197 FS, 5197 WT, 3 mut, 1 mWT, 11 recomb, 2 rWT
-        //0, 5: 5402 FS, 5402 WT, 1 mut, 0 mWT, 18 recomb, 17 rWT
-        //0, 6: 0 FS, 10804 WT, 5 mut, 0 mWT, 1 recomb, 20 rWT
-        //0, 7: 5402 FS, 5402 WT, 2 mut, 1 mWT, 9 recomb, 15 rWT
-        //1, 0: 5402 FS, 5402 WT, 3 mut, 2 mWT, 6 recomb, 3 rWT
-        //1, 1: 5402 FS, 5402 WT, 2 mut, 1 mWT, 11 recomb, 10 rWT
-        //1, 2: 5402 FS, 5402 WT, 3 mut, 0 mWT, 9 recomb, 6 rWT
-        //1, 3: 5197 FS, 5197 WT, 4 mut, 2 mWT, 1 recomb, 1 rWT
-        //1, 4: 5402 FS, 5402 WT, 2 mut, 3 mWT, 15 recomb, 11 rWT
-        //1, 5: 5197 FS, 5197 WT, 2 mut, 2 mWT, 7 recomb, 7 rWT
-        //1, 6: 0 FS, 10394 WT, 7 mut, 0 mWT, 1 recomb, 3 rWT
-        //1, 7: 5402 FS, 5402 WT, 2 mut, 1 mWT, 14 recomb, 19 rWT
-
-
         request(app)
           .post('/api/cricket/plexer')
           .send(req)
@@ -827,9 +1066,9 @@ describe('Genetics Controller Unit Tests:', () => {
       });
 
       it('Should create multiplexer for FS X FS input, PERM bacteria', (done) => {
-        let mPhage = 12300;
-        let expectedMut = [12521, 12559, 12092, 12115, 12082, 12082, 6047, 12538, 12525, 12523, 12081, 12526, 12087, 12107, 6275, 12094];
-        let expectedWT = [0, 1, 1, 0, 2, 2, 6052, 3, 6, 2, 2, 2, 2, 1, 6274, 2];
+        let mPhage = 123;
+        let expectedMut = [146, 147, 100, 102, 100, 100, 51, 147, 146, 146, 100, 146, 100, 102, 73, 100];
+    let expectedWT = [0, 2, 0, 1, 0, 0, 50, 0, 0, 0, 0, 0, 1, 0, 74, 1];
         let rowPhage = [];
         let colPhage = [];
         for (let i = 1; i < 4; i += 2) {
@@ -844,7 +1083,6 @@ describe('Genetics Controller Unit Tests:', () => {
             tmp = phageList2[1];
           else
             tmp = phageList2[i + 2];
-          //tmp.numPhage = mPhage;
           colPhage.push({
             id: tmp,
             numPhage: mPhage
@@ -855,27 +1093,9 @@ describe('Genetics Controller Unit Tests:', () => {
           colPhage: colPhage,
           lawnType: bactPerm,
           location: 'multiplexer',
-          capacity: 20000,
+          capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };
-
-        //0, 0: 12520 FS, 0 WT, 1 mut, 0 mWT, 0 recomb, 0 rWT
-        //0, 1: 12520 FS, 0 WT, 3 mut, 1 mWT, 36 recomb, 0 rWT
-        //0, 2: 12078 FS, 0 WT, 5 mut, 1 mWT, 9 recomb, 0 rWT
-        //0, 3: 12078 FS, 0 WT, 1 mut, 0 mWT, 36 recomb, 0 rWT
-        //0, 4: 12078 FS, 0 WT, 3 mut, 2 mWT, 1 recomb, 0 rWT
-        //0, 5: 12078 FS, 0 WT, 0 mut, 0 mWT, 4 recomb, 2 rWT
-        //0, 6: 6039 FS, 6039 WT, 0 mut, 4 mWT, 8 recomb, 9 rWT
-        //0, 7: 12520 FS, 0 WT, 2 mut, 3 mWT, 16 recomb, 0 rWT
-        //1, 0: 12520 FS, 0 WT, 4 mut, 4 mWT, 1 recomb, 2 rWT
-        //1, 1: 12520 FS, 0 WT, 3 mut, 2 mWT, 0 recomb, 0 rWT
-        //1, 2: 12078 FS, 0 WT, 0 mut, 2 mWT, 3 recomb, 0 rWT
-        //1, 3: 12520 FS, 0 WT, 3 mut, 2 mWT, 3 recomb, 0 rWT
-        //1, 4: 12078 FS, 0 WT, 3 mut, 1 mWT, 6 recomb, 1 rWT
-        //1, 5: 12078 FS, 0 WT, 2 mut, 1 mWT, 27 recomb, 0 rWT
-        //1, 6: 6260 FS, 6260 WT, 7 mut, 1 mWT, 8 recomb, 13 rWT
-        //1, 7: 12078 FS, 0 WT, 2 mut, 0 mWT, 14 recomb, 2 rWT
-
 
         request(app)
           .post('/api/cricket/plexer')
@@ -897,9 +1117,9 @@ describe('Genetics Controller Unit Tests:', () => {
       }); // end Should create multiplexer for FS X FS input, PERM bacteria
 
       it('Should create multiplexer for FS X FS input, REST bacteria', (done) => {
-        let mPhage = 12600;
+        let mPhage = 126;
 
-        let expectedWT = [2, 3, 4, 5, 4, 2, 6191, 6, 7, 1, 2, 1, 2, 1, 6199, 7];
+        let expectedWT = [0, 1, 0, 0, 0, 0, 53, 0, 1, 0, 0, 0, 0, 0, 52, 0];
         let rowPhage = [];
         let colPhage = [];
         for (let i = 1; i < 4; i += 2) {
@@ -925,27 +1145,9 @@ describe('Genetics Controller Unit Tests:', () => {
           colPhage: colPhage,
           lawnType: bactRest,
           location: 'multiplexer',
-          capacity: 20000,
+          capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };
-
-        //0, 0: 12374 FS, 0 WT, 0 mut, 2 mWT, 0 recomb, 0 rWT
-        //0, 1: 12374 FS, 0 WT, 1 mut, 2 mWT, 15 recomb, 1 rWT
-        //0, 2: 12374 FS, 0 WT, 2 mut, 4 mWT, 5 recomb, 0 rWT
-        //0, 3: 12824 FS, 0 WT, 2 mut, 5 mWT, 41 recomb, 0 rWT
-        //0, 4: 12824 FS, 0 WT, 3 mut, 4 mWT, 25 recomb, 0 rWT
-        //0, 5: 12824 FS, 0 WT, 3 mut, 2 mWT, 0 recomb, 0 rWT
-        //0, 6: 6187 FS, 6187 WT, 1 mut, 0 mWT, 10 recomb, 4 rWT
-        //0, 7: 12824 FS, 0 WT, 4 mut, 6 mWT, 12 recomb, 0 rWT
-        //1, 0: 12824 FS, 0 WT, 0 mut, 6 mWT, 28 recomb, 1 rWT
-        //1, 1: 12374 FS, 0 WT, 4 mut, 1 mWT, 0 recomb, 0 rWT
-        //1, 2: 12824 FS, 0 WT, 0 mut, 2 mWT, 3 recomb, 0 rWT
-        //1, 3: 12374 FS, 0 WT, 2 mut, 1 mWT, 39 recomb, 0 rWT
-        //1, 4: 12374 FS, 0 WT, 1 mut, 1 mWT, 9 recomb, 1 rWT
-        //1, 5: 12824 FS, 0 WT, 4 mut, 1 mWT, 15 recomb, 0 rWT
-        //1, 6: 6187 FS, 6187 WT, 2 mut, 0 mWT, 13 recomb, 12 rWT
-        //1, 7: 12824 FS, 0 WT, 2 mut, 5 mWT, 10 recomb, 2 rWT
-
 
         request(app)
           .post('/api/cricket/plexer')
@@ -975,7 +1177,7 @@ describe('Genetics Controller Unit Tests:', () => {
         done();
       });
     }); // end after
-  }); */ // end Testing the Plexer POST methods
+  });  // end Testing the Plexer POST methods
 
   // Define a post-tests function
 
