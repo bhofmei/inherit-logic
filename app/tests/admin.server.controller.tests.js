@@ -9,7 +9,7 @@ const Fridge = mongoose.model('Fridge');
 const Phage = mongoose.model('Phage');
 const scenDefaults = require('../../config/scenario.config');
 
-let admin, adminDetails, instr, instrDetails, student1, studentDetails, student2, fridge, scenario, course;
+let admin, adminDetails, instr, instrDetails, student1, studentDetails, student2, fridge, fridge2, scenario, course;
 let tmpUserDetails;
 describe('Admin Controller Unit Tests', () => {
 
@@ -84,8 +84,16 @@ describe('Admin Controller Unit Tests', () => {
       accessGranted: student1.accessGranted[scenario.scenCode],
       strains: []
     });
+    fridge2 = new Fridge({
+      owner: student2,
+      scenario: scenario,
+      accessGranted: student1.accessGranted[scenario.scenCode],
+      strains: []
+    });
     fridge.save(() => {
-      done();
+      fridge2.save(()=>{
+        done();
+      });
     });
   });
 
@@ -179,7 +187,7 @@ describe('Admin Controller Unit Tests', () => {
 
       it('Should be able to grant scenario access as admin', (done) => {
         adminAgent
-          .post('/api/admin/' + admin.userId + '/students/' + student1.userId + '/' + scenario.scenCode)
+          .post('/api/admin/' + admin.userId + '/students/' + student2.userId + '/' + scenario.scenCode)
           .send({
             access: true
           })
