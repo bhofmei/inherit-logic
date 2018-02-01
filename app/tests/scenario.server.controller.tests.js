@@ -30,7 +30,6 @@ describe('Scenario Controller Unit Tests:', () => {
 	// Test the 'Scenario' GET methods
 	describe('Testing the GET methods', () => {
 		it('Should be able to get the list of scenarios', (done) => {
-			// Create a SuperTest request
 			request(app).get('/api/cricket/')
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
@@ -44,9 +43,8 @@ describe('Scenario Controller Unit Tests:', () => {
 				});
 		});
 
-		/*it('Should be able to get the specific scenario', (done) => {
-			// Create a SuperTest request
-			request(app).get('/api/scenarios/' + scenario.scenCode)
+		it('Should be able to get the specific scenario', (done) => {
+			request(app).get('/api/cricket/' + scenario.scenCode)
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
 				.expect(200)
@@ -54,12 +52,11 @@ describe('Scenario Controller Unit Tests:', () => {
 					res.body.should.be.an.Object().and.have.property('label', scenario.label);
 					done();
 				});
-		});*/
+		});
 	});
 
 	// Define a post-tests function
 	afterEach((done) => {
-		// Clean the database
 		Scenario.remove(() => {
 				done();
 		});

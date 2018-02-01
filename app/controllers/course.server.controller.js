@@ -15,11 +15,15 @@ const getErrorMessage = function (err) {
 
 exports.isInstructor = function (req, res, next) {
   let instr = req.curUser;
+  let id = JSON.stringify(instr._id);
   let course = req.course;
+  let instrIds = course.instructors.map((inst)=>{
+    return JSON.stringify(inst._id);
+  });
   // search for this user in list of instructors
   if (instr.role === 'admin') {
     next();
-  } else if (course.instructors.indexOf(instr._id) === -1) {
+  } else if (instrIds.indexOf(id) === -1) {
     return res.status(403)
       .send({
         message: 'Not instructor of this course'
@@ -246,8 +250,39 @@ exports.setInstructor = function (req, res) {
     return res.json(course);
   }
 
-  course.instructors.push(newInstructor);
-  course.save((err, c) => {
+  User.findByIdAndUpdate(
+    newInstructor._id,
+    {role: (newInstructor.role === 'student' ? 'instr' : newInstructor.role)},
+    {new: true},
+    (err, updated)=>{
+      if(err){
+        return res.status(500).send({message: getErrorMessage(err)});
+      } else {
+        Course.findByIdAndUpdate(
+          course._id,
+          {$push: {
+            instructors: updated._id
+          }},
+          {new: true},
+          (err2, c)=>{
+            if(err2){
+              return res.status(400).send({message: getErrorMessage(err)});
+            } else {
+              res.json(c)
+            }
+          }
+        ); // end course find
+      }
+    }
+  ); // end user find
+
+  //course.instructors.push(newInstructor);
+/*  Course.findByIdAndUpdate(
+    course._id,
+    {$push:{
+      instructors: newInstructor._id
+    }},
+    (err, c) => {
     if (err) {
       return res.status(500)
         .send({
@@ -257,10 +292,10 @@ exports.setInstructor = function (req, res) {
       if (newInstructor.role === 'student') {
         newInstructor.role = 'instr';
         newInstructor.save((err2) => {
-          if (err) {
+          if (err2) {
             return res.status(400)
               .send({
-                message: getErrorMessage(err)
+                message: getErrorMessage(err2)
               });
           } else {
             res.json(c);
@@ -270,7 +305,7 @@ exports.setInstructor = function (req, res) {
         res.json(c);
       }
     }
-  }); // end course.save
+  }); // end course.save*/
 };
 
 /**
