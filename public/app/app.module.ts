@@ -10,7 +10,6 @@ import { AppRoutes } from './app.routes';
 
 import { SharedModule } from './shared/shared.module';
 
-//import { HomeModule } from './home/home.module';
 import { AuthenticationService } from './authentication/authentication.service';
 import { LoggedInGuard } from './authentication/logged-in.guard.service';
 import { ScenarioService } from './scenario/scenario.service';
@@ -19,7 +18,6 @@ import { ScenarioResolver } from './scenario/scenario.resolver';
 
 import { AdminModule } from './admin/admin.module';
 import { AuthenticationModule } from './authentication/authentication.module';
-//import { ArticleModule } from './articles/article.module';
 import { HelpModule } from './help/help.module';
 import { HomeModule } from './home/home.module';
 import { ProfileModule } from './profile/profile.module';
