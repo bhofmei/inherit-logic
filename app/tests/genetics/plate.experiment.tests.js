@@ -18,7 +18,7 @@ var scenario = {
   minStops: scenDefaults.minStops,
   intraMuteDist: scenDefaults.intraMuteDist,
   interMuteDist: scenDefaults.interMuteDist,
-  referencePhage: [scenDefaults.wildtypePhage, scenDefaults.frameShiftPhage, '{"numToMake": 1, "isWildType": false, "deletion": true, "comment": "Deletion phage"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Mutant phage containing a single +1 frameshift mutation"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "never", "readable": "any", "frameChoice": -1}, "deletion": false, "comment": "Mutant phage containing a two -1 frameshift mutation"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "always", "readable": "can", "frameChoice": 0}, "deletion": false, "comment": "Mutant phage bearing compensating +1 and -1 frameshifts resulting in successful translation and a wild type phenotype"}'],
+  referencePhage: [scenDefaults.wildtypePhage, scenDefaults.frameShiftPhage, '{"numToMake": 1, "isWildType": false, "deletion": true, "comment": "Deletion phage"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Mutant phage containing a single +1 frameshift mutation"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "never", "readable": "any", "frameChoice": -1}, "deletion": false, "comment": "Mutant phage containing a two -1 frameshift mutation"}', '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "always", "readable": "can", "frameChoice": 0}, "deletion": false, "comment": "Mutant phage bearing compensating +1 and -1 frameshifts resulting in successful translation and a wild type phenotype"}', '{"numToMake": 1, "isWildType": false, "deletion": true, "comment": "Second deletion phage"}'],
   otherPhage: []
 };
 
@@ -55,9 +55,10 @@ describe('Plate experiments unit tests', () => {
   3. mutationList: [ { kind: 'plusOne', location: 86 } ]
   4. [ { kind: 'minusOne', location: 211 }, { kind: 'minusOne', location: 287 } ]
   5. [ { kind: 'plusOne', location: 201 }, { kind: 'minusOne', location: 226 } ]
+  6. deletion: [ 40, 130 ]
   */
 
-  describe('Testing create phage list for single phage input', () => {
+  /*describe('Testing create phage list for single phage input', () => {
 
     before((done) => {
       phageExp.seedEngine(435);
@@ -74,7 +75,7 @@ describe('Plate experiments unit tests', () => {
       // plate should have 1 genotype
       plate.genoList.should.have.lengthOf(1);
       plate.strainList.should.have.length(phage1.numPhage);
-    });
+    }); // end Should create small phage list for WT phage, PERM bact
 
     it('Should create large phage list for WT phage, PERM bact', () => {
       // wt phage
@@ -85,7 +86,7 @@ describe('Plate experiments unit tests', () => {
       // plate should have 3 genotypes (2 mut)
       plate.genoList.should.have.lengthOf(1 + expMut);
       plate.strainList.should.have.length(phage1.numPhage + expMut);
-    });
+    }); // end Should create large phage list for WT phage, PERM bact
 
     it('Should not create over capacity phage list for WT phage, PERM bact', () => {
       // wt phage
@@ -96,7 +97,7 @@ describe('Plate experiments unit tests', () => {
       // plate should have 1 genotype - over capacity
             plate.genoList.should.have.lengthOf(1);
             plate.strainList.should.equal(false);
-    });
+    }); // end Should not create over capacity phage list for WT phage, PERM bact
 
     it('Should create small phage list for WT phage, REST bact', () => {
       // wt phage
@@ -106,7 +107,7 @@ describe('Plate experiments unit tests', () => {
       // plate should have 1 genotype
       plate.genoList.should.have.lengthOf(1);
       plate.strainList.should.have.length(phage1.numPhage);
-    });
+    }); // end Should not create over capacity phage list for WT phage, PERM bact
 
     it('Should create large phage list for WT phage, REST bact', () => {
       // wt phage
@@ -117,7 +118,7 @@ describe('Plate experiments unit tests', () => {
       // plate should have 1 genotypes (0 mut)
      plate.genoList.should.have.lengthOf(1 + expMut);
       plate.strainList.should.have.lengthOf(phage1.numPhage + expMut);
-    });
+    }); // end Should create large phage list for WT phage, REST bact
 
     it('Should create pseudo over capacity phage list for WT phage, REST bact', () => {
       // wt phage
@@ -128,7 +129,7 @@ describe('Plate experiments unit tests', () => {
       // plate should have 10 genotypes (9 mut) and 1 toomany phage
             plate.genoList.should.have.lengthOf(1 + expMut);
             plate.strainList.should.have.lengthOf(phage1.numPhage + expMut);
-    });
+    }); // end Should create pseudo over capacity phage list for WT phage, REST bact
 
     it('Should create small phage list for FS phage, PERM bact', () => {
       // fs phage
@@ -138,7 +139,7 @@ describe('Plate experiments unit tests', () => {
       // plate should have 1 genotype
       plate.genoList.should.have.lengthOf(1);
       plate.strainList.should.have.length(phage1.numPhage);
-    });
+    }); // end Should create small phage list for FS phage, PERM bact
 
     it('Should create large phage list for FS phage, PERM bact', () => {
       // fs phage
@@ -149,7 +150,7 @@ describe('Plate experiments unit tests', () => {
       // plate should have 2 genotypes (1 mut)
             plate.genoList.should.have.lengthOf(1 + expMut);
             plate.strainList.should.have.length(phage1.numPhage + expMut);
-    });
+    }); // end Should create large phage list for FS phage, PERM bact
 
     it('Should not create over capacity phage list for FS phage, PERM bact', () => {
       // fs phage
@@ -159,7 +160,7 @@ describe('Plate experiments unit tests', () => {
       // plate should have 1 genotype
       plate.genoList.should.have.lengthOf(1);
       plate.strainList.should.equal(false);
-    });
+    }); // end Should not create over capacity phage list for FS phage, PERM bact
 
     it('Should create small phage list for FS phage, REST bact', () => {
       // fs phage
@@ -169,7 +170,7 @@ describe('Plate experiments unit tests', () => {
       // plate should have 1 genotype
       plate.genoList.should.have.lengthOf(1);
       plate.strainList.should.have.length(phage1.numPhage);
-    });
+    }); // end Should create small phage list for FS phage, REST bact
 
     it('Should create large phage list for FS phage, REST bact', () => {
       // fs phage
@@ -200,8 +201,8 @@ describe('Plate experiments unit tests', () => {
       // plate should have 1 genotype
         plate.genoList.should.have.lengthOf(1);
       plate.strainList.should.have.lengthOf(phage1.numPhage);
-    });
-  });
+    }); // end Should create plate for DEL phage, under capacity
+  });*/
 
  describe('Testing create phage list for double phage input', () => {
 
@@ -454,9 +455,136 @@ describe('Plate experiments unit tests', () => {
         nStrains.should.equal(total);
       });
     }); // end Test WT x double FS
-  }); // end Testing create phage list for double phage input
 
-  describe('Testing generate plate for single phage input', () => {
+   describe('Test WT x DEL', () => {
+      let phage1, phage2;
+      beforeEach((done) => {
+        phage1 = clone(phageList[0]);
+        phage2 = clone(phageList[2]);
+        done();
+      });
+
+      it('Should create phage list, PERM bact', () => {
+        phage1.numPhage = 1200;
+        phage2.numPhage = 1000;
+        let plate = plateExp.createPlatePhage(phage1, phage2, bactPerm, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+        // { total: 1275,
+        // numGeno: [ 692, 577 ], numMut: [ 0, 0 ],
+        // numRecomb: [ 4, 2, 0 ] }
+        let nRecomb = 6,
+          total = 1275;
+        let nStrains = plate.strainList.length;
+        plate.genoList.should.have.lengthOf(2 + nRecomb);
+        nStrains.should.equal(total);
+      });
+
+      it('Should not create phage list over capacity, PERM bact', () => {
+        phage1.numPhage = 8700;
+        phage2.numPhage = 3200;
+        let plate = plateExp.createPlatePhage(phage1, phage2, bactPerm, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+        // { total: 8915,
+        // numGeno: [ 6497, 2390 ], numMut: [ 6, 1 ],
+        // numRecomb: [ 18, 3, 0 ] }
+        plate.genoList.should.have.lengthOf(2);
+        plate.strainList.should.equal(false);
+      });
+
+      it('Should create phage list, REST bact', () => {
+        phage1.numPhage = 1400;
+        phage2.numPhage = 1000;
+        let plate = plateExp.createPlatePhage(phage1, phage2, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+        // { total: 1482,
+        // numGeno: [ 860, 615 ], numMut: [ 0, 0 ],
+        // numRecomb: [ 6, 1, 0 ] }
+        let nRecomb = 7,
+          total = 1482;
+        let nStrains = plate.strainList.length;
+        plate.genoList.should.have.lengthOf(2 + nRecomb);
+        nStrains.should.equal(total);
+      });
+
+      it('Should create pseudo-over capacity phage list, REST bact', () => {
+        phage1.numPhage = 8700;
+        phage2.numPhage = 3200;
+        let plate = plateExp.createPlatePhage(phage1, phage2, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+        // { total: 8535,
+        // numGeno: [ 6224, 2289 ], numMut: [ 3, 2 ],
+        // numRecomb: [ 14, 3, 0 ] }
+        let nMut = 5,
+          nRecomb = 17,
+          total = 8535;
+        let nStrains = plate.strainList.length;
+        plate.genoList.should.have.lengthOf(2 + nMut + nRecomb);
+        nStrains.should.equal(total);
+      });
+    }); // end Test WT x DEL
+
+   describe('Test DEL x DEL', () => {
+      let phage1, phage2;
+      beforeEach((done) => {
+        phage1 = clone(phageList[2]);
+        phage2 = clone(phageList[6]);
+        done();
+      });
+
+      it('Should create phage list, PERM bact', () => {
+        phage1.numPhage = 1250;
+        phage2.numPhage = 1000;
+        let plate = plateExp.createPlatePhage(phage1, phage2, bactPerm, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+        // { total: 1179,
+        // numGeno: [ 655, 524 ], numMut: [ 0, 0 ],
+        // numRecomb: [ 0, 0, 0 ] }
+        let nRecomb = 0,
+          total = 1179;
+        let nStrains = plate.strainList.length;
+        plate.genoList.should.have.lengthOf(2 + nRecomb);
+        nStrains.should.equal(total);
+      });
+
+      it('Should not create phage list over capacity, PERM bact', () => {
+        phage1.numPhage = 8700;
+        phage2.numPhage = 3200;
+        let plate = plateExp.createPlatePhage(phage1, phage2, bactPerm, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+        // { total: 8894,
+        // numGeno: [ 6497, 2390 ], numMut: [ 3, 0 ],
+        // numRecomb: [ 0, 4, 0 ] }
+        plate.genoList.should.have.lengthOf(2);
+        plate.strainList.should.equal(false);
+      });
+
+      it('Should create phage list, REST bact', () => {
+        phage1.numPhage = 1400;
+        phage2.numPhage = 1200;
+        let plate = plateExp.createPlatePhage(phage1, phage2, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+        // { total: 1487,
+        // numGeno: [ 794, 681 ], numMut: [ 0, 0 ],
+        // numRecomb: [ 11, 1, 0 ] }
+        let nRecomb = 12,
+          total = 1487;
+        let nStrains = plate.strainList.length;
+        plate.genoList.should.have.lengthOf(2 + nRecomb);
+        nStrains.should.equal(total);
+      });
+
+      it('Should create pseudo-over capacity phage list, REST bact', () => {
+        phage1.numPhage = 8700;
+        phage2.numPhage = 3200;
+        let plate = plateExp.createPlatePhage(phage1, phage2, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+        // { total: 8533,
+        // numGeno: [ 6224, 2289 ], numMut: [ 2, 2 ],
+        // numRecomb: [ 13, 3, 0 ] }
+        let nMut = 4,
+          nRecomb = 16,
+          total = 8533;
+        let nStrains = plate.strainList.length;
+        plate.genoList.should.have.lengthOf(2 + nMut + nRecomb);
+        nStrains.should.equal(total);
+      });
+    }); // end Test DEL x DEL
+
+ }); // end Testing create phage list for double phage input
+
+/*describe('Testing generate plate for single phage input', () => {
 
     before((done) => {
       phageExp.seedEngine(639);
@@ -496,7 +624,7 @@ describe('Plate experiments unit tests', () => {
         let bPhage = plate.largePlaque.length;
         lPhage.should.equal(nSmall);
         bPhage.should.equal(0);
-      });
+      }); // end Should generate small plate, PERM bacteria
 
       it('Should generate small plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateSm.genoList, plateSm.strainList, scenDefaults.plateCapacity, scenData);
@@ -506,7 +634,7 @@ describe('Plate experiments unit tests', () => {
         let bPhage = plate.largePlaque.length;
         lPhage.should.equal(nSmall);
         bPhage.should.equal(0);
-      });
+      }); // end Should generate small plate, REST bacteria
 
       it('Should generate large plate, PERM bacteria', () => {
         let plate = plateExp.generatePlate(bactPerm, plateLg.genoList, plateLg.strainList, scenDefaults.plateCapacity, scenData);
@@ -518,7 +646,7 @@ describe('Plate experiments unit tests', () => {
         nPhage.should.equal(nLarge + nMutLg);
         lPhage.should.equal(nLarge);
         bPhage.should.equal(nMutLg);
-      });
+      }); // end Should generate large plate, PERM bacteria
 
       it('Should generate large plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateLg.genoList, plateLg.strainList, scenDefaults.plateCapacity, scenData);
@@ -530,7 +658,7 @@ describe('Plate experiments unit tests', () => {
         nPhage.should.equal(nLarge);
         lPhage.should.equal(nLarge);
         bPhage.should.equal(0);
-      });
+      }); // end Should generate large plate, REST bacteria
 
     }); // end Test WT phage
 
@@ -555,7 +683,7 @@ describe('Plate experiments unit tests', () => {
           debug(plateLg.genoList[i + 1].shifts);
         }
         done();
-      });
+      }); // end before
 
       it('Should generate small plate, PERM bacteria', () => {
         let plate = plateExp.generatePlate(bactPerm, plateSm.genoList, plateSm.strainList, scenDefaults.plateCapacity, scenData);
@@ -565,7 +693,7 @@ describe('Plate experiments unit tests', () => {
         let bPhage = plate.largePlaque.length;
         lPhage.should.equal(0);
         bPhage.should.equal(nSmall);
-      });
+      }); // end Should generate small plate, PERM bacteria
 
       it('Should generate small plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateSm.genoList, plateSm.strainList, scenDefaults.plateCapacity, scenData);
@@ -575,7 +703,7 @@ describe('Plate experiments unit tests', () => {
         let bPhage = plate.largePlaque.length;
         lPhage.should.equal(0);
         bPhage.should.equal(0);
-      });
+      }); // end Should generate small plate, REST bacteria
 
       it('Should generate large plate, PERM bacteria', () => {
         let plate = plateExp.generatePlate(bactPerm, plateLg.genoList, plateLg.strainList, scenDefaults.plateCapacity, scenData);
@@ -587,7 +715,7 @@ describe('Plate experiments unit tests', () => {
         nPhage.should.equal(nLarge + nMut);
         lPhage.should.equal(nMut);
         bPhage.should.equal(nLarge);
-      });
+      }); // end Should generate large plate, PERM bacteria
 
       it('Should generate large plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateLg.genoList, plateLg.strainList, scenDefaults.plateCapacity, scenData);
@@ -599,10 +727,10 @@ describe('Plate experiments unit tests', () => {
         nPhage.should.equal(nMut);
         lPhage.should.equal(nMut);
         bPhage.should.equal(0);
-      });
+      }); // end Should generate large plate, REST bacteria
     }); // end Test FS phage
 
-  }); // end Test generate plate for single phage input
+  }); // end Test generate plate for single phage input*/
 
   describe('Testing generate plate for double phage input', () => {
 
@@ -611,7 +739,7 @@ describe('Plate experiments unit tests', () => {
       phageScen.seedEngine(16);
       plateExp.seedEngine(723);
       done();
-    });
+    }); // end before
 
     describe('Test for WT x WT phage', () => {
       let plateB, nMut, nPhage1, nPhage2;
@@ -633,7 +761,7 @@ describe('Plate experiments unit tests', () => {
           debug(plateB.genoList[i].shifts);
         }
         done();
-      });
+      }); // end before
 
       it('Should generate large plate, PERM bacteria', () => {
         let plate = plateExp.generatePlate(bactPerm, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
@@ -645,7 +773,7 @@ describe('Plate experiments unit tests', () => {
         nPhage.should.equal(nPhage1 + nPhage2 + nMut);
         lPhage.should.equal(nPhage1 + nPhage2);
         bPhage.should.equal(nMut);
-      });
+      }); // end Should generate large plate, PERM bacteria
 
       it('Should generate large plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
@@ -655,7 +783,7 @@ describe('Plate experiments unit tests', () => {
         let bPhage = plate.largePlaque.length;
         lPhage.should.equal(nPhage1 + nPhage2);
         bPhage.should.equal(0);
-      });
+      }); // end Should generate large plate, REST bacteria
     }); // end Test WTxWT phage
 
     describe('Test for WT x FS phage', () => {
@@ -673,8 +801,6 @@ describe('Plate experiments unit tests', () => {
         // numRecomb: [ 5, 1, 0 ] }
         // FS geno first
         // 1 mut, 1 mut WT, 1 recomb mut, 5 recomb WT
-
-
         nPhage1 = 637, nPhage2 = 1274;
         nMut = plateB.genoList.length - 2;
         for (let i = 0; i < nMut + 2; i++) {
@@ -683,7 +809,7 @@ describe('Plate experiments unit tests', () => {
         nMutHiddenPheno = 6;
         nMutPheno = nMut - nMutHiddenPheno;
         done();
-      });
+      }); // end before
 
       it('Should generate large plate, PERM bacteria', () => {
         let plate = plateExp.generatePlate(bactPerm, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
@@ -695,7 +821,7 @@ describe('Plate experiments unit tests', () => {
         nPhage.should.equal(nPhage1 + nPhage2 + nMut);
         lPhage.should.equal(nPhage1 + nMutHiddenPheno);
         bPhage.should.equal(nPhage2 + nMutPheno);
-      });
+      }); // end Should generate large plate, PERM bacteria
 
       it('Should generate large plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
@@ -705,7 +831,7 @@ describe('Plate experiments unit tests', () => {
         let bPhage = plate.largePlaque.length;
         lPhage.should.equal(nPhage1 + nMutHiddenPheno);
         bPhage.should.equal(0);
-      });
+      }); // end Should generate large plate, REST bacteria
     }); // end Test WTxFS phage
 
     describe('Test for FS x FS phage', () => {
@@ -723,7 +849,6 @@ describe('Plate experiments unit tests', () => {
         // numRecomb: [ 8, 2, 0 ] }
         // FS1 geno first
         // 4 recomb mut, 4 recomb WT
-
         nPhage1 = 737, nPhage2 = 737;
         nMut = plateB.genoList.length - 2;
         for (let i = 0; i < plateB.genoList.length; i++) {
@@ -732,7 +857,7 @@ describe('Plate experiments unit tests', () => {
         nMutHiddenPheno = 4;
         nMutPheno = nMut - nMutHiddenPheno;
         done();
-      });
+      }); // end before
 
       it('Should generate large plate, PERM bacteria', () => {
         let plate = plateExp.generatePlate(bactPerm, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
@@ -744,7 +869,7 @@ describe('Plate experiments unit tests', () => {
         nPhage.should.equal(nPhage1 + nPhage2 + nMut);
         lPhage.should.equal(nMutHiddenPheno);
         bPhage.should.equal(nPhage1 + nPhage2 + nMutPheno);
-      });
+      }); // end Should generate large plate, PERM bacteria
 
       it('Should generate large plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
@@ -754,7 +879,7 @@ describe('Plate experiments unit tests', () => {
         let bPhage = plate.largePlaque.length;
         lPhage.should.equal(nMutHiddenPheno);
         bPhage.should.equal(0);
-      });
+      }); // end Should generate large plate, REST bacteria
     }); // end Test FSxFS phage
 
     describe('Test for WT x double FS phage', () => {
@@ -774,8 +899,6 @@ describe('Plate experiments unit tests', () => {
         // numRecomb: [ 8, 1, 0 ] }
         // FS geno first
         // 3 recomb mut, 6 recomb WT
-
-
         nPhage1 = 552, nPhage2 = 773;
         nMut = plateB.genoList.length - 2;
         for (let i = 0; i < nMut + 2; i++) {
@@ -784,7 +907,7 @@ describe('Plate experiments unit tests', () => {
         nMutHiddenPheno = 6;
         nMutPheno = nMut - nMutHiddenPheno;
         done();
-      });
+      }); // end before
 
       it('Should generate large plate, PERM bacteria', () => {
         let plate = plateExp.generatePlate(bactPerm, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
@@ -796,7 +919,7 @@ describe('Plate experiments unit tests', () => {
         nPhage.should.equal(nPhage1 + nPhage2 + nMut);
         lPhage.should.equal(nPhage1 + nPhage2 + nMutHiddenPheno);
         bPhage.should.equal( nMutPheno);
-      });
+      }); // end Should generate large plate, PERM bacteria
 
       it('Should generate large plate, REST bacteria', () => {
         let plate = plateExp.generatePlate(bactRest, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
@@ -806,8 +929,104 @@ describe('Plate experiments unit tests', () => {
         let bPhage = plate.largePlaque.length;
         lPhage.should.equal(nPhage1 + nPhage2 + nMutHiddenPheno);
         bPhage.should.equal(0);
-      });
+      }); // end Should generate large plate, REST bacteria
     }); // end Test WTxdouble FS phage
+
+    describe('Test for WT x DEL phage', () => {
+      let plateB, nMut, nPhage1, nPhage2, nMutHiddenPheno, nMutPheno;
+      let mPhage1 = 1400,
+        mPhage2 = 1300;
+      before((done) => {
+        let phage1 = clone(phageList[0]);
+        phage1.numPhage = mPhage1;
+        let phage2 = clone(phageList[2]);
+        phage2.numPhage = mPhage2;
+        plateB = plateExp.createPlatePhage(phage1, phage2, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+        // { total: 1331,
+        // numGeno: [ 687, 638 ], numMut: [ 0, 0 ],
+        // numRecomb: [ 5, 1, 0 ] }
+        // WT geno first
+        // 0 mut, 0 mut WT, 3 recomb mut, 3 recomb WT
+        nPhage1 = 687, nPhage2 = 638;
+        nMut = plateB.genoList.length - 2;
+        for (let i = 0; i < nMut + 2; i++) {
+          debug(plateB.genoList[i].shifts, plateB.genoList[i].deletion);
+        }
+        nMutHiddenPheno = 3;
+        nMutPheno = nMut - nMutHiddenPheno;
+        done();
+      }); // end before
+
+      it('Should generate large plate, PERM bacteria', () => {
+        let plate = plateExp.generatePlate(bactPerm, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
+        plate.should.be.an.Object();
+        plate.full.should.equal(false);
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
+        let nPhage = lPhage + bPhage;
+        nPhage.should.equal(nPhage1 + nPhage2 + nMut);
+        lPhage.should.equal(nPhage1 + nMutHiddenPheno);
+        bPhage.should.equal(nPhage2 + nMutPheno);
+      }); // end Should generate large plate, PERM bacteria
+
+      it('Should generate large plate, REST bacteria', () => {
+        let plate = plateExp.generatePlate(bactRest, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
+        plate.should.be.an.Object();
+        plate.full.should.equal(false);
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
+        lPhage.should.equal(nPhage1 + nMutHiddenPheno);
+        bPhage.should.equal(0);
+      }); // end Should generate large plate, REST bacteria
+    }); // end Test WTxDEL phage
+
+    describe('Test for DEL x DEL phage', () => {
+      let plateB, nMut, nPhage1, nPhage2, nMutHiddenPheno, nMutPheno;
+      let mPhage1 = 1500,
+        mPhage2 = 1500;
+      before((done) => {
+        let phage1 = clone(phageList[2]);
+        phage1.numPhage = mPhage1;
+        let phage2 = clone(phageList[6]);
+        phage2.numPhage = mPhage2;
+        plateB = plateExp.createPlatePhage(phage1, phage2, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+        // { total: 1432,
+        // numGeno: [ 711, 711 ], numMut: [ 0, 0 ],
+        // numRecomb: [ 8, 2, 0 ] }
+        // DEL1 geno first
+        // 0 mut, 0 mut WT, 10 recomb mut, 0 recomb WT
+        nPhage1 = 711, nPhage2 = 711;
+        nMut = plateB.genoList.length - 2;
+        for (let i = 0; i < nMut + 2; i++) {
+          debug(plateB.genoList[i].shifts, plateB.genoList[i].deletion);
+        }
+        nMutHiddenPheno = 0;
+        nMutPheno = nMut - nMutHiddenPheno;
+        done();
+      }); // end before
+
+      it('Should generate large plate, PERM bacteria', () => {
+        let plate = plateExp.generatePlate(bactPerm, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
+        plate.should.be.an.Object();
+        plate.full.should.equal(false);
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
+        let nPhage = lPhage + bPhage;
+        nPhage.should.equal(nPhage1 + nPhage2 + nMut);
+        lPhage.should.equal(nMutHiddenPheno);
+        bPhage.should.equal(nPhage1 + nPhage2 + nMutPheno);
+      }); // end Should generate large plate, PERM bacteria
+
+      it('Should generate large plate, REST bacteria', () => {
+        let plate = plateExp.generatePlate(bactRest, plateB.genoList, plateB.strainList, scenDefaults.plateCapacity, scenData);
+        plate.should.be.an.Object();
+        plate.full.should.equal(false);
+        let lPhage = plate.smallPlaque.length;
+        let bPhage = plate.largePlaque.length;
+        lPhage.should.equal(nMutHiddenPheno);
+        bPhage.should.equal(0);
+      }); // end Should generate large plate, REST bacteria
+    }); // end Test DELxDEL phage
 
 
   }); // end Test generate plate for double phage input
@@ -819,7 +1038,7 @@ describe('Plate experiments unit tests', () => {
       phageScen.seedEngine(917);
       plateExp.seedEngine(748);
       done();
-    });
+    }); // end before
 
     it('Should not create plate for single WT phage input, PERM bact', () => {
       let phage1 = clone(phageList[0]);
@@ -829,7 +1048,7 @@ describe('Plate experiments unit tests', () => {
       plate.full.should.equal(true);
       plate.smallPlaque.should.have.lengthOf(0);
       plate.largePlaque.should.have.lengthOf(0);
-    });
+    }); // end Should not create plate for single WT phage input, PERM bact
 
     it('Should not create plate for single WT phage input, REST bact', () => {
       let phage1 = clone(phageList[0]);
@@ -839,7 +1058,7 @@ describe('Plate experiments unit tests', () => {
       plate.full.should.equal(true);
       plate.smallPlaque.should.have.lengthOf(0);
       plate.largePlaque.should.have.lengthOf(0);
-    });
+    }); // end Should not create plate for single WT phage input, REST bact
 
     it('Should not create plate for WT x FS phage input, PERM bact', () => {
       let phage1 = clone(phageList[0]);
@@ -851,7 +1070,7 @@ describe('Plate experiments unit tests', () => {
       plate.full.should.equal(true);
       plate.smallPlaque.should.have.lengthOf(0);
       plate.largePlaque.should.have.lengthOf(0);
-    });
+    }); // end Should not create plate for WT x FS phage input, PERM bact
 
     it('Should not create plate for WT x FS phage input, REST bact', () => {
       let phage1 = clone(phageList[0]);
@@ -867,7 +1086,7 @@ describe('Plate experiments unit tests', () => {
       plate.full.should.equal(true);
       plate.smallPlaque.should.have.lengthOf(0);
       plate.largePlaque.should.have.lengthOf(0);
-    });
+    }); // end Should not create plate for WT x FS phage input, REST bact
   }); // end Test generate plate over capacity
 
   describe('Test create full plate', () => {
@@ -877,7 +1096,8 @@ describe('Plate experiments unit tests', () => {
       phageScen.resetEngine();
       plateExp.resetEngine();
       done();
-    });
+    }); // end before
+
     it('Should create plate for single, WT input, PERM bacteria', () => {
       let nPhage = 1300,
         nMut = 0;
@@ -892,7 +1112,7 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nPhage);
       bPhage.should.equal(nMut);
       nGeno.should.equal(nMut + 1);
-    });
+    }); // end Should create plate for single, WT input, PERM bacteria
 
     it('Should create plate for single, WT input, REST bacteria', () => {
       let nPhage = 1300,
@@ -908,7 +1128,7 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nPhage);
       bPhage.should.equal(0);
       nGeno.should.equal(nMut + 1);
-    });
+    }); // end Should create plate for single, WT input, REST bacteria
 
     it('Should create plate for single, FS input, PERM bacteria', () => {
       let nPhage = 1300,
@@ -928,7 +1148,7 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nMutWT);
       bPhage.should.equal(nPhage + nMut - nMutWT);
       nGeno.should.equal(nMut + 1);
-    });
+    }); // end Should create plate for single, FS input, PERM bacteria
 
     it('Should create plate for single, FS input, REST bacteria', () => {
       let nPhage = 1300,
@@ -948,7 +1168,7 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nMutWT);
       bPhage.should.equal(0);
       nGeno.should.equal(nMut + 1);
-    });
+    }); // end Should create plate for single, FS input, REST bacteria
 
     it('Should create plate for WTxWT input, PERM bacteria', () => {
       let mPhage1 = 1300,
@@ -974,7 +1194,7 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nPhage1 + nPhage2);
       bPhage.should.equal(nMut);
       nGeno.should.equal(nMut + 2);
-    });
+    }); // end Should create plate for WTxWT input, PERM bacteria
 
     it('Should create plate for WTxWT input, REST bacteria', () => {
       let mPhage1 = 1400,
@@ -1003,7 +1223,7 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nPhage1 + nPhage2);
       bPhage.should.equal(0);
       nGeno.should.equal(nMut + 2);
-    });
+    }); // end Should create plate for WTxWT input, REST bacteria
 
     it('Should create plate for WTxFS input, PERM bacteria', () => {
       let mPhage1 = 1100,
@@ -1032,7 +1252,7 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nPhage1 + nMutWT);
       bPhage.should.equal(nPhage2 + nMut);
       nGeno.should.equal(nMut + nMutWT + 2)
-    });
+    }); // end Should create plate for WTxFS input, PERM bacteria
 
     it('Should create plate for WTxFS input, REST bacteria', () => {
       let mPhage1 = 1200,
@@ -1061,7 +1281,7 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nPhage1 + nMutWT);
       bPhage.should.equal(0);
       nGeno.should.equal(nMut + nMutWT + 2)
-    });
+    }); // end Should create plate for WTxFS input, REST bacteria
 
     it('Should create plate for FSxFS input, PERM bacteria', () => {
       let mPhage1 = 1400,
@@ -1090,7 +1310,7 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nMutWT);
       bPhage.should.equal(nPhage1 + nPhage2 + nMut);
       nGeno.should.equal(nMut + nMutWT + 2)
-    });
+    }); // end Should create plate for FSxFS input, PERM bacteria
 
     it('Should create plate for FSxFS input, REST bacteria', () => {
       let mPhage1 = 1500,
@@ -1119,7 +1339,7 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nMutWT);
       bPhage.should.equal(0);
       nGeno.should.equal(nMut + nMutWT + 2)
-    });
+    }); // end Should create plate for FSxFS input, REST bacteria
 
     it('Should create plate for WT x double FS input, PERM bacteria', () => {
       let mPhage1 = 1100,
@@ -1148,7 +1368,7 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nPhage1 + nPhage2 + nMutWT);
       bPhage.should.equal(nMut);
       nGeno.should.equal(nMut + nMutWT + 2)
-    });
+    }); // end Should create plate for WT x double FS input, PERM bacteria
 
     it('Should create plate for WT x double FS input, REST bacteria', () => {
       let mPhage1 = 1200,
@@ -1177,6 +1397,122 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(nPhage1 + nPhage2 + nMutWT);
       bPhage.should.equal(0);
       nGeno.should.equal(nMut + nMutWT + 2)
+    }); // end Should create plate for WT x double FS input, REST bacteria
+
+    it('Should create plate for WT x DEL input, PERM bacteria', () => {
+      let mPhage1 = 1200,
+        mPhage2 = 1300,
+        nMut = 2,
+        nPhage1 = 589,
+        nPhage2 = 639,
+        nMutWT = 6;
+      let phage1 = clone(phageList[0]);
+      phage1.numPhage = mPhage1;
+      let phage2 = clone(phageList[6]);
+      phage2.numPhage = mPhage2;
+      let plate = plateExp.createPlate(phage1, phage2, bactPerm, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+      // { total: 1236,
+      // numGeno: [ 639, 589 ], numMut: [ 0, 0 ],
+      // numRecomb: [ 8, 0, 0 ] }
+      // DEL is first
+      // 6 recomb WT, 2 recomb DEL
+      plate.genotypes.forEach((geno) => {
+        debug(geno.shifts, geno.deletion)
+      });
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
+      let nGeno = plate.genotypes.length;
+      plate.full.should.equal(false);
+      lPhage.should.equal(nPhage1 + nMutWT);
+      bPhage.should.equal(nPhage2 + nMut);
+      nGeno.should.equal(nMut + nMutWT + 2)
+    });
+
+    it('Should create plate for WT x DEL input, REST bacteria', () => {
+      let mPhage1 = 1100,
+        mPhage2 = 1300,
+        nMut = 0,
+        nPhage1 = 563,
+        nPhage2 = 665,
+        nMutWT = 2;
+      let phage1 = clone(phageList[0]);
+      phage1.numPhage = mPhage1;
+      let phage2 = clone(phageList[6]);
+      phage2.numPhage = mPhage2;
+      let plate = plateExp.createPlate(phage1, phage2, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+      // { total: 1230,
+      // numGeno: [ 665, 563 ], numMut: [ 0, 0 ],
+      // numRecomb: [ 2, 0, 0 ] }
+      // DEL is first
+      // 2 recomb WT, 0 recomb DEL
+      plate.genotypes.forEach((geno) => {
+        debug(geno.shifts, geno.deletion)
+      });
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
+      let nGeno = plate.genotypes.length;
+      plate.full.should.equal(false);
+      lPhage.should.equal(nPhage1 + nMutWT);
+      bPhage.should.equal(0);
+      nGeno.should.equal(nMut + nMutWT + 2)
+    });
+
+     it('Should create plate for DEL x DEL input, PERM bacteria', () => {
+      let mPhage1 = 1200,
+        mPhage2 = 1250,
+        nMut = 2,
+        nPhage1 = 578,
+        nPhage2 = 602,
+        nMutWT = 0;
+      let phage1 = clone(phageList[2]);
+      phage1.numPhage = mPhage1;
+      let phage2 = clone(phageList[6]);
+      phage2.numPhage = mPhage2;
+      let plate = plateExp.createPlate(phage1, phage2, bactPerm, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+      // { total: 1182,
+      // numGeno: [ 602, 578 ], numMut: [ 0, 0 ],
+       // numRecomb: [ 2, 0, 0 ] }
+      // DEL2 is first
+      // 0 recomb WT, 2 recomb FS
+      plate.genotypes.forEach((geno) => {
+        debug(geno.shifts, geno.deletion)
+      });
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
+      let nGeno = plate.genotypes.length;
+      plate.full.should.equal(false);
+      lPhage.should.equal(nMutWT);
+      bPhage.should.equal(nPhage1 + nPhage2 + nMut);
+      nGeno.should.equal(nMut + nMutWT + 2)
+    });
+
+    it('Should create plate for DEL x DEL input, REST bacteria', () => {
+      let mPhage1 = 1350,
+        mPhage2 = 1200,
+        nMut = 10,
+        nPhage1 = 754,
+        nPhage2 = 670,
+        nMutWT = 0;
+      let phage1 = clone(phageList[2]);
+      phage1.numPhage = mPhage1;
+      let phage2 = clone(phageList[6]);
+      phage2.numPhage = mPhage2;
+      let plate = plateExp.createPlate(phage1, phage2, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+      // { total: 1434,
+      // numGeno: [ 754, 670 ], numMut: [ 0, 0 ],
+      // numRecomb: [ 9, 1, 0 ] }
+      // DEL1 is first
+      // 0 recomb WT, 10 recomb FS
+      plate.genotypes.forEach((geno) => {
+        debug(geno.shifts, geno.deletion)
+      });
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
+      let nGeno = plate.genotypes.length;
+      plate.full.should.equal(false);
+      lPhage.should.equal(nMutWT);
+      bPhage.should.equal(0);
+      nGeno.should.equal(nMut + nMutWT + 2)
     });
 
     it('Should not create plate FS x FS over capacity, PERM bacteria', () => {
@@ -1195,26 +1531,26 @@ describe('Plate experiments unit tests', () => {
       let lPhage = plate.smallPlaque.length;
       let bPhage = plate.largePlaque.length;
       let nGeno = plate.genotypes.length;
-      lPhage.should.equal(0);
-      bPhage.should.equal(0);
-      nGeno.should.equal(2);
-    });
+//      lPhage.should.equal(0);
+//      bPhage.should.equal(0);
+//      nGeno.should.equal(2);
+    }); // end Should not create plate FS x FS over capacity, PERM bacteria
 
     it('Should not create plate WT x FS over capacity, REST bacteria', () => {
       let mPhage1 = 3000,
         mPhage2 = 2500,
-        nMut = 4,
-        nMutWT = 4;
+        nMut = 8,
+        nMutWT = 6;
       let phage1 = clone(phageList[0]);
       phage1.numPhage = mPhage1;
       let phage2 = clone(phageList[3]);
       phage2.numPhage = mPhage2;
       let plate = plateExp.createPlate(phage1, phage2, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
-      // { total: 2899,
-      // numGeno: [ 1577, 1314 ], numMut: [ 1, 0 ],
-      // numRecomb: [ 4, 3, 0 ] }
+      // { total: 3123,
+      // numGeno: [ 1696, 1413 ], numMut: [ 2, 1 ],
+      // numRecomb: [ 9, 2, 0 ]}
       // WT is first
-      // 1 mut, 3 recomb FS, 4 recomb WT
+      // 2 mut, 1 mut WT, 6 recomb FS, 5 recomb WT
       plate.genotypes.forEach((geno) => {
         debug(geno.shifts)
       });
@@ -1225,7 +1561,34 @@ describe('Plate experiments unit tests', () => {
       lPhage.should.equal(0);
       bPhage.should.equal(0);
       nGeno.should.equal(nMut + nMutWT + 2);
-    });
+    }); // end Should not create plate WT x FS over capacity, REST bacteria
+
+    it('Should not create plate WT x DEL over capacity, REST bacteria', () => {
+      let mPhage1 = 3000,
+        mPhage2 = 2700,
+        nMut = 6,
+        nMutWT = 3;
+      let phage1 = clone(phageList[0]);
+      phage1.numPhage = mPhage1;
+      let phage2 = clone(phageList[2]);
+      phage2.numPhage = mPhage2;
+      let plate = plateExp.createPlate(phage1, phage2, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenData);
+      // { total: 2899,
+      // numGeno: [ 1521, 1369 ], numMut: [ 3, 0 ],
+      // numRecomb: [ 5, 1, 0 ] }
+      // WT is first
+      // 3 mut, 3 recomb DEL, 3 recomb WT
+      plate.genotypes.forEach((geno) => {
+        debug(geno.shifts, geno.deletion)
+      });
+      plate.full.should.equal(true);
+      let lPhage = plate.smallPlaque.length;
+      let bPhage = plate.largePlaque.length;
+      let nGeno = plate.genotypes.length;
+      lPhage.should.equal(0);
+      bPhage.should.equal(0);
+      nGeno.should.equal(nMut + nMutWT + 2);
+    }); // end Should not create plate WT x DEL over capacity, REST bacteria
   }); // end Test create full plate
 
 });
