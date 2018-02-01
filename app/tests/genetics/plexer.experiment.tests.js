@@ -62,6 +62,7 @@ before((done) => {
 */
 
 describe('Testing generate plates for multiplexer', () => {
+  // used in genetics controller testing
 
   it('Should create multiplexer for all WT input, PERM bacteria', () => {
     let mPhage = 150;
@@ -331,109 +332,4 @@ describe('Testing generate plates for multiplexer', () => {
   }); // end Should create multiplexer for FS X FS input, PERM bacteria
 
 }); // end Test generate plate for multiplexer
-
-/*describe('Testing generate plate for super plexer', () => {
-
-  it('Should create superplexer for all WT input, PERM bacteria', () => {
-    let mPhage = 10000;
-    let rowPhage = [];
-    let colPhage = [];
-    for (let i = 0; i < 8; i++) {
-      let tmp = clone(phageList[0]);
-      tmp.numPhage = mPhage;
-      rowPhage.push(tmp);
-    }
-    for (let i = 0; i < 8; i++) {
-      let tmp = clone(phageList[0]);
-      tmp.numPhage = mPhage;
-      colPhage.push(tmp);
-    }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, 20000, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        plate[i][j].should.have.property('largePlaque');
-        plate[i][j].should.have.property('smallPlaque');
-      }
-    }
-  });
-
-  it('Should create superplexer for all WT input, REST bacteria', () => {
-    let mPhage = 10000;
-    let rowPhage = [];
-    let colPhage = [];
-    for (let i = 0; i < 8; i++) {
-      let tmp = clone(phageList[0]);
-      tmp.numPhage = mPhage;
-      rowPhage.push(tmp);
-    }
-    for (let i = 0; i < 8; i++) {
-      let tmp = clone(phageList[0]);
-      tmp.numPhage = mPhage;
-      colPhage.push(tmp);
-    }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, 20000, plateEnum.PLATECALLER.SUPERPLEXER, scenData);
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        plate[i][j].should.have.property('largePlaque', 0);
-        plate[i][j].should.have.property('smallPlaque');
-      }
-    }
-  });
-
-      it('Should create multiplexer for WT X FS input, PERM bacteria', () => {
-    let mPhage = 10500;
-    let rowPhage = [];
-    let colPhage = [];
-    for (let i = 0; i < 8; i++) {
-      let tmp = clone(phageList[0]);
-      tmp.numPhage = mPhage;
-      rowPhage.push(tmp);
-    }
-    for (let i = 0; i < 8; i++) {
-      let tmp;
-      if(i === 0)
-        tmp = clone(phageList[1]);
-      else
-        tmp = clone(phageList[i+2]);
-      tmp.numPhage = mPhage;
-      colPhage.push(tmp);
-    }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, 20000, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        //console.log(plate[i][j]);
-        plate[i][j].should.have.property('largePlaque');
-        plate[i][j].should.have.property('smallPlaque');
-      }
-    }
-  });
-
-   it('Should create multiplexer for WT X FS input, REST bacteria', () => {
-    let mPhage = 10600;
-    let rowPhage = [];
-    let colPhage = [];
-    for (let i = 0; i < 8; i++) {
-      let tmp = clone(phageList[0]);
-      tmp.numPhage = mPhage;
-      rowPhage.push(tmp);
-    }
-    for (let i = 0; i < 8; i++) {
-      let tmp;
-      if(i === 0)
-        tmp = clone(phageList[1]);
-      else
-        tmp = clone(phageList[i+2]);
-      tmp.numPhage = mPhage;
-      colPhage.push(tmp);
-    }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, 20000, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        plate[i][j].should.have.property('largePlaque', 0);
-        plate[i][j].should.have.property('smallPlaque');
-      }
-    }
-  });
-
-}); // end Test generate plate for super plexer*/
 });
