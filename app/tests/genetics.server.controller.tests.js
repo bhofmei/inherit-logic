@@ -897,7 +897,7 @@ describe('Genetics Controller Unit Tests:', () => {
           rowPhage: rowPhage,
           colPhage: colPhage,
           lawnType: bactPerm,
-          location: 'multiplexer',
+          location: 'plexer',
           capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };
@@ -941,7 +941,7 @@ describe('Genetics Controller Unit Tests:', () => {
           rowPhage: rowPhage,
           colPhage: colPhage,
           lawnType: bactRest,
-          location: 'multiplexer',
+          location: 'plexer',
           capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };
@@ -991,7 +991,7 @@ describe('Genetics Controller Unit Tests:', () => {
           rowPhage: rowPhage,
           colPhage: colPhage,
           lawnType: bactPerm,
-          location: 'multiplexer',
+          location: 'plexer',
           capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };
@@ -1042,7 +1042,7 @@ describe('Genetics Controller Unit Tests:', () => {
           rowPhage: rowPhage,
           colPhage: colPhage,
           lawnType: bactRest,
-          location: 'multiplexer',
+          location: 'plexer',
           capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };
@@ -1092,7 +1092,7 @@ describe('Genetics Controller Unit Tests:', () => {
           rowPhage: rowPhage,
           colPhage: colPhage,
           lawnType: bactPerm,
-          location: 'multiplexer',
+          location: 'plexer',
           capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };
@@ -1144,7 +1144,7 @@ describe('Genetics Controller Unit Tests:', () => {
           rowPhage: rowPhage,
           colPhage: colPhage,
           lawnType: bactRest,
-          location: 'multiplexer',
+          location: 'plexer',
           capacity: scenDefaults.plexerCapcaity,
           scenarioData: scenDat2
         };

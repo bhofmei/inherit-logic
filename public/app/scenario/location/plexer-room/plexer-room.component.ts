@@ -14,7 +14,7 @@ export class PlexerRoomComponent{
 
   private chosenBact: string = 'none';
   private dilutionValue: number = ScenarioGlobals.defaultPlexerDilution;
-  private plexerType: string = 'multi';
+  private plexerType: string = 'plexer';
   private scenarioDetails: string;
   private rows: ExperimentPhage[];
   private cols: ExperimentPhage[];
@@ -62,7 +62,7 @@ export class PlexerRoomComponent{
   reset(){
     this.chosenBact = 'none';
     this.dilutionValue = ScenarioGlobals.defaultPlexerDilution;
-    this.plexerType = 'multi';
+    this.plexerType = 'plexer';
     this._clearData();
     this.results = {};
     this.errorMessage = '';
@@ -84,21 +84,6 @@ export class PlexerRoomComponent{
       'btn-info': (src==='B' && this.chosenBact === src),
       'btn-outline-danger': (src==='K' && this.chosenBact !== src),
       'btn-danger': (src==='K' && this.chosenBact === src)
-    }
-  }
-
-  /**
-   * Get the CSS class for each plexer button based on which
-   * plexer type is set
-   *
-   * @param {string} src - button to get classes for
-   * @returns {Object} - classes which apply to this button
-   */
-  getPlexerClasses(src: string): Object{
-    return{
-      'btn': true,
-      'btn-outline-secondary':(this.plexerType !== src) ,
-      'btn-secondary': (this.plexerType === src)
     }
   }
 
@@ -141,6 +126,39 @@ export class PlexerRoomComponent{
   }
 
   /**
+   * Reformats the results to take into account of null in the rows/cols
+   *
+   * @param {Object} results - results of computing the plexer
+   * @returns {Object} - updated results
+   */
+  _unCleanResults(results: Object):Object{
+    let out = {},
+        newCols = {};
+    let curRow = 0,
+        curCol = 0;
+    for(let j = 0; j < this.cols.length; j++){
+      let col = this.cols[j];
+      if(col !== null){
+        newCols[curCol] = j;
+        curCol ++;
+      }
+    } // end for this.cols
+    for(let i in this.rows){
+      if(this.rows[i] !== null){
+        let row = results[curRow];
+        let tmp = {};
+        for(let j in row){
+          let newCol = newCols[j];
+          tmp[newCol] = row[j];
+        }
+        out[i] = tmp;
+        curRow++;
+      }
+    }
+    return out;
+  }
+
+  /**
    * Gets experiment data and submits to service to get results
    * of the multiplexer
    *
@@ -148,7 +166,7 @@ export class PlexerRoomComponent{
    */
   performPlexer(){
     // need to deal with dilution values
-    let tmpRows = (this.plexerType === 'multi' ? this.rows.slice(0, 2) : this.rows);
+    let tmpRows = this.rows;
     let cleanRows = this._cleanArrays(tmpRows);
     let cleanCols = this._cleanArrays(this.cols);
     // gather data
@@ -164,7 +182,8 @@ export class PlexerRoomComponent{
     // use the service
     this.expSubscription = this._experimentService.performPlexer(data)
     .subscribe((res)=>{
-      this.results = res;
+      //this.results = res;
+      this.results = this._unCleanResults(res);
     }, (err)=>{
       this.errorMessage = err.error.message || err.message || 'Unknown error';
     });
@@ -194,29 +213,5 @@ export class PlexerRoomComponent{
       this.cols[spot] = phage;
       this.nStrains[1] = this.cols.filter(function(value) { return value !== null }).length;
     }
-  }
-
-  /**
-   * Returns CSS classes for a row
-   *
-   * @param {number} rowInt - row we are considering
-   * @returns {Object} classes for the row
-   */
-  getRowClass(rowInt: number): Object{
-    return {
-      'data-table-row': true,
-      'invisible': this._isRowHidden(rowInt)
-    }
-  }
-
-  /**
-   * Determine if row is hidden based on plexer type;
-   * rows 2-7 are hidden for multiplexer
-   *
-   * @param {number} rowInt - row we are considering
-   * @returns {boolean} true if row is hidden
-   */
-  _isRowHidden(rowInt: number){
-    return (this.plexerType === 'multi' && rowInt > 1)
   }
 }

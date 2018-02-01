@@ -49,7 +49,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
   //console.log('plate', JSON.stringify(phage1), JSON.stringify(phage2));
   // TODO: add parents information
   var parents = [];
-  let getParents = (whoCalled === plateEnum.PLATECALLER.MULTIPLEXER || whoCalled === plateEnum.PLATECALLER.SUPERPLEXER ? false : true)
+  let getParents = (whoCalled === plateEnum.PLATECALLER.PLEXER ? false : true)
   var newPhage1, newPhage2, phageRatio;
   var onePhage = false;
   if (phage1.hasOwnProperty('strainNum')) {

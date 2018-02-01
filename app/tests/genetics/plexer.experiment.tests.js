@@ -61,10 +61,10 @@ before((done) => {
 9. [ { kind: 'minusOne', location: 243 } ]
 */
 
-describe('Testing generate plates for multiplexer', () => {
+describe('Testing generate plates for PLEXER', () => {
   // used in genetics controller testing
 
-  it('Should create multiplexer for all WT input, PERM bacteria', () => {
+  it('Should create PLEXER for all WT input, PERM bacteria', () => {
     let mPhage = 150;
     let rowPhage = [];
     let colPhage = [];
@@ -78,7 +78,7 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.PLEXER, scenData);
     /*
       0, 0: 126 WT    1, 0: 174 WT
       0, 1: 126 WT    1, 1: 174 WT
@@ -101,7 +101,7 @@ describe('Testing generate plates for multiplexer', () => {
     }
   });
 
-  it('Should create multiplexer for all WT input, REST bacteria', () => {
+  it('Should create PLEXER for all WT input, REST bacteria', () => {
     let mPhage = 154;
     let rowPhage = [];
     let colPhage = [];
@@ -115,7 +115,7 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.PLEXER, scenData);
     /*
       0, 0: 130 WT    1, 0: 130 WT
       0, 1: 130 WT    1, 1: 130 WT
@@ -137,7 +137,7 @@ describe('Testing generate plates for multiplexer', () => {
     }
   });
 
-  it('Should create multiplexer for WT X FS input, PERM bacteria', () => {
+  it('Should create PLEXER for WT X FS input, PERM bacteria', () => {
     let mPhage = 152;
     let rowPhage = [];
     let colPhage = [];
@@ -155,7 +155,7 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.PLEXER, scenData);
     /*
       0, 0: 64 WT, 64 FS, 1 rFS
       0, 1: 64 WT, 64 FS
@@ -186,7 +186,7 @@ describe('Testing generate plates for multiplexer', () => {
     }
   });
 
-  it('Should create multiplexer for WT X FS input, REST bacteria', () => {
+  it('Should create PLEXER for WT X FS input, REST bacteria', () => {
     let mPhage = 160;
     let rowPhage = [];
     let colPhage = [];
@@ -204,7 +204,7 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.PLEXER, scenData);
     /*
       0, 0: 67 WT, 67 FS
       0, 1: 67 WT, 67 FS, 1 rWT
@@ -234,7 +234,7 @@ describe('Testing generate plates for multiplexer', () => {
     }
   });
 
-  it('Should create multiplexer for FS X FS input, PERM bacteria', () => {
+  it('Should create PLEXER for FS X FS input, PERM bacteria', () => {
     let mPhage = 123;
     let rowPhage = [];
     let colPhage = [];
@@ -252,7 +252,7 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactPerm, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.PLEXER, scenData);
     /*
       0, 0: 73 FS1 WT, 73 FS2
       0, 1: 73 FS1 WT, 73 FS2, 2 rWT, 1 rFS
@@ -281,9 +281,9 @@ describe('Testing generate plates for multiplexer', () => {
         plate[i][j].should.have.property('smallPlaque', expectedWT[exp]);
       }
     }
-  }); // end Should create multiplexer for FS X FS input, PERM bacteria
+  }); // end Should create PLEXER for FS X FS input, PERM bacteria
 
-    it('Should create multiplexer for FS X FS input, REST bacteria', () => {
+    it('Should create PLEXER for FS X FS input, REST bacteria', () => {
     let mPhage = 126;
     let rowPhage = [];
     let colPhage = [];
@@ -301,7 +301,7 @@ describe('Testing generate plates for multiplexer', () => {
       tmp.numPhage = mPhage;
       colPhage.push(tmp);
     }
-    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.MULTIPLEXER, scenData);
+    let plate = plexerExp.createPlexerPlate(rowPhage, colPhage, bactRest, null, scenDefaults.plexerCapcaity, plateEnum.PLATECALLER.PLEXER, scenData);
     /*
       0, 0: 52 FS1, 52 FS2
       0, 1: 52 FS1, 52 FS2, 1 rWT
@@ -329,7 +329,7 @@ describe('Testing generate plates for multiplexer', () => {
         plate[i][j].should.have.property('smallPlaque', expectedWT[exp]);
       }
     }
-  }); // end Should create multiplexer for FS X FS input, PERM bacteria
+  }); // end Should create PLEXER for FS X FS input, PERM bacteria
 
-}); // end Test generate plate for multiplexer
+}); // end Test generate plate for PLEXER
 });

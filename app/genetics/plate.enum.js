@@ -1,7 +1,6 @@
 exports.PLATECALLER = {
   LAB: 'lab',
-  MULTIPLEXER: 'multi',
-  SUPERPLEXER: 'super',
+  PLEXER: 'plexer',
   MODEL: 'modeler'
 };
 

@@ -24,6 +24,7 @@
       <!-- end dilution-value -->
 
       <!-- plexer type -->
+<!--
       <div>
         <label class="tb-label" for="plexer-type">Plexer</label>
         <div id="plexer-type" class="col-12 col-sm-6 col-md-3 btn-group" role="group" aria-label="Plexer-type">
@@ -36,6 +37,7 @@
     </button>
         </div>
       </div>
+-->
       <!-- end plexer-type -->
       <div class="col-12 col-sm-6 col-md-3 btn-group-vertical">
         <button class="btn btn-outline-primary btn-sm" (click)="reset()">Reset</button>
@@ -58,7 +60,7 @@
         </td>
       </tr>
       <!-- rows with data -->
-      <tr *ngFor="let row of rows; let i=index" [ngClass]="getRowClass(i)">
+      <tr *ngFor="let row of rows; let i=index" class="data-table-row">
         <td dnd-droppable (onDropSuccess)="addPhage($event, 'row', i)" class="plexer-td-label">
           <span *ngIf="row !== null">{{ row.strainNum+1 }}</span>
         </td>
