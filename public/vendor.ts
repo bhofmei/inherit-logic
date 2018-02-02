@@ -11,3 +11,5 @@ import 'rxjs';
 import '@ng-bootstrap/ng-bootstrap';
 import 'ng2-dnd';
 import 'ngx-breadcrumbs';
+import 'angular-skyhook';
+import 'react-dnd-touch-backend';

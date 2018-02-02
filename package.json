@@ -7,15 +7,15 @@
     "test": "test"
   },
   "scripts": {
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
     "webpack": "webpack --watch --config webpack.dev.js",
+    "webpack:p": "webpack --watch --config webpack.prod.js",
     "clean": "find ./public/app/ -name '*.js*' -delete",
     "app": "node index",
-    "start": "concurrently \"npm run tsc:w\" \"npm run app\" ",
     "start:w": "concurrently \"npm run webpack\" \"npm run app\" ",
+    "start:p": "concurrently \"npm run webpack:p\" \"npm run app\" ",
     "build": "webpack --config webpack.prod.js",
-    "test:back": "NODE_ENV=test mocha --reporter spec -t 5000 app/tests",
+    "test:back": "NODE_ENV=test mocha --recursive --reporter spec -t 5000 app/tests/",
+    "test:server": "NODE_ENV=test mocha --reporter spec -t 5000 app/tests/",
     "test:genetics": "NODE_ENV=test DEBUG=genetics mocha --reporter spec app/tests/genetics"
   },
   "keywords": [
@@ -36,6 +36,7 @@
     "@angular/platform-server": "^5.0.0",
     "@angular/router": "^5.0.0",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.6",
+    "angular-skyhook": "^1.0.0-beta.2",
     "async": "^2.6.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.15.2",
@@ -73,6 +74,8 @@
     "passport-local": "^1.0.0",
     "popper.js": "^1.12.9",
     "random-js": "^1.0.8",
+    "react-dnd-html5-backend": "^2.5.4",
+    "react-dnd-touch-backend": "^0.3.20",
     "reflect-metadata": "^0.1.8",
     "rxjs": "^5.5.2",
     "systemjs": "^0.19.39",
