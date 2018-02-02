@@ -5,6 +5,9 @@ import { DndModule } from 'ng2-dnd';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { McBreadcrumbsModule } from 'ngx-breadcrumbs';
 import { PersonNamePipe } from '../pipes/person-name.pipe';
+import { SkyhookDndModule } from 'angular-skyhook';
+import { default as TouchBackend } from 'react-dnd-touch-backend';
+import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog.component';
 
 @NgModule({
     imports: [
@@ -12,10 +15,12 @@ import { PersonNamePipe } from '../pipes/person-name.pipe';
       FormsModule,
       DndModule.forRoot(),
       NgbModule.forRoot(),
-      McBreadcrumbsModule.forRoot()
+      McBreadcrumbsModule.forRoot(),
+      SkyhookDndModule.forRoot({ backend: TouchBackend })
     ],
   declarations: [
-    PersonNamePipe
+    PersonNamePipe,
+    ConfirmDeleteDialogComponent
   ],
     exports: [
       CommonModule,
@@ -23,7 +28,9 @@ import { PersonNamePipe } from '../pipes/person-name.pipe';
       DndModule,
       NgbModule,
       McBreadcrumbsModule,
-      PersonNamePipe
+      PersonNamePipe,
+      SkyhookDndModule,
+      ConfirmDeleteDialogComponent
     ],
 })
 export class SharedModule {

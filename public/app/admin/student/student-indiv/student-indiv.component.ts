@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SharedModule } from '../../../shared/shared.module';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -10,6 +11,7 @@ import { AuthenticationService } from '../../../authentication/authentication.se
 import { StudentService } from '../student.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
 import { StudentRolesArray } from '../student.roles';
+import { ConfirmDeleteDialogComponent } from '../../../shared/confirm-delete-dialog.component';
 
 import { User } from '../../../interfaces/user.interface';
 import { Course } from '../../../interfaces/course.interface';
@@ -163,8 +165,8 @@ export class StudentIndivComponent {
    *
    * @param{any} content - ng-template to open
    */
-  checkDelete(content){
-    this._modalService.open(content, {size: 'sm'}).result
+  checkDelete(){
+    /*this._modalService.open(content, {size: 'sm'}).result
       .then((res)=>{
       // close result
       if(res === 'delete'){
@@ -172,6 +174,17 @@ export class StudentIndivComponent {
       }
     }, (dismiss)=>{
       // dismiss result
+      return;
+    });*/
+    const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm'});
+    modelRef.componentInstance.message = 'Are you sure you want to delete?';
+
+    modelRef.result.then((result)=>{
+      if(result === 'delete'){
+        this._callDelete();
+      }
+    }, (dismiss)=>{
+      // do nothing
       return;
     });
   }
