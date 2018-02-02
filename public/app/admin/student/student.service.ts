@@ -48,9 +48,9 @@ export class StudentService {
             .post(`${this._baseURL}/${this.getAdmin()}/students/${studentId}`, body);
   }*/
 
-  deleteUser(userId: number, studentId: number): Observable<any>{
+  deleteStudent(userId: number, studentId: number): Observable<any>{
     return this._http
-            .delete(`${this._baseURL}/${userId}/users/${studentId}`);
+            .delete(`${this._baseURL}/${userId}/students/${studentId}`);
   }
 
   getFridge(adminId: number, studentId: number, scenId: string): Observable<StudentFridge>{

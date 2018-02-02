@@ -5,9 +5,14 @@
   <div *ngIf="student">
     <div id="student-info">
       <div class="row mb-0" id="student-name">
+        <div class="m-0 p-0">
         <h4 class="text-dark">
           {{ student | personName }}
         </h4>
+          </div>
+        <div class="ml-auto">
+        <button class="btn btn-outline-danger btn-sm" (click)="checkDelete(deletemodal)" [disabled]="deleteDisabled()">Delete</button>
+          </div>
       </div>
 
       <div class="row mt-2" id="student-email">
@@ -28,14 +33,15 @@
         </div>
       </div>
 
-      <div class="row mb-2" id="student-role">
+      <div class="row" id="student-role">
         <div class="col-6 col-md-4 col-xl-2">Role</div>
         <div class="btn-group col-6 col-md-8 col-xl-10">
           <button *ngFor="let role of roles" [disabled]="roleDisabled(role.key)" [ngClass]="roleButtonClass(role.key)" (click)="clickButton(role.key)">
           {{ role.label }}
         </button>
         </div>
-      </div>
+      </div> <!-- end student role -->
+
     </div>
     <!-- end student info -->
 
@@ -47,8 +53,8 @@
             <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(scenario.scenCode) }}</span>
           </div>
           <div class="btn-group" role="group">
-            <!--<button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="student.accessGranted[scenario.scenCode]">Grant access</button>-->
-            <button [ngClass]="accessButtonClass(scenario.scenCode)" (click)="toggleAccess(scenario.scenCode)">{{ accessButtonText(scenario.scenCode) }}</button>
+            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="student.accessGranted[scenario.scenCode]">Grant access</button>
+<!--            <button [ngClass]="accessButtonClass(scenario.scenCode)" (click)="toggleAccess(scenario.scenCode)">{{ accessButtonText(scenario.scenCode) }}</button>-->
             <a [routerLink]="['./', scenario.scenCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
           </div>
         </div>
@@ -61,3 +67,23 @@
   <!-- end if student -->
 </div>
 <!-- end container -->
+
+<ng-template #deletemodal let-c="close" let-d="dismiss">
+  <div class="modal-header py-2">
+    <button type="button" class="close" aria-label="Close" (click)="d('exit')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div> <!-- end modal-header -->
+    <div class="modal-body">
+      <p class="text-center">
+        Are you sure you want to delete?
+        </p>
+  </div> <!-- end modal-body -->
+      <div class="modal-footer d-flex justify-content-around">
+        <div class="">
+      <button type="button" class="btn btn-outline-secondary" (click)="d('cancel')">Cancel</button>
+        </div><div>
+        <button type="submit" class="btn btn-danger" (click)="c('delete')">Confirm</button>
+          </div>
+      </div> <!-- end modal-footer -->
+</ng-template>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
@@ -38,7 +39,8 @@ export class StudentIndivComponent {
         private _route: ActivatedRoute,
         private _authService: AuthenticationService,
         private _studentService: StudentService,
-        private _scenarioService: ScenarioService) {
+        private _scenarioService: ScenarioService,
+        private _modalService: NgbModal) {
         this.isDestroyed$ = new Subject<boolean>();
     }
 
@@ -142,6 +144,49 @@ export class StudentIndivComponent {
                 this.errorMessage = err.error.message;
             });
     }
+
+  deleteDisabled(){
+    if(this._admin === undefined){
+      return true;
+    } else if(this.student.userId === this._admin.id){
+      return false;
+    } else if(this.student.role === 'admin'){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * when clicking delete button, open a modal dialog to confirm delete
+   * if confirm, delete and redirect to students
+   * otherwise, do nothing
+   *
+   * @param{any} content - ng-template to open
+   */
+  checkDelete(content){
+    this._modalService.open(content, {size: 'sm'}).result
+      .then((res)=>{
+      // close result
+      if(res === 'delete'){
+        this._callDelete();
+      }
+    }, (dismiss)=>{
+      // dismiss result
+      return;
+    });
+  }
+
+  _callDelete(){
+    this._studentService.deleteStudent(this._admin.id, this.student.userId)
+    .takeUntil(this.isDestroyed$)
+    .subscribe((res)=>{
+      // successful
+      this._router.navigate(['/admin/students']);
+    }, (err)=>{
+      this.errorMessage = readErrorMessage(err);
+    })
+  }
 
     ngOnDestroy() {
         this.paramObserver.unsubscribe();
