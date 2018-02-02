@@ -90,7 +90,7 @@ export class CourseService {
 
   deleteStudents(userId: number, courseNum: string): Observable<any>{
     return this._http
-      .delete(`${this._baseURL}/${userId}/courses/${courseNum}/users`);
+      .delete(`${this._baseURL}/${userId}/courses/${courseNum}/students`);
   }
 
   getScenarioStatus(adminId: number, courseNum: string, scenId: string): Observable<Student[]>{
