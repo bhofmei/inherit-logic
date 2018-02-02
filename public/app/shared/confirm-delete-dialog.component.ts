@@ -3,7 +3,7 @@ import { NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'confirm-delete-dialog',
-  templateUrl: 'app/admin/confirm-delete-dialog.template.html'
+  templateUrl: 'app/shared/confirm-delete-dialog.template.html'
 })
 
 export class ConfirmDeleteDialogComponent{
