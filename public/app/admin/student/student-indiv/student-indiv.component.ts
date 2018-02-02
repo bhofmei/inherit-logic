@@ -100,9 +100,8 @@ export class StudentIndivComponent {
         return (isGranted ? 'Revoke access' : 'Grant access');
     }
 
-    toggleAccess(scenCode: string) {
-        let curState = this.student.accessGranted[scenCode];
-        this._studentService.grantScenAccess(this._admin.id, this.student.userId, scenCode, !curState)
+    grantAccess(scenCode: string) {
+        this._studentService.grantScenAccess(this._admin.id, this.student.userId, scenCode, true)
             .takeUntil(this.isDestroyed$)
             .subscribe((res) => {
                 if (res !== undefined && res !== null) {
