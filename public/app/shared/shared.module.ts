@@ -4,10 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { DndModule } from 'ng2-dnd';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { McBreadcrumbsModule } from 'ngx-breadcrumbs';
-import { PersonNamePipe } from '../pipes/person-name.pipe';
 import { SkyhookDndModule } from 'angular-skyhook';
 import { default as TouchBackend } from 'react-dnd-touch-backend';
+
 import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog.component';
+
+import { PersonNamePipe } from '../pipes/person-name.pipe';
+import { PeopleListNamesPipe } from '../pipes/people-list-names.pipe';
 
 @NgModule({
     imports: [
@@ -20,6 +23,7 @@ import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog.component'
     ],
   declarations: [
     PersonNamePipe,
+    PeopleListNamesPipe,
     ConfirmDeleteDialogComponent
   ],
     exports: [
@@ -29,6 +33,7 @@ import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog.component'
       NgbModule,
       McBreadcrumbsModule,
       PersonNamePipe,
+      PeopleListNamesPipe,
       SkyhookDndModule,
       ConfirmDeleteDialogComponent
     ],
