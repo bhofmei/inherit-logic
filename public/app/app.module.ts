@@ -44,11 +44,11 @@ import { NavComponent } from './nav/nav.component';
         NavComponent
     ],
     providers: [
-        AuthenticationService,
+      AuthenticationService,
       LoggedInGuard,
-        ScenarioService,
+      ScenarioService,
       CourseService,
-    ScenarioResolver
+      ScenarioResolver
     ],
     bootstrap: [AppComponent]
 })

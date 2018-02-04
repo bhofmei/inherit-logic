@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [unreleased]
+- ADDED ability to delete non-admin users
 
 ## [v1.0.5]
 - ADDED rate limiting

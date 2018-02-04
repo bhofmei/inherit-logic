@@ -42,6 +42,9 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: ['bootstrap', 'vendor', 'polyfills']
     }),
+//    new webpack.optimize.CommonsChunkPlugin({
+//      name: 'manifest'
+//    }),
     new HtmlWebpackPlugin({
       title: 'Cricket',
       filename: 'index.ejs',
