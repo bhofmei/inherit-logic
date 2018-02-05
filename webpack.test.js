@@ -23,7 +23,8 @@ module.exports = {
         },
         {
           test: /\.ts$/,
-          loaders: ['awesome-typescript-loader']
+          loaders: [{loader: 'awesome-typescript-loader',
+                    options: {configFileName: './tsconfig.test.json'}}]
 //          use: [
 //            {loader: 'awesome-typescript-loader',
 //            query: {

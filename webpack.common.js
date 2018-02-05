@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
 
@@ -21,12 +22,12 @@ module.exports = {
     publicPath: 'build/'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.ts$/,
-        loaders: [
-          'awesome-typescript-loader',
-          'angular-router-loader'
+        use: [
+          {loader: 'awesome-typescript-loader'},
+          {loader: 'angular-router-loader'}
         ]
       },
       {
@@ -79,6 +80,7 @@ Please wait.
     new ExtractTextPlugin({
       filename: '[name].css',
       allChunks: true
-    })
+    }),
+    new CleanWebpackPlugin(['public/build'])
   ]
 };
