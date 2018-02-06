@@ -29,5 +29,5 @@ function requireAll(requireContext) {
 }
 
 //var modules = requireAll(testContext);
-var modules = [require('./public/app/nav/nav.component.spec.ts')
+var modules = [require('./public/app/home/home.component.spec.ts')
 ];
