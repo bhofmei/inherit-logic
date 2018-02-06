@@ -17,14 +17,17 @@ var testing = require('@angular/core/testing');
 var browser = require('@angular/platform-browser-dynamic/testing');
 
 testing.TestBed.initTestEnvironment(
-browser.BrowserDynamicTestingModule,
-browser.platformBrowserDynamicTesting()
+  browser.BrowserDynamicTestingModule,
+  browser.platformBrowserDynamicTesting()
 );
 
 var testContext = require.context('./public/app', true, /.spec\.ts/)
 
-function requireAll(requireContext){
-  return requireContext.keys().map(requireContext);
+function requireAll(requireContext) {
+  return requireContext.keys()
+    .map(requireContext);
 }
 
-var modules = requireAll(testContext);
+//var modules = requireAll(testContext);
+var modules = [require('./public/app/nav/nav.component.spec.ts')
+];
