@@ -5,8 +5,8 @@ import { User } from '../interfaces/user.interface';
 
 @Component({
     selector: 'cricket-nav',
-    templateUrl: './app/nav/nav.template.html',
-    styleUrls: ['./app/nav/nav.style.css']
+    templateUrl: 'app/nav/nav.template.html',
+    styleUrls: ['app/nav/nav.style.css']
 })
 export class NavComponent {
 
@@ -21,10 +21,11 @@ export class NavComponent {
     .subscribe((res)=>{
       this.user = res
     });
-    this.user = this._authService.getUser();
+    //this.user = this._authService.getUser();
   }
 
   ngOnDestroy(){
+    if(this.subscription)
     this.subscription.unsubscribe();
   }
 }
