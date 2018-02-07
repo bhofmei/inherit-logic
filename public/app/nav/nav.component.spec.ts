@@ -34,7 +34,7 @@ describe('Nav Component', ()=>{
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       declarations: [NavComponent],
-      providers: [{provide: AuthenticationService, use: AuthServiceStub}]
+      providers: [{provide: AuthenticationService, useClass: AuthServiceStub}]
     }).overrideComponent(NavComponent, {
       set: {
         providers: [
@@ -46,10 +46,7 @@ describe('Nav Component', ()=>{
 
   beforeEach(()=>{
     fixture = TestBed.createComponent(NavComponent);
-    comp = fixture.componentInstance;
-    authService = fixture.debugElement.injector.get(AuthenticationService);
-    //spy = spyOn(authService, 'getUser$').and.returnValue(new Observable(testUser));
-
+    authService = TestBed.get(AuthenticationService);
   }); // end beforeEach
 
   it('Should not have user before OnInit', ()=>{
@@ -58,14 +55,12 @@ describe('Nav Component', ()=>{
   }); // end Should not have user before OnInit
 
   it('Should have user after OnInit', async(()=>{
-    comp.ngOnInit();
     fixture.detectChanges();
     fixture.whenStable().then(()=>{
       fixture.detectChanges();
       let listElements = fixture.debugElement.queryAll(By.css('li'));
     expect(listElements.length).toBe(3);
     });
-
   })); // end Should have user after OnInit
 
   it('Should have scenario link', ()=>{
@@ -73,6 +68,13 @@ describe('Nav Component', ()=>{
     let scenElement = listElements[0].query(By.css('a'));
     let link = scenElement.nativeElement.getAttribute('routerLink');
     expect(link).toMatch(/scenarios/);
-  })
+  }); // end Should have scenario link
+
+  it('Should have help link', ()=>{
+    let listElements = fixture.debugElement.queryAll(By.css('li'));
+    let scenElement = listElements[1].query(By.css('a'));
+    let link = scenElement.nativeElement.getAttribute('routerLink');
+    expect(link).toMatch(/help/);
+  }); // end Should have help link
 
 }); // end App Component
