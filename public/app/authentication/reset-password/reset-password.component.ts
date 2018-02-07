@@ -6,7 +6,7 @@ import { AuthenticationService } from '../authentication.service';
 import { readErrorMessage } from '../../shared/read-error';
 
 @Component({
-    selector: 'reset-pswd-cmp',
+    selector: 'reset-pswd',
     templateUrl: 'app/authentication/reset-password/reset-password.template.html',
   //styleUrls: ['app/authentication/signin/signin.style.css']
 })

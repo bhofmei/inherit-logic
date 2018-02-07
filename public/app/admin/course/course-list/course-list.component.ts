@@ -8,7 +8,7 @@ import { Course } from '../../../interfaces/course.interface';
 import { User } from '../../../interfaces/user.interface';
 
 @Component({
-    selector: 'course-list-cmp',
+    selector: 'course-list',
     templateUrl: './app/admin/course/course-list/course-list.template.html'
 })
 export class CourseListComponent implements OnInit, OnDestroy{

@@ -14,7 +14,7 @@ import { Scenario } from '../../../interfaces/scenario.interface';
 import { User } from '../../../interfaces/user.interface';
 
 @Component({
-  selector: 'course-indiv-cmp',
+  selector: 'course-indiv',
   templateUrl: 'app/admin/course/course-indiv/course-indiv.template.html',
   styleUrls: ['app/admin/course/course-indiv/course-indiv.style.css']
 })

@@ -6,7 +6,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { User } from '../interfaces/user.interface';
 
 @Component({
-  selector: 'admin-cmp',
+  selector: 'admin',
   templateUrl: 'app/admin/admin.template.html'
 })
 

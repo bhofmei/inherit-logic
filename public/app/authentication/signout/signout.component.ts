@@ -6,7 +6,7 @@ import { AuthenticationService } from '../authentication.service';
 
 
 @Component({
-  selector: 'signout-cmp',
+  selector: 'signout',
   template: ''
   //templateUrl: 'app/authentication/signout/signout.template.html'
 })

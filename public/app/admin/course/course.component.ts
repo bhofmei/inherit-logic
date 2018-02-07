@@ -6,7 +6,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil'
 
 @Component({
-  selector: 'course-cmp',
+  selector: 'course',
   templateUrl: 'app/admin/course/course.template.html'
 })
 

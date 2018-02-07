@@ -7,7 +7,7 @@ import { AuthenticationService } from '../../../authentication/authentication.se
 import { User } from '../../../interfaces/user.interface';
 
 @Component({
-  selector: 'course-create-cmp',
+  selector: 'course-create',
   templateUrl: 'app/admin/course/course-create/course-create.template.html',
   styleUrls: ['app/admin/course/course-create/course-create.style.css']
 })

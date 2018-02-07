@@ -18,7 +18,8 @@
         <span class="text-primary student-label">{{student | personName}}:</span> {{ formatAccess(student.status) }}
         </div>
         <div class="btn-group" role="group">
-          <button [ngClass]="accessButtonClass(student.status)" (click)="toggleAccess(i)">{{ accessButtonText(student.status) }}</button>
+<!--          <button [ngClass]="accessButtonClass(student.status)" (click)="toggleAccess(i)">{{ accessButtonText(student.status) }}</button>-->
+          <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="accessButtonText(student.status]">Grant access</button>
           <button class="btn btn-outline-primary btn-sm" (click)="goToFridge(student.userId)">View fridge</button>
         </div>
         </div> <!-- end list-group-item -->

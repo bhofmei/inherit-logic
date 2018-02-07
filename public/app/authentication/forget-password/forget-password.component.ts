@@ -5,7 +5,7 @@ import { AuthenticationService } from '../authentication.service';
 import { readErrorMessage } from '../../shared/read-error';
 
 @Component({
-    selector: 'forget-pswd-cmp',
+    selector: 'forget-pswd',
     templateUrl: 'app/authentication/forget-password/forget-password.template.html',
   //styleUrls: ['app/authentication/signin/signin.style.css']
 })
