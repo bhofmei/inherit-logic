@@ -6,12 +6,21 @@ import { ScenarioService } from '../scenario.service';
 import { User } from '../../interfaces/user.interface';
 import { Scenario } from '../../interfaces/scenario.interface';
 
+/**
+ * Component which lists all available scenarios
+ */
 @Component({
     selector: 'scenario-list',
-    templateUrl: './app/scenario/list/list.template.html'
+    templateUrl: 'app/scenario/list/list.template.html'
 })
 export class ListComponent implements OnInit, OnDestroy{
+  /**
+   * User object of logged in user, if available
+   */
     user: User;
+  /**
+  * list of available scenarios
+  */
     scenarios: Scenario[];
     errorMessage: string;
   private sSubscription: Subscription;
@@ -29,6 +38,7 @@ export class ListComponent implements OnInit, OnDestroy{
     }
 
   ngOnDestroy(){
+    if(this.sSubscription)
     this.sSubscription.unsubscribe();
   }
 }

@@ -1,11 +1,6 @@
 <div class="container">
-  <h1>Available Scenarios</h1>
+  <h2 class="mt-4">Available Scenarios</h2>
   <div *ngIf="user" class="col-12">
-    <!--<h2>Welcome {{user.name}}</h2>
-  <a *ngIf="user.role==1" [routerLink]="['/admin']">Instructor Page</a>
-  <a *ngIf="user.role==2" [routerLink]="['/admin']">Administrator Page</a>
-  <br>
-  <a href="api/auth/signout">Sign out</a>-->
     <div class="list-group mt-2">
       <a *ngFor="let scenario of scenarios" [routerLink]="[scenario.scenCode, 'info']" class="list-group-item list-group-item-action">{{scenario.label}}</a>
     </div>
@@ -14,7 +9,5 @@
   <div *ngIf="!user" class="col-12">
     <p>
       <a [routerLink]="['/authentication/signin']">Sign in</a> or <a [routerLink]="['/authentication/signup']">Sign up</a> to see scenarios.</p>
-    <!--<a [routerLink]="['/authentication/signup']">Sign up</a><br>
-  <a [routerLink]="['/authentication/signin']">Sign in</a>-->
   </div>
 </div>
