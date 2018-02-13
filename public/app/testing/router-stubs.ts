@@ -1,6 +1,6 @@
 // From: https://angular.io/guide/testing#test-a-routeroutlet-component
  // export for convenience.
-import { ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
+export { ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
 
 import { Component, Directive, Injectable, Input } from '@angular/core';
 import { NavigationExtras } from '@angular/router';
@@ -30,7 +30,8 @@ export class RouterStub {
 
 
 // Only implements params and part of snapshot.params
-/*import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class ActivatedRouteStub {
@@ -38,6 +39,7 @@ export class ActivatedRouteStub {
   // ActivatedRoute.params is Observable
   private subject = new BehaviorSubject(this.testParams);
   params = this.subject.asObservable();
+  //params = Observable.of(this.subject);
 
   // Test parameters
   private _testParams: {};
@@ -51,4 +53,4 @@ export class ActivatedRouteStub {
   get snapshot() {
     return { params: this.testParams };
   }
-}*/
+}
