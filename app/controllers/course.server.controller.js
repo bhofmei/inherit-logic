@@ -353,7 +353,7 @@ exports.courseByNum = function (req, res, next, id) {
       return next(err);
     }
     if (!course) {
-      return next(new Error('Failed to load course ' + id));
+      return next('Failed to load course ' + id);
     }
     req.course = course;
     // Call the next middleware

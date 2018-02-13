@@ -134,6 +134,21 @@ describe('Course Controller Unit Tests', () => {
           });
       }); // end Should be able to get course1
 
+      it('Should not be able to get non-existant course', (done) => {
+        adminAgent
+          .get('/api/admin/' + admin.userId + '/courses/' + 'FAKE')
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res) => {
+            let body = res.body;
+            let error = res.error;
+            body.should.be.an.Object();
+            error.should.have.property('status', 500);
+            error.text.should.match(/Failed to load course/);
+            done();
+          });
+      }); // end Should not be able to get non-existant course
+
       it('Should be able to get students of course1', (done) => {
         adminAgent
           .get('/api/admin/' + admin.userId + '/courses/' + course1.courseNum + '/students')
@@ -353,6 +368,21 @@ describe('Course Controller Unit Tests', () => {
             done();
           });
       }); // end Should not be able to get course2
+
+      it('Should not be able to get non-existant course', (done) => {
+        instrAgent
+          .get('/api/admin/' + instructors[0].userId + '/courses/' + 'FAKE')
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res) => {
+            let body = res.body;
+            let error = res.error;
+            body.should.be.an.Object();
+            error.should.have.property('status', 500);
+            error.text.should.match(/Failed to load course/);
+            done();
+          });
+      }); // end Should not be able to get non-existant course
 
       it('Should be able to get students of course1', (done) => {
         instrAgent
@@ -582,6 +612,22 @@ describe('Course Controller Unit Tests', () => {
           });
       }); // end Should not be able to get course2
 
+            it('Should not be able to get non-existant course', (done) => {
+        studentAgent
+          .get('/api/admin/' + students[0].userId + '/courses/' + 'FAKE')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(403)
+          .end((err, res) => {
+            //res.body.should.have.property('message', 'Not authorized');
+          res.body.should.be.an.Object();
+          let error = res.error;
+          error.should.have.property('status', 500);
+          error.text.should.match(/Failed to load course/)
+            done();
+          });
+      }); // end Should not be able to get non-existant course
+
       it('Should not be able to get students of course2', (done) => {
         studentAgent
           .get('/api/admin/' + students[0].userId + '/courses/' + course2.courseNum + '/students')
@@ -630,36 +676,36 @@ describe('Course Controller Unit Tests', () => {
       }); // end Should not be able to edit course
     }); // end Testing POST methods
 
-    describe('Testing DELETE methods', ()=>{
+    describe('Testing DELETE methods', () => {
       let tmpUser, tmpCourse;
-    beforeEach((done) => {
-      tmpUser = new User({
-        name: 'tmp',
-        email: 'tmp@test.com'
-      });
-    tmpCourse = new Course({
+      beforeEach((done) => {
+        tmpUser = new User({
+          name: 'tmp',
+          email: 'tmp@test.com'
+        });
+        tmpCourse = new Course({
           courseNum: 'TEMP',
           instructors: [instructors[0]]
         });
-      tmpUser.save(()=>{
-        tmpCourse.save(()=>{
-          done();
+        tmpUser.save(() => {
+          tmpCourse.save(() => {
+            done();
+          });
         });
-      });
 
-    }); // end beforeEach
+      }); // end beforeEach
 
-    it('Should not delete course', (done) => {
-      studentAgent
-        .delete('/api/admin/' + students[0].userId + '/courses/' + tmpCourse.courseNum)
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(403)
-        .end((err, res) => {
-          res.body.should.have.property('message', 'Not authorized');
-          done();
-        });
-    }); // end Should not delete course
+      it('Should not delete course', (done) => {
+        studentAgent
+          .delete('/api/admin/' + students[0].userId + '/courses/' + tmpCourse.courseNum)
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(403)
+          .end((err, res) => {
+            res.body.should.have.property('message', 'Not authorized');
+            done();
+          });
+      }); // end Should not delete course
 
     }); // end Testing DELETE methods
 
