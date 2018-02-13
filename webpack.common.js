@@ -80,7 +80,6 @@ Please wait.
     new ExtractTextPlugin({
       filename: '[name].css',
       allChunks: true
-    }),
-    new CleanWebpackPlugin(['public/build'])
+    })
   ]
 };
