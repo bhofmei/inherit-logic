@@ -1,10 +1,11 @@
 import { Course } from './course.interface';
+import { _User } from './user.interface';
+//  firstName: string;
+//  lastName: string;
+//  userId: number;
 
-export interface Student {
-  firstName: string;
-  lastName: string;
+export interface Student extends _User {
   email?: string;
-  userId: number;
   accessGranted?: any;
   status?: boolean;
 }
