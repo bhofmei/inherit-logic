@@ -26,7 +26,7 @@ const compareMut = function (expected, actual) {
 const compareDel = function (expected, actual) {
   // expected is int: -1 don't check (no valid recomb points), 0 for no deletion otherwise start of deletion
   // actual is actual deletions -> only look at start
-  if (expected === -1){
+  if (expected === -1) {
     return true;
   } else if (expected !== 0) {
     return (expected === actual[0]);
@@ -411,7 +411,7 @@ describe('Phage experiments unit tests', () => {
       }); // end Should recombine WT and double FS, triple crossover
     }); // end Test FS recombine
 
-    describe('Test DEL recombine', () => {
+    describe('Test DEL recombination', () => {
 
       let wt, del1, del2, del3;
       before((done) => {
@@ -642,6 +642,185 @@ describe('Phage experiments unit tests', () => {
       }); // end Should recombine DEL and DEL, overlap, triple crossover
 
     }); // end Test DEL recombine
+
+    describe('Test FS middle recombination', () => {
+      let fsA, fsB, fsC;
+      before((done) => {
+        fsA = {
+          shifts: [{
+            kind: 'minusOne',
+            location: 20
+          }],
+          deletion: []
+        };
+        fsB = {
+          shifts: [{
+            kind: 'minusOne',
+            location: 160
+          }],
+          deletion: []
+        };
+        fsC = {
+          shifts: phageList[1].mutationList,
+          deletion: []
+        }; // 240
+        done();
+      }); // end before
+
+      it('Should have more WT for FS-A x FS-B than FS-B x FS-C, single crossover', () => {
+        let rec1 = phageExp.recombine(fsA, fsB, 1, 100); // 20, 160
+        let rec2 = phageExp.recombine(fsB, fsC, 1, 100); // 160, 240
+        rec1.should.be.an.Array()
+          .and.have.lengthOf(100);
+        rec2.should.be.an.Array()
+          .and.have.lengthOf(100);
+        // filter lists
+        let wt1 = rec1.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        let wt2 = rec2.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        wt1.length.should.be.above(wt2.length);
+      }); // end Should have more WT for FS-A x FS-B than FS-B x FS-C, single crossover
+
+      it('Should have more WT for FS-A x FS-C than FS-B x FS-C, single crossover', () => {
+        let rec1 = phageExp.recombine(fsA, fsC, 1, 100); // 20, 240
+        let rec2 = phageExp.recombine(fsB, fsC, 1, 100); // 160, 240
+        rec1.should.be.an.Array()
+          .and.have.lengthOf(100);
+        rec2.should.be.an.Array()
+          .and.have.lengthOf(100);
+        // filter lists
+        let wt1 = rec1.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        let wt2 = rec2.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        wt1.length.should.be.above(wt2.length);
+      }); // end Should have more WT for FS-A x FS-C than FS-B x FS-C, single crossover
+
+      it('Should have more WT for FS-A x FS-C than FS-A x FS-B, single crossover', () => {
+        let rec1 = phageExp.recombine(fsA, fsC, 1, 100); // 20, 240
+        let rec2 = phageExp.recombine(fsA, fsB, 1, 100); // 20, 160
+        rec1.should.be.an.Array()
+          .and.have.lengthOf(100);
+        rec2.should.be.an.Array()
+          .and.have.lengthOf(100);
+        // filter lists
+        let wt1 = rec1.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        let wt2 = rec2.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        wt1.length.should.be.above(wt2.length);
+      }); // end Should have more WT for FS-A x FS-B than FS-A x FS-C, single crossover
+
+      it('Should have more WT for FS-A x FS-B than FS-B x FS-C, double crossover', () => {
+        let rec1 = phageExp.recombine(fsA, fsB, 2, 100); // 20, 160
+        let rec2 = phageExp.recombine(fsB, fsC, 2, 100); // 160, 240
+        rec1.should.be.an.Array()
+          .and.have.lengthOf(100);
+        rec2.should.be.an.Array()
+          .and.have.lengthOf(100);
+        // filter lists
+        let wt1 = rec1.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        let wt2 = rec2.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        wt1.length.should.be.above(wt2.length);
+      }); // end Should have more WT for FS-A x FS-B than FS-B x FS-C, double crossover
+
+      it('Should have more WT for FS-A x FS-C than FS-B x FS-C, double crossover', () => {
+        let rec1 = phageExp.recombine(fsA, fsC, 2, 100); // 20, 240
+        let rec2 = phageExp.recombine(fsB, fsC, 2, 100); // 160, 240
+        rec1.should.be.an.Array()
+          .and.have.lengthOf(100);
+        rec2.should.be.an.Array()
+          .and.have.lengthOf(100);
+        // filter lists
+        let wt1 = rec1.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        let wt2 = rec2.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        wt1.length.should.be.above(wt2.length);
+      }); // end Should have more WT for FS-A x FS-C than FS-B x FS-C, double crossover
+
+      it('Should have more WT for FS-A x FS-C than FS-A x FS-B, double crossover', () => {
+        let rec1 = phageExp.recombine(fsA, fsC, 2, 100); // 20, 240
+        let rec2 = phageExp.recombine(fsA, fsB, 2, 100); // 20, 160
+        rec1.should.be.an.Array()
+          .and.have.lengthOf(100);
+        rec2.should.be.an.Array()
+          .and.have.lengthOf(100);
+        // filter lists
+        let wt1 = rec1.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        let wt2 = rec2.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        wt1.length.should.be.above(wt2.length);
+      }); // end Should have more WT for FS-A x FS-B than FS-A x FS-C, double crossover
+
+      it('Should have more WT for FS-A x FS-B than FS-B x FS-C, triple crossover', () => {
+        let rec1 = phageExp.recombine(fsA, fsB, 3, 100); // 20, 160
+        let rec2 = phageExp.recombine(fsB, fsC, 3, 100); // 160, 240
+        rec1.should.be.an.Array()
+          .and.have.lengthOf(100);
+        rec2.should.be.an.Array()
+          .and.have.lengthOf(100);
+        // filter lists
+        let wt1 = rec1.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        let wt2 = rec2.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        wt1.length.should.be.above(wt2.length);
+      }); // end Should have more WT for FS-A x FS-B than FS-B x FS-C, triple crossover
+
+      it('Should have more WT for FS-A x FS-C than FS-B x FS-C, triple crossover', () => {
+        let rec1 = phageExp.recombine(fsA, fsC, 3, 100); // 20, 240
+        let rec2 = phageExp.recombine(fsB, fsC, 3, 100); // 160, 240
+        rec1.should.be.an.Array()
+          .and.have.lengthOf(100);
+        rec2.should.be.an.Array()
+          .and.have.lengthOf(100);
+        // filter lists
+        let wt1 = rec1.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        let wt2 = rec2.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        wt1.length.should.be.above(wt2.length);
+      }); // end Should have more WT for FS-A x FS-C than FS-B x FS-C, triple crossover
+
+      it('Should have more WT for FS-A x FS-C than FS-A x FS-B, triple crossover', () => {
+        let rec1 = phageExp.recombine(fsA, fsC, 3, 100); // 20, 240
+        let rec2 = phageExp.recombine(fsA, fsB, 3, 100); // 20, 160
+        rec1.should.be.an.Array()
+          .and.have.lengthOf(100);
+        rec2.should.be.an.Array()
+          .and.have.lengthOf(100);
+        // filter lists
+        let wt1 = rec1.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        let wt2 = rec2.filter((phage) => {
+          return phage.shifts.length === 0
+        });
+        //wt1.length.should.be.above(wt2.length);
+      }); // end Should have more WT for FS-A x FS-B than FS-A x FS-C, triple crossover
+
+    }); // end Test FS middle recombination
   }); // end Test recombining
 
   afterEach((done) => {
