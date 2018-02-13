@@ -57,7 +57,7 @@ describe('Admin Component', ()=>{
     let links;
     beforeEach(()=>{
       fixture.detectChanges();
-      links = getAllRouterLinks(fixture);
+      links = getAllRouterLinks(fixture.debugElement);
     }); // end beforeEach
 
     it('Should have courses link', ()=>{
@@ -85,7 +85,7 @@ describe('Admin Component', ()=>{
     beforeEach(()=>{
       authService.getUser = ()=>{return testInstr};
       fixture.detectChanges();
-      links = getAllRouterLinks(fixture);
+      links = getAllRouterLinks(fixture.debugElement);
     }); // end beforeEach
 
     it('Should have instr header', ()=>{

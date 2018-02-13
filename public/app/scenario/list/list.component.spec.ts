@@ -12,24 +12,10 @@ import { ScenarioService } from '../scenario.service';
 
 import { User } from '../../interfaces/user.interface';
 import { Scenario } from '../../interfaces/scenario.interface';
-
-const testUser: User = {
-    id: 2,
-    firstName: 'First',
-    lastName: 'Last',
-    email: 'test@test.com',
-    role: 0 // admin
-}
-const testScenario: Scenario = {
-  label: 'Test Scenario',
-  scenCode: 'test',
-  purpose: 'This is the purpose',
-  startingPoint: 'This is the starting point',
-  relevance: 'This is the relevance'
-}
+import { sampleAdmin, sampleScenario } from '../../testing/sample-data';
 
 class AuthServiceStub {
-  getUser$ = Observable.of(testUser);
+  getUser$ = Observable.of(sampleAdmin);
   getUser(): User {
     return null;
   }
@@ -37,7 +23,7 @@ class AuthServiceStub {
 
 class ScenarioServiceStub {
   listScenarios(): Observable<Scenario[]>{
-    return Observable.of([testScenario]);
+    return Observable.of([sampleScenario]);
   }
 }
 
@@ -74,7 +60,7 @@ describe('List Component', ()=>{
     let links;
     beforeEach(()=>{
       fixture.detectChanges();
-      links = getAllRouterLinks(fixture);
+      links = getAllRouterLinks(fixture.debugElement);
     }); // end beforeEach
 
     it('Should have sign in link', ()=>{
@@ -93,14 +79,14 @@ describe('List Component', ()=>{
 
     let links;
     beforeEach(()=>{
-      authService.getUser = ()=>{return testUser};
+      authService.getUser = ()=>{return sampleAdmin};
       fixture.detectChanges();
-      links = getAllRouterLinks(fixture);
+      links = getAllRouterLinks(fixture.debugElement);
     }); // end beforeEach
 
     it('Should have 1 scenario link', ()=>{
       let linkEl = links[0];
-      expect(linkEl.linkParams[0]).toBe(testScenario.scenCode);
+      expect(linkEl.linkParams[0]).toBe(sampleScenario.scenCode);
     }); // end Should have sign up link
 
   }); // end With user
