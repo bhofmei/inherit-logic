@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { CourseResolver } from './course.resolver';
 import { ScenarioResolver } from '../../scenario/scenario.resolver';
 
-import { CourseComponent } from './course.component';
 import { CourseCreateComponent } from './course-create/course-create.component';
 import { CourseIndivComponent } from './course-indiv/course-indiv.component';
 import { CourseEditComponent } from './course-edit/course-edit.component';
