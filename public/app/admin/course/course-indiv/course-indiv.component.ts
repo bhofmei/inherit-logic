@@ -7,11 +7,9 @@ import 'rxjs/add/operator/takeUntil'
 import { CourseService } from '../course.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
+import { readErrorMessage } from '../../../shared/read-error';
 
-import { Course } from '../../../interfaces/course.interface';
-import { Student, sortStudents } from '../../../interfaces/student.interface';
-import { Scenario } from '../../../interfaces/scenario.interface';
-import { User } from '../../../interfaces/user.interface';
+import { Course, Student, sortStudents, Scenario, User } from '../../../interfaces';
 
 @Component({
   selector: 'course-indiv',
@@ -19,30 +17,49 @@ import { User } from '../../../interfaces/user.interface';
   styleUrls: ['app/admin/course/course-indiv/course-indiv.style.css']
 })
 
+
+/**
+ * Component to view an individual course
+ * Includes information such as course number, description, instructors, and students
+ */
 export class CourseIndivComponent{
 
+  /**
+   * List of students enrolled in the course
+   */
   private students: Student[] = [];
-  private courseInfo: Course;
+  /**
+   * Course info: courseNum, description, instructors
+   */
+  courseInfo: Course;
+  /**
+   * list of available scenarios (used for linking)
+   */
   private scenarios: Scenario[];
   private isDestroyed$: Subject<boolean>;
   private paramObserver: any;
 
-  //private courseNum: string;
+  /**
+   * Potential error message that could arise
+   */
   private errorMessage: string = '';
 
-  constructor(private _router: Router,
-        private _route: ActivatedRoute,
-               private _courseService: CourseService,
-               private _authService: AuthenticationService,
-              private _scenarioService: ScenarioService){
+  constructor(
+    private _router: Router,
+    private _route: ActivatedRoute,
+    private _courseService: CourseService,
+    private _authService: AuthenticationService,
+    private _scenarioService: ScenarioService){
     this.isDestroyed$ = new Subject<boolean>();
   }
 
+  /**
+   * Initialize all content on the page using several services
+   */
   ngOnInit(){
     let admin: User = this._authService.getUser();
     this.paramObserver = this._route.params.subscribe(params => {
             let course = params['courseNum'];
-
             this._courseService.getCourse(admin.id, course)
         .takeUntil(this.isDestroyed$)
               .subscribe((info) => {
@@ -57,13 +74,15 @@ export class CourseIndivComponent{
                     this.scenarios = scens;
                 });
               });
-            },
-                (error) => {
-              this.errorMessage = error.message;
+            },(error) => {
+              this.errorMessage = readErrorMessage(error);
             });
         });
   }
 
+  /**
+   * Unsubscribe from subscriptions
+   */
   ngOnDestroy(){
     this.paramObserver.unsubscribe();
     this.isDestroyed$.next(true);
