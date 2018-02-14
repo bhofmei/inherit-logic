@@ -681,6 +681,8 @@ describe('Phage experiments unit tests', () => {
         let wt2 = rec2.filter((phage) => {
           return phage.shifts.length === 0
         });
+        debug('AxB', wt1.length, 'BxC', wt2.length);
+        // AxB 19 BxC 15
         wt1.length.should.be.above(wt2.length);
       }); // end Should have more WT for FS-A x FS-B than FS-B x FS-C, single crossover
 
@@ -698,6 +700,8 @@ describe('Phage experiments unit tests', () => {
         let wt2 = rec2.filter((phage) => {
           return phage.shifts.length === 0
         });
+        debug('AxC', wt1.length, 'BxC', wt2.length);
+        // AxC 27 BxC 6
         wt1.length.should.be.above(wt2.length);
       }); // end Should have more WT for FS-A x FS-C than FS-B x FS-C, single crossover
 
@@ -715,6 +719,8 @@ describe('Phage experiments unit tests', () => {
         let wt2 = rec2.filter((phage) => {
           return phage.shifts.length === 0
         });
+        debug('AxC', wt1.length, 'AxB', wt2.length);
+        // AxC 39 AxB 19
         wt1.length.should.be.above(wt2.length);
       }); // end Should have more WT for FS-A x FS-B than FS-A x FS-C, single crossover
 
@@ -732,6 +738,8 @@ describe('Phage experiments unit tests', () => {
         let wt2 = rec2.filter((phage) => {
           return phage.shifts.length === 0
         });
+        debug('AxB', wt1.length, 'BxC', wt2.length);
+        // AxB 20 BxC 14
         wt1.length.should.be.above(wt2.length);
       }); // end Should have more WT for FS-A x FS-B than FS-B x FS-C, double crossover
 
@@ -749,6 +757,8 @@ describe('Phage experiments unit tests', () => {
         let wt2 = rec2.filter((phage) => {
           return phage.shifts.length === 0
         });
+        debug('AxC', wt1.length, 'BxC', wt2.length);
+        // AxC 27 BxC 13
         wt1.length.should.be.above(wt2.length);
       }); // end Should have more WT for FS-A x FS-C than FS-B x FS-C, double crossover
 
@@ -766,6 +776,8 @@ describe('Phage experiments unit tests', () => {
         let wt2 = rec2.filter((phage) => {
           return phage.shifts.length === 0
         });
+        debug('AxC', wt1.length, 'AxB', wt2.length);
+        // AxC 24 AxB 20
         wt1.length.should.be.above(wt2.length);
       }); // end Should have more WT for FS-A x FS-B than FS-A x FS-C, double crossover
 
@@ -783,6 +795,8 @@ describe('Phage experiments unit tests', () => {
         let wt2 = rec2.filter((phage) => {
           return phage.shifts.length === 0
         });
+        debug('AxB', wt1.length, 'BxC', wt2.length);
+        // AxB 20 BxC 17
         wt1.length.should.be.above(wt2.length);
       }); // end Should have more WT for FS-A x FS-B than FS-B x FS-C, triple crossover
 
@@ -800,6 +814,8 @@ describe('Phage experiments unit tests', () => {
         let wt2 = rec2.filter((phage) => {
           return phage.shifts.length === 0
         });
+        debug('AxC', wt1.length, 'BxC', wt2.length);
+        // AxC 28 BxC 24
         wt1.length.should.be.above(wt2.length);
       }); // end Should have more WT for FS-A x FS-C than FS-B x FS-C, triple crossover
 
@@ -817,6 +833,8 @@ describe('Phage experiments unit tests', () => {
         let wt2 = rec2.filter((phage) => {
           return phage.shifts.length === 0
         });
+        debug('AxC', wt1.length, 'AxB', wt2.length);
+        // AxC 20 AxB 24
         //wt1.length.should.be.above(wt2.length);
       }); // end Should have more WT for FS-A x FS-B than FS-A x FS-C, triple crossover
 

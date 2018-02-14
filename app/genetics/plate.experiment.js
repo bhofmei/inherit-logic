@@ -70,7 +70,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
   } // end phage1.has property
   // if phage2 exists
   if (phage2) {
-    if (getParents) {
+    if (getParents && phage2.hasOwnProperty('strainNum')) {
       parents.phage.push(phage2._id)
     }
     newPhage2 = {
