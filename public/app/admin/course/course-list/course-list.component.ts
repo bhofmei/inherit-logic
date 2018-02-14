@@ -4,24 +4,32 @@ import { Subscription } from 'rxjs/Subscription';
 import { CourseService } from '../course.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 
-import { Course } from '../../../interfaces/course.interface';
-import { User } from '../../../interfaces/user.interface';
+import { Course, User } from '../../../interfaces';
 
+/**
+ * Component which lists available courses based on logged-in user role
+ * If admin, lists all available courses
+ * If instr, list courses which instructor of
+ */
 @Component({
     selector: 'course-list',
-    templateUrl: './app/admin/course/course-list/course-list.template.html'
+    templateUrl: 'app/admin/course/course-list/course-list.template.html'
 })
 export class CourseListComponent implements OnInit, OnDestroy{
+  /**
+   * List of courses
+   */
     private courses: Course[];
   private subscription: Subscription;
 
     constructor(
       private _courseService: CourseService,
       private _authService: AuthenticationService
-    ) {
+    ) {}
 
-    }
-
+    /**
+     * Initialize component by getting list of courses
+     */
     ngOnInit() {
       let admin: User = this._authService.getUser();
       this.subscription = this._courseService.listCourses(admin.id)
