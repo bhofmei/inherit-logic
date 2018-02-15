@@ -25,7 +25,10 @@ export class RouterOutletStubComponent { }
 
 @Injectable()
 export class RouterStub {
-  navigate(commands: any[], extras?: NavigationExtras) { }
+  path: string;
+  navigate(commands: any[], extras?: NavigationExtras) {
+    this.path = commands.join('');
+  }
 }
 
 

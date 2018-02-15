@@ -1,4 +1,7 @@
 <div class="container-fluid">
+  <div *ngIf="errorMessage !== ''" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
   <div *ngIf="courseInfo" id="course-info">
     <h4 class="row">{{ courseInfo.courseNum }}</h4>
 
@@ -25,16 +28,16 @@
         </div>
       </div>
     </div>
-      <div class="text-secondary d-block">
-        Description
-      </div>
-      <textarea type="text" id="desc-input" class="form-control" [(ngModel)]="courseInfo.description" placeholder="Course description" name="description"></textarea>
-      <div class="">
+    <div class="text-secondary d-block">
+      Description
+    </div>
+    <textarea type="text" id="desc-input" class="form-control" [(ngModel)]="courseInfo.description" placeholder="Course description" name="description"></textarea>
+    <div class="">
       <div class="btn-group">
         <button class="btn btn-primary" type="submit" (click)="update()">Submit</button>
         <button class="btn btn-outline-secondary" type="button" (click)="onCancel()">Cancel</button>
       </div>
-        </div>
+    </div>
     <div *ngIf="courseInfo.courseNum !== 'NA'" class="btn-group mt-3" id="delete-course-btns">
       <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteCourse()">Delete course</button>
       <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteCourseStudents()">Delete students in course</button>

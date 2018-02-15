@@ -21,15 +21,30 @@ import { readErrorMessage } from '../../../shared/read-error';
   styleUrls: ['app/admin/course/course-edit/course-edit.style.css']
 })
 
+/**
+ * Component for editting course details such as
+ * adding/removing instructors, updating course description
+ */
 export class CourseEditComponent{
 
-  private courseInfo: Course;
+  /**
+   * Course being edited
+   */
+  courseInfo: Course;
+  /**
+   * List of possible instructors who could be added
+   */
   private possibleInstr: AdminStudent[];
+  /**
+   * Variable used to remember instr selected when adding
+   */
+  selectedAdd: number;
+  /**
+   * the logged in user
+   */
+  private _admin: User;
   private paramObserver: any;
   private isDestroyed$: Subject<boolean>;
-  private selectedAdd: number;
-  private _admin: User;
-
   private errorMessage: string = '';
 
   constructor(private _router: Router,
@@ -40,6 +55,13 @@ export class CourseEditComponent{
     this.isDestroyed$ = new Subject<boolean>();
   }
 
+  /**
+   * On init
+   * 1. get the logged in user
+   * 2. Use the url param to get course number
+   * 3. Get course details (using coureNum)
+   * 3. Get possible instructors (using courseNum)
+   */
   ngOnInit(){
     this._admin = this._authService.getUser();
     this.paramObserver = this._route.params.subscribe(params => {
@@ -63,10 +85,17 @@ export class CourseEditComponent{
         });
   }
 
+  /**
+   * When the cancel button is pressed, navigate back to course view page
+   */
   onCancel(){
     this._router.navigate(['../'], {relativeTo: this._route});
   }
 
+  /**
+   * When submit button is clicked, submit the updates to be
+   * saved in the backend
+   */
   update(){
     this._courseService
       .editCourse(this._admin.id, this.courseInfo.courseNum, this.courseInfo)
@@ -79,6 +108,11 @@ export class CourseEditComponent{
     });
   }
 
+  /**
+   * When add instructor button is clicked, send the selected
+   * instructor (by userId) to the backend to be added as an instructor
+   * If successful, update list of possible instructors
+   */
   addInstructor(){
     if(this.selectedAdd){
     this._courseService
@@ -96,8 +130,14 @@ export class CourseEditComponent{
   }
   // TODO: remove instructor
 
+  /**
+   * When clicking delete course button, open a dialog
+   * to confirm deletion
+   * If confirmed, call helper method
+   * If cancel, do nothing
+   */
   deleteCourse(){
-    const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm'});
+    const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm', windowClass: 'delete-modal'});
     modelRef.componentInstance.message = 'Are you sure you want to delete course ' + this.courseInfo.courseNum + '?';
 
     modelRef.result.then((result)=>{
@@ -109,6 +149,9 @@ export class CourseEditComponent{
     })
   }
 
+  /**
+   * Helper method which uses service to tell server to delete the course
+   */
   _callDeleteCourse(){
     this._courseService.deleteCourse(this._admin.id, this.courseInfo.courseNum)
     .takeUntil(this.isDestroyed$)
@@ -120,6 +163,12 @@ export class CourseEditComponent{
     })
   }
 
+  /**
+   * When delete students button is click,
+   * open a dialog to confirm deletion
+   * If confirm, call helper method
+   * If cancel, do nothing
+   */
   deleteCourseStudents(){
     const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm'});
     modelRef.componentInstance.message = 'Are you sure you want to delete all students in course ' + this.courseInfo.courseNum + '?';
@@ -133,6 +182,10 @@ export class CourseEditComponent{
     })
   }
 
+  /**
+   * Helper method with tells service to delete all of the
+   * students in this course
+   */
   _callDeleteCourseStudents(){
     this._courseService.deleteStudents(this._admin.id, this.courseInfo.courseNum)
     .takeUntil(this.isDestroyed$)
