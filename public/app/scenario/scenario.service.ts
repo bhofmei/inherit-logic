@@ -5,42 +5,51 @@ import { Subject } from 'rxjs/Subject';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Scenario } from '../interfaces/scenario.interface';
-import { Fridge } from '../interfaces/fridge.interface';
-import { FridgePhage, GenotypePhage } from '../interfaces/phage.interface';
+import { Scenario, Fridge, FridgePhage, GenotypePhage } from '../interfaces';
 
 
 @Injectable()
 export class ScenarioService {
     private _baseURL = 'api/cricket';
+  /**
+   * The current scenario details which is needed when performing
+   * crosses
+   */
     private _scenarioDetails = new BehaviorSubject<string>('');
     getScenarioDetails = this._scenarioDetails.asObservable();
+  /**
+   * The current scenario guesses
+   */
     private _scenarioGuesses = new BehaviorSubject<any>({});
     getGuesses = this._scenarioGuesses.asObservable();
+  /**
+   * The current scenario code; used by fridge and location components
+   * to get the code without the route
+   */
     private _scenarioCode = new BehaviorSubject<string>('');
     getScenarioCode = this._scenarioCode.asObservable();
 
 
-    constructor(private _http: HttpClient) {
-    }
+    constructor(private _http: HttpClient) {}
 
-    listScenarios(): Observable<any> {
-        return this._http
-            .get(this._baseURL)
-    }
-
-    getScenario(scenId: string): Observable<Scenario> {
-        this._scenarioCode.next(scenId);
-        return this._http
-            .get<Scenario>(`${this._baseURL}/${scenId}`);
-    }
-
-    resetScenario() {
+  /**
+   * Reset the save scenario stuff:
+   * scenarioDetails, scenarioGuesses, and scenarioCode
+   * Used when navigating away from scenario component
+   */
+  resetScenario() {
         this._scenarioDetails.next('');
         this._scenarioGuesses.next({});
         this._scenarioCode.next('');
     }
 
+  /**
+  * Set the scenario details and scenario guesses
+  *
+  *
+  @param {string} scenarioDetails - scenario details; necessary for performing experiments
+  @param {string} scenarioGuesses - current scenario guesses
+  */
     setScenario(scenarioDetails: string, scenarioGuesses: string) {
         if (scenarioDetails !== null)
             this._scenarioDetails.next(scenarioDetails);
@@ -49,15 +58,69 @@ export class ScenarioService {
               .next(JSON.parse(scenarioGuesses));
     }
 
+  /**
+   * List available scenarios
+   *
+   * @returns {Observable<Scenario[]>} - list of scenarios
+   */
+    listScenarios(): Observable<Scenario[]> {
+        return this._http
+            .get<Scenario[]>(this._baseURL)
+    }
+
+  /**
+   * Get information about a specific scenario
+   *
+   * @param {string} scenId - scenario identifier
+   *
+   * @returns {Scenario} - scenario information
+   * or error "Failed to load scenario <scenId>" if doesn't exist
+   */
+    getScenario(scenId: string): Observable<Scenario> {
+        this._scenarioCode.next(scenId);
+        return this._http
+            .get<Scenario>(`${this._baseURL}/${scenId}`);
+    }
+
+  /**
+   * Send updated guesses for the scenario to be saved in database
+   *
+   * @param {any} guesses - string of updated guesses
+   * @param {number} userId - userId of logged in user
+   * @param {string} scenId - scenario code of current scenario
+   *
+   * @returns {Observable<any>} updated guesses
+   * or error "Failed to find fridge" if fridge doesn't exist
+   * or error "Could not save new guesses" if couldn't update
+   */
     saveDeletions(guesses: any, userId: number, scenId: string): Observable<any> {
         return this._http
             .post(`${this._baseURL}/${userId}/${scenId}/deletions`, guesses);
     }
 
+  /**
+   * Create a new fridge for the user/scenario
+   *
+   * @param {number} userId - userId of logged in user
+   * @param {string} scenId - scenario code of current scenario
+   *
+   * @returns {Observable<Fridge>} - newly created fridge
+   * or error "Unable to create new phage for scenario" if issue create phage
+   * or error "Unable to save new fridge" if couldn't create
+   */
     createFridge(userId: number, scenId: string): Observable<Fridge> {
         return this._http.get<Fridge>(`${this._baseURL}/${userId}/${scenId}/new-fridge`);
     }
 
+  /**
+   * Get an existing fridge for user/scenario
+   *
+    * @param {number} userId - userId of logged in user
+   * @param {string} scenId - scenario code of current scenario
+   *
+   * @returns {Observable<Fridge>} - existing fridge
+   * or error "No fridge for scenario/user" if fridge does not exist
+   */
     getFridge(userId: number, scenId: string): Observable<Fridge> {
         var res = this._http
             .get<Fridge>(`${this._baseURL}/${userId}/${scenId}`);
@@ -69,45 +132,51 @@ export class ScenarioService {
         let scenCode = fridge.scenario.scenCode;
         return this._http
             .post(`${this._baseURL}/${userId}/${scenCode}`, fridge)
-        //.map((res: Response) => res.json())
-        //.catch(this.handleError);
     }
 
-    addStrain(strain: any, userId: number, scenCode: string): Observable<FridgePhage> {
-        // strains has strainNum, mutationList, deletion
-        // returns new phage
+  /**
+   * Add a new phage strain to the fridge;
+   * Server uses userId and scenCode to find the fridge
+   *
+   * @param {number} userId - userId of logged in user
+   * @param {string} scenId - scenario code of current scenario
+   * @param {any} strain - new phage to add to fridge; has strainNum, mutationList, and deletion
+   *
+   * @returns {Observable<FridgePhage>} - newly saved phage
+   * or error "User not found" if user not found
+   * or error "" if scenario not found
+   * or error "Failed to find fridge" if fridge doesn't exist
+   */
+    addStrain(userId: number, scenId: string, strain: any): Observable<FridgePhage> {
         return this._http
-            .post<FridgePhage>(`${this._baseURL}/${userId}/${scenCode}/fridge-phage`, strain)
-        //.map((res: Response) => res.json())
-        //.catch(this.handleError);
+            .post<FridgePhage>(`${this._baseURL}/${userId}/${scenId}/fridge-phage`, strain)
     }
 
-    updateStrain(strain: FridgePhage, userId: number, scenCode: string): Observable<FridgePhage> {
+  /**
+   * Update details/information about an existing phage in the fridge
+   *
+   * @param {number} userId - userId of logged in user
+   * @param {string} scenId - scenario code of current scenario
+   * @param {FridgePhage} strain - strain to update; use strain id to specify strain and send updated info
+   *
+   * @returns {Observable<FridgePhage>} - updated strain
+   * or error "Phage not found" if strain doesn't exist
+   */
+    updateStrain(userId: number, scenId: string, strain: FridgePhage): Observable<FridgePhage> {
         let strainId = strain.id;
         return this._http
-            .post<FridgePhage>(`${this._baseURL}/${userId}/${scenCode}/${strainId}`, strain)
+            .post<FridgePhage>(`${this._baseURL}/${userId}/${scenId}/${strainId}`, strain)
     }
 
-    deleteStrain(strain: FridgePhage, userId: number, scenCode: string): Observable<any> {
+  /**
+   *
+   * @returns {any} - the strain just deleted
+   * or error "Failed to find fridge" if fridge doesn't exist
+   * or error "Unable to remove strain from fridge" if couldn't delete
+   */
+    deleteStrain(userId: number, scenId: string, strain: FridgePhage): Observable<any> {
         let strainId = strain.id;
         return this._http
-            .delete(`${this._baseURL}/${userId}/${scenCode}/${strainId}`)
+            .delete(`${this._baseURL}/${userId}/${scenId}/${strainId}`)
     }
-
-    /**
- * Handle Http operation that failed.
- * Let the app continue.
- * @param operation - name of the operation that failed
- * @param result - optional value to return as the observable result
- */
-    /*private handleError<T> (operation = 'operation', result?: T) {
-      return (error: any): Observable<T> => {
-
-        // TODO: send the error to remote logging infrastructure
-        console.error(error); // log to console instead
-
-        // Let the app keep running by returning an empty result.
-        return of(result as T);
-      };
-    }*/
 }
