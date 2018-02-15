@@ -12,10 +12,10 @@ import { ScenarioService } from '../scenario.service';
 
 import { User } from '../../interfaces/user.interface';
 import { Scenario } from '../../interfaces/scenario.interface';
-import { sampleAdmin, sampleScenario } from '../../testing/sample-data';
+import { userAdmin, sampleScenario } from '../../testing/sample-data';
 
 class AuthServiceStub {
-  getUser$ = Observable.of(sampleAdmin);
+  getUser$ = Observable.of(userAdmin);
   getUser(): User {
     return null;
   }
@@ -79,7 +79,7 @@ describe('List Component', ()=>{
 
     let links;
     beforeEach(()=>{
-      authService.getUser = ()=>{return sampleAdmin};
+      authService.getUser = ()=>{return userAdmin};
       fixture.detectChanges();
       links = getAllRouterLinks(fixture.debugElement);
     }); // end beforeEach

@@ -11,7 +11,7 @@ import { CourseService } from '../course.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
 
 import { User, Course, _User, Scenario } from '../../../interfaces';
-import { sampleAdmin, sampleCourse, sampleScenario, listOfCourses } from '../../../testing/sample-data';
+import { userAdmin, sampleCourse, sampleScenario, listOfCourses } from '../../../testing/sample-data';
 import { CourseServiceStub } from '../../../testing/service-stubs/fake.course.service';
 
 // Testing variables
@@ -102,13 +102,21 @@ describe('Course Indiv Component', ()=>{
       expect(scenLinks[0].linkParams[1]).toBe(sampleScenario.scenCode);
 
     }); // end Should have scenario links
+
+    it('Should have student links', ()=>{
+      let scenDE = fixture.debugElement.query(By.css('#statusByStudent'));
+      let scenLinks = getAllRouterLinks(scenDE);
+      expect(scenLinks.length).toBe(2);
+      expect(scenLinks[0].linkParams[0]).toMatch(/admin\/students/);
+
+    }); // end Should have scenario links
   }); // end Test router links
 }); // end Course Indiv Component
 
 // Helpers
 class AuthServiceStub {
   getUser(): User {
-    return sampleAdmin;
+    return userAdmin;
   }
 }
 
