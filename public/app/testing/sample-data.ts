@@ -1,10 +1,43 @@
 import { AdminStudent, Course, User, Scenario } from '../interfaces';
 
+export const userAdmin: User = {
+  id: 1,
+  firstName: 'Admin',
+  lastName: 'Tester',
+  email: 'admin@test.com',
+  role: 2 // admin
+}
+
+export const userInstr: User = {
+  id: 2,
+  firstName: 'In',
+  lastName: 'Tester',
+  email: 'in@test.com',
+  role: 1
+}
+
+export const userStudent: User = {
+  id: 3,
+  firstName: 'Student',
+  lastName: 'Tester',
+  email: 'student@test.com',
+  role: 0
+}
+
 export const sampleInstr: AdminStudent = {
-  userId: 2,
+  userId: 4,
   firstName: 'Instr',
   lastName: 'Tester',
   email: 'instr@test.com',
+  role: 'instr',
+  course: null
+}
+
+export const instructorToAdd: AdminStudent = {
+  userId: 5,
+  firstName: 'Add',
+  lastName: 'Tester',
+  email: 'add@test.com',
   role: 'instr',
   course: null
 }
@@ -18,19 +51,18 @@ export const listOfCourses: Course[] = [
   {
     courseNum: 'TEST002',
     description: 'Second test course',
-    instructors: [sampleInstr]
+    instructors: [{
+      userId: userInstr.id,
+      firstName: userInstr.firstName,
+      lastName: userInstr.lastName,
+      email: userInstr.email,
+      role: 'instr',
+      course: null
+    }]
   }
 ];
 
 export const sampleCourse: Course = listOfCourses[0];
-
-export const sampleAdmin: User = {
-  id: 1,
-  firstName: 'Admin',
-  lastName: 'Tester',
-  email: 'admin@test.com',
-  role: 2 // admin
-}
 
 export const listOfStudents: AdminStudent[] = [
   {
