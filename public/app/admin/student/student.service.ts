@@ -87,10 +87,11 @@ export class StudentService {
   }
 
   /**
-   * Grant scenario access for a student; this deletes the existing
-   * "practice" fridge
+   * Update scenario access for a student; this deletes the existing
+   * fridge
    * @param {number} adminId - userId of logged in user
    * @param {number} studentId - userId of student
+   * @param {boolean} updatedState - true to grant access, false to revoke access
    *
    * @returns {Observable<AdminStudent>} - updated student
    */

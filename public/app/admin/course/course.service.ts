@@ -44,9 +44,9 @@ export class CourseService {
       .get<Course>(`${this._baseURL}/${this.getAdmin()}/courses/${courseNum}`);
   }*/
 
-  getStudents(adminId: number, courseNum: string): Observable<any>{
+  getStudents(adminId: number, courseNum: string): Observable<Student[]>{
     return this._http
-      .get(`${this._baseURL}/${adminId}/courses/${courseNum}/students`);
+      .get<Student[]>(`${this._baseURL}/${adminId}/courses/${courseNum}/students`);
   }
 
   /*getStudents(courseNum: string): Observable<any>{

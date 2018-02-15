@@ -35,19 +35,19 @@ export class StudentFridgeComponent{
   private errorMessage: string = '';
 
   constructor(private _router: Router,
-        private _route: ActivatedRoute,
-               private _studentService: StudentService,
-              private _authService: AuthenticationService){
+    private _route: ActivatedRoute,
+    private _studentService: StudentService,
+    private _authService: AuthenticationService){
     this.isDestroyed$ = new Subject<boolean>();
   }
 
   ngOnInit(){
     this.paramObserver = this._route.params.subscribe(params => {
-            let studentId = params['studentId'];
+      let studentId = params['studentId'];
       let scenId = params['scenId'];
       let admin = this._authService.getUser();
 
-            this._studentService.getFridge(admin.id, studentId, scenId)
+      this._studentService.getFridge(admin.id, studentId, scenId)
         .takeUntil(this.isDestroyed$)
               .subscribe((fridge) => {
               this.fridge = fridge;
