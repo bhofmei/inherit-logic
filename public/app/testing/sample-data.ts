@@ -1,6 +1,6 @@
 import { AdminStudent, Course, User, Scenario, Fridge, StudentFridge, StudentPhage } from '../interfaces';
 
-export const userAdmin: User = {
+export var userAdmin: User = {
   id: 1,
   firstName: 'Admin',
   lastName: 'Tester',
@@ -8,7 +8,7 @@ export const userAdmin: User = {
   role: 2 // admin
 }
 
-export const userInstr: User = {
+export var userInstr: User = {
   id: 2,
   firstName: 'In',
   lastName: 'Tester',
@@ -16,16 +16,16 @@ export const userInstr: User = {
   role: 1
 }
 
-export const sampleInstr: AdminStudent = {
+export var sampleInstr: AdminStudent = {
   userId: 4,
   firstName: 'Instr',
   lastName: 'Tester',
   email: 'instr@test.com',
   role: 'instr',
   course: null
-}
+};
 
-export const instructorToAdd: AdminStudent = {
+export var instructorToAdd: AdminStudent = {
   userId: 5,
   firstName: 'Add',
   lastName: 'Tester',
@@ -34,7 +34,7 @@ export const instructorToAdd: AdminStudent = {
   course: null
 }
 
-export const listOfCourses: Course[] = [
+export var listOfCourses: Course[] = [
   {
     courseNum: 'TEST001',
     description: 'This is a test course',
@@ -54,9 +54,29 @@ export const listOfCourses: Course[] = [
   }
 ];
 
-export const sampleCourse: Course = listOfCourses[0];
+export var sampleCourse: Course = listOfCourses[0];
 
-export const listOfStudents: AdminStudent[] = [
+export var listOfUsers: AdminStudent[] = [
+  {
+  userId: 1,
+  firstName: 'Admin',
+  lastName: 'Tester',
+  email: 'admin@test.com',
+  role: 'admin',
+  course: null,
+  accessGranted: {
+    test1: false,
+    test2: true
+  }
+ },
+  {
+  userId: 4,
+  firstName: 'Instr',
+  lastName: 'Tester',
+  email: 'instr@test.com',
+  role: 'instr',
+  course: null
+},
   {
     firstName: 'Student1',
     lastName: 'Last',
@@ -65,7 +85,7 @@ export const listOfStudents: AdminStudent[] = [
     course: listOfCourses[0],
     role: 'student',
     accessGranted: {
-      test1: false,
+      test1: true,
       test2: false
     }
   },
@@ -74,7 +94,7 @@ export const listOfStudents: AdminStudent[] = [
     lastName: 'Last',
     userId: 16,
     email: 'student2@test.com',
-    course: listOfCourses[0],
+    course: undefined,
     role: 'student',
     accessGranted: {
       test1: true,
@@ -95,7 +115,9 @@ export const listOfStudents: AdminStudent[] = [
   }
 ]
 
-export const userStudent: User = {
+export var listOfStudents: AdminStudent[] = listOfUsers.slice(2,5)
+
+export var userStudent: User = {
   id: listOfStudents[0].userId,
   firstName: listOfStudents[0].firstName,
   lastName: listOfStudents[0].lastName,
@@ -103,7 +125,7 @@ export const userStudent: User = {
   role: 0
 }
 
-export const listOfScenarios: Scenario[] = [
+export var listOfScenarios: Scenario[] = [
   {
   label: 'Test Scenario 1',
   scenCode: 'test1',
@@ -120,9 +142,9 @@ export const listOfScenarios: Scenario[] = [
 }
 ]
 
-export const sampleScenario: Scenario = listOfScenarios[0];
+export var sampleScenario: Scenario = listOfScenarios[0];
 
-export const listOfPhage: StudentPhage[] = [
+export var listOfPhage: StudentPhage[] = [
   {id: 'a0',
    strainNum: 0,
    phageType: 'ref',
@@ -133,9 +155,17 @@ export const listOfPhage: StudentPhage[] = [
   {id: 'a1',
    strainNum: 1,
    phageType: 'ref',
-   comment: 'other comment',
+   comment: 'mut',
    mutationList: [{kind: 'minusOne', location: '77'}],
    deletion: []
+  },
+  {id: 'a2',
+   strainNum: 2,
+   phageType: 'ref',
+   comment: 'del',
+   mutationList: [],
+   deletion: [10, 50],
+   guesses: [true, false, true]
   }
 ]
 
@@ -146,11 +176,11 @@ const _fridges: any[] = [
     scenarioDetails: 'student1 test1',
     guesses: '',
     accessGranted: listOfStudents[0].accessGranted[listOfScenarios[0].scenCode],
-    strains: [listOfPhage[0]]
+    strains: listOfPhage.slice(0,3)
   },
   {
-    userId: listOfStudents[1].userId,
-    scenCode: listOfScenarios[0].scenCode,
+    user: listOfStudents[1],
+    scenario: listOfScenarios[0],
     scenarioDetails: 'student2 test1',
     guesses: '',
     accessGranted: listOfStudents[1].accessGranted[listOfScenarios[0].scenCode],
@@ -158,7 +188,7 @@ const _fridges: any[] = [
   }
 ]
 
-export const listOfFridges: Fridge[] = _fridges.map((f)=>{
+export var listOfFridges: Fridge[] = _fridges.map((f)=>{
   return {
     userId: f.user.userId,
     guesses: f.guesses,
@@ -169,7 +199,7 @@ export const listOfFridges: Fridge[] = _fridges.map((f)=>{
   }
 });
 
-export const listOfStudentFridges: StudentFridge[] = _fridges.map((f)=>{
+export var listOfStudentFridges: StudentFridge[] = _fridges.map((f)=>{
   return {
     owner: f.user,
     guesses: f.guesses,
