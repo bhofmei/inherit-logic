@@ -192,7 +192,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
     // add to fridge
     let userId = this.user.id;
     let scenCode = this.fridge.scenCode;
-    this._scenarioService.addStrain(newStrain, userId, scenCode)
+    this._scenarioService.addStrain(userId, scenCode, newStrain)
     .subscribe((res)=>{
       this.strains[spot] = {
         // strainNum comment phageType id parents
@@ -236,7 +236,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
   }
 
   _editPhage(src: number, newPhage: FridgePhage){
-    this._scenarioService.updateStrain(newPhage, this.user.id, this.fridge.scenCode)
+    this._scenarioService.updateStrain(this.user.id, this.fridge.scenCode, newPhage)
     .takeUntil(this.isDestroyed$)
     .subscribe((res)=>{
       this.strains[src] = res;
@@ -248,7 +248,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
 
   _deletePhage(src: number){
     let newPhage = this.strains[src];
-    this._scenarioService.deleteStrain(newPhage, this.user.id, this.fridge.scenCode)
+    this._scenarioService.deleteStrain(this.user.id, this.fridge.scenCode, newPhage, )
     .takeUntil(this.isDestroyed$)
     .subscribe((res)=>{
       // successful
