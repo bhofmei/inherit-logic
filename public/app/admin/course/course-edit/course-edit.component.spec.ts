@@ -23,7 +23,7 @@ let page: Page;
 
 let testCourse: Course = listOfCourses[0];
 
-class TestComponent extends CourseEditComponent {
+class CourseEditTestComponent extends CourseEditComponent {
   // override so we don't have to deal with modal in testing
   deleteCourse(){
     this._callDeleteCourse();
@@ -39,7 +39,7 @@ describe('Course Edit Component', ()=>{
     route = new RouterStub();
     TestBed.configureTestingModule({
       imports: [SharedModule],
-      declarations: [TestComponent, RouterLinkStubDirective],
+      declarations: [CourseEditTestComponent, RouterLinkStubDirective],
       providers: [
         {provide: ActivatedRoute, useValue: activatedRoute},
         {provide: CourseService, useClass: CourseServiceStub},
@@ -258,7 +258,7 @@ class Page {
 }
 
 function createComponent(){
-  fixture = TestBed.createComponent(TestComponent);
+  fixture = TestBed.createComponent(CourseEditTestComponent);
   comp = fixture.componentInstance;
   page = new Page();
   fixture.detectChanges(); // trigger ngOnInit
