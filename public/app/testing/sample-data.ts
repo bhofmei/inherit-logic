@@ -79,7 +79,7 @@ export var listOfUsers: AdminStudent[] = [
 },
   {
     firstName: 'Student1',
-    lastName: 'Last',
+    lastName: 'Tester',
     userId: 15,
     email: 'student1@test.com',
     course: listOfCourses[0],
@@ -91,7 +91,7 @@ export var listOfUsers: AdminStudent[] = [
   },
   {
     firstName: 'Student2',
-    lastName: 'Last',
+    lastName: 'Tester',
     userId: 16,
     email: 'student2@test.com',
     course: undefined,
@@ -103,7 +103,7 @@ export var listOfUsers: AdminStudent[] = [
   },
   {
     firstName: 'Student3',
-    lastName: 'Last',
+    lastName: 'Tester',
     userId: 17,
     email: 'student3@test.com',
     course: listOfCourses[1],

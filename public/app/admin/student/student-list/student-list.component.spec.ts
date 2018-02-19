@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../../authentication/authentication.se
 import { StudentService } from '../student.service';
 
 import { AdminStudent, Course } from '../../../interfaces';
-import { userAdmin, userInstr, listOfStudents } from '../../../testing/sample-data';
+import { userAdmin, userInstr, listOfUsers } from '../../../testing/sample-data';
 import { StudentServiceStub, AuthServiceStub } from '../../../testing/service-stubs';
 
 describe('Student List Component', ()=>{
@@ -41,23 +41,25 @@ describe('Student List Component', ()=>{
       links = getAllRouterLinks(fixture.debugElement);
     }); // end beforeEaach
 
-    it('Should have 3 students', ()=>{
+    it('Should have 5 users', ()=>{
       let students = fixture.debugElement.queryAll(By.css('.list-group-item')).map((de)=>{return de.nativeElement});
-      expect(students.length).toBe(3);
+      expect(students.length).toBe(5);
     }); // end Should have 3 students
 
     it('Should have the correct names', ()=>{
       let studentNames = fixture.debugElement.queryAll(By.css('.text-primary')).map((de)=>{return de.nativeElement.innerHTML});
-      expect(studentNames[0]).toBe('Last, Student1');
-      expect(studentNames[1]).toBe('Last, Student2');
-      expect(studentNames[2]).toBe('Last, Student3');
+      expect(studentNames[0]).toBe('Tester, Admin');
+      expect(studentNames[1]).toBe('Tester, Instr');
+      expect(studentNames[2]).toBe('Tester, Student1');
+      expect(studentNames[3]).toBe('Tester, Student2');
+      expect(studentNames[4]).toBe('Tester, Student3');
     }); // end Should have the correct names
 
     it('Should have correct links', ()=>{
-      expect(links.length).toBe(3);
-      for(let i = 0; i <3; i++){
+      expect(links.length).toBe(5);
+      for(let i = 0; i <5; i++){
         let link = links[i].linkParams[0];
-        expect(link).toBe(listOfStudents[i].userId);
+        expect(link).toBe(listOfUsers[i].userId);
       }
     }); // end Should have correct links
   }); // end Test as admin
@@ -66,7 +68,7 @@ describe('Student List Component', ()=>{
     let links;
       beforeEach(()=>{
         authService.setUser(userInstr)
-        studentService.listStudents = ()=>{return Observable.of(listOfStudents.slice(2,3))}
+        studentService.listStudents = ()=>{return Observable.of(listOfUsers.slice(4,5))}
         fixture.detectChanges();
         links = getAllRouterLinks(fixture.debugElement);
       }); // end beforeEach
@@ -78,13 +80,13 @@ describe('Student List Component', ()=>{
 
     it('Should have the correct names', ()=>{
       let studentNames = fixture.debugElement.queryAll(By.css('.text-primary')).map((de)=>{return de.nativeElement.innerHTML});
-      expect(studentNames[0]).toBe('Last, Student3');
+      expect(studentNames[0]).toBe('Tester, Student3');
     }); // end Should have the correct names
 
     it('Should have correct links', ()=>{
       expect(links.length).toBe(1);
       let link = links[0].linkParams[0];
-      expect(link).toBe(listOfStudents[2].userId);
+      expect(link).toBe(listOfUsers[4].userId);
     }); // end Should have correct links
   }); // end Test as instr
 
