@@ -24,10 +24,9 @@ export class ScenarioServiceStub {
     return p;
   }
 
-
-  getScenarioDetails = Observable.of(null);
-  getGuesses = Observable.of(null);
-  getScenarioCode = Observable.of(null);
+  getScenarioDetails = Observable.of('details');
+  getGuesses = Observable.of('guesses');
+  getScenarioCode = Observable.of(listOfScenarios[0].scenCode);
 
    /*resetScenario() {
         this._scenarioDetails.next('');
