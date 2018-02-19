@@ -16,7 +16,6 @@
       </div>
 
       <div class="row mt-2" id="student-email">
-        <!--<a [routerLink]="['mailto:', student.email]">{{ student.email }}</a>-->
         <div class="col-6 col-md-4 col-xl-2">
           Email
         </div>
@@ -55,7 +54,6 @@
           </div>
           <div class="btn-group" role="group">
             <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="student.accessGranted[scenario.scenCode]">Grant access</button>
-            <!--            <button [ngClass]="accessButtonClass(scenario.scenCode)" (click)="toggleAccess(scenario.scenCode)">{{ accessButtonText(scenario.scenCode) }}</button>-->
             <a [routerLink]="['./', scenario.scenCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
           </div>
         </div>

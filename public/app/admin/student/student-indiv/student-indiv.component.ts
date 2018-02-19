@@ -27,7 +27,7 @@ import { readErrorMessage } from '../../../shared/read-error';
 
 export class StudentIndivComponent {
 
-    private student: AdminStudent;
+    protected student: AdminStudent;
     private scenarios: Scenario[];
     private isDestroyed$: Subject<boolean>;
     private paramObserver: any;
@@ -46,6 +46,12 @@ export class StudentIndivComponent {
         this.isDestroyed$ = new Subject<boolean>();
     }
 
+  /**
+   * Initialize component
+   * 1. Get logged in user
+   * 2. Get id of student of interest, then get the student's info
+   * 3. Get list of all scenarios
+   */
     ngOnInit() {
         this._admin = this._authService.getUser();
         this.paramObserver = this._route.params.subscribe(params => {
@@ -68,6 +74,13 @@ export class StudentIndivComponent {
         });
     }
 
+  /**
+   * Return formatted string based on if access granted for scenario
+   *
+   * @param {string} scenCode - scenario to look up
+   *
+   * @returns {string} - "Access granted", "Access not granted", or "NA"
+   */
     getScenStatus(scenCode: string): string {
         let isGranted = this.student.accessGranted[scenCode];
         if (isGranted === true) {
@@ -79,7 +92,15 @@ export class StudentIndivComponent {
         }
     }
 
-    getStudentCourse() {
+  /**
+   * Get a formatted HTML string based on the student
+   *
+   * If student has a course, returns link to the course page
+   * If student doesn't have a course, returns 'No course'
+   *
+   * @returns {string} - formatted HTML
+   */
+    getStudentCourse(): string {
         let s: AdminStudent = this.student;
         if (s.course) {
             return '<a [routlerLink]="[\'/admin/courses/\', "' + s.course.courseNum + ']">s.course.courseNum</a>';
@@ -88,33 +109,33 @@ export class StudentIndivComponent {
         }
     }
 
-    accessButtonClass(scenCode: string): Object {
-        let isGranted = this.student.accessGranted[scenCode];
-        return {
-            'btn btn-sm': true,
-            'btn-outline-secondary': isGranted,
-            'btn-outline-dark': !isGranted
-        }
-    }
-
-    accessButtonText(scenCode: string): string {
-        let isGranted = this.student.accessGranted[scenCode];
-        return (isGranted ? 'Revoke access' : 'Grant access');
-    }
-
+  /**
+   * Grant access for a specific scenario by calling student service
+   *
+   * @param {string} scenCode - scenario to grant access for
+   */
     grantAccess(scenCode: string) {
         this._studentService.grantScenAccess(this._admin.id, this.student.userId, scenCode, true)
             .takeUntil(this.isDestroyed$)
             .subscribe((res) => {
                 if (res !== undefined && res !== null) {
-                    this.student.accessGranted[scenCode] = res.accessGranted[scenCode];
+                    //this.student.accessGranted[scenCode] = res.accessGranted[scenCode];
+                  this.student = res;
                 }
             }, (err) => {
-                this.errorMessage = err.error.message;
+                this.errorMessage = readErrorMessage(err);
             });
     }
 
-    roleDisabled(src: string) {
+  /**
+   * Determine if a role toggle button should be disabled
+   *
+   * @param {string} src - name of button/role
+   *
+   * @returns {boolean} - disable for roles greater than current user
+   * and if viewing page of current user
+   */
+    roleDisabled(src: string): boolean {
         if (this._admin === undefined) {
             return false
         } else if (this.student.userId === this._admin.id) {
@@ -128,6 +149,19 @@ export class StudentIndivComponent {
         }
     }
 
+  /**
+   * Determine CSS classes for each role button based on the
+   * student's current role
+   *
+   * @param {string} src - name of button/role
+   *
+   * @returns {Object} - possible classes with true/false as applicable
+   *
+   * @example
+   * Current student has role "student"
+   * roleButtonClass('student') -> {'btn btn-small': true, 'bth-secondary': true, 'btn-secondary-outline': false}
+   * roleButtonClass('admin') -> {'btn btn-small': true, 'bth-secondary': false, 'btn-secondary-outline': true}
+   */
     roleButtonClass(src: string): Object {
         return {
             'btn btn-sm': true,
@@ -136,16 +170,27 @@ export class StudentIndivComponent {
         }
     }
 
+  /**
+   * When clicking a role button, update the student role
+   * by calling student service
+   *
+   * @param {string} src - role of button pushed
+   */
     clickButton(src: string) {
         this._studentService.setStudentRole(this._admin.id, this.student.userId, src)
             .takeUntil(this.isDestroyed$)
             .subscribe((res) => {
                 this.student = res;
             }, (err) => {
-                this.errorMessage = err.error.message;
+                this.errorMessage = readErrorMessage(err);
             });
     }
 
+  /**
+   * Determine if delete button should be disabled
+   *
+   * @returns {boolean} - true if viewing page of logged in user or if student is an admin
+   */
   deleteDisabled(){
     if(this._admin === undefined){
       return true;
@@ -162,20 +207,8 @@ export class StudentIndivComponent {
    * when clicking delete button, open a modal dialog to confirm delete
    * if confirm, delete and redirect to students
    * otherwise, do nothing
-   *
-   * @param{any} content - ng-template to open
    */
   checkDelete(){
-    /*this._modalService.open(content, {size: 'sm'}).result
-      .then((res)=>{
-      // close result
-      if(res === 'delete'){
-        this._callDelete();
-      }
-    }, (dismiss)=>{
-      // dismiss result
-      return;
-    });*/
     const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm'});
     modelRef.componentInstance.message = 'Are you sure you want to delete?';
 
@@ -189,7 +222,12 @@ export class StudentIndivComponent {
     });
   }
 
-  _callDelete(){
+  /**
+   * Helper function which implements delete student after user
+   * confirmed deletion
+   * Calls student service
+   */
+  protected _callDelete(){
     this._studentService.deleteStudent(this._admin.id, this.student.userId)
     .takeUntil(this.isDestroyed$)
     .subscribe((res)=>{
