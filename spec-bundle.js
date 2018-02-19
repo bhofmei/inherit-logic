@@ -8,13 +8,15 @@ require('zone.js/dist/jasmine-patch'); // put here since zone.js 0.6.14
 require('zone.js/dist/async-test');
 require('zone.js/dist/fake-async-test');
 require('rxjs/Rx');
-//require('@ng-bootstrap/ng-bootstrap');
+require('lodash');
+require('@ng-bootstrap/ng-bootstrap');
 //require('ng2-dnd');
-//require('ngx-breadcrumbs');
+require('ngx-breadcrumbs');
 //require('angular-skyhook');
 //require('react-dnd-touch-backend');
 var testing = require('@angular/core/testing');
 var browser = require('@angular/platform-browser-dynamic/testing');
+require('./public/app/testing');
 
 testing.TestBed.initTestEnvironment(
   browser.BrowserDynamicTestingModule,
@@ -29,5 +31,5 @@ function requireAll(requireContext) {
 }
 
 //var modules = requireAll(testContext);
-var modules = [require('./public/app/scenario/list/list.component.spec.ts')
+var modules = [require('./public/app/admin/student/student-indiv/student-indiv.component.spec')
 ];
