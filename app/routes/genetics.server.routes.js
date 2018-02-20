@@ -9,8 +9,8 @@ module.exports = function (app) {
   app.route('/api/cricket/plate')
     .post(genetics.createPlate);
 
-  app.route('/api/cricket/plexer')
-    .post(limiter.geneticsLimiter.prevent, genetics.handlePlexer);
+//  app.route('/api/cricket/plexer')
+//    .post(limiter.geneticsLimiter.prevent, genetics.handlePlexer);
   app.route('/api/cricket/plexer')
     .post(genetics.handlePlexer);
 };
