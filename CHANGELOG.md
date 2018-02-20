@@ -1,7 +1,10 @@
 # CHANGELOG
 
 ## [unreleased]
+- FIXED recombination error which was under-generating recombinants
 - ADDED ability to delete non-admin users
+- ADDED ability to delete course
+- REMOVED revoke access option on user fridges
 
 ## [v1.0.5]
 - ADDED rate limiting
@@ -17,7 +20,6 @@
 - FIXED bugs
   - grant scenario access
   - Sign out blocking issue
-
 
 ## [v1.0.3] - 2018-01-23
 - ADDED User profile and update password pages
