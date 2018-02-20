@@ -47,7 +47,7 @@ exports.read = function(req, res) {
 exports.scenarioByCode = function(req, res, next, id) {
     Scenario.findOne({scenCode: id}, (err, scenario) => {
         if (err) return next(err);
-        if (!scenario) return next(new Error('Failed to load scenario ' + id));
+        if (!scenario) return next('Failed to load scenario ' + id);
 
         // If an scenario is found use the 'request' object to pass it to the next middleware
         req.scenario = scenario;

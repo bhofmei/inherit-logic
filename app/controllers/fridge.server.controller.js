@@ -69,7 +69,7 @@ exports.stockFridge = function (req, res) {
     newPhage.save((err, phage) => {
       //console.log(phage);
       if (err)
-        res.status(500).send('Unable to create new phage for scenario');
+        res.status(500).send({message:'Unable to create new phage for scenario'});
     });
     strainIdList.push(newPhage);
     //console.log('p', newPhage);
@@ -79,7 +79,6 @@ exports.stockFridge = function (req, res) {
   } // end for i
   let guessStr = '';
   // add deletion guess info if needed
-  //if(scenario.createDeletionModel){
     // initialize empty guesses
     let geneLength = scenDefaults.geneLength;
     let stepSize = scenDefaults.deletionGuessLength;
@@ -106,7 +105,7 @@ exports.stockFridge = function (req, res) {
   // save fridge
   Fridge.create(newFridge, (err, fridge)=>{
     if(err)
-      res.status(500).send('Unable to save new fridge');
+      res.status(500).send({message: 'Unable to save new fridge'});
     else{
       let i = getFridgeInfo(fridge);
       res.json(i);
@@ -132,7 +131,7 @@ exports.getFridge = function (req, res) {
             message: getErrorMessage(err)
           });
       } else if (!fridge) {
-        res.status(307).send('No fridge for scenario/user');
+        res.status(307).send({message: 'No fridge for scenario/user'});
       } else {//
         let i = getFridgeInfo(fridge);
         res.json(i);
@@ -172,7 +171,7 @@ exports.saveDeletions = function(req, res){
   fridge.guesses = s;
   fridge.save((err)=>{
     if(err)
-      return res.status(500).send('Could not save new guesses');
+      return res.status(500).send({message: 'Could not save new guesses'});
     else
       res.json(s);
   });
@@ -291,7 +290,7 @@ exports.deletePhage = function (req, res) {
   fridge.save((error) => {
     if (error) {
       return res.status(500)
-        .send('Unable to remove strain from fridge');
+        .send({message: 'Unable to remove strain from fridge'});
     } else {
       strain.remove((err) => {
         if (err) {
@@ -314,7 +313,7 @@ exports.phageById = function (req, res, next, id) {
     // if error
     if (err) return next(err);
     // if user not found
-    else if (!phage) return next(new Error('Phage not found'));
+    else if (!phage) return next('Phage not found');
     // if user found -> next middleware
     req.strain = phage;
     next();
@@ -324,7 +323,6 @@ exports.phageById = function (req, res, next, id) {
 exports.findFridgeByScenOwner = function (req, res, next) {
   var user = req.curUser;
   var scen = req.scenario;
-  //console.log(user, scen);
   Fridge.findOne({
     owner: user._id,
     scenario: scen._id
@@ -332,7 +330,7 @@ exports.findFridgeByScenOwner = function (req, res, next) {
     if (err) {
       next(err)
     } else if (!fridge) {
-      return next(new Error('Failed to find fridge'))
+      return next('Failed to find fridge')
     } else {
       req.fridge = fridge;
       next()

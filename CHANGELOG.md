@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [unreleased]
+
+## [v1.0.6] - 2018-02-20
 - FIXED recombination error which was under-generating recombinants
 - ADDED ability to delete non-admin users
 - ADDED ability to delete course
