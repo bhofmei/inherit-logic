@@ -15,10 +15,7 @@ const PhageSchema = new Schema({
     ref: 'Scenario'
   },
   phageType: String,
-  mutationList: [{
-    kind: String,
-    location: Number
-  }],
+  mutationList: [Number],
   deletion: [Number],
   comment: {
     type: String,

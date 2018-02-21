@@ -147,10 +147,8 @@ exports.makeGene = function (gcProb, minStops) {
     let position = 1;
     while (dupliGene.length > 2) {
       if (stopCodons.indexOf(dupliGene.slice(0, 3)) !== -1) {
-        realStops.push({
-          kind: pEnum.MUTEKIND.PLUSONE,
-          location: position
-        });
+        realStops.push(position
+        );
       }
       dupliGene = dupliGene.slice(3);
       position++;
@@ -162,10 +160,8 @@ exports.makeGene = function (gcProb, minStops) {
     position = 1;
     while (dupliGene.length > 2) {
       if (stopCodons.indexOf(dupliGene.slice(0, 3)) !== -1) {
-        realStops.push({
-          kind: pEnum.MUTEKIND.MINUSONE,
-          location: position
-        });
+        realStops.push(-1*position
+        );
       }
       dupliGene = dupliGene.slice(3);
       position++;
@@ -178,7 +174,7 @@ exports.makeGene = function (gcProb, minStops) {
   var framesStopList = [];
   for (let i = 0; i < realStops.length; i++) {
     let rStop = realStops[i];
-    framesStopList.push([(rStop.kind === pEnum.MUTEKIND.PLUSONE ? 1 : -1), rStop.location]);
+    framesStopList.push([(rStop > 0 ? 1 : -1), rStop.location]);
   } // end for i
   return {
     wtGene: wtGene,
@@ -294,37 +290,34 @@ const generateFrameshift = function (shiftType, nShifts, readable, scenData) {
   for (let i = 0; i < nShifts; i++) {
     switch (shiftType) {
       case 1:
-        shifter = pEnum.MUTEKIND.PLUSONE;
+        shifter = 1;
         break;
       case -1:
-        shifter = pEnum.MUTEKIND.MINUSONE;
+        shifter = -1;
         break;
       case 0:
-        shifter = (randGen.randBool(randEngine) ? pEnum.MUTEKIND.MINUSONE : pEnum.MUTEKIND.PLUSONE);
+        shifter = (randGen.randBool(randEngine) ? -1 : 1);
         break;
       default:
-        shifter = ((shiftType + i) % 2 ? pEnum.MUTEKIND.MINUSONE : pEnum.MUTEKIND.PLUSONE);
+        shifter = ((shiftType + i) % 2 ? -1 : 1);
     } // end switch shiftType
     var newSpot = getNewSpot(lastMade, scenData);
     // add to mutation list
-    muteList.push({
-      kind: shifter,
-      location: newSpot
-    });
+    muteList.push(shifter*newSpot);
     lastMade = newSpot;
   } // end for i
 
   // sort the mutation list
-  muteList.sort(util.locSort);
+  muteList.sort(util.absSort);
   // make sure first mutant is good regardless of location from end point
   if (nShifts > 1) {
     let mutePoint = -100;
     for (let i = 0; i < muteList.length; i++) {
       let shiftMute = muteList[i];
-      if ((shiftMute.location - mutePoint) < okDist)
+      if ((Math.abs(shiftMute) - mutePoint) < okDist)
         goodPhage = true;
       else
-        mutePoint = shiftMute.location;
+        mutePoint = shiftMute;
     } // end for i
   } // end nShifts > 1
 
@@ -348,17 +341,21 @@ const checkPhageFrameshift = function (keyMutes, scenData) {
   for (let i = 0; i < chainLength; i++) {
     let stopSpot;
     let mute = keyMutes[i];
+    let absMute = Math.abs(mute);
     // check internal spacing
     let sameKind = 500;
     let otherKind = 500;
     for (stopSpot in scenData.realStops) {
-      if (stopSpot.kind === mute.kind) {
+      let absStop = Math.abs(stopSpot);
+
+      if (stopSpot * mute > 0) {
+        // if same kind, mulitiple will be positive -1*-1 = 1
         // make sure no inframe stops immediately downstream
-        if (stopSpot.location >= mute.location)
-          sameKind = Math.min(sameKind, stopSpot.location - mute.location);
-      } else if (stopSpot.location < mute.location) {
+        if (absStop >= absMute)
+          sameKind = Math.min(sameKind, absStop-absMute);
+      } else if (absStop < absMute) {
         // make sure no opposite stops are upstream
-        otherKind = Math.min(otherKind, mute.location - stopSpot.location)
+        otherKind = Math.min(otherKind, absMute - absStop)
       } // end if stopSpot.kind/location
       if (sameKind < 16 && otherKind < 16) {
         // can't be supppressed by changes within 15 on one side or the other
@@ -368,8 +365,8 @@ const checkPhageFrameshift = function (keyMutes, scenData) {
     } // end for stopSpot
     // make sure all mutants in this phage are separated
     for (let j = i + 1; j < chainLength; j++) {
-      let brotherLoc = keyMutes[j].location;
-      if (Math.abs(brotherLoc - mute.location) < 20) {
+      let brotherLoc = Math.abs(keyMutes[j]);
+      if (Math.abs(brotherLoc - absMute) < 20) {
         //console.log('brotherLoc')
         return false;
       }
@@ -377,8 +374,8 @@ const checkPhageFrameshift = function (keyMutes, scenData) {
 
     // check shift spots
     for (let j = 0; j < scenData.usedShiftSpots; j++) {
-      let usedMute = scenData.usedShiftSpots[j];
-      if (Math.abs(usedMute.location - mute.location) < scenConfig.shiftMin) {
+      let usedMute = Math.abs(scenData.usedShiftSpots[j]);
+      if (Math.abs(usedMute - absMute) < scenConfig.shiftMin) {
         //console.log('shift spot')
         return false;
       }
@@ -422,7 +419,7 @@ const getNewSpot = function (lastMade, scenData) {
         newSpot = randGen.randDie(300, randEngine) + 25;
         friendly = true;
         for (let j = 0; j < scenData.usedShiftSpots.length; j++) {
-          friendly = (Math.abs(scenData.usedShiftSpots[j].location - newSpot) < scenData.interMuteDist);
+          friendly = (Math.abs(Math.abs(scenData.usedShiftSpots[j]) - newSpot) < scenData.interMuteDist);
         } // end for j
       } // end while not friendly
     } // end if usedShiftSpots

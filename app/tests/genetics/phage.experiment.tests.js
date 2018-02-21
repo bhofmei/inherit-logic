@@ -14,9 +14,7 @@ const compareMut = function (expected, actual) {
   // actual is full list of mutations -> only look at first
   if (expected !== 0) {
     let mut = actual[0];
-    let kind = (expected < 0 ? 'minusOne' : 'plusOne');
-    let loc = Math.abs(expected);
-    return (kind === mut.kind && loc === mut.location);
+    return (mut === expected);
   } else {
     // no expected mutations
     return (actual.length === 0)
@@ -76,12 +74,12 @@ describe('Phage experiments unit tests', () => {
   });
   /* PHAGE:
   0. WT
-  1. mutationList: [ { kind: 'minusOne', location: 240 } ]
+  1. mutationList: [ -240 ]
   2. deletion: [ 110, 210 ]
-  3. mutationList: [ { kind: 'plusOne', location: 86 } ]
-  4. [ { kind: 'minusOne', location: 211 }, { kind: 'minusOne', location: 287 } ]
+  3. mutationList: [ 86 ]
+  4. [ -211, -287 ]
   5. deletion: [ 190, 330 ]
-  6. [ { kind: 'plusOne', location: 129 }, { kind: 'minusOne', location: 193 } ]
+  6. [ 129, 193 ]
   7. deletion: [ 80, 170 ]
   */
 
@@ -144,14 +142,14 @@ describe('Phage experiments unit tests', () => {
         let rec = phageExp.recombine(wt, fs, 1, 10);
         //0 - geno 2, 1 - Xover 272 - -240
         //1 - geno 2, 1 - Xover 347 - -240
-        //2 - geno 1, 2 - Xover 308 - none
+        //2 - geno 1, 2 - Xover 308 - 0
         //3 - geno 1, 2 - Xover 111 - -240
         //4 - geno 1, 2 - Xover 234 - -240
-        //5 - geno 1, 2 - Xover 267 - none
+        //5 - geno 1, 2 - Xover 267 - 0
         //6 - geno 1, 2 - Xover 114 - -240
-        //7 - geno 2, 1 - Xover 203 - none
-        //8 - geno 2, 1 - Xover 190 - none
-        //9 - geno 2, 1 - Xover 43 - none
+        //7 - geno 2, 1 - Xover 203 - 0
+        //8 - geno 2, 1 - Xover 190 - 0
+        //9 - geno 2, 1 - Xover 43 - 0
         let exp = [-240, -240, 0, -240, -240, 0, -240, 0, 0, 0];
         rec.should.be.an.Array()
           .and.have.lengthOf(10);
@@ -172,15 +170,15 @@ describe('Phage experiments unit tests', () => {
           deletion: phageList[1].deletion
         };
         let rec = phageExp.recombine(wt, fs, 2, 10);
-        //0 - geno 1, 2 - Xover 85,187 - none
-        //1 - geno 2, 1 - Xover 233,336 - none
+        //0 - geno 1, 2 - Xover 85,187 - 0
+        //1 - geno 2, 1 - Xover 233,336 - 0
         //2 - geno 1, 2 - Xover 69,292 - -240
-        //3 - geno 2, 1 - Xover 39,317 - none
+        //3 - geno 2, 1 - Xover 39,317 - 0
         //4 - geno 2, 1 - Xover 150,179 - -240
-        //5 - geno 1, 2 - Xover 256,313 - none
+        //5 - geno 1, 2 - Xover 256,313 - -
         //6 - geno 2, 1 - Xover 305,327 - -240
         //7 - geno 2, 1 - Xover 124,237 - -240
-        //8 - geno 1, 2 - Xover 63,155 - none
+        //8 - geno 1, 2 - Xover 63,155 - 0
         //9 - geno 1, 2 - Xover 40,350 - -240
         let exp = [0, 0, -240, 0, -240, 0, -240, -240, 0, -240];
         rec.should.be.an.Array()
@@ -203,12 +201,12 @@ describe('Phage experiments unit tests', () => {
         };
         let rec = phageExp.recombine(wt, fs, 3, 10);
         //0 - geno 2, 1 - Xover 86,103,318 - -240
-        //1 - geno 1, 2 - Xover 119,123,313 - none
+        //1 - geno 1, 2 - Xover 119,123,313 - 0
         //2 - geno 2, 1 - Xover 141,164,344 - -240
         //3 - geno 1, 2 - Xover 75,316,345 - -240
-        //4 - geno 2, 1 - Xover 77,158,222 - none
+        //4 - geno 2, 1 - Xover 77,158,222 - 0
         //5 - geno 2, 1 - Xover 18,83,317 - -240
-        //6 - geno 1, 2 - Xover 261,346,349 - none
+        //6 - geno 1, 2 - Xover 261,346,349 - 0
         //7 - geno 2, 1 - Xover 32,114,294 - -240
         //8 - geno 1, 2 - Xover 88,104,233 - -240
         //9 - geno 1, 2 - Xover 145,188,238 - -240
@@ -232,7 +230,7 @@ describe('Phage experiments unit tests', () => {
           deletion: phageList[3].deletion
         }; // 86
         let rec = phageExp.recombine(fs1, fs2, 1, 10);
-        //0 - geno 1, 2 - Xover 126 - none
+        //0 - geno 1, 2 - Xover 126 - 0
         //1 - geno 1, 2 - Xover 246 - -240
         //2 - geno 2, 1 - Xover 336 - 86
         //3 - geno 2, 1 - Xover 154 - 86, -240
@@ -318,15 +316,7 @@ describe('Phage experiments unit tests', () => {
           deletion: phageList[0].deletion
         };
         let fs2 = {
-          shifts: [{
-              kind: 'plusOne',
-              location: 79
-            },
-            {
-              kind: 'minusOne',
-              location: 125
-            }
-          ],
+          shifts: [79, 125],
           deletion: phageList[6].deletion
         } // 79, -125
         let rec = phageExp.recombine(wt, fs2, 1, 10);
@@ -647,17 +637,11 @@ describe('Phage experiments unit tests', () => {
       let fsA, fsB, fsC;
       before((done) => {
         fsA = {
-          shifts: [{
-            kind: 'minusOne',
-            location: 20
-          }],
+          shifts: [-20],
           deletion: []
         };
         fsB = {
-          shifts: [{
-            kind: 'minusOne',
-            location: 160
-          }],
+          shifts: [-160],
           deletion: []
         };
         fsC = {

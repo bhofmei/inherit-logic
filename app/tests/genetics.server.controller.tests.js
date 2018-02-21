@@ -50,7 +50,7 @@ describe('Genetics Controller Unit Tests:', () => {
       let tmp = phageScen.generateScenario(scenario);
       // has strainList and scenData
       scenDat = JSON.stringify(tmp.scenData);
-      //console.log(tmp.strainList);
+      console.log(tmp.strainList);
 
       Phage.create(tmp.strainList, function (err, strains) {
         phageList = [];
@@ -291,8 +291,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1100,
           mPhage2: 1400,
-          nMut: 9,
-          nMutWT: 2,
+          nMut: 12,
+          nMutWT: 7,
           nPhage1: 649,
           nPhage2: 826
         };
@@ -334,9 +334,9 @@ describe('Genetics Controller Unit Tests:', () => {
           mPhage1: 1200,
           mPhage2: 1500,
           nMut: 5,
-          nMutWT: 6,
-          nPhage1: 632,
-          nPhage2: 790
+          nMutWT: 12,
+          nPhage1: 701,
+          nPhage2: 876
         };
         let req = {
           phage1: {
@@ -375,8 +375,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1400,
           mPhage2: 1400,
-          nMut: 5,
-          nMutWT: 4,
+          nMut: 6,
+          nMutWT: 5,
           nPhage1: 663,
           nPhage2: 663
         };
@@ -416,8 +416,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1500,
           mPhage2: 1400,
-          nMut: 2,
-          nMutWT: 2,
+          nMut: 8,
+          nMutWT: 8,
           nPhage1: 736,
           nPhage2: 687
         };
@@ -458,10 +458,10 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1100,
           mPhage2: 1400,
-          nMut: 0,
-          nMutWT: 7,
-          nPhage1: 583,
-          nPhage2: 742
+          nMut: 2,
+          nMutWT: 12,
+          nPhage1: 649,
+          nPhage2: 826
         };
         let req = {
           phage1: {
@@ -500,10 +500,10 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1200,
           mPhage2: 1400,
-          nMut: 2,
-          nMutWT: 5,
-          nPhage1: 681,
-          nPhage2: 794
+          nMut: 0,
+          nMutWT: 13,
+          nPhage1: 612,
+          nPhage2: 714
         };
         let req = {
           phage1: {
@@ -542,10 +542,10 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1200,
           mPhage2: 1300,
-          nMut: 2,
-          nMutWT: 6,
-          nPhage1: 589,
-          nPhage2: 639
+          nMut: 6,
+          nMutWT: 10,
+          nPhage1: 659,
+          nPhage2: 713
         };
         let req = {
           phage1: {
@@ -584,8 +584,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1100,
           mPhage2: 1300,
-          nMut: 0,
-          nMutWT: 2,
+          nMut: 7,
+          nMutWT: 5,
           nPhage1: 563,
           nPhage2: 665
         };
@@ -626,7 +626,7 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1200,
           mPhage2: 1250,
-          nMut: 2,
+          nMut: 1,
           nMutWT: 0,
           nPhage1: 578,
           nPhage2: 602
@@ -668,7 +668,7 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 1350,
           mPhage2: 1200,
-          nMut: 10,
+          nMut: 16,
           nMutWT: 0,
           nPhage1: 754,
           nPhage2: 670
@@ -751,8 +751,8 @@ describe('Genetics Controller Unit Tests:', () => {
         let exp = {
           mPhage1: 3000,
           mPhage2: 2500,
-          nMut: 8,
-          nMutWT: 6
+          nMut: 14,
+          nMutWT: 16
         };
         let req = {
           phage1: {
@@ -792,7 +792,7 @@ describe('Genetics Controller Unit Tests:', () => {
           mPhage1: 3000,
           mPhage2: 2700,
           nMut: 6,
-          nMutWT: 3
+          nMutWT: 14
         };
         let req = {
           phage1: {
@@ -864,15 +864,15 @@ describe('Genetics Controller Unit Tests:', () => {
 
     //PHAGE:
     //0. WT
-    //1. [ { kind: 'minusOne', location: 240 } ]
+    //1. [ -240 ]
     //2. deletion: [ 110, 205 ]
-    //3. [ { kind: 'plusOne', location: 86 } ]
-    //4. [ { kind: 'minusOne', location: 211 }, { kind: 'minusOne', location: 287 } ]
-    //5. [ { kind: 'minusOne', location: 201 }, { kind: 'minusOne', location: 226 } ]
-    //6. [ { kind: 'plusOne', location: 270 }, { kind: 'plusOne', location: 344 } ]
-    //7. [ { kind: 'plusOne', location: 142 } ]
-    //8. [ { kind: 'minusOne', location: 79 }, { kind: 'plusOne', location: 156 } ]
-    //9. [ { kind: 'minusOne', location: 243 } ]
+    //3. [ 86 ]
+    //4. [ -211, 287 ]
+    //5. [ -201, -226 ]
+    //6. [ 270, 344 ]
+    //7. [ 142 ]
+    //8. [ -79, 156 ]
+    //9. [ -243 ]
 
     describe('Testing multiplexer', () => {
       it('Should create multiplexer for all WT input, PERM bacteria', (done) => {
@@ -966,8 +966,8 @@ describe('Genetics Controller Unit Tests:', () => {
 
       it('Should create multiplexer for WT X FS input, PERM bacteria', (done) => {
         let mPhage = 152;
-        let expectedMut = [65, 64, 88, 66, 65, 88, 0, 64, 88, 64, 66, 91, 91, 89, 0, 65];
-    let expectedWT = [64, 64, 88, 64, 64, 89, 176, 66, 93, 64, 64, 90, 88, 88, 178, 65];
+        let expectedMut = [65, 64, 88, 66, 65, 88, 0, 64, 88, 64, 66, 91, 91, 88, 0, 65];
+    let expectedWT = [64, 64, 88, 64, 64, 89, 176, 66, 93, 64, 64, 89, 88, 89, 178, 65];
         let rowPhage = [];
         let colPhage = [];
         for (let i = 0; i < 2; i++) {
@@ -1017,7 +1017,7 @@ describe('Genetics Controller Unit Tests:', () => {
 
       it('Should create multiplexer for WT X FS input, REST bacteria', (done) => {
         let mPhage = 160;
-        let expectedWT = [67, 68, 94, 93, 67, 96, 189, 94, 94, 94, 93, 67, 93, 67, 134, 94];
+        let expectedWT = [67, 67, 93, 94, 67, 96, 188, 96, 93, 94, 93, 67, 93, 68, 134, 95];
         let rowPhage = [];
         let colPhage = [];
         for (let i = 0; i < 2; i++) {
@@ -1067,8 +1067,8 @@ describe('Genetics Controller Unit Tests:', () => {
 
       it('Should create multiplexer for FS X FS input, PERM bacteria', (done) => {
         let mPhage = 123;
-        let expectedMut = [146, 147, 100, 102, 100, 100, 51, 147, 146, 146, 100, 146, 100, 102, 73, 100];
-    let expectedWT = [0, 2, 0, 1, 0, 0, 50, 0, 0, 0, 0, 0, 1, 0, 74, 1];
+        let expectedMut = [146, 147, 100, 103, 100, 100, 51, 147, 146, 146, 100, 146, 100, 101, 74, 100];
+    let expectedWT = [0, 2, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 1, 73, 1];
         let rowPhage = [];
         let colPhage = [];
         for (let i = 1; i < 4; i += 2) {
@@ -1119,7 +1119,7 @@ describe('Genetics Controller Unit Tests:', () => {
       it('Should create multiplexer for FS X FS input, REST bacteria', (done) => {
         let mPhage = 126;
 
-        let expectedWT = [0, 1, 0, 0, 0, 0, 53, 0, 1, 0, 0, 0, 0, 0, 52, 0];
+        let expectedWT = [0, 0, 0, 0, 1, 0, 52, 0, 2, 0, 0, 0, 0, 0, 53, 0];
         let rowPhage = [];
         let colPhage = [];
         for (let i = 1; i < 4; i += 2) {

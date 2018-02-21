@@ -50,15 +50,15 @@ describe('Plexer experiments unit tests', () => {
   }); // end before
   /* PHAGE:
   0. WT
-  1. [ { kind: 'minusOne', location: 240 } ]
+  1. [ -240 ]
   2. deletion: [ 110, 205 ]
-  3. [ { kind: 'plusOne', location: 86 } ]
-  4. [ { kind: 'minusOne', location: 211 }, { kind: 'minusOne', location: 287 } ]
-  5. [ { kind: 'minusOne', location: 201 }, { kind: 'minusOne', location: 226 } ]
-  6. [ { kind: 'plusOne', location: 270 }, { kind: 'plusOne', location: 344 } ]
-  7. [ { kind: 'plusOne', location: 142 } ]
-  8. [ { kind: 'minusOne', location: 79 }, { kind: 'plusOne', location: 156 } ]
-  9. [ { kind: 'minusOne', location: 243 } ]
+  3. [ 86 ]
+  4. [ -211, -287 ]
+  5. [ -201, -226 ]
+  6. [ 270, 344 ]
+  7. [ 142 ]
+  8. [ 79, 156 ]
+  9. [ -243 ]
   */
 
   describe('Testing generate plates for PLEXER', () => {

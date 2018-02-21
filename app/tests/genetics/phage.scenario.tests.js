@@ -64,13 +64,13 @@ describe('Scenario phage creator unit tests: ', () => {
       /* mutationList: [ { kind: 'plusOne', location: 39 } ] */
       frameDetails.scenData.usedShiftSpots.should.have.length(1);
       frameDetails.phage.mutationList.should.have.length(1);
-      frameDetails.phage.mutationList[0].should.have.property('location', 39);
+      frameDetails.phage.mutationList[0].should.equal(39);
     }); // end Should be able to make FS phage
 
     it('Should be able to make multiple FS phage', () => {
       var fsPhage = JSON.parse(scenario.referencePhage[1]);
       var phageList = []
-      var expectedShifts = [268, 68, 325, 306, 66, 232];
+      var expectedShifts = [268, 68, 325, 306, 66, -232];
       for (let i = 0; i < 6; i++) {
         let frameDetails = phageScen.makeFrameshiftPhage(fsPhage, i + 10, pEnum.PHAGETYPE.REF, scenGeneData);
         scenGeneData = frameDetails.scenData;
@@ -82,7 +82,6 @@ describe('Scenario phage creator unit tests: ', () => {
       shiftSpots.should.have.length(6);
       // check that shift spots match
       for (let i = 0; i < phageList.length; i++) {
-        //console.log('shift', phageList[i].mutationList);
         phageList[i].mutationList[0].should.equal(shiftSpots[i]);
       }
     }); // end Should be able to make multiple FS phage
@@ -138,7 +137,7 @@ describe('Scenario phage creator unit tests: ', () => {
       // fs - mutationList: [ { kind: 'minusOne', location: 119 } ]
       let fs = phageList[1];
       fs.mutationList.should.have.lengthOf(1);
-      //fs.mutationList[0].should.have.property('location', 238);
+      fs.mutationList[0].should.equal(-119);
       fs.deletion.should.have.lengthOf(0);
       // del - deletion: [ 160, 250 ]
       let del = phageList[2];
@@ -171,12 +170,12 @@ describe('Scenario phage creator unit tests: ', () => {
       4. (5) [ { kind: 'plusOne', location: 274 } ]
       5. (4) [ { kind: 'plusOne', location: 43 } ]
       */
-      var mutList = [-1, 323, 235, -1, 274, 43];
+      var mutList = [-1, -323, 235, -1, 274, 43];
       var delList = [-1, -1, -1, 190, -1, -1];
       for(let i = 0; i < scenOutput.strainList.length; i++){
         let s = scenOutput.strainList[i];
         if(mutList[i] !== -1)
-          s.mutationList[0].should.have.property('location', mutList[i]);
+          s.mutationList[0].should.equal(mutList[i]);
         if(delList[i] !== -1)
           s.deletion[0].should.be.equal(delList[i]);
       } //end for i
@@ -196,9 +195,9 @@ describe('Scenario phage creator unit tests: ', () => {
         let p1 = scenOutput.strainList[1].mutationList[0];
         let p2 = scenOutput.strainList[2].mutationList[0];
         debug(p1,p2);
-        if(p1.kind === p2.kind && p1.location === p2.location){
+        if(p1=== p2){
           same++;
-        } else if(p1.kind !== p2.kind || p1.location !== p2.location){
+        } else if(p1 !== p2){
           diff++;
         } else {
           console.log('ERROR', p1, p2);

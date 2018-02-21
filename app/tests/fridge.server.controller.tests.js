@@ -148,10 +148,7 @@ describe('Fridge Controller Unit Tests:', () => {
     it('Should be able to save FS phage to fridge', (done) => {
       var newPhage = {
         strainNum: 13,
-        mutationList: [{
-          kind: 'minusOne',
-          location: 9
-        }],
+        mutationList: [-9],
         deletion: []
       };
       //console.log(newPhage);

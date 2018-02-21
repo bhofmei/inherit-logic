@@ -107,7 +107,8 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
       startGenoPieces.forEach((copyZone) => {
         for (let j = 0; j < startGeno.shifts.length; j++) {
           let shiftElt = startGeno.shifts[j];
-          if (shiftElt.location >= copyZone[0] && shiftElt.location < copyZone[1])
+          let absShift = Math.abs(shiftElt);
+          if (absShift >= copyZone[0] && absShift < copyZone[1])
             newPhageShiftList.push(clone(shiftElt));
         } // end for j
         // copy deletion
@@ -118,7 +119,8 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
       endGenoPieces.forEach((copyZone) => {
         for (let j = 0; j < endGeno.shifts.length; j++) {
           let shiftElt = endGeno.shifts[j];
-          if (shiftElt.location >= copyZone[0] && shiftElt.location < copyZone[1])
+          let absShift = Math.abs(shiftElt);
+          if (absShift >= copyZone[0] && absShift < copyZone[1])
             newPhageShiftList.push(clone(shiftElt));
         } // end for j
         if (endGeno.deletion.length > 0) {
@@ -135,7 +137,7 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
         });
       }
     } // end if okRecSpots
-    newPhageShiftList.sort(util.locSort);
+    newPhageShiftList.sort(util.absSort);
     // check for multi-deletes
     debugExt('deletes %o', newPhageDeletes);
     recGenos.push({
@@ -161,20 +163,19 @@ exports.mutagenize = function (inList, numDesired) {
       mutantList = clone(inList);
       //let spotShot = randGen.integer(1, scenConfig.geneLength);
       let spotShot = randGen.randInt(1, scenConfig.geneLength, randEngine);
-      mutantList.push({
-        //kind: (randGen.bool() ? pEnum.MUTEKIND.PLUSONE : pEnum.MUTEKIND.MINUSONE),
-        kind: (randGen.randBool(randEngine) ? pEnum.MUTEKIND.PLUSONE : pEnum.MUTEKIND.MINUSONE),
-        location: spotShot
-      });
+      let kind = (randGen.randBool(randEngine) ? 1 : -1)
+      mutantList.push(
+       kind * spotShot
+      );
       // resort list
-      mutantList.sort(util.locSort);
+      mutantList.sort(util.absSort);
       goodMute = true;
       let mutePoint = -100; // first mutant is okay
       for (let shiftMute in mutantList) {
-        if ((shiftMute.location - mutePoint) < okDist)
+        if ((Math.abs(shiftMute) - mutePoint) < okDist)
           goodMute = false;
         else
-          mutePoint = shiftMute.location;
+          mutePoint = Math.abs(shiftMute);
       } // end for shiftMute
       count++;
     } // end while

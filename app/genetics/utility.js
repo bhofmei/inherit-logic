@@ -33,6 +33,10 @@ exports.holyRoller = function(engine, numSides, numTimes){
   return sumDice;
 }
 
+exports.absSort = function(a, b){
+  return Math.abs(a) - Math.abs(b)
+}
+
 exports.locSort = function(a, b){
   return a.location - b.location;
 }
@@ -101,7 +105,7 @@ exports.identicalGenotypes = function( phage1, phage2){
   } else {
     // loop through deletions
     for(let i = 0; i < s1.length; i++){
-      if(s1[i].location !== s2[i].location || s1[i].kind != s2[i].kind){
+      if(s1[i] !== s2[i]){
         return false;
       }
     }

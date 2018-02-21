@@ -163,7 +163,8 @@ describe('Scenario experiment tests: ', () => {
         let plate12 = plateExp.createPlate(phage1, phage2, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenDetails);
         wt12 += plate12.smallPlaque.length;
       } // end for
-      //console.log('wt13 (135)',wt13, 'wt12 (30)', wt12);
+      console.log('wt13 (135)',wt13, 'wt12 (30)', wt12);
+      // wt13 (135) 108 wt12 (30) 59
       wt13.should.be.above(wt12);
     }); // end Should have more WT for phage1 x phage3 vs phage1 x phage2 on REST
 
@@ -182,7 +183,8 @@ describe('Scenario experiment tests: ', () => {
         let plate23 = plateExp.createPlate(phage2, phage3, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenDetails);
         wt23 += plate23.smallPlaque.length;
       } // end for
-      //console.log('wt13 (135)',wt13, 'wt23 (105)', wt23);
+      console.log('wt13 (135)',wt13, 'wt23 (105)', wt23);
+      // wt13 (135) 123 wt23 (105) 115
       wt13.should.be.above(wt23);
     }); // end Should have more WT for phage1 x phage3 vs phage2 x phage3 on REST
 
@@ -201,7 +203,8 @@ describe('Scenario experiment tests: ', () => {
         let plate23 = plateExp.createPlate(phage2, phage3, bactRest, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenDetails);
         wt23 += plate23.smallPlaque.length;
       } // end for
-      //console.log('wt12 (30)',wt12, 'wt23 (105)', wt23);
+      console.log('wt12 (30)',wt12, 'wt23 (105)', wt23);
+      // wt12 (30) 72 wt23 (105) 105
       wt23.should.be.above(wt12);
     }); // end Should have more WT for phage1 x phage3 vs phage2 x phage3 on REST
   }); // end WhoMiddle

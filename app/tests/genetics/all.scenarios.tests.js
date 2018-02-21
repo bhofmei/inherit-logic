@@ -12,9 +12,7 @@ const compareMut = function(expected, actual){
   // actual is full list of mutations -> only look at first
   if(expected !== 0){
     let mut = actual[0];
-    let kind = (expected < 0 ? 'minusOne' : 'plusOne');
-    let loc = Math.abs(expected);
-    return (kind === mut.kind && loc === mut.location);
+    return (mut === expected);
   } else {
     // no expected mutations
     return (actual.length === 0)

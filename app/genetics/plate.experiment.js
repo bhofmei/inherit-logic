@@ -273,15 +273,15 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
     strainList.forEach((strain) => {
       //console.log(phenoList[strain[1]] )
       if (phenoList[strain] === plateEnum.PLAQUETYPE.SMALL)
-        smallPlaqueList.push({i:strain, pheno: plateEnum.PLAQUETYPE.SMALL});
+        smallPlaqueList.push(strain);
       else
-        largePlaqueList.push({i:strain, pheno: plateEnum.PLAQUETYPE.LARGE});
+        largePlaqueList.push(strain);
     }); // end for each
   } else {
-    // restrictive bacteria
+    // restrictive bacteria -> fix
     strainList.forEach((strain) => {
       if (phenoList[strain] === plateEnum.PLAQUETYPE.SMALL)
-        smallPlaqueList.push({i:strain, pheno: plateEnum.PLAQUETYPE.SMALL});
+        smallPlaqueList.push(strain);
       // else it's dead - do nothing
     });
     // check capacity

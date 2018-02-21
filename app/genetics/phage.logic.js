@@ -33,8 +33,8 @@ exports.getFrames = function (whoSays, mutantList, stopList) {
     for (let i = 0; i < stopList.length; i++) {
       let rStop = stopList[i];
       intStopList.push([
-        (rStop.kind === pEnum.MUTEKIND.PLUSONE ? 1 : -1),
-        rStop.location
+        (rStop > 0 ? 1 : -1),
+        rStop
       ]);
     } // end for i
   } // end stopList
@@ -44,19 +44,19 @@ exports.getFrames = function (whoSays, mutantList, stopList) {
   }
 
   // sort mutant list
-  mutantList.sort(util.locSort);
+  mutantList.sort(util.absSort);
 
   var readFrame = 0;
   var totalFramage = [];
   var currentFrameInfo = [0, 1];
   for (let j = 0; j < mutantList.length; j++) {
     let baseElement = mutantList[j];
-    let lookSpot = baseElement.location;
+    let lookSpot = Math.abs(baseElement);
     currentFrameInfo.push(lookSpot - 1) // mark end of old frame
     totalFramage.push(currentFrameInfo) // add frame region to new info
-    if (baseElement.kind === pEnum.MUTEKIND.PLUSONE)
+    if (baseElement > 0)
       readFrame++;
-    else if (baseElement.kind === pEnum.MUTEKIND.MINUSONE)
+    else if (baseElement < 0)
       readFrame--;
     // adjust so everything is 0 or +/- 1 frame
     switch (readFrame) {
