@@ -128,7 +128,7 @@ describe('Genetics Controller Unit Tests:', () => {
             results.full.should.equal(false);
             lPhage.should.equal(exp.nPhage);
             bPhage.should.equal(0);
-            nGeno.should.equal(exp.nMut + 1);
+            nGeno.should.equal(1);
             done();
           });
       }); // end Should create plate for WT, REST bacteria
@@ -198,7 +198,7 @@ describe('Genetics Controller Unit Tests:', () => {
             results.full.should.equal(false);
             lPhage.should.equal(exp.nWT);
             bPhage.should.equal(0);
-            nGeno.should.equal(exp.nMut + 1);
+            nGeno.should.equal(exp.nWT);
             done();
           });
       }); // end Should create plate for FS, REST bacteria
@@ -282,7 +282,7 @@ describe('Genetics Controller Unit Tests:', () => {
             results.full.should.equal(false);
             lPhage.should.equal(exp.nPhage1 + exp.nPhage2);
             bPhage.should.equal(0);
-            nGeno.should.equal(exp.nMut + 2);
+            nGeno.should.equal(2);
             done();
           });
       }); // end Should create plate for WTxWT, REST bacteria
@@ -366,7 +366,7 @@ describe('Genetics Controller Unit Tests:', () => {
             results.full.should.equal(false);
             lPhage.should.equal(exp.nPhage1 + exp.nMutWT);
             bPhage.should.equal(0);
-            nGeno.should.equal(exp.nMut + exp.nMutWT + 2);
+            nGeno.should.equal(exp.nMutWT + 1);
             done();
           });
       }); // end Should create plate for WTxFS, REST bacteria
@@ -449,7 +449,7 @@ describe('Genetics Controller Unit Tests:', () => {
             results.full.should.equal(false);
             lPhage.should.equal(exp.nMutWT);
             bPhage.should.equal(0);
-            nGeno.should.equal(exp.nMut + exp.nMutWT + 2);
+            nGeno.should.equal(exp.nMutWT);
             done();
           });
       }); // end Should create plate for FSxFS, REST bacteria
@@ -533,7 +533,7 @@ describe('Genetics Controller Unit Tests:', () => {
             results.full.should.equal(false);
             lPhage.should.equal(exp.nPhage1 + exp.nPhage2 + exp.nMutWT);
             bPhage.should.equal(0);
-            nGeno.should.equal(exp.nMut + exp.nMutWT + 2);
+            nGeno.should.equal(exp.nMutWT + 2);
             done();
           });
       }); // end Should create plate for WTx2FS, REST bacteria
@@ -617,7 +617,7 @@ describe('Genetics Controller Unit Tests:', () => {
             results.full.should.equal(false);
             lPhage.should.equal(exp.nPhage1 + exp.nMutWT);
             bPhage.should.equal(0);
-            nGeno.should.equal(exp.nMut + exp.nMutWT + 2);
+            nGeno.should.equal(exp.nMutWT + 1);
             done();
           });
       }); // end Should create plate for WTxDEL, REST bacteria
@@ -701,7 +701,7 @@ describe('Genetics Controller Unit Tests:', () => {
             results.full.should.equal(false);
             lPhage.should.equal(exp.nMutWT);
             bPhage.should.equal(0);
-            nGeno.should.equal(exp.nMut + exp.nMutWT + 2);
+            nGeno.should.equal(exp.nMutWT);
             done();
           });
       }); // end Should create plate for WTxDEL, REST bacteria
@@ -782,7 +782,7 @@ describe('Genetics Controller Unit Tests:', () => {
             results.full.should.equal(true);
             lPhage.should.equal(0);
             bPhage.should.equal(0);
-            nGeno.should.equal(2+exp.nMut+exp.nMutWT);
+            nGeno.should.equal(exp.nMutWT+1);
             done();
           });
       }); // end Should not create plate for WT x FS over capacity, REST bacteria
@@ -822,7 +822,7 @@ describe('Genetics Controller Unit Tests:', () => {
             results.full.should.equal(true);
             lPhage.should.equal(0);
             bPhage.should.equal(0);
-            nGeno.should.equal(2+exp.nMut+exp.nMutWT);
+            nGeno.should.equal(exp.nMutWT+1);
             done();
           });
       }); // end Should not create plate for WT x DEL over capacity, REST bacteria

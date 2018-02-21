@@ -257,12 +257,20 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
 
   // loop through geno elements
   //console.log(genoList);
+  var curCount = 0;
+  var genoMapping = [];
   var phenoList = genoList.map((genoElmt) => {
-    //console.log(genoElmt);
     let pheno = phageLogic.doPheno(genoElmt, scenData.realStops);
-
-    let rType = (pheno === phageEnum.FRAMEPHENOTYPE.ALLTRANSLATED ? readOkay : readBad);
-    //console.log('-', genoElmt.shifts, pheno, rType);//
+    //let rType = (pheno === phageEnum.FRAMEPHENOTYPE.ALLTRANSLATED ? readOkay : readBad);
+    let rType;
+    if(pheno === phageEnum.FRAMEPHENOTYPE.ALLTRANSLATED){
+      rType = readOkay;
+      genoMapping.push(curCount);
+      curCount++;
+    } else {
+      rType = readBad;
+      genoMapping.push(null);
+    }
     return rType;
   });
 
@@ -271,19 +279,29 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
   var largePlaqueList = [];
   if (lawnType.kind === plateEnum.BACTTYPE.PERM) {
     strainList.forEach((strain) => {
-      //console.log(phenoList[strain[1]] )
       if (phenoList[strain] === plateEnum.PLAQUETYPE.SMALL)
         smallPlaqueList.push(strain);
       else
         largePlaqueList.push(strain);
     }); // end for each
   } else {
-    // restrictive bacteria -> fix
+    // restrictive bacteria
+    // update genoList
+    genoList = genoList.filter((genoElt, i)=>{
+      return genoMapping[i] !== null;
+    });
     strainList.forEach((strain) => {
-      if (phenoList[strain] === plateEnum.PLAQUETYPE.SMALL)
-        smallPlaqueList.push(strain);
+      if (phenoList[strain] === plateEnum.PLAQUETYPE.SMALL){
+        // update geno mapping
+        let pos = genoMapping[strain];
+        smallPlaqueList.push(pos);
+      }
       // else it's dead - do nothing
     });
+    let tmp = Math.max(...smallPlaqueList);
+    if(tmp >= genoList.length){
+      console.err('ERROR with genotype mapping');
+    }
     // check capacity
     if(smallPlaqueList.length + largePlaqueList.length > capacity){
       return {
