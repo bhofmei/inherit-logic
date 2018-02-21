@@ -7,12 +7,28 @@ import { StudentPhage } from '../../../interfaces/phage.interface';
   templateUrl: 'app/admin/student/student-fridge/student-phage.template.html'
 })
 
+/**
+ * Small component which encompasses a single phage strain being viewed
+ * within a student's fridge
+ */
 export class StudentPhageComponent{
 
   @Input() phage: StudentPhage;
 
   constructor(){}
 
+  /**
+   * Produces formatted string based on phage type and if phage is
+   * submitted to be graded
+   *
+   * @returns {string} - formatted string
+   *
+   * @example
+   * reference phage -> "REFERENCE"
+   * scenario unknown phage -> "UNKOWN"
+   * user phage, not sumitted -> "USER"
+   * submitted phage -> "SUBMISSION"
+   */
   formatPhageType(){
     if(this.phage){
       let t = this.phage.phageType;

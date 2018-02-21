@@ -1,5 +1,5 @@
 <div *ngIf="phage" class="row">
-<div class="strain-num text-primary col-2 col-xl-1">
+<div class="strain-num text-primary col-2 col-xl-1" id="phageNum">
   {{ phage.strainNum + 1 }}
 </div>
 <!-- phage.strainNum -->
@@ -19,9 +19,6 @@
   <div class="row phage-row-mutations" *ngIf="phage.mutationList.length > 0">
     <label for="phageMutations" class="col-sm-3 text-secondary col-label">Mutations</label>
     <div class="col-sm-9" id="phageMutations">
-      <!--<div *ngFor="let mutation of phage.mutationList" class="mr-1">
-        {{mutation.kind}} at {{mutation.location}}
-      </div>-->
       {{ phage.mutationList | phageMutations }}
     </div>
   </div>
