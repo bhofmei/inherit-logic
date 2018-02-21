@@ -9,7 +9,7 @@ const phageLogic = require('./phage.logic');
 const plateEnum = require('./plate.enum');
 const bacteria = require('../models/bacteria.server.model');
 const plateExper = require('./plate.experiment');
-const debug = require('debug')('genetics');
+const debug = require('debug')('genetics:plexer');
 
 exports.resetEngine = function(){
   //randGen.reset(randEngine);

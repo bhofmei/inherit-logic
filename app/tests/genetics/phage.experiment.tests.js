@@ -6,7 +6,7 @@ const scenarios = require('../../../config/scenario.data');
 const phageScen = require('../../genetics/phage.scenario');
 const phageExp = require('../../genetics/phage.experiment');
 const pEnum = require('../../genetics/phage.enum');
-const debug = require('debug')('genetics:phage');
+const debug = require('debug')('genetics:test');
 
 const compareMut = function (expected, actual) {
   // expected is int: negative is minusOne, positive is plusOne, 0 is none
@@ -819,7 +819,7 @@ describe('Phage experiments unit tests', () => {
         wt1.length.should.be.above(wt2.length);
       }); // end Should have more WT for FS-A x FS-C than FS-B x FS-C, triple crossover
 
-      it('Should have more WT for FS-A x FS-C than FS-A x FS-B, triple crossover', () => {
+      it('Should have similar WT for FS-A x FS-C and FS-A x FS-B, triple crossover', () => {
         let rec1 = phageExp.recombine(fsA, fsC, 3, 100); // 20, 240
         let rec2 = phageExp.recombine(fsA, fsB, 3, 100); // 20, 160
         rec1.should.be.an.Array()
@@ -834,9 +834,10 @@ describe('Phage experiments unit tests', () => {
           return phage.shifts.length === 0
         });
         debug('AxC', wt1.length, 'AxB', wt2.length);
+        let dif = Math.abs(wt1.length - wt2.length);
         // AxC 20 AxB 24
-        //wt1.length.should.be.above(wt2.length);
-      }); // end Should have more WT for FS-A x FS-B than FS-A x FS-C, triple crossover
+       dif.should.be.below(5);
+      }); // end Should have similar WT for FS-A x FS-B and FS-A x FS-C, triple crossover
 
     }); // end Test FS middle recombination
   }); // end Test recombining

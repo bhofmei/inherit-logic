@@ -4,7 +4,7 @@ const randGen = require('./random.generator');
 const randEngine = randGen.getEngine();
 const scenConfig = require('../../config/scenario.config');
 const pEnum = require('./phage.enum');
-const debug = require('debug')('genetics'),
+const debug = require('debug')('genetics:phage'),
   debugExt = require('debug', 'genetics:ext');
 
 exports.resetEngine = function () {

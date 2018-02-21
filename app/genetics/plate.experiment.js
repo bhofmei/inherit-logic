@@ -155,7 +155,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
       debug('change phage %d', changePhage1);
       let changePhage = changePhage1 + util.gaussRand(randEngine, 2 * Math.sqrt(changePhage1));
       changePhage = Math.abs(Math.round(changePhage));
-      debugTest('numPhage: %d; numMut: %d; numMut adj: %d', newPhage1.numPhage, changePhage1, changePhage);
+      debugTest('numMut %d', changePhage);
       if ((newPhage1.numPhage + changePhage > capacity) && (lawnType.kind === plateEnum.BACTTYPE.PERM)) {
         // if too many, return so we don't waste time computing
         return {
@@ -185,7 +185,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
     numNewGenos = 1;
     // compute offspring counts
     var nOffspring = computeNumOffspring(newPhage1.numPhage, newPhage2.numPhage, phageRatio, scenData.mutationFreq, scenData.recombinationFreq, identical);
-  debugTest('numPhage: %d, %d; num offspring %o', newPhage1.numPhage, newPhage2.numPhage, nOffspring);
+  debugTest('num offspring %o', nOffspring);
     // check capacity for PERM bact
     if (nOffspring.total > capacity && (lawnType.kind === plateEnum.BACTTYPE.PERM)) {
       return {
@@ -310,17 +310,14 @@ const computeRecombParameters = function (f1, f2, p, n) {
   // f2 = fraction phage 2
   // p = recombFreq
   // n = numOffspring
-  let c = '';
   var numRecomb = [];
   for (let i = 0; i < 3; i++) {
     let pR = Math.pow(p, i + 1) * n * f1 * f2;
-    c += i + ': '+pR + ';  ';
     let kR = Math.sqrt(2 * Math.round(pR))
     let nR = pR + util.gaussRand(randEngine, kR);
     debugExt('prob %d recomb %d adjusted %d', i, pR, nR);
     numRecomb.push(nR < 0 ? 0 : Math.round(nR));
   }
-  debugTest('recomb: ', c);
   debugExt('nrecomb %o', numRecomb);
   return numRecomb;
 }
@@ -335,16 +332,13 @@ const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
   let f2 = 1 - f1;
   let numRecomb = (identical ? [0, 0, 0] : computeRecombParameters(f1, f2, recFreq, numOffspring));
   let numGeno = [Math.round(f1 * numOffspring), Math.round(f2 * numOffspring)];
-  let c = '';
   let numMut = numGeno.map((nGeno) => {
     let nMut = Math.round(mutFreq * nGeno);
-    c += ' ' + nMut;
     let changeBy = util.gaussRand(randEngine, (2 * Math.sqrt(nMut)))
     nMut = Math.round(nMut + changeBy);
     debugExt('nmut %d', nMut);
     return nMut < 0 ? 0 : nMut;
   });
-  debugTest('mut: ', c)
   let total = numGeno[0] + numGeno[1] + numRecomb[0] + numRecomb[1] + numRecomb[2] + numMut[0] + numMut[1];
   // return results
   return {
