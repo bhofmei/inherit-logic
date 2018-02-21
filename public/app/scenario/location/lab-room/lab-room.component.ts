@@ -389,9 +389,9 @@ export class LabRoomComponent {
       return null;
     }
     let plaque = tmpList[0];
-    let genotypeIndex = plaque.i;
+    let genotypeIndex = plaque;
     let phage = JSON.parse(JSON.stringify(this.genotypes[genotypeIndex]));
-    phage['src'] = plaque.pheno;
+    phage['src'] = src;
     return phage;
   }
 

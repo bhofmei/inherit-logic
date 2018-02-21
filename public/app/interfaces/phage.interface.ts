@@ -15,19 +15,14 @@ export interface ExperimentPhage extends Phage {
 }
 
 export interface GenotypePhage {
-  shifts: any[];
+  shifts: number[];
   deletion: number[];
   parents: Phage[];
   src?: string;
 }
 
-export interface StudentPhage extends FridgePhage{
-  mutationList: any[];
+export interface StudentPhage extends FridgePhage {
+  mutationList: number[];
   deletion: number[];
   guesses?: boolean[];
-}
-
-export interface Mutation {
-  kind: string;
-  location: number
 }

@@ -156,16 +156,34 @@ export var listOfPhage: StudentPhage[] = [
    strainNum: 1,
    phageType: 'ref',
    comment: 'mut',
-   mutationList: [{kind: 'minusOne', location: '77'}],
+   mutationList: [-77],
    deletion: []
   },
   {id: 'a2',
    strainNum: 2,
-   phageType: 'ref',
+   phageType: 'unknown',
    comment: 'del',
    mutationList: [],
-   deletion: [10, 50],
+   deletion: [10, 40],
    guesses: [true, false, true]
+  },
+  {
+    id: 'b1',
+    strainNum: 101,
+    phageType: 'user',
+    mutationList: [89],
+    comment: 'user not submitted',
+    deletion: [],
+    submitted: false
+  },
+  {
+    id: 'b2',
+    strainNum: 102,
+    phageType: 'user',
+    mutationList: [299],
+    comment: 'user submitted',
+    deletion: [],
+    submitted: true
   }
 ]
 
@@ -176,7 +194,7 @@ const _fridges: any[] = [
     scenarioDetails: 'student1 test1',
     guesses: '',
     accessGranted: listOfStudents[0].accessGranted[listOfScenarios[0].scenCode],
-    strains: listOfPhage.slice(0,3)
+    strains: listOfPhage.slice(1,5)
   },
   {
     user: listOfStudents[1],
@@ -215,7 +233,7 @@ export const fridgeToCreate: Fridge = {
   scenarioDetails: 'student1 test2',
   guesses: '',
   accessGranted: listOfStudents[0].accessGranted[listOfScenarios[1].scenCode],
-  strains: [listOfPhage[1]]
+  strains: listOfPhage.slice(0,2)
 }
 
 
