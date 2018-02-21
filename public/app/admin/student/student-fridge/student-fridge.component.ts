@@ -8,11 +8,7 @@ import { StudentService } from '../student.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
 
-import { Course } from '../../../interfaces/course.interface';
-import { AdminStudent } from '../../../interfaces/student.interface';
-import { Scenario } from '../../../interfaces/scenario.interface';
-import { StudentPhage } from '../../../interfaces/phage.interface';
-import { StudentFridge } from '../../../interfaces/fridge.interface';
+import { Course, AdminStudent, Scenario, StudentPhage, StudentFridge } from '../../../interfaces';
 
 import { readErrorMessage } from '../../../shared/read-error';
 
@@ -24,12 +20,27 @@ import { readErrorMessage } from '../../../shared/read-error';
 
 export class StudentFridgeComponent{
 
-  private fridge: StudentFridge;
-  private hasFridge: boolean = false;
+  /**
+   * Fridge object (if it exists)
+   */
+  protected fridge: StudentFridge;
+  /**
+   * If fridge exists determine by if this.fridge has strains
+   */
+  protected hasFridge: boolean = false;
   private isDestroyed$: Subject<boolean>;
   private paramObserver: any;
 
+  /**
+   * Option to show all strains in fridge or
+   * only strains of interest for grading (unknown
+   * and submitted)
+   * Should be "all" or "graded"
+   */
   private viewStrains: string = 'all';
+  /**
+   * List of phage currently being viewed
+   */
   private strainList: StudentPhage[];
 
   private errorMessage: string = '';
@@ -41,6 +52,14 @@ export class StudentFridgeComponent{
     this.isDestroyed$ = new Subject<boolean>();
   }
 
+  /**
+   * Initialize the view
+   * 1. Get studentId, scenarioId, and admin
+   * 2. Get the fridge
+   * 3. If the fridge exists
+   * 3a. add the "guesses" to each strain
+   * 3b. sort the strains by strain number
+   */
   ngOnInit(){
     this.paramObserver = this._route.params.subscribe(params => {
       let studentId = params['studentId'];
@@ -72,6 +91,18 @@ export class StudentFridgeComponent{
         });
   }
 
+  /**
+   * Determine the CSS class for the view strains button depending on selected option
+   *
+   * @param {string} src - button determining classes for
+   *
+   * @returns {Object} - classes which appy to this button in the form {"class": boolean, ...}
+   *
+   * @example
+   * View stains is "all"
+   * getButtonClass('all') -> {'btn btn-small': true, 'btn-primary': true, 'btn-primary-outline': false}
+   * getButtonClass('graded') -> {'btn btn-small': true, 'btn-primary': false, 'btn-primary-outline': true}
+   */
   getButtonClass(src: string): Object{
     return {
       'btn btn-sm': true,
@@ -80,6 +111,13 @@ export class StudentFridgeComponent{
     }
   }
 
+  /**
+   * When a viewStrain button is clicked,
+   * update the list of visible phage appropriately
+   *
+   * @param {string} src - button which was clicked;
+   * Should be one of ["all", "graded"]
+   */
   setPhage(src: string){
     this.viewStrains = src;
     if(this.viewStrains === 'all'){
