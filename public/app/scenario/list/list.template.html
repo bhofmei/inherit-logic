@@ -1,5 +1,5 @@
 <div class="container">
-  <h2 class="mt-4">Available Scenarios</h2>
+  <h2 class="mt-4 text-dark">Available Scenarios</h2>
   <div *ngIf="user" class="col-12">
     <div class="list-group mt-2">
       <a *ngFor="let scenario of scenarios" [routerLink]="[scenario.scenCode, 'info']" class="list-group-item list-group-item-action">{{scenario.label}}</a>
