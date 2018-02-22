@@ -12,7 +12,6 @@ const plateExper = require('./plate.experiment');
 const debug = require('debug')('genetics:plexer');
 
 exports.resetEngine = function(){
-  //randGen.reset(randEngine);
   // resets the plateExper engine
   plateExper.resetEngine();
 }
@@ -39,7 +38,7 @@ exports.createPlexerPlate = function (rowPhage, colPhage, lawnType, specials, ca
         //console.log(geno.shifts);
       });
       // has: full, smallPlaque, largePlaque
-      var plate = this.generatePlexerPlate(lawnType, phagePlate.genoList, phagePlate.strainList, scenData);
+      var plate = this.generatePlexerPlate(lawnType, phagePlate.genoList, phagePlate.strainList, capacity, scenData);
       outMat[i][j] = plate;
       //console.log(i, j, plate);
     } // end for j
@@ -47,7 +46,7 @@ exports.createPlexerPlate = function (rowPhage, colPhage, lawnType, specials, ca
   return outMat;
 }
 
-exports.generatePlexerPlate = function (lawnTypeStr, genoList, strainList, scenData) {
+exports.generatePlexerPlate = function (lawnTypeStr, genoList, strainList, capacity,  scenData) {
   // return full, smallPlaque, largePlaque
   // lawn type is "B" or "K"
 
@@ -80,6 +79,13 @@ exports.generatePlexerPlate = function (lawnTypeStr, genoList, strainList, scenD
   });
   let smallPlaque = smallPlaqueList.length;
   let largePlaque = (lawnType.kind === plateEnum.BACTTYPE.PERM  ? nPlaque - smallPlaque : 0);
+  if(smallPlaque + largePlaque > capacity){
+    return {
+      full: true,
+      smallPlaque: 0,
+      largePlaque: 0
+    }
+  }
   return {
     full: overwhelm,
     smallPlaque: smallPlaque,

@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+import { FormControl, Validators } from '@angular/forms';
+
 import { ScenarioGlobals } from '../../scenario.globals';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../scenario.service'
 import { FridgePhage, ExperimentPhage } from '../../../interfaces/phage.interface';
+import { PlexerPlate } from '../../../interfaces/experiments.interface';
 
 @Component({
     selector: 'plexer-room',
@@ -23,9 +26,11 @@ export class PlexerRoomComponent{
   private errorMessage: string = '';
   private subscription: Subscription;
   private expSubscription: Subscription;
+  private dilutionControl: FormControl;
 
   constructor( private _experimentService: ExperimentService,
                private _scenarioService: ScenarioService){
+    this.dilutionControl = new FormControl("", [Validators.min(0.1), Validators.max(100)]);
     this._clearData();
   }
 
@@ -99,6 +104,8 @@ export class PlexerRoomComponent{
     var disabled = this.chosenBact === 'none';
     // check that at least 1 phage added for row/col
     if(this.nStrains[0] === 0 || this.nStrains[1] === 0){
+      return true;
+    } else if (this.dilutionValue < 0.1 || this.dilutionValue > 20){
       return true;
     }
     return disabled;
