@@ -5,10 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { McBreadcrumbsConfig } from 'ngx-breadcrumbs';
 
-import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routes';
-
-import { SharedModule } from './shared/shared.module';
 
 import { AuthenticationService } from './authentication/authentication.service';
 import { LoggedInGuard } from './authentication/logged-in.guard.service';
@@ -16,6 +13,7 @@ import { ScenarioService } from './scenario/scenario.service';
 import { CourseService } from './admin/course/course.service';
 import { ScenarioResolver } from './scenario/scenario.resolver';
 
+import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { HelpModule } from './help/help.module';
@@ -23,7 +21,9 @@ import { HomeModule } from './home/home.module';
 import { ProfileModule } from './profile/profile.module';
 import { ScenarioModule } from './scenario/scenario.module';
 
+import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
     imports: [
@@ -41,7 +41,8 @@ import { NavComponent } from './nav/nav.component';
     ],
     declarations: [
         AppComponent,
-        NavComponent
+        NavComponent,
+      PageNotFoundComponent
     ],
     providers: [
       AuthenticationService,
