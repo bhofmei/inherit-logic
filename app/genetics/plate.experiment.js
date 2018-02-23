@@ -10,32 +10,30 @@ const plateEnum = require('./plate.enum');
 const bacteria = require('../models/bacteria.server.model');
 
 const debug = require('debug')('genetics'),
-      debugExt = require('debug')('genetics:ext'),
-      debugTest = require('debug')('genetics:test');
+  debugExt = require('debug')('genetics:ext'),
+  debugTest = require('debug')('genetics:test');
 
-exports.resetEngine = function(){
+exports.resetEngine = function () {
   randGen.reset(randEngine);
 }
 
-exports.seedEngine = function(num){
+exports.seedEngine = function (num) {
   randGen.setSeed(randEngine, num)
 }
 
-exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData){
+exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData) {
   // combines createPlatePhage and generatePlate into one function
   // has: genoList and strainList
   // if both phage empty, throw error
-  if(phage1 === null && phage2 === null)
+  if (phage1 === null && phage2 === null)
     throw new Error('No phage specified');
-  if(lawnType===null || lawnType === undefined)
+  if (lawnType === null || lawnType === undefined)
     throw new Error('No bacteria specified');
   var phagePlate = this.createPlatePhage(phage1, phage2, lawnType, specials, capacity, whoCalled, scenData);
-  debug('createPlate');
-  phagePlate.genoList.forEach((geno)=>{
-    debug(geno.shifts);
-  });
-  // has: full, smallPlaque, largePlaque, genotypes
-  var plate = this.generatePlate(lawnType, phagePlate.genoList, phagePlate.strainList, capacity, scenData);
+  // has: full, smallPlaque, largePlaque, genotypes, parents
+  var numInput = (phage2 === null ? 1 : 2);
+  var plate = this.generatePlate(lawnType, phagePlate.genoList, phagePlate.strainList, capacity, scenData, numInput);
+  plate.parents = phagePlate.parents;
   return plate;
 }
 
@@ -54,10 +52,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
   var onePhage = false;
   if (phage1.hasOwnProperty('strainNum')) {
     if (getParents) {
-      parents = {
-        phage: [phage1._id],
-        bacteria: lawnType
-      };
+      parents = [phage1._id]
     }
     newPhage1 = {
       genome: {
@@ -71,7 +66,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
   // if phage2 exists
   if (phage2) {
     if (getParents && phage2.hasOwnProperty('strainNum')) {
-      parents.phage.push(phage2._id)
+      parents.push(phage2._id)
     }
     newPhage2 = {
       genome: {
@@ -126,7 +121,8 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
         // too many phage
         return {
           genoList: genoList,
-          strainList: false
+          strainList: false,
+          parents: parents
         }
       }
       // TODO: findSpotOnPlate
@@ -185,12 +181,13 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
     numNewGenos = 1;
     // compute offspring counts
     var nOffspring = computeNumOffspring(newPhage1.numPhage, newPhage2.numPhage, phageRatio, scenData.mutationFreq, scenData.recombinationFreq, identical);
-  debugTest('num offspring %o', nOffspring);
+    debugTest('num offspring %o', nOffspring);
     // check capacity for PERM bact
     if (nOffspring.total > capacity && (lawnType.kind === plateEnum.BACTTYPE.PERM)) {
       return {
         genoList: genoList,
-        strainList: false
+        strainList: false,
+        parents: parents
       }
     }
     for (let j = 0; j < 2; j++) {
@@ -217,11 +214,11 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
       for (let j = 0; j < nOffspring.numRecomb.length; j++) {
         let nRec = nOffspring.numRecomb[j];
         if (nRec > 0) {
-          let newGenoList = phageExper.recombine(startGenotypes[0], startGenotypes[1], j+1, nRec);
+          let newGenoList = phageExper.recombine(startGenotypes[0], startGenotypes[1], j + 1, nRec);
           // add to plate
           for (let k = 0; k < newGenoList.length; k++) {
             numNewGenos++;
-            debugExt('recomb %d phage %o', j+1, newGenoList[k]);
+            debugExt('recomb %d phage %o', j + 1, newGenoList[k]);
             replicaStrainList.push(numNewGenos);
             genoList.push(newGenoList[k]);
           } // end for k
@@ -232,12 +229,13 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
   // return genoList and strainList
   return {
     genoList: genoList,
-    strainList: replicaStrainList
+    strainList: replicaStrainList,
+    parents: parents
   }
 } // end createPlage
 
-exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, scenData) {
-  // return full, smallPlaque, largePlaque, genotypes
+exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, scenData, numInput) {
+  // return full, smallPlaque, largePlaque, genotypes -> this only applies to the lab scenario
   // lawn type is "B" or "K"
 
   var lawnType = bacteria[lawnTypeStr];
@@ -256,14 +254,13 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
   }
 
   // loop through geno elements
-  //console.log(genoList);
   var curCount = 0;
   var genoMapping = [];
+
   var phenoList = genoList.map((genoElmt) => {
     let pheno = phageLogic.doPheno(genoElmt, scenData.realStops);
-    //let rType = (pheno === phageEnum.FRAMEPHENOTYPE.ALLTRANSLATED ? readOkay : readBad);
     let rType;
-    if(pheno === phageEnum.FRAMEPHENOTYPE.ALLTRANSLATED){
+    if (pheno === phageEnum.FRAMEPHENOTYPE.ALLTRANSLATED) {
       rType = readOkay;
       genoMapping.push(curCount);
       curCount++;
@@ -287,11 +284,11 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
   } else {
     // restrictive bacteria
     // update genoList
-    genoList = genoList.filter((genoElt, i)=>{
+    genoList = genoList.filter((genoElt, i) => {
       return genoMapping[i] !== null;
     });
     strainList.forEach((strain) => {
-      if (phenoList[strain] === plateEnum.PLAQUETYPE.SMALL){
+      if (phenoList[strain] === plateEnum.PLAQUETYPE.SMALL) {
         // update geno mapping
         let pos = genoMapping[strain];
         smallPlaqueList.push(pos);
@@ -299,22 +296,54 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
       // else it's dead - do nothing
     });
     let tmp = Math.max(...smallPlaqueList);
-    if(tmp >= genoList.length){
+    if (tmp >= genoList.length) {
       console.err('ERROR with genotype mapping');
     }
     // check capacity
-    if(smallPlaqueList.length + largePlaqueList.length > capacity){
+    if (smallPlaqueList.length + largePlaqueList.length > capacity) {
       return {
-      full: true,
-      smallPlaque: [],
-      largePlaque: [],
-      genotypes: genoList
-    }
+        full: true,
+        smallPlaque: [],
+        largePlaque: [],
+        genotypes: genoList
+      }
     }
   }
   // shuffle plaques
-  randGen.randShuffle(smallPlaqueList, randEngine);
-  randGen.randShuffle(largePlaqueList, randEngine);
+  // might want to remove this shuffling if too slow
+    if (smallPlaqueList.length > 100 && smallPlaqueList.length < 400 ) {
+      let newPhage = smallPlaqueList.filter((x) => {
+        return x > (numInput - 1)
+      });
+      let parentalPhage = smallPlaqueList.filter((x) => {
+        return x <= (numInput - 1)
+      });
+      randGen.randShuffle(parentalPhage, randEngine);
+      let tmp = parentalPhage.slice(0, 100)
+        .concat(newPhage);
+      parentalPhage = (parentalPhage.length > 100 ? parentalPhage.slice(100) : []);
+      randGen.randShuffle(tmp, randEngine);
+      smallPlaqueList = tmp.concat(parentalPhage);
+    } else {
+          randGen.randShuffle(smallPlaqueList, randEngine);
+    }
+    if (largePlaqueList.length > 100 && largePlaqueList.length < 400) {
+      //debug('shuffle large - ', largePlaqueList);
+      let newPhage = largePlaqueList.filter((x) => {
+        return x > (numInput-1)
+      });
+      let parentalPhage = largePlaqueList.filter((x) => {
+        return x <= (numInput-1)
+      });
+      randGen.randShuffle(parentalPhage, randEngine);
+      let tmp = parentalPhage.slice(0, 100)
+        .concat(newPhage);
+      parentalPhage = (parentalPhage.length > 100 ? parentalPhage.slice(100) : []);
+      randGen.randShuffle(tmp, randEngine);
+      largePlaqueList = tmp.concat(parentalPhage);
+  } else {
+    randGen.randShuffle(largePlaqueList, randEngine);
+  }
   return {
     full: overwhelm,
     genotypes: genoList,

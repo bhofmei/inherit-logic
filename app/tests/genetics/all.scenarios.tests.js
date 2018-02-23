@@ -242,7 +242,7 @@ describe('Defined scenario creator tests: ', () => {
 
     it('Should be able to create scenario CombineTwo', () => {
       let scenario = scenarios[5];
-      let exp = [0, -66, -39];
+      let exp = [0, 74, 252];
       phageScen.seedEngine(scenario.degOfDiff);
       var scenOutput = phageScen.generateScenario(scenario);
       scenOutput.should.be.an.Object();

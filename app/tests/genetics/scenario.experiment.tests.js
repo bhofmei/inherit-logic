@@ -8,6 +8,7 @@ const phageExp = require('../../genetics/phage.experiment');
 const plateExp = require('../../genetics/plate.experiment');;
 const phageEnum = require('../../genetics/phage.enum');
 const plateEnum = require('../../genetics/plate.enum');
+const debug = require('debug')('genetics:test');
 
 var bactPerm = 'B';
 var bactRest = 'K';
@@ -135,7 +136,7 @@ describe('Scenario experiment tests: ', () => {
 
   }); // end SameOrDiff1
 
-  describe('WhoMiddle', () => {
+  /*describe('WhoMiddle', () => {
     let scenDetails, phageList;
     before((done) => {
       // generate scenario
@@ -207,5 +208,32 @@ describe('Scenario experiment tests: ', () => {
       // wt12 (30) 72 wt23 (105) 105
       wt23.should.be.above(wt12);
     }); // end Should have more WT for phage1 x phage3 vs phage2 x phage3 on REST
-  }); // end WhoMiddle
+  }); // end WhoMiddle*/
+
+  describe('CombineTwo', ()=>{
+    let scenDetails, phageList;
+    before((done) => {
+    // generate scenario
+      let scenario = scenarios[5];
+      phageScen.seedEngine(scenario.degOfDiff);
+      var scenOutput = phageScen.generateScenario(scenario);
+      scenDetails = scenOutput.scenData;
+      phageList = scenOutput.strainList;
+      // 0, 74, 252
+      done();
+    }); // end before
+
+    it('Should identify double', ()=>{
+       let phage1 = clone(phageList[1]); // 74
+      phage1.numPhage = 400;
+      let phage2 = clone(phageList[2]); // 252
+      phage2.numPhage = 400;
+
+      for(let i = 0; i < 1; i++){
+         let plate1 = plateExp.createPlate(phage1, phage2, bactPerm, null, scenDefaults.plateCapacity, plateEnum.PLATECALLER.LAB, scenDetails);
+        plate1.genotypes.forEach((phage)=>{debug(phage.shifts)});
+      }
+      //let large1 = plate1.largePlaque.length;
+    });
+  }); // end  CombineTwo
 }); // end Scenario experiment tests

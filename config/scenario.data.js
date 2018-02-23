@@ -106,7 +106,7 @@ module.exports = [
     purpose: "Combine two different +1 mutations to create a double mutant phage.",
     relevance: "Making a working, triple mutant phage is the easy part since you're asking for a wild-type to arise. Making double mutants to serve as its parents is tougher, but a necessary step.",
     startingPoint: "A pair of phage, each containing a single, different +1 frameshift mutation.",
-    referencePhage: [scenDefaults.wildtypePhage, '{"numToMake": 2, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 0}, "deletion": false, "comment": "Mutant phage containing a single +1 frameshift mutation"}'],
+    referencePhage: [scenDefaults.wildtypePhage, '{"numToMake": 2, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Mutant phage containing a single +1 frameshift mutation"}'],
     otherPhage: []
   },
   {
