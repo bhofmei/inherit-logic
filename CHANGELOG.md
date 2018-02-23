@@ -2,6 +2,19 @@
 
 ## [unreleased]
 
+## [v1.0.7] - 2018-02-23
+- UPDATED the way phage mutations are stored to save memory
+  - updated all genetics components
+  - updated model
+  - updated front end interface and pipe
+- UPDATED on rest bacteria, only WT-like genotypes sent to client so smaller data transfer
+- REMOVED rate limiting (causing server errors)
+- FIXED over capacity for plexer
+- ADDED "Page not found" component for invalid URL
+- ADDED shuffle plaque lists to force mutants and recombinants to the front
+  - When small/large plaques 100-400
+  - Handle and shuffle each separately
+
 ## [v1.0.6] - 2018-02-20
 - FIXED recombination error which was under-generating recombinants
 - ADDED ability to delete non-admin users

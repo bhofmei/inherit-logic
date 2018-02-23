@@ -275,37 +275,6 @@ exports.setInstructor = function (req, res) {
       }
     }
   ); // end user find
-
-  //course.instructors.push(newInstructor);
-/*  Course.findByIdAndUpdate(
-    course._id,
-    {$push:{
-      instructors: newInstructor._id
-    }},
-    (err, c) => {
-    if (err) {
-      return res.status(500)
-        .send({
-          message: getErrorMessage(err)
-        });
-    } else {
-      if (newInstructor.role === 'student') {
-        newInstructor.role = 'instr';
-        newInstructor.save((err2) => {
-          if (err2) {
-            return res.status(400)
-              .send({
-                message: getErrorMessage(err2)
-              });
-          } else {
-            res.json(c);
-          }
-        }); // end instructor.save
-      } else {
-        res.json(c);
-      }
-    }
-  }); // end course.save*/
 };
 
 /**
@@ -334,7 +303,8 @@ exports.getScenarioStatus = function (req, res) {
     } else {
       var output = students.map((student) => {
         return {
-          name: student.name,
+          firstName: student.firstName,
+          lastName: student.lastName,
           userId: student.userId,
           status: student.accessGranted[scenId]
         }

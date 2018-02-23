@@ -1,6 +1,6 @@
 {
   "name": "cricket",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "Cricket application",
   "main": "index.js",
   "directories": {

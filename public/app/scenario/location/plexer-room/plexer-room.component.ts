@@ -6,7 +6,6 @@ import { ScenarioGlobals } from '../../scenario.globals';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../scenario.service'
 import { FridgePhage, ExperimentPhage } from '../../../interfaces/phage.interface';
-import { PlexerPlate } from '../../../interfaces/experiments.interface';
 
 @Component({
     selector: 'plexer-room',
