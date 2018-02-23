@@ -165,7 +165,7 @@ export var listOfPhage: StudentPhage[] = [
    comment: 'del',
    mutationList: [],
    deletion: [10, 40],
-   guesses: [true, false, true]
+   guesses: [false, true, false]
   },
   {
     id: 'b1',

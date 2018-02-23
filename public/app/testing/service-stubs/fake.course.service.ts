@@ -80,7 +80,14 @@ export class CourseServiceStub {
   }
 
   getScenarioStatus(adminId: number, courseNum: string, scenId: string): Observable<Student[]>{
-    return Observable.of(null);
+    let students: Student[] = listOfStudents.filter((student)=>{
+      return (student.course && student.course.courseNum === courseNum)
+    });
+    let x = students.map((student)=>{
+      return { firstName: student.firstName, lastName: student.lastName,
+             userId: student.userId, status: student.accessGranted[scenId]}
+    });
+    return Observable.of(x);
   }
 
   getCourseList(): Observable<any>{
