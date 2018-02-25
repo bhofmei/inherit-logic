@@ -348,6 +348,9 @@ export class LabRoomComponent {
     this._experimentService.createPlate(newPlate)
     .takeUntil(this.isDestroyed$)
     .subscribe((res)=>{
+      console.log('genotypes:', res.genotypes);
+      console.log('small plaque:', res.smallPlaque);
+      console.log('large plaque:', res.largePlaque);
       this.isFull = res.full;
       this.smallPlaqueList = res.smallPlaque;
       this.largePlaqueList = res.largePlaque;
