@@ -216,12 +216,15 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
         if (nRec > 0) {
           let newGenoList = phageExper.recombine(startGenotypes[0], startGenotypes[1], j + 1, nRec);
           // add to plate
+          let mutsCounts = [0,0,0];
           for (let k = 0; k < newGenoList.length; k++) {
             numNewGenos++;
             debugExt('recomb %d phage %o', j + 1, newGenoList[k]);
+            mutsCounts[newGenoList[k].shifts.length]++;
             replicaStrainList.push(numNewGenos);
             genoList.push(newGenoList[k]);
           } // end for k
+          debugTest('Recomb mutants: %o', mutsCounts);
         } // end if nRec > 0
       } // end for j
     } // end if !identical
@@ -359,7 +362,7 @@ const computeRecombParameters = function (f1, f2, p, n) {
   // n = numOffspring
   var numRecomb = [];
   for (let i = 0; i < 3; i++) {
-    let pR = Math.pow(p, i + 1) * n * f1 * f2;
+    let pR = Math.pow(p, i + 1) * n * 2 * f1 * f2;
     let kR = Math.sqrt(2 * Math.round(pR))
     let nR = pR + util.gaussRand(randEngine, kR);
     debugExt('prob %d recomb %d adjusted %d', i, pR, nR);
