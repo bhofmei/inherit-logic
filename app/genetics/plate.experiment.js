@@ -313,40 +313,8 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
     }
   }
   // shuffle plaques
-  // might want to remove this shuffling if too slow
-    if (smallPlaqueList.length > 100 && smallPlaqueList.length < 400 ) {
-      let newPhage = smallPlaqueList.filter((x) => {
-        return x > (numInput - 1)
-      });
-      let parentalPhage = smallPlaqueList.filter((x) => {
-        return x <= (numInput - 1)
-      });
-      randGen.randShuffle(parentalPhage, randEngine);
-      let tmp = parentalPhage.slice(0, 100)
-        .concat(newPhage);
-      parentalPhage = (parentalPhage.length > 100 ? parentalPhage.slice(100) : []);
-      randGen.randShuffle(tmp, randEngine);
-      smallPlaqueList = tmp.concat(parentalPhage);
-    } else {
-          randGen.randShuffle(smallPlaqueList, randEngine);
-    }
-    if (largePlaqueList.length > 100 && largePlaqueList.length < 400) {
-      //debug('shuffle large - ', largePlaqueList);
-      let newPhage = largePlaqueList.filter((x) => {
-        return x > (numInput-1)
-      });
-      let parentalPhage = largePlaqueList.filter((x) => {
-        return x <= (numInput-1)
-      });
-      randGen.randShuffle(parentalPhage, randEngine);
-      let tmp = parentalPhage.slice(0, 100)
-        .concat(newPhage);
-      parentalPhage = (parentalPhage.length > 100 ? parentalPhage.slice(100) : []);
-      randGen.randShuffle(tmp, randEngine);
-      largePlaqueList = tmp.concat(parentalPhage);
-  } else {
-    randGen.randShuffle(largePlaqueList, randEngine);
-  }
+  smallPlaqueList = shufflePlaqueList(smallPlaqueList, numInput);
+  largePlaqueList = shufflePlaqueList(largePlaqueList, numInput);
   return {
     full: overwhelm,
     genotypes: genoList,
@@ -398,4 +366,30 @@ const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
     numMut: numMut,
     numRecomb: numRecomb
   };
+}
+
+const shufflePlaqueList = function(inList, numInput){
+  if(inList.length < 100){
+    return randGen.randShuffle(inList, randEngine);
+  }
+  let newPhage = inList.filter((x)=>{
+    return x > (numInput-1);
+  });
+  let numNew = newPhage.length;
+  let parentPhage = inList.filter((x)=>{
+    return x <= (numInput-1);
+  });
+  let numParent = parentPhage.length;
+
+  if(numParent > 25){
+    randGen.randShuffle(parentPhage, randEngine);
+    // numNew > 75 -> 25, otherwise get to 100
+    let nP = (numNew <= 75 ? 100 - numNew : 25);
+    let tmp = parentPhage.slice(0, nP).concat(newPhage);
+    randGen.randShuffe(tmp, randEngine);
+    return tmp.concat(parentPhage.slice(nP));
+  } else {
+    // just shuffle everything
+    return randGen.randShuffle(inList, randEngine);
+  }
 }

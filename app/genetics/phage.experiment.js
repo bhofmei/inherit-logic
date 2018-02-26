@@ -144,7 +144,7 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
       shifts: newPhageShiftList,
       deletion: newPhageDeletes
     });
-    debug('%s - %s', k, debugText);
+    debug('%s - %s - %o', k, debugText, newPhageShiftList);
   } // end for k
   return recGenos;
 
