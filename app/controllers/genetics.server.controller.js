@@ -38,7 +38,11 @@ exports.createPlate = function (req, res) {
         if (phage2 !== null && phage2 !== undefined) {
           // has two phage
           let pId2 = phage2.id;
-          Phage.findById(pId2, (err2, ph2) => {
+          Phage.findOne({
+            '_id': pId2
+          }, 'strainNum mutationList deletion', {
+            lean: true
+          }, (err2, ph2) => {
             if (err2) {
               res.status(400)
                 .send({
@@ -92,9 +96,8 @@ exports.handlePlexer = function (req, res) {
   var location = reqB.location;
   var capacity = reqB.capacity;
   var scenData = JSON.parse(reqB.scenarioData);
-  console.log()
   var rowPhageId = reqB.rowPhage.map((phage) => {
-      return phage.id
+    return phage.id
   });
   var colPhageId = reqB.colPhage.map((phage) => {
     return phage.id;
@@ -141,8 +144,14 @@ exports.handlePlexer = function (req, res) {
             } else {
               // duplicate rowPhage as necessary
               let objects2 = {};
-              array2.forEach(o => {objects2[o._id] = o;});
-              rowPhage = rowPhageId.map((id,i) => {let o = objects2[id]; o.numPhage = reqB.rowPhage[i].numPhage; return o;});
+              array2.forEach(o => {
+                objects2[o._id] = o;
+              });
+              rowPhage = rowPhageId.map((id, i) => {
+                let o = objects2[id];
+                o.numPhage = reqB.rowPhage[i].numPhage;
+                return o;
+              });
               // we are safe to perform
               //console.log('controller', rowPhage, '\n-', colPhage);
               let plexerResults = plexer.createPlexerPlate(rowPhage, colPhage, lawnType, null, capacity, location, scenData);

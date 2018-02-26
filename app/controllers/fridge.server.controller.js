@@ -242,8 +242,8 @@ exports.deleteStudentFridge = function (req, res, next) {
       Phage.remove({
         owner: student._id,
         scenarioOrigin: scen._id
-      }, (err2)=>{
-        if(err2){
+      }, (err2) => {
+        if (err2) {
           next(err2)
         } else {
           next()
@@ -324,8 +324,17 @@ exports.updatePhage = function (req, res) {
           message: getErrorMessage(err)
         });
     } else {
-      // Send a JSON representation of the strain
-      res.json(strain);
+      // Send a JSON representation of the strain and populate parents
+      strain.populate({
+        path: 'parents',
+        select: 'strainNum'
+      }, (err3, newPhage2) => {
+        if (!err && newPhage2) {
+          res.json(newPhage2)
+        } else {
+          res.json(strain);
+        }
+      }); // end populate
     }
   });
 };

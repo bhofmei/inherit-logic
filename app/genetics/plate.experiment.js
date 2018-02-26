@@ -45,15 +45,11 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
   var mutagenized = (specials === 'irrad');
   // phage 1 and 2 will be full objects previously retrieved from mongoose database and numPhage property
   //console.log('plate', JSON.stringify(phage1), JSON.stringify(phage2));
-  // TODO: add parents information
   var parents = [];
-  let getParents = (whoCalled === plateEnum.PLATECALLER.PLEXER ? false : true)
   var newPhage1, newPhage2, phageRatio;
   var onePhage = false;
   if (phage1.hasOwnProperty('strainNum')) {
-    if (getParents) {
-      parents = [phage1._id]
-    }
+    parents = [phage1._id]
     newPhage1 = {
       genome: {
         deletion: phage1.deletion,
@@ -64,10 +60,8 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
     }
   } // end phage1.has property
   // if phage2 exists
-  if (phage2) {
-    if (getParents && phage2.hasOwnProperty('strainNum')) {
-      parents.push(phage2._id)
-    }
+  if (phage2 && phage2.hasOwnProperty('strainNum')) {
+    parents = [phage1._id, phage2._id]
     newPhage2 = {
       genome: {
         deletion: phage2.deletion,
@@ -107,7 +101,6 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
     if (startGenotypes[i].deletion.length !== 0)
       deletesInPlay = true;
   }
-
   // handle one phage
   let numNewGenos;
   if (onePhage) {
@@ -386,7 +379,7 @@ const shufflePlaqueList = function(inList, numInput){
     // numNew > 75 -> 25, otherwise get to 100
     let nP = (numNew <= 75 ? 100 - numNew : 25);
     let tmp = parentPhage.slice(0, nP).concat(newPhage);
-    randGen.randShuffe(tmp, randEngine);
+    randGen.randShuffle(tmp, randEngine);
     return tmp.concat(parentPhage.slice(nP));
   } else {
     // just shuffle everything
