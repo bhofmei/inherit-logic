@@ -2,6 +2,11 @@
 
 ## [unreleased]
 
+## [v1.0.8] - 2018-02-26
+- Save parent id of phage from plate to fridge
+- Get parent info about phage when getting fridge
+- Display phage parent strain number in dialog
+
 ## [v1.0.7] - 2018-02-23
 - UPDATED the way phage mutations are stored to save memory
   - updated all genetics components
