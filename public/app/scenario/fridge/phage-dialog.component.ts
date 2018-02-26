@@ -11,9 +11,7 @@ import { FridgePhage } from '../../interfaces/phage.interface';
 export class PhageDialogComponent {
   @Input() phage: FridgePhage;
 
-  public viewParents: boolean = false;
-
   constructor(public activeModal: NgbActiveModal) {
-    //this.hasParents = (this.phage.parents.length === 0);
   }
+
 }

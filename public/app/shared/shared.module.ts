@@ -11,6 +11,7 @@ import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog.component'
 
 import { PersonNamePipe } from '../pipes/person-name.pipe';
 import { PeopleListNamesPipe } from '../pipes/people-list-names.pipe';
+import { PhageParentsPipe } from '../pipes/phage-parents.pipe';
 
 @NgModule({
     imports: [
@@ -24,6 +25,7 @@ import { PeopleListNamesPipe } from '../pipes/people-list-names.pipe';
   declarations: [
     PersonNamePipe,
     PeopleListNamesPipe,
+    PhageParentsPipe,
     ConfirmDeleteDialogComponent
   ],
     exports: [
@@ -34,6 +36,7 @@ import { PeopleListNamesPipe } from '../pipes/people-list-names.pipe';
       McBreadcrumbsModule,
       PersonNamePipe,
       PeopleListNamesPipe,
+      PhageParentsPipe,
       SkyhookDndModule,
       ConfirmDeleteDialogComponent
     ],

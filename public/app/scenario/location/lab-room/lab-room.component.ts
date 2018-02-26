@@ -34,6 +34,7 @@ export class LabRoomComponent {
   private smallPlaqueList: any[];
   private largePlaqueList: any[];
   private genotypes: GenotypePhage[];
+  private plateParents: string[];
 
   private errorMessage: string = '';
 
@@ -356,6 +357,7 @@ export class LabRoomComponent {
       this.largePlaqueList = res.largePlaque;
       this.isEmpty = false;
       this.genotypes = res.genotypes;
+      this.plateParents = res.parents;
       // success
     }, (err)=>{
       // error
@@ -395,6 +397,7 @@ export class LabRoomComponent {
     let genotypeIndex = plaque;
     let phage = JSON.parse(JSON.stringify(this.genotypes[genotypeIndex]));
     phage['src'] = src;
+    phage['parents'] = this.plateParents;
     return phage;
   }
 
@@ -411,6 +414,15 @@ export class LabRoomComponent {
     if(src === 'small'){
       this.smallPlaqueList.shift();
     } else { // large
+      this.largePlaqueList.shift();
+    }
+  }
+
+  delPhagePlate(src: string){
+    if(src === 'small'){
+      this.smallPlaqueList.shift();
+    }
+    else{
       this.largePlaqueList.shift();
     }
   }

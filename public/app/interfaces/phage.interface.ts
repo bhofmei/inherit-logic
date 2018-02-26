@@ -7,6 +7,7 @@ export interface FridgePhage extends Phage {
   phageType: string;
   comment: string;
   parents?: Phage[];
+  numParents?: number;
   submitted?: boolean;
 }
 

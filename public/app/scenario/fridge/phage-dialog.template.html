@@ -6,21 +6,21 @@
 </div>
 <div class="modal-body">
   <div class="container-fluid">
-    <div class="row form-group" id="phageType">
+    <div class="row form-group mb-1" id="phageType">
       <label for="typeInput" class="col-sm-3 col-form-label text-secondary" style="font-weight: 500;">Type</label>
       <div class="col-sm-9">
         <input type="text" readonly class="form-control-plaintext text-capitalize" id="typeInput" [(value)]="phage.phageType">
       </div>
     </div>
     <!-- end row phageType -->
-    <div class="row form-group" id="phageComment">
+    <div class="row form-group mb-1" id="phageComment">
       <label for="commentInput" class="col-sm-3 col-form-label text-secondary" style="font-weight: 500;">Comment</label>
       <div class="col-sm-9">
         <textarea type="text" class="form-control" id="commentInput" placeholder="comment" [(ngModel)]="phage.comment"></textarea>
       </div>
     </div>
     <!-- end row phageComment -->
-    <div *ngIf="phage.phageType==='user'" class="row form-group" id="phageSubmit">
+    <div *ngIf="phage.phageType==='user'" class="row form-group mb-1" id="phageSubmit">
       <label for="submitInput" class="col-sm-3 col-form-label text-secondary" style="font-weight: 500;" title="submit phage for grading">Submitted</label>
       <div class="col-sm-9">
         <input type="checkbox" class="" id="submitInput" [(ngModel)]="phage.submitted">
@@ -28,14 +28,10 @@
     </div>
     <!-- end row phageType -->
 
-    <div *ngIf="phage.parents.length > 0" id="viewParents" class="row">
-      <label for="parentList" class="col-sm-2">Parents</label>
-      <div class="col-sm-10">
-        <ul class="list-group">
-          <li *ngFor="let parent of phage.parents" class="list-group-item">
-            Strain number: {{parent.strainNum+1}}
-          </li>
-        </ul>
+    <div *ngIf="phage.parents.length > 0" id="viewParents" class="row form-group mb-1">
+      <label for="parentList" class="col-sm-3 col-form-label text-secondary" style="font-weight: 500;">Parents</label>
+      <div class="col-sm-9 form-control-plaintext">
+        {{phage.parents | phageParents:phage.numParents}}
       </div>
     </div>
     <!-- end row viewParents -->

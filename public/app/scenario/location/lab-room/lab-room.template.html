@@ -66,7 +66,7 @@
           Small plaques:
           <div class="plaque text-dark border border-secondary"
                title="Drag to fridge to save"
-               dnd-draggable [dragEnabled]="canDragPlate('small')" [dragData]="getPhagePlate('small')" (onDragSuccess)="addedToFridge($event)">
+               dnd-draggable [dragEnabled]="canDragPlate('small')" [dragData]="getPhagePlate('small')" (onDragSuccess)="addedToFridge($event)"(dblclick)="delPhagePlate('small')">
             {{ smallPlaqueList.length }}
           </div>
         </div>
@@ -77,7 +77,8 @@
                title="Drag to fridge to save"
                dnd-draggable [dragEnabled]="canDragPlate('large')"
                [dragData]="getPhagePlate('large')"
-               (onDragSuccess)="addedToFridge($event)">
+               (onDragSuccess)="addedToFridge($event)"
+               (dblclick)="delPhagePlate('large')">
             {{ largePlaqueList.length }}
           </div>
         </div>

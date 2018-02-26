@@ -187,7 +187,8 @@ export class FridgeComponent implements OnInit, OnDestroy{
     let newStrain = {
       strainNum: spot,
       mutationList: strain.shifts,
-      deletion: strain.deletion
+      deletion: strain.deletion,
+      parents: strain.parents
     }
     // add to fridge
     let userId = this.user.id;
@@ -200,7 +201,8 @@ export class FridgeComponent implements OnInit, OnDestroy{
         comment: res.comment,
         phageType: res.phageType,
         id: res.id,
-        parents: res.parents
+        parents: res.parents,
+        numParents: res.numParents
       }
       this._currStrains();
     },
