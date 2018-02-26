@@ -16,6 +16,7 @@ const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 const gracefulExit = require('express-graceful-exit');
 const helmet = require('helmet');
+const mongoose = require('mongoose');
 
 module.exports = function (db) {
   const app = express();
@@ -50,7 +51,7 @@ module.exports = function (db) {
   app.use(helmet());
 
   const mongoStore = new MongoStore({
-    mongooseConnection: db.connection
+    mongooseConnection: mongoose.connection
   });
 
   app.use(session({

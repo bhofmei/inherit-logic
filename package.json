@@ -16,7 +16,7 @@
     "start:p": "concurrently \"npm run webpack:p\" \"npm run app\" ",
     "test:back": "NODE_ENV=test mocha --recursive --reporter spec -t 5000 app/tests/",
     "test:server": "NODE_ENV=test mocha --reporter spec -t 5000 app/tests/",
-    "test:genetics": "NODE_ENV=test DEBUG=genetics mocha --reporter spec app/tests/genetics"
+    "test:genetics": "NODE_ENV=test DEBUG=genetics:test mocha --reporter spec app/tests/genetics"
   },
   "keywords": [
     "genetics"
@@ -60,7 +60,7 @@
     "jquery": "^3.2.1",
     "loadash": "^1.0.0",
     "method-override": "^2.3.6",
-    "mongoose": "^4.13.8",
+    "mongoose": "^5.0.7",
     "mongoose-sequence": "^4.0.1",
     "morgan": "^1.7.0",
     "ng2-dnd": "^5.0.2",
