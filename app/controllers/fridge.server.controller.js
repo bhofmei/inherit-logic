@@ -18,15 +18,16 @@ const getErrorMessage = function (err) {
   }
 };
 
-const getFridgeInfo = function(fridge){
-  let strains = fridge.strains.map((strain)=>{
+const getFridgeInfo = function (fridge) {
+  let strains = fridge.strains.map((strain) => {
     return {
       comment: strain.comment,
       id: strain.id,
       parents: strain.parents,
       strainNum: strain.strainNum,
       phageType: strain.phageType,
-      submitted: strain.submitted
+      submitted: strain.submitted,
+      numParents: strain.numParents
     }
   });
   return {
@@ -45,7 +46,7 @@ exports.stockFridge = function (req, res) {
   // determine if access granted -> default true bc of testing
   let accessGranted = user.get('accessGranted');
   let access;
-  if(accessGranted){
+  if (accessGranted) {
     // created user
     access = accessGranted[scen.scenCode];
   } else {
@@ -53,7 +54,7 @@ exports.stockFridge = function (req, res) {
     access = true;
   }
   // get stock phage and details
-  if(!access){
+  if (!access) {
     phageScen.seedEngine(scen.degOfDiff);
   }
   var stock = phageScen.generateScenario(scen);
@@ -69,30 +70,33 @@ exports.stockFridge = function (req, res) {
     newPhage.save((err, phage) => {
       //console.log(phage);
       if (err)
-        res.status(500).send({message:'Unable to create new phage for scenario'});
+        res.status(500)
+        .send({
+          message: 'Unable to create new phage for scenario'
+        });
     });
     strainIdList.push(newPhage);
     //console.log('p', newPhage);
-    if(strain.phageType === phageEnum.PHAGETYPE.UNKNOWN){
+    if (strain.phageType === phageEnum.PHAGETYPE.UNKNOWN) {
       unknwnStrains.push(newPhage);
     }
   } // end for i
   let guessStr = '';
   // add deletion guess info if needed
-    // initialize empty guesses
-    let geneLength = scenDefaults.geneLength;
-    let stepSize = scenDefaults.deletionGuessLength;
-    let guesses = {};
-    //console.log('unknowns', unknwnStrains);
-    for(let i = 0; i < unknwnStrains.length; i++){
-      let guess = [];
-      for(let j = 0; j < geneLength; j += stepSize){
-        guess.push(false);
-      } // end for j
-      let s = unknwnStrains[i].strainNum;
-      guesses[s] = guess;
-    } // end for i
-    guessStr = JSON.stringify(guesses);
+  // initialize empty guesses
+  let geneLength = scenDefaults.geneLength;
+  let stepSize = scenDefaults.deletionGuessLength;
+  let guesses = {};
+  //console.log('unknowns', unknwnStrains);
+  for (let i = 0; i < unknwnStrains.length; i++) {
+    let guess = [];
+    for (let j = 0; j < geneLength; j += stepSize) {
+      guess.push(false);
+    } // end for j
+    let s = unknwnStrains[i].strainNum;
+    guesses[s] = guess;
+  } // end for i
+  guessStr = JSON.stringify(guesses);
   // fridge info
   var newFridge = {
     scenario: scen,
@@ -103,10 +107,13 @@ exports.stockFridge = function (req, res) {
     guesses: guessStr
   };
   // save fridge
-  Fridge.create(newFridge, (err, fridge)=>{
-    if(err)
-      res.status(500).send({message: 'Unable to save new fridge'});
-    else{
+  Fridge.create(newFridge, (err, fridge) => {
+    if (err)
+      res.status(500)
+      .send({
+        message: 'Unable to save new fridge'
+      });
+    else {
       let i = getFridgeInfo(fridge);
       res.json(i);
     }
@@ -123,7 +130,15 @@ exports.getFridge = function (req, res) {
     })
     .populate('owner', 'userId')
     .populate('scenario', 'scenCode')
-    .populate('strains', 'strainNum comment phageType id parents submitted')
+    .populate({
+      path: 'strains',
+      select: 'strainNum comment phageType id submitted numParents',
+      populate: {
+        path: 'parents',
+        select: 'strainNum',
+        model: 'Phage'
+      }
+    })
     .exec((err, fridge) => {
       if (err) {
         return res.status(400)
@@ -131,47 +146,64 @@ exports.getFridge = function (req, res) {
             message: getErrorMessage(err)
           });
       } else if (!fridge) {
-        res.status(307).send({message: 'No fridge for scenario/user'});
-      } else {//
+        res.status(307)
+          .send({
+            message: 'No fridge for scenario/user'
+          });
+      } else { //
         let i = getFridgeInfo(fridge);
         res.json(i);
       }
     });
 };
 
-exports.getStudentFridge = function(req, res){
+exports.getStudentFridge = function (req, res) {
   let student = req.student;
   let scen = req.scenario;
   Fridge.findOne({
-    owner: student._id,
-    scenario: scen._id
-  }).populate('strains', 'strainNum comment phageType id mutationList deletion parents submitted')
-  .populate('owner', 'firstName lastName userId')
-  .populate('scenario', 'scenCode label')
-  .exec((err, fridge)=>{
-    if(err){
-      return res.status(500).send({message: getErrorMessage(err)});
-    } else if(!fridge){
-      let out = {
-        owner: {firstName: student.firstName, lastName: student.lastName, userId: student.userId},
-        scenario: {scenCode: scen.scenCode, label: scen.label}
-      };
-      res.json(out);
-    } else {
-      res.json(fridge);
-    }
-  });
+      owner: student._id,
+      scenario: scen._id
+    })
+    .populate('strains', 'strainNum comment phageType id mutationList deletion parents submitted')
+    .populate('owner', 'firstName lastName userId')
+    .populate('scenario', 'scenCode label')
+    .exec((err, fridge) => {
+      if (err) {
+        return res.status(500)
+          .send({
+            message: getErrorMessage(err)
+          });
+      } else if (!fridge) {
+        let out = {
+          owner: {
+            firstName: student.firstName,
+            lastName: student.lastName,
+            userId: student.userId
+          },
+          scenario: {
+            scenCode: scen.scenCode,
+            label: scen.label
+          }
+        };
+        res.json(out);
+      } else {
+        res.json(fridge);
+      }
+    });
 };
 
-exports.saveDeletions = function(req, res){
+exports.saveDeletions = function (req, res) {
   let newGuesses = req.body;
   let fridge = req.fridge;
   let s = JSON.stringify(req.body);
 
   fridge.guesses = s;
-  fridge.save((err)=>{
-    if(err)
-      return res.status(500).send({message: 'Could not save new guesses'});
+  fridge.save((err) => {
+    if (err)
+      return res.status(500)
+        .send({
+          message: 'Could not save new guesses'
+        });
     else
       res.json(s);
   });
@@ -196,27 +228,17 @@ exports.saveFridge = function (req, res) {
   });
 };
 
-exports.deleteFridge = function(req, res) {
-  // called with findFridgebyScenOwner
-  var fridge = req.fridge;
-  fridge.remove((err, f) =>{
-    if(err)
-      res.status(500).send({message: 'Failed to remove fridge'});
-    else
-      res.json(fridge);
-  });
-};
-
-exports.deleteStudentFridge = function(req, res, next){
+exports.deleteStudentFridge = function (req, res, next) {
   let student = req.student;
   let scen = req.scenario;
   Fridge.remove({
     owner: student._id,
     scenario: scen._id
-  }, (err)=>{
-    if(err){
+  }, (err) => {
+    if (err) {
       next(err);
     } else {
+      // TODO: remove the phage in the fridge
       next();
     }
   });
@@ -231,6 +253,12 @@ exports.addPhageToFridge = function (req, res) {
   strain.owner = user;
   strain.scenarioOrigin = scen;
   strain.phageType = phageEnum.PHAGETYPE.USER;
+  // get parents
+  strain.parents = (strain.parents === undefined ? [] : strain.parents);
+  strain.parents = strain.parents.map((parent) => {
+    return ObjectId(parent)
+  })
+  strain.numParents = strain.parents.length;
 
   Phage.create(strain, (err, newPhage) => {
     if (err) {
@@ -240,22 +268,32 @@ exports.addPhageToFridge = function (req, res) {
         });
     } else {
       Fridge.findByIdAndUpdate(
-        fridge._id,
-        {$push: {
-          strains: newPhage._id
-        }},
+        fridge._id, {
+          $push: {
+            strains: newPhage._id
+          }
+        },
         (err2, updated) => {
-        if(err2){
-          res.status(500)
-        .send({
-          message: getErrorMessage(err2)
-        })
-        } else {
-        res.json(newPhage);
-        }
-      });
+          if (err2) {
+            res.status(500)
+              .send({
+                message: getErrorMessage(err2)
+              })
+          } else {
+            newPhage.populate({
+              path: 'parents',
+              select: 'strainNum'
+            }, (err3, newPhage2) => {
+              if (!err && newPhage2) {
+                res.json(newPhage2)
+              } else {
+                res.json(newPhage);
+              }
+            }); // end populate
+          }
+        }); // end Fridge update
     }
-  });
+  }); // end Phage create
 };
 
 exports.updatePhage = function (req, res) {
@@ -290,7 +328,9 @@ exports.deletePhage = function (req, res) {
   fridge.save((error) => {
     if (error) {
       return res.status(500)
-        .send({message: 'Unable to remove strain from fridge'});
+        .send({
+          message: 'Unable to remove strain from fridge'
+        });
     } else {
       strain.remove((err) => {
         if (err) {
@@ -351,9 +391,9 @@ exports.hasFridgeAuthorization = function (req, res, next) {
   next();
 };
 
-exports.hasPhageAuthorization = function(req, res, next){
+exports.hasPhageAuthorization = function (req, res, next) {
   let ownerId = req.strain.owner.toString();
-  if(ownerId !== req.curUser.id){
+  if (ownerId !== req.curUser.id) {
     return res.status(403)
       .send({
         message: 'User is not authorized'

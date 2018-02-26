@@ -28,7 +28,11 @@ const PhageSchema = new Schema({
   parents: [{
     type: Schema.ObjectId,
     ref: 'Phage'
-  }]
+  }],
+  numParents: {
+    type: Number,
+    default: 0
+  }
 });
 
 PhageSchema.set('toJSON',{getters: true});
