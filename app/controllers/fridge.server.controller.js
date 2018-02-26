@@ -239,6 +239,16 @@ exports.deleteStudentFridge = function (req, res, next) {
       next(err);
     } else {
       // TODO: remove the phage in the fridge
+      Phage.remove({
+        owner: student._id,
+        scenarioOrigin: scen._id
+      }, (err2)=>{
+        if(err2){
+          next(err2)
+        } else {
+          next()
+        }
+      });
       next();
     }
   });
