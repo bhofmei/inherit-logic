@@ -15,7 +15,7 @@ const getErrorMessage = function(err) {
 
 // Create a new controller method that retrieves a list of scenarios
 exports.list = function(req, res) {
-  Scenario.find({}, 'label scenCode purpose startingPoint relevance degOfDiff', (err, scenarios) => {
+  /*Scenario.find({}, 'label scenCode purpose startingPoint relevance degOfDiff', (err, scenarios) => {
         if (err) {
             // If an error occurs send the error message
             return res.status(400).send({
@@ -25,7 +25,20 @@ exports.list = function(req, res) {
             // Send a JSON representation
             res.json(scenarios);
         }
-    }).sort('degOfDiff');
+    }).sort('degOfDiff');*/
+  Scenario.find({}, 'label scenCode purpose startingPoint relevance degOfDiff')
+    .sort('degOfDiff')
+    .exec((err, scenarios) => {
+        if (err) {
+            // If an error occurs send the error message
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        } else {
+            // Send a JSON representation
+            res.json(scenarios);
+        }
+    });
 };
 
 // Create a new controller method that returns a scenario
