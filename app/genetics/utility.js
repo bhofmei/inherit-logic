@@ -62,6 +62,11 @@ exports.expand = function(inList, guesses){
 }
 
 exports.gaussRand = function(engine, inNum){
+  // if test environment, return 0
+  if(process.env.NODE_ENV === 'test'){
+    return 0;
+  }
+  // else generate number
   debug('guassRand start %d', inNum);
   var notGood = true;
   var r, v, w, n1, n2;

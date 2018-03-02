@@ -209,15 +209,12 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
         if (nRec > 0) {
           let newGenoList = phageExper.recombine(startGenotypes[0], startGenotypes[1], j + 1, nRec);
           // add to plate
-          let mutsCounts = [0,0,0];
           for (let k = 0; k < newGenoList.length; k++) {
             numNewGenos++;
             debugExt('recomb %d phage %o', j + 1, newGenoList[k]);
-            mutsCounts[newGenoList[k].shifts.length]++;
             replicaStrainList.push(numNewGenos);
             genoList.push(newGenoList[k]);
           } // end for k
-          debugTest('Recomb mutants: %o', mutsCounts);
         } // end if nRec > 0
       } // end for j
     } // end if !identical
@@ -280,6 +277,7 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
   } else {
     // restrictive bacteria
     // update genoList
+    debugTest('parents: ', genoList.slice(0, numInput))
     genoList = genoList.filter((genoElt, i) => {
       return genoMapping[i] !== null;
     });

@@ -60,7 +60,7 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
       notOk.sort();
       debugText += ' (' + notOk + ') ';
     }
-    debugText += okRecSpots + ' - ';
+    debugText += okRecSpots;
     if (okRecSpots.length === 0) {
       // no recombinations successful, return parent
       if (randGen.randBool(randEngine)) {
@@ -144,7 +144,7 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
       shifts: newPhageShiftList,
       deletion: newPhageDeletes
     });
-    debug('%s - %s - %o', k, debugText, newPhageShiftList);
+    debug('%s - %s - %o', k, debugText, (newPhageDeletes.length ===0 ? newPhageShiftList : newPhageDeletes));
   } // end for k
   return recGenos;
 
