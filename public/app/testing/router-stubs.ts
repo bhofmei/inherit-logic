@@ -27,7 +27,7 @@ export class RouterOutletStubComponent { }
 export class RouterStub {
   path: string;
   navigate(commands: any[], extras?: NavigationExtras) {
-    this.path = commands.join('');
+    this.path = commands.join('/').replace(/\/\//g, '/');
   }
 }
 

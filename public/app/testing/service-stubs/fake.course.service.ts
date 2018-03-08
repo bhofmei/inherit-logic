@@ -80,6 +80,10 @@ export class CourseServiceStub {
   }
 
   getScenarioStatus(adminId: number, courseNum: string, scenId: string): Observable<Student[]>{
+    let cIndex = this._findCourseIndex(courseNum);
+    if(cIndex === -1){
+      return Observable.throw({message: 'Failed to load course '+courseNum});
+    }
     let students: Student[] = listOfStudents.filter((student)=>{
       return (student.course && student.course.courseNum === courseNum)
     });
