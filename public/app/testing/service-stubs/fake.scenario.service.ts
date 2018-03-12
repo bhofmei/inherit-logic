@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Scenario, Fridge, FridgePhage, GenotypePhage } from '../../interfaces';
 import { listOfScenarios, listOfFridges, fridgeToCreate, listOfPhage } from '../sample-data';
+import * as _ from 'lodash';
 
 export class ScenarioServiceStub {
 
@@ -28,19 +29,19 @@ export class ScenarioServiceStub {
   getGuesses = Observable.of('guesses');
   getScenarioCode = Observable.of(listOfScenarios[0].scenCode);
 
-   /*resetScenario() {
-        this._scenarioDetails.next('');
-        this._scenarioGuesses.next({});
-        this._scenarioCode.next('');
+   resetScenario() {
+//        this._scenarioDetails.next('');
+//        this._scenarioGuesses.next({});
+//        this._scenarioCode.next('');
     }
 
   setScenario(scenarioDetails: string, scenarioGuesses: string) {
-        if (scenarioDetails !== null)
-            this._scenarioDetails.next(scenarioDetails);
-        if (scenarioDetails !== null)
-            this._scenarioGuesses
-              .next(JSON.parse(scenarioGuesses));
-    }*/
+//        if (scenarioDetails !== null)
+//            this._scenarioDetails.next(scenarioDetails);
+//        if (scenarioDetails !== null)
+//            this._scenarioGuesses
+//              .next(JSON.parse(scenarioGuesses));
+    }
 
   listScenarios(): Observable<Scenario[]> {
     return Observable.of(this.scenarios);
@@ -93,8 +94,10 @@ export class ScenarioServiceStub {
   updateStrain(userId: number, scenCode: string, strain: FridgePhage): Observable<FridgePhage> {
     let p = this._findPhage(strain.id);
     if(p){
-      p.comment = strain.comment;
-      return Observable.of(p)
+      let x = _.cloneDeep(p);
+      x.comment = strain.comment;
+      x.submitted = strain.submitted;
+      return Observable.of(x)
     } else {
       return Observable.throw({message: 'Phage not found'});
     }

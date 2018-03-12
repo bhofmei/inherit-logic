@@ -25,7 +25,8 @@ module.exports = function(config) {
     ],
 
     proxies: {
-      '/app/': '/base/public/app/'
+      '/app/': '/base/public/app/',
+      "/img/": "/base/public/img/"
     },
 
 

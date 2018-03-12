@@ -30,20 +30,24 @@
 }
 
 .strain-image{
-  background: url(../../../img/dna-black.svg) repeat-x center center;
+/*  background: url(../../../img/dna-black.svg) repeat-x center center;*/
+  background: url(/img/dna-black.svg) repeat-x center center;
   height: 20px;
 }
 
 .strain-image-submitted{
-  background-image: url(../../../img/dna-orange.svg)
+/*  background-image: url(../../../img/dna-orange.svg)*/
+  background-image: url(/img/dna-orange.svg)
 }
 
 .strain-image-unknown{
-  background-image: url(../../../img/dna-purple.svg)
+/*  background-image: url(../../../img/dna-purple.svg)*/
+  background-image: url(/img/dna-purple.svg)
 }
 
 .strain-image-reference{
-  background-image: url(../../../img/dna-teal.svg)
+/*  background-image: url(../../../img/dna-teal.svg)*/
+  background-image: url(/img/dna-teal.svg)
 }
 
 .phage-dialog div.modal-dialog{

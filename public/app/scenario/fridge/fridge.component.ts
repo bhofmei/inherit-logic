@@ -13,23 +13,47 @@ import { Fridge } from '../../interfaces/fridge.interface';
 import { FridgePhage, GenotypePhage } from '../../interfaces/phage.interface';
 import { readErrorMessage } from '../../shared/read-error';
 
+/**
+ * One of the main components of the app - the fridge stores the phage for
+ * the given user/scenario
+ * Needs to get existing fridge/create new one; edit and remove existing strains;
+ * add new strains; change shelf
+ */
 @Component({
     selector: 'fridge',
-    templateUrl: './app/scenario/fridge/fridge.template.html',
-  styleUrls: ['./app/scenario/fridge/fridge.style.css']
+    templateUrl: 'app/scenario/fridge/fridge.template.html',
+  styleUrls: ['app/scenario/fridge/fridge.style.css']
 })
 export class FridgeComponent implements OnInit, OnDestroy{
 
-  private modalDialog: string = 'Hi';
+  /**
+   * The logged in user
+   */
   user: User;
   fridge: Fridge;
+  /**
+   * list of strains in the fridge, including empty ones
+   */
   strains: FridgePhage[];
+  /**
+   * currently visible strains based on shelf number
+   */
   currStrains: FridgePhage[];
+  /**
+   * current shelf
+   */
   shelf: number = 0;
+  /**
+   * maximum number of shelves in fridge
+   */
   maxShelf: number;
+  /**
+   * number of slots per shelf
+   */
   spots: number;
   errorMessage: string = '';
   private isDestroyed$: Subject<boolean>
+  private paramObserver: any;
 
   constructor(private _router: Router,
                private _route: ActivatedRoute,
@@ -43,40 +67,61 @@ export class FridgeComponent implements OnInit, OnDestroy{
 
   /**
    * Initailize the fridge when creating component
+   * 1. Get logged in user and current scenario
+   * 2. Fetch the corresponding fridge
+   * 3a. If the fridge doesn't exist yet, create a new one
+   * 3b. If the fridge does exist, initialize it
    */
   ngOnInit(){
     this.user = this._authenticationService.getUser();
 
     let userId = this.user.id;
-    let scenId = this._route.snapshot.paramMap.get('scenId');
-    this._scenarioService.getFridge(userId, scenId)
-    .takeUntil(this.isDestroyed$)
-    .subscribe(
-      (fridge) => {this._initFridge(fridge)},
-      (err) => {
-        if(err.status === 307){
-        this._createFridge(userId, scenId);
-      } else {
-        this.errorMessage = err.message;
-      } }
-    );
+    //let scenId = this._route.snapshot.paramMap.get('scenId');
+    this.paramObserver = this._route.params.subscribe((params) => {
+       let scenId = params['scenId'];
+      this._scenarioService.getFridge(userId, scenId)
+        .takeUntil(this.isDestroyed$)
+        .subscribe(
+          (fridge) => {this._initFridge(fridge)},
+          (err) => {
+            if(err.status === 307){
+            this._createFridge(userId, scenId);
+          } else {
+            this.errorMessage = readErrorMessage(err);
+          } }
+        );
+    });
   }
 
   ngOnDestroy(){
+    this.paramObserver.unsubscribe();
     this.isDestroyed$.next(true);
     this.isDestroyed$.unsubscribe();
   }
 
+  /**
+   * Creates a new fridge because this user doesn't have one for this scenario
+   * On success, inializes fridge
+   *
+   * @param {number} userId - logged in user's id
+   * @param {string} scenId - current scenario id
+   */
   _createFridge(userId: number, scenId: string){
     this._scenarioService.createFridge(userId, scenId)
     .takeUntil(this.isDestroyed$)
       .subscribe((fridge)=>{
       this._initFridge(fridge);
     }, (err)=>{
-      this.errorMessage = err.message;
+      this.errorMessage = readErrorMessage(err);
     });
   }
 
+  /**
+   * Intializes the fridge and component variables related to which strains are
+   * visible based on the current shelf
+   *
+   * @param {Fridge} newFridge - fridge object to be initalized
+   */
   _initFridge(newFridge: Fridge){
     this.fridge = newFridge;
     this.strains = this._fillStrains(newFridge.strains);
@@ -85,8 +130,11 @@ export class FridgeComponent implements OnInit, OnDestroy{
   }
 
   /**
-   * @param {Phage[]} fridgeStrains - array for created strains in the fridge
-   * @returns {Phage[]} - array of all slots in fridge, including empty
+   * Fills in the empty slots with "empty" phage objects
+   *
+   * @param {FridgePhage[]} fridgeStrains - array of strains actually in the fridge
+   *
+   * @returns {FridgePhage[]} - array of all slots in fridge, including empty
    */
   _fillStrains(fridgeStrains: FridgePhage[]): FridgePhage[]{
     var out: FridgePhage[] = [];
@@ -111,8 +159,26 @@ export class FridgeComponent implements OnInit, OnDestroy{
   }
 
   /**
-   * Increase or decrease visible shelf
-   * @param {number} inc - amout to change shelf by
+   * Gets CSS classes applicable to the phage based on the phage type
+   *
+   * @param {number} src - strain number of phage
+   *
+   * @returns {Object} - classes which appy to this button in the form {"class": boolean, ...}
+   */
+  getPhageClass(src: number): Object{
+    let phage = this.strains[src];
+    return {
+      'col-7 col-xl-8 p-0 strain-image': true,
+      'strain-image-reference': phage.phageType === 'reference',
+      'strain-image-unknown': phage.phageType === 'unknown',
+      'strain-image-submitted': phage.submitted
+    }
+  }
+
+  /**
+   * Increase or decrease visible shelf then update the visible strains
+   *
+   * @param {number} inc - amount to change shelf by
    */
   changeShelf(inc: number){
     this.errorMessage = '';
@@ -125,19 +191,10 @@ export class FridgeComponent implements OnInit, OnDestroy{
     }
   }
 
-  getPhageClass(src: number): Object{
-    let phage = this.strains[src];
-    return {
-      'col-7 col-xl-8 p-0 strain-image': true,
-      'strain-image-reference': phage.phageType === 'reference',
-      'strain-image-unknown': phage.phageType === 'unknown',
-      'strain-image-submitted': phage.submitted
-    }
-  }
-
   /**
    * Set visible shelf to a specific number;
    * used to jump to the beginning and end
+   *
    * @param {number} nShelf - shelf to go to
    */
   setShelf(nShelf: number){
@@ -177,11 +234,10 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * Called by onDropSucess of slot
    *
    * @param {any} $event - drag event, incuding data for strain to add;
-   * has: shifts, deletion
+   * has: shifts, deletion, parents
    * @param {number} spot - slot to drop new strain
    */
   dropStrain($event: any, spot: number){
-    // onDropSuccess
     let strain: GenotypePhage = $event.dragData;
     // need strainNum, mutationList, deletion
     let newStrain = {
@@ -206,13 +262,16 @@ export class FridgeComponent implements OnInit, OnDestroy{
       }
       this._currStrains();
     },
-              (err)=>{
+      (err)=>{
       this.errorMessage = readErrorMessage(err);
     })
   }
 
   /**
    * opens a dialog box to edit/learn more about selected phage
+   * This function opens the box calls helper methods based on box output
+   *
+   * @param {number} src - strain number to open box for
    */
   editPhage(src: number) {
     let phage = this.strains[src];
@@ -237,6 +296,13 @@ export class FridgeComponent implements OnInit, OnDestroy{
     });
   }
 
+  /**
+   * Helper function which updates the phage after dialog box has closed
+   * Updates the strain on success and sets error message on error
+   *
+   * @param {number} src - strain number to update
+   * @param {FridgePhage} newPhage - updated details
+   */
   _editPhage(src: number, newPhage: FridgePhage){
     this._scenarioService.updateStrain(this.user.id, this.fridge.scenCode, newPhage)
     .takeUntil(this.isDestroyed$)
@@ -244,10 +310,16 @@ export class FridgeComponent implements OnInit, OnDestroy{
       this.strains[src] = res;
       this._currStrains();
     }, (err)=>{
-      this.errorMessage = err.error.message;
+      this.errorMessage = readErrorMessage(err);
     });
   }
 
+  /**
+   * Helper function which deletes the phage from the fridge after dialog box has closed
+   * Sets spot to empty phage on success and sets error message on error
+   *
+   * @param {number} src - strain number to delete
+   */
   _deletePhage(src: number){
     let newPhage = this.strains[src];
     this._scenarioService.deleteStrain(this.user.id, this.fridge.scenCode, newPhage, )
@@ -257,7 +329,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
       this.strains[src] = {strainNum: src, phageType: 'empty', comment:'', id: ''};
       this._currStrains();
     }, (err)=>{
-      this.errorMessage = err.error.message;
+      this.errorMessage = readErrorMessage(err);
     });
   }
 }

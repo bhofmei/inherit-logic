@@ -125,6 +125,14 @@ export var userStudent: User = {
   role: 0
 }
 
+export var userStudent2: User = {
+  id: listOfStudents[1].userId,
+  firstName: listOfStudents[1].firstName,
+  lastName: listOfStudents[1].lastName,
+  email: listOfStudents[1].email,
+  role: 0
+}
+
 export var listOfScenarios: Scenario[] = [
   {
   label: 'Test Scenario 1',
@@ -147,14 +155,14 @@ export var sampleScenario: Scenario = listOfScenarios[0];
 export var listOfPhage: StudentPhage[] = [
   {id: 'a0',
    strainNum: 0,
-   phageType: 'ref',
+   phageType: 'reference',
    comment: 'wild type',
    mutationList: [],
    deletion: []
   },
   {id: 'a1',
    strainNum: 1,
-   phageType: 'ref',
+   phageType: 'reference',
    comment: 'mut',
    mutationList: [-77],
    deletion: []
@@ -169,7 +177,7 @@ export var listOfPhage: StudentPhage[] = [
   },
   {
     id: 'b1',
-    strainNum: 101,
+    strainNum: 4,
     phageType: 'user',
     mutationList: [89, -123],
     comment: 'user not submitted',
@@ -178,14 +186,14 @@ export var listOfPhage: StudentPhage[] = [
   },
   {
     id: 'b2',
-    strainNum: 102,
+    strainNum: 5,
     phageType: 'user',
     mutationList: [299],
     comment: 'user submitted',
     deletion: [],
     submitted: true
   },
-    {id: 'a3',
+  {id: 'a3',
    strainNum: 3,
    phageType: 'unknown',
    comment: 'del - no guesses',
@@ -200,7 +208,7 @@ const _fridges: any[] = [
     scenario: listOfScenarios[0],
     scenarioDetails: 'student1 test1',
     guesses: '{}',
-    accessGranted: listOfStudents[0].accessGranted[listOfScenarios[0].scenCode],
+    accessGranted: listOfStudents[0].accessGranted[listOfScenarios[0].scenCode], // true
     strains: listOfPhage.slice(1,5)
   },
   {
@@ -208,8 +216,16 @@ const _fridges: any[] = [
     scenario: listOfScenarios[0],
     scenarioDetails: 'student2 test1',
     guesses: '{}',
-    accessGranted: listOfStudents[1].accessGranted[listOfScenarios[0].scenCode],
+    accessGranted: listOfStudents[1].accessGranted[listOfScenarios[0].scenCode], // true
     strains: [listOfPhage[1]]
+  },
+  {
+    user: listOfStudents[1],
+    scenario: listOfScenarios[1],
+    scenarioDetails: 'student2 test1',
+    guesses: '{}',
+    accessGranted: listOfStudents[1].accessGranted[listOfScenarios[1].scenCode], // false
+    strains: [listOfPhage[0], listOfPhage[5]]
   }
 ]
 
@@ -239,7 +255,7 @@ export const fridgeToCreate: Fridge = {
   scenCode: listOfScenarios[1].scenCode,
   scenarioDetails: 'student1 test2',
   guesses: '',
-  accessGranted: listOfStudents[0].accessGranted[listOfScenarios[1].scenCode],
+  accessGranted: listOfStudents[0].accessGranted[listOfScenarios[1].scenCode], // false
   strains: listOfPhage.slice(0,2)
 }
 
