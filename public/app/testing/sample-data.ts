@@ -182,7 +182,9 @@ export var listOfPhage: StudentPhage[] = [
     mutationList: [89, -123],
     comment: 'user not submitted',
     deletion: [],
-    submitted: false
+    submitted: false,
+    parents: [{id: 'a0', strainNum: 0}],
+    numParents: 1
   },
   {
     id: 'b2',
@@ -191,14 +193,18 @@ export var listOfPhage: StudentPhage[] = [
     mutationList: [299],
     comment: 'user submitted',
     deletion: [],
-    submitted: true
+    submitted: true,
+    parents: [{id: 'a1', strainNum: 1}, {id: 'a2', strainNum: 2}],
+    numParents: 2
   },
   {id: 'a3',
    strainNum: 3,
    phageType: 'unknown',
    comment: 'del - no guesses',
    mutationList: [],
-   deletion: [50, 90]
+   deletion: [50, 90],
+   numParents: 2,
+   parents: [{id: 'a1', strainNum: 1}]
   }
 ]
 
