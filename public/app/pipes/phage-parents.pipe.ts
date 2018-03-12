@@ -15,7 +15,7 @@ export class PhageParentsPipe implements PipeTransform {
     if(sorted.length === 1 && numParents === 1){
 
       out = 'Strain ' + nums[0];
-    } else if(sorted.length === 2 && numParents === 1){
+    } else if(sorted.length === 1 && numParents === 2){
       out = 'Strains ' + nums[0] + ' and ?';
     } else if(sorted.length === 2 && numParents === 2){
       out = 'Strains ' + nums[0] + ' and ' + nums[1];
