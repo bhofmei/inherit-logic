@@ -31,5 +31,5 @@ function requireAll(requireContext) {
 }
 
 //var modules = requireAll(testContext);
-var modules = [require('./public/app/scenario/list/list.component.spec')
+var modules = [require('./public/app/scenario/location/landing-room/landing-room.component.spec')
 ];
