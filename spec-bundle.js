@@ -31,5 +31,5 @@ function requireAll(requireContext) {
 }
 
 //var modules = requireAll(testContext);
-var modules = [require('./public/app/admin/student/student-fridge/student-phage.component.spec')
+var modules = [require('./public/app/scenario/list/list.component.spec')
 ];

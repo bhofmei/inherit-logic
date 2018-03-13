@@ -4,7 +4,7 @@ import { Directive, DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Rx';
-import { RouterLinkStubDirective, getAllRouterLinks } from '../../testing';
+import { RouterLinkStubDirective, getAllRouterLinks, addMatchers } from '../../testing';
 
 import { ListComponent } from './list.component';
 import { AuthenticationService } from '../../authentication/authentication.service';
@@ -12,7 +12,7 @@ import { ScenarioService } from '../scenario.service';
 
 import { User, Scenario } from '../../interfaces';
 import { AuthServiceStub, ScenarioServiceStub } from '../../testing/service-stubs';
-import { userAdmin, sampleScenario } from '../../testing/sample-data';
+import { userAdmin, listOfScenarios } from '../../testing/sample-data';
 
 describe('List Component', ()=>{
   let comp: ListComponent;
@@ -28,12 +28,14 @@ describe('List Component', ()=>{
         {provide: ScenarioService, useClass: ScenarioServiceStub}
       ]
     }).compileComponents();
+
   }) // end beforeEach async
 
   beforeEach(()=>{
     fixture = TestBed.createComponent(ListComponent);
     authService = TestBed.get(AuthenticationService);
     scenService = TestBed.get(ScenarioService);
+    addMatchers();
   }); // end beforeEach
 
   it('Should have header', ()=>{
@@ -65,16 +67,34 @@ describe('List Component', ()=>{
 
   describe('With user', ()=>{
 
-    let links;
+    let links, labels;
     beforeEach(()=>{
       fixture.detectChanges();
       links = getAllRouterLinks(fixture.debugElement);
+      labels = fixture.debugElement.queryAll(By.css('.list-group-item-action'))
+        .map((el)=>{return el.nativeElement});
     }); // end beforeEach
 
-    it('Should have 1 scenario link', ()=>{
+    it('Should have 2 scenarios', ()=>{
+      expect(links.length).toBe(2);
+      expect(labels.length).toBe(2);
+    });
+
+    it('Should have scenario 1', ()=>{
+      let expected = listOfScenarios[0]
       let linkEl = links[0];
-      expect(linkEl.linkParams[0]).toBe(sampleScenario.scenCode);
-    }); // end Should have sign up link
+      expect(linkEl.linkParams[0]).toBe(expected.scenCode);
+      let labelEl = labels[0].innerHTML;
+      expect(labelEl).toTemplateMatch(expected.label);
+    }); // end Should have scenario 1
+
+    it('Should have scenario 2', ()=>{
+      let expected = listOfScenarios[1]
+      let linkEl = links[1];
+      expect(linkEl.linkParams[0]).toBe(expected.scenCode);
+      let labelEl = labels[1].innerHTML;
+      expect(labelEl).toTemplateMatch(expected.label);
+    }); // end Should have scenario 2
 
   }); // end With user
 }); // end List Component
