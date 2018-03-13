@@ -8,10 +8,9 @@ import { PhageGuessesPipe, PhageMutationsPipe, PhageDeletionsPipe } from '../../
 
 import { User, AdminStudent, StudentPhage, Scenario } from '../../../interfaces';
 import { listOfPhage } from '../../../testing/sample-data';
-import { recurCSSQuery } from '../../../testing';
+import { recurCSSQuery, addMatchers } from '../../../testing';
 
 // Fake component for testing StudentPhage as part of StudentFridge
-
 @Component({
   template: `<student-phage [phage]="strain"></student-phage>`
 })
@@ -66,6 +65,7 @@ describe('Student Phage Component', ()=>{
       createComponent(expected);
       tick();
       page.addElements();
+      addMatchers();
     })); // end beforeEach fakeAsync
 
     it('Should have strain num', ()=>{
@@ -82,8 +82,7 @@ describe('Student Phage Component', ()=>{
 
     it('Should have a mutation', ()=>{
       let m = page.phageMutations.innerHTML;
-      m = m.replace(/^(\s|\n|\t)+|(\s|\n|\t)+$/g, '');
-      expect(m).toBe('-1 at 77');
+      expect(m).toTemplateMatch('-1 at 77');
     });// end Should have a mutation
 
     it('Should not have deletions, and guesses', ()=>{
@@ -99,10 +98,11 @@ describe('Student Phage Component', ()=>{
       createComponent(expected);
       tick();
       page.addElements();
+      addMatchers();
     })); // end beforeEach fakeAsync
 
     it('Should have strain num', ()=>{
-      expect(page.strainNum.innerHTML).toMatch('3');
+      expect(page.strainNum.innerHTML).toTemplateMatch('3');
     });
 
     it('Should have "unknown" phage type', ()=>{
@@ -113,10 +113,10 @@ describe('Student Phage Component', ()=>{
       expect(page.phageComment.innerHTML).toMatch(expected.comment);
     }); // end Should have comment
 
-/*    it('Should have a deletion and guesses', ()=>{
-      expect(page.phageDeletions).toMatch('-1 @ 77');
-      expect(page.phageGuesses).toBeNull();
-    });// end Should have a deletion and guesses*/
+    it('Should have a deletion and guesses', ()=>{
+      expect(page.phageDeletions.innerHTML).toMatch('10 - 40');
+      expect(page.phageGuesses.innerHTML).toMatch('10 - 20');
+    });// end Should have a deletion and guesses
 
     it('Should not have mutations', ()=>{
       expect(page.phageMutations).toBeNull();
@@ -130,10 +130,11 @@ describe('Student Phage Component', ()=>{
       createComponent(expected);
       tick();
       page.addElements();
+      addMatchers();
     })); // end beforeEach fakeAsync
 
     it('Should have strain num', ()=>{
-      expect(page.strainNum.innerHTML).toMatch('102');
+      expect(page.strainNum.innerHTML).toTemplateMatch('5');
     });
 
     it('Should have "user" phage type', ()=>{
@@ -146,8 +147,7 @@ describe('Student Phage Component', ()=>{
 
     it('Should have a mutation', ()=>{
       let m = page.phageMutations.innerHTML;
-      m = m.replace(/^(\s|\n|\t)+|(\s|\n|\t)+$/g, '');
-      expect(m).toBe('+1 at 89, -1 at 123');
+      expect(m).toTemplateMatch('+1 at 89, -1 at 123');
     }); // end Should have a mutation
 
     it('Should not have a deletion and guesses', ()=>{
@@ -163,10 +163,11 @@ describe('Student Phage Component', ()=>{
       createComponent(expected);
       tick();
       page.addElements();
+      addMatchers();
     })); // end beforeEach fakeAsync
 
     it('Should have strain num', ()=>{
-      expect(page.strainNum.innerHTML).toMatch('103');
+      expect(page.strainNum.innerHTML).toMatch('6');
     });
 
     it('Should have "submitted" phage type', ()=>{
@@ -179,8 +180,7 @@ describe('Student Phage Component', ()=>{
 
     it('Should have a mutation', ()=>{
       let m = page.phageMutations.innerHTML;
-      m = m.replace(/^(\s|\n|\t)+|(\s|\n|\t)+$/g, '');
-      expect(m).toBe('+1 at 299');
+      expect(m).toTemplateMatch('+1 at 299');
     }); // end Should have a mutation
 
     it('Should not have a deletion and guesses', ()=>{
@@ -210,10 +210,9 @@ describe('Student Phage Component', ()=>{
       expect(page.phageComment.innerHTML).toMatch(expected.comment);
     }); // end Should have comment
 
-/*    it('Should have a deletion', ()=>{
-      expect(page.phageDeletions).toMatch('-1 @ 77');
-
-    });// end Should have a deletion*/
+    it('Should have a deletion', ()=>{
+      expect(page.phageDeletions.innerHTML).toMatch('50 - 90');
+    });// end Should have a deletion
 
     it('Should not have mutations and guesses', ()=>{
       expect(page.phageMutations).toBeNull();
