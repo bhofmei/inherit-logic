@@ -1,9 +1,9 @@
 // From: https://angular.io/guide/testing#test-a-routeroutlet-component
  // export for convenience.
-export { ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
+export { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 
 import { Component, Directive, Injectable, Input } from '@angular/core';
-import { NavigationExtras } from '@angular/router';
+import { NavigationExtras, convertToParamMap, ParamMap } from '@angular/router';
 
 @Directive({
   selector: '[routerLink]',
@@ -35,6 +35,7 @@ export class RouterStub {
 // Only implements params and part of snapshot.params
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+//import { convertToParamMap } from '@angular/router';
 
 @Injectable()
 export class ActivatedRouteStub {
@@ -42,6 +43,8 @@ export class ActivatedRouteStub {
   // ActivatedRoute.params is Observable
   private subject = new BehaviorSubject(this.testParams);
   params = this.subject.asObservable();
+  parent: ActivatedRouteStub;
+  paramMap: ParamMap;
   //params = Observable.of(this.subject);
 
   // Test parameters
@@ -50,10 +53,17 @@ export class ActivatedRouteStub {
   set testParams(params: {}) {
     this._testParams = params;
     this.subject.next(params);
+    this.paramMap = convertToParamMap(this.testParams);
   }
 
-  // ActivatedRoute.snapshot.params
+  // ActivatedRoute.snapshot
   get snapshot() {
-    return { params: this.testParams };
+    return this;
   }
+
+  // handle parent stuff?
+  set parentParams(params: {}){
+    this.parent.testParams = params;
+  }
+
 }
