@@ -8,6 +8,13 @@ import { ScenarioService } from '../../scenario.service';
 
 import { ExperimentPhage, GenotypePhage } from '../../../interfaces/phage.interface';
 
+/**
+ * Component where phage are plated and mutated/crossed
+ * Students will spend the majority of their time in this component
+ *
+ * Includes: 2 E. coli test tubes, 4 serial dilution tubes, 1 plate
+ * Uses drag and drop mechanism to move phage/tubes around
+ */
 @Component({
     selector: 'lab-room',
     templateUrl: './app/scenario/location/lab-room/lab-room.template.html',
@@ -17,33 +24,83 @@ export class LabRoomComponent {
 
   private isDestroyed$: Subject<boolean>;
   // bacteria tubes
+  /**
+   * At init, both tubs visible
+   * Once a bacteria type has been selected, need to hide the other
+   */
   private isHidden: Object = {'K': false, 'B': false};
+  /**
+   * phage strains which are in the tube
+   */
   private phage: ExperimentPhage[] = [];
 
   // dilution tubes
+  /**
+   * value to dilute the number of phage at each dilution
+   */
   private dilutionValue: number = ScenarioGlobals.defaultLabDilution;
+  /**
+   * Contents of the dilution tube
+   * includes: lawnType and phage
+   */
   private contents: any[];
+  /**
+   * Only show dilution labels as we do the serial dilution
+   */
   private visibleLabel: boolean[];
+  /**
+   * boolean to stop users from changing the diluation factor once
+   * they start diluting
+   * allowing changes while diluting could lead to unexpected numbers
+   * of phage and would make tube labeling difficult
+   */
   private canEditDilution: boolean = true;
 
   // plate
   private isEmpty: boolean = true;
+  /**
+   * E. coli type on the plate currently
+   */
   private lawnType: string = '';
+  /**
+   * scenario details (from the fridge) which is needed when doing cross
+   */
   private scenarioDetails: string;
+  /**
+   * is the plate over capacity?
+   */
   private isFull: boolean = false;
+  /**
+   * list of genotype index for phage with small plaques
+   */
   private smallPlaqueList: any[];
+  /**
+   * list of genotype index for phage with large plaques
+   */
   private largePlaqueList: any[];
+  /**
+   * genotypes which correspond to contents of smallPlaqueList and largePlaqueList
+   */
   private genotypes: GenotypePhage[];
   private plateParents: string[];
 
   private errorMessage: string = '';
 
-  constructor(private _experimentService: ExperimentService, private _scenarioService: ScenarioService){
+  /**
+   * Initialize variables - dilution tube contents and visible labels
+   */
+  constructor(private _experimentService: ExperimentService,
+    private _scenarioService: ScenarioService){
     this.isDestroyed$ = new Subject<boolean>();
     this.contents = [null, null, null, null];
     this.visibleLabel = [true, false, false, false];
   }
 
+  /**
+   * Initalize the component
+   * Get the scenario details (scenario details are already set
+   * by LocationComponent)
+   */
   ngOnInit(){
      this._scenarioService.getScenarioDetails
     .takeUntil(this.isDestroyed$)
@@ -57,6 +114,9 @@ export class LabRoomComponent {
 
   /**
    * Reset the tube-related variables
+   * bacteria tube - phage contents and which is hidden
+   * dilution tube - contents, labels, and can edit dilution value
+   * clear any error message
    */
   clearTubes(){
     this.phage = [];
@@ -69,6 +129,9 @@ export class LabRoomComponent {
 
   /**
    * Reset the plate variables
+   * plate is empty, not full
+   * no small plqaues, large plaques, or genotypes
+   * clear any error message
    */
   clearPlate() {
     // reset all variables
@@ -120,7 +183,9 @@ export class LabRoomComponent {
    * Determines classes for a bacteria tube
    *
    * @param {string} src - E. coli source, "B" or "K"
-   * @returns {Object} - applicable classes
+   *
+   * @returns {Object} - applicable classes in the form
+   * {'class': boolean, ...}
    */
     getClassesBact(src: string): Object {
     return {'bact-tube test-tube-outer': true,
@@ -169,6 +234,7 @@ export class LabRoomComponent {
    * Called for [dragEnabled] of dilution tube (0-3)
    *
    * @param {number} src - dilution tube number
+   *
    * @returns {boolean} - true if tube has contents
    */
   canDragDil(src: number): boolean{
@@ -179,7 +245,9 @@ export class LabRoomComponent {
    * Determines classes for a dilution tube
    *
    * @param {number} src - dilution tube number (0-3)
-   * @returns {Object} - applicable classes
+   *
+   * @returns {Object} - applicable classes in the form
+   * {'class': boolean, ...}
    */
   getClassesDil(src: number): Object {
     let tube = this.contents[src];
@@ -193,6 +261,7 @@ export class LabRoomComponent {
    * Determines classes for a dilution tube label
    *
    * @param {number} src - dilution tube number (0-3)
+   *
    * @returns {Object} - applicable classes
    */
   getClassesDilLabel(src: number): Object {
@@ -232,6 +301,7 @@ export class LabRoomComponent {
    * Called for [dragData] of dilution tube
    *
    * @param {number} src - dilution tube number (0-3)
+   *
    * @returns {Object} - data with dilution tube contents and src
    */
   getDataDil(src: number): Object {
@@ -246,7 +316,7 @@ export class LabRoomComponent {
    * Called on (oDropSuccess) of dilution tubes
    *
    * @param {any} $event - drag event with content/phage data
-   * @param {string} dest - dest tube
+   * @param {string} dest - dest tube number (0-3)
    */
   dropContentsDil($event: any, dest: number){
     let incomingDat = JSON.parse(JSON.stringify($event.dragData));
@@ -267,7 +337,8 @@ export class LabRoomComponent {
   /**
    * Determines classes for plate depending if empty, full, has phage
    *
-   * @returns {Object} - applicable classes
+   * @returns {Object} - applicable classes in the form
+   * {'class': boolean, ...}
    */
   getClassesPlate(){
     return {
@@ -349,9 +420,9 @@ export class LabRoomComponent {
     this._experimentService.createPlate(newPlate)
     .takeUntil(this.isDestroyed$)
     .subscribe((res)=>{
-      console.log('genotypes:', res.genotypes);
-      console.log('small plaque:', res.smallPlaque);
-      console.log('large plaque:', res.largePlaque);
+//      console.log('genotypes:', res.genotypes);
+//      console.log('small plaque:', res.smallPlaque);
+//      console.log('large plaque:', res.largePlaque);
       this.isFull = res.full;
       this.smallPlaqueList = res.smallPlaque;
       this.largePlaqueList = res.largePlaque;
@@ -370,7 +441,8 @@ export class LabRoomComponent {
    *
    * Called for [dragEnabled] of plaques on plate
    *
-   * @param {string} src - small or large plaque
+   * @param {string} src - "small" or "large" plaque
+   *
    * @returns {boolean} - true if there are still plaques of that size
    */
   canDragPlate(src: string): boolean {
@@ -385,7 +457,8 @@ export class LabRoomComponent {
    *
    * Called for [dragData] of plaque on plate
    *
-   * @param {string} src - small or large plaque
+   * @param {string} src - "small" or "large" plaque
+   *
    * @returns {Object} - phage genotype data
    */
   getPhagePlate(src: string): GenotypePhage{

@@ -178,6 +178,8 @@ export class FridgeComponent implements OnInit, OnDestroy{
   /**
    * Increase or decrease visible shelf then update the visible strains
    *
+   * Called by (click) of prev/next buttons
+   *
    * @param {number} inc - amount to change shelf by
    */
   changeShelf(inc: number){
@@ -195,6 +197,8 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * Set visible shelf to a specific number;
    * used to jump to the beginning and end
    *
+   * Called by (click) of first/last buttons
+   *
    * @param {number} nShelf - shelf to go to
    */
   setShelf(nShelf: number){
@@ -206,7 +210,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * Determine if strain can be dropped in a slot
    * can be dropped if slot is empty and src is small or large
    *
-   * Called by allowDrop
+   * Called by [allowDrop] of fridge slot
    *
    * @param {number} spot - spot to test to see if can drop
    *
@@ -231,7 +235,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
   /**
    * Adds a new strain to a fridge
    *
-   * Called by onDropSucess of slot
+   * Called by (onDropSucess) of slot
    *
    * @param {any} $event - drag event, incuding data for strain to add;
    * has: shifts, deletion, parents
