@@ -9,29 +9,8 @@ import { RouterLinkStubDirective, getAllRouterLinks } from '../testing';
 import { AdminComponent } from './admin.component';
 import { AuthenticationService } from '../authentication/authentication.service';
 
-import { User } from '../interfaces/user.interface';
-
-const testAdmin: User = {
-    id: 1,
-    firstName: 'Admin',
-    lastName: 'Last',
-    email: 'test@test.com',
-    role: 2 // admin
-}
-
-const testInstr: User = {
-  id: 2,
-  firstName: 'Instr',
-  lastName: 'Last',
-  email: 'instr@test.com',
-  role: 1 // instr
-}
-
-class AuthServiceStub {
-  getUser(): User {
-    return testAdmin;
-  }
-}
+import { userAdmin, userInstr } from '../testing/sample-data';
+import { AuthServiceStub } from '../testing/service-stubs';
 
 describe('Admin Component', ()=>{
   let fixture: ComponentFixture<AdminComponent>;
@@ -83,7 +62,7 @@ describe('Admin Component', ()=>{
   describe('With instr', ()=>{
     let links;
     beforeEach(()=>{
-      authService.getUser = ()=>{return testInstr};
+      authService.setUser(userInstr);
       fixture.detectChanges();
       links = getAllRouterLinks(fixture.debugElement);
     }); // end beforeEach

@@ -10,22 +10,9 @@ import { ListComponent } from './list.component';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { ScenarioService } from '../scenario.service';
 
-import { User } from '../../interfaces/user.interface';
-import { Scenario } from '../../interfaces/scenario.interface';
+import { User, Scenario } from '../../interfaces';
+import { AuthServiceStub, ScenarioServiceStub } from '../../testing/service-stubs';
 import { userAdmin, sampleScenario } from '../../testing/sample-data';
-
-class AuthServiceStub {
-  getUser$ = Observable.of(userAdmin);
-  getUser(): User {
-    return null;
-  }
-}
-
-class ScenarioServiceStub {
-  listScenarios(): Observable<Scenario[]>{
-    return Observable.of([sampleScenario]);
-  }
-}
 
 describe('List Component', ()=>{
   let comp: ListComponent;
@@ -59,6 +46,7 @@ describe('List Component', ()=>{
   describe('Without user', ()=>{
     let links;
     beforeEach(()=>{
+      authService.getUser = ()=>{return null};
       fixture.detectChanges();
       links = getAllRouterLinks(fixture.debugElement);
     }); // end beforeEach
@@ -79,7 +67,6 @@ describe('List Component', ()=>{
 
     let links;
     beforeEach(()=>{
-      authService.getUser = ()=>{return userAdmin};
       fixture.detectChanges();
       links = getAllRouterLinks(fixture.debugElement);
     }); // end beforeEach
