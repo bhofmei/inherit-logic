@@ -11,11 +11,10 @@ import { CourseService } from '../../admin/course/course.service';
 
 @Component({
     selector: 'signup',
-    templateUrl: 'app/authentication/signup/signup.template.html',
-  styleUrls: ['app/authentication/signup/signup.style.css']
+    templateUrl: 'app/authentication/signup/signup.template.html'
 })
 export class SignupComponent implements OnDestroy {
-    errorMessage: string;
+    errorMessage: string = '';
   private courses: string[] = [];
     user: any = {};
   private isDestroyed$: Subject<boolean>;
