@@ -10,7 +10,7 @@ const ROOT = function (inPath) {
 module.exports = {
   devtool: 'inline-source-map',
   resolve: {
-    extensions: ['.ts', '.js', '.html', '.css', '.png'],
+    extensions: ['.ts', '.js', '.html', '.css', '.png', '.svg'],
     modules: [ROOT('public/app'), ROOT('node_modules'), ROOT('public/img')],
     alias: {
       'app': ROOT('public/app')
@@ -56,8 +56,15 @@ module.exports = {
         test: /\.(html|css)$/,
         loader: 'raw-loader'
       },
+            /*{
+              test: /\.css$/,
+              use: [
+                'style-loader',
+                'css-loader'
+              ]
+            },*/
       {
-        test: /\.(png|jpg|jpeg)$/,
+        test: /\.(png|jpg|jpeg|svg)$/,
         loader: 'file-loader'
       }
     ]

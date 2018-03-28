@@ -360,10 +360,10 @@ export class LabRoomComponent {
   canDropPlate():any {
     return (dragData: any) => {
       //console.log(dragData);
+      let invalidSrc = ['B', 'K', 'small', 'large']
     if(dragData === null || dragData === undefined)
       return false;
-    if(dragData.hasOwnProperty('src') && dragData.src
-       !== 'small' && dragData.src !== 'large'){
+    if(dragData.hasOwnProperty('src') && invalidSrc.indexOf(dragData.src) === -1){
       return true
     }
       return false;
@@ -386,6 +386,10 @@ export class LabRoomComponent {
     }
     if (contents.hasOwnProperty('phage') === false || contents.phage.length === 0){
       this.errorMessage = 'There is no phage in the tube.'
+      return;
+    }
+    if(contents.src === 'B' || contents.src === 'K'){
+      this.errorMessage = 'Do not plate directly from bacteria tube';
       return;
     }
     // gather data

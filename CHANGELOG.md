@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [unreleased]
+- fixed issue with potential incorrect error dropping bact tube to plate directly
 
 ## [v1.0.8] - 2018-02-26
 - Save parent id of phage from plate to fridge

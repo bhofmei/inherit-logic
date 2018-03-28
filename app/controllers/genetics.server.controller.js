@@ -28,7 +28,7 @@ exports.createPlate = function (req, res) {
             message: err.message
           });
       } else if (phage1.hasOwnProperty('numPhage') === false) {
-        res.status(400)
+        return res.status(400)
           .send({
             message: 'numPhage not set'
           });
@@ -44,7 +44,7 @@ exports.createPlate = function (req, res) {
             lean: true
           }, (err2, ph2) => {
             if (err2) {
-              res.status(400)
+              return res.status(400)
                 .send({
                   message: err2.message
                 });
@@ -60,7 +60,7 @@ exports.createPlate = function (req, res) {
               if (newPlate)
                 res.json(newPlate);
               else {
-                res.status(400)
+                return res.status(400)
                   .send({
                     message: 'double phage - could not create plate'
                   });
@@ -74,7 +74,7 @@ exports.createPlate = function (req, res) {
           if (newPlate)
             res.json(newPlate);
           else {
-            res.status(400)
+            return res.status(400)
               .send({
                 message: 'single phage - could not create plate'
               });
@@ -83,7 +83,7 @@ exports.createPlate = function (req, res) {
       } // end if not error
     }); // end find by id
   } else {
-    req.status(400)
+    return req.status(400)
       .send({
         message: 'must specify at least 1 phage and a lawn type'
       });
