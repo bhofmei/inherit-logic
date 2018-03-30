@@ -67,7 +67,7 @@ module.exports = [
     intraMuteDist: scenDefaults.intraMuteDist,
     interMuteDist: scenDefaults.interMuteDist,
     purpose: "Separate a double mutant into each single mutant",
-    relevance: "",
+    relevance: "Working through this scenario will allow you to determine if a phenotypically wildtype strain is in fact truly wildtype or if it has two compensating frameshift mutations.",
     startingPoint: "A mutant phage with compensating mutations (+1 and -1).",
     createDeletionModel: scenDefaults.createDeletionModel,
     referencePhage: [scenDefaults.wildtypePhage, '{"numToMake": 1, "isWildType": false, "frameshifts": {"howMany": [2,2], "mixed": "always", "readable": "can", "frameChoice": 0}, "deletion": false, "comment": "Mutant phage bearing compensating +1 and -1 frameshifts resulting in successful translation and a wild type phenotype"}'],
