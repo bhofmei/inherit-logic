@@ -1,7 +1,13 @@
 # CHANGELOG
 
 ## [unreleased]
+
+## [v1.0.9] - 2018-04-16
 - fixed issue with potential incorrect error dropping bact tube to plate directly
+- UPDATED plexer submission
+  - when submit button is pushed, a spinner appears in the top left of the results table and the submit button is disabled
+  - spinner is hidden and button is active once the results come back from the server
+  - this will hopefully minimize students sending the same plexer request several times bc they weren't sure if it went through--this causes server overload
 
 ## [v1.0.8] - 2018-02-26
 - Save parent id of phage from plate to fridge
