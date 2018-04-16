@@ -54,7 +54,7 @@
     <table class="w-100 h-100">
       <!-- header -->
       <tr>
-        <td></td>
+        <td class="text-center"><span [ngClass]="getSpinnerClass()"></span></td>
         <td *ngFor="let col of cols; let i=index" dnd-droppable (onDropSuccess)="addPhage($event, 'col', i)" class="plexer-td-label">
           <span *ngIf="col !== null">{{ col.strainNum+1 }}</span>
         </td>

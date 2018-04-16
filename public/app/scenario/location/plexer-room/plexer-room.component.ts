@@ -26,6 +26,11 @@ export class PlexerRoomComponent{
   private subscription: Subscription;
   private expSubscription: Subscription;
   private dilutionControl: FormControl;
+  private _spinnerClass: Object = {
+    'hiding': true,
+    'spinning': false,
+    'oi oi-loop-circular': true
+  };
 
   constructor( private _experimentService: ExperimentService,
                private _scenarioService: ScenarioService){
@@ -70,6 +75,7 @@ export class PlexerRoomComponent{
     this._clearData();
     this.results = {};
     this.errorMessage = '';
+    this._setSpinnerClass('reset');
   }
 
   /**
@@ -99,6 +105,10 @@ export class PlexerRoomComponent{
    */
   submitDisabled(): boolean {
 
+    // if spinner is spinning, disable
+    if(this._spinnerClass['spinning']){
+      return true;
+    }
     // determine if disabled
     var disabled = this.chosenBact === 'none';
     // check that at least 1 phage added for row/col
@@ -164,6 +174,15 @@ export class PlexerRoomComponent{
     return out;
   }
 
+  private _setSpinnerClass(newClass: string){
+    this._spinnerClass['hiding'] = (newClass === "spinning" ? false : true);
+     this._spinnerClass['spinning'] = (newClass === "spinning" ? true : false);
+  }
+
+  getSpinnerClass(){
+    return this._spinnerClass;
+  }
+
   /**
    * Gets experiment data and submits to service to get results
    * of the multiplexer
@@ -171,6 +190,8 @@ export class PlexerRoomComponent{
    * Called on (click) of submit button
    */
   performPlexer(){
+    // set the spinner
+    this._setSpinnerClass('spinning');
     // need to deal with dilution values
     let tmpRows = this.rows;
     let cleanRows = this._cleanArrays(tmpRows);
@@ -185,13 +206,26 @@ export class PlexerRoomComponent{
       scenarioData: this.scenarioDetails,
       capacity: ScenarioGlobals.plexerCapacity
     };
+    /*setTimeout(()=>{
+      this.expSubscription = this._experimentService.performPlexer(data)
+    .subscribe((res)=>{
+      //this.results = res;
+      this.results = this._unCleanResults(res);
+      this._setSpinnerClass('hiding');
+    }, (err)=>{
+      this.errorMessage = err.error.message || err.message || 'Unknown error';
+      this._setSpinnerClass('hiding');
+    });
+    }, 5000);*/
     // use the service
     this.expSubscription = this._experimentService.performPlexer(data)
     .subscribe((res)=>{
       //this.results = res;
       this.results = this._unCleanResults(res);
+      this._setSpinnerClass('hiding');
     }, (err)=>{
       this.errorMessage = err.error.message || err.message || 'Unknown error';
+      this._setSpinnerClass('hiding');
     });
   }
 
