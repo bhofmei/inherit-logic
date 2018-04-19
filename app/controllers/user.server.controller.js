@@ -230,7 +230,7 @@ exports.resetPassword = function (req, res) {
         debugPass('saved');
         if (err2) {
           return res.status(400)
-            .send(getErrorMessage(err2))
+            .send({message: getErrorMessage(err2)})
         } else {
           // successful
           res.json({
@@ -246,14 +246,14 @@ exports.resetPassword = function (req, res) {
 exports.signin = function (req, res, next) {
   passport.authenticate('local', (err, user, info) => {
     if (err || !user) {
-      res.status(400)
+      return res.status(400)
         .send(info);
     } else {
       let userInfo = getUserInfo(user);
 
       req.login(user, (err) => {
         if (err) {
-          res.status(400)
+          return res.status(400)
             .send({
               message: getErrorMessage(err)
             });

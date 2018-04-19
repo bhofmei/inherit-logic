@@ -23,7 +23,7 @@ exports.createPlate = function (req, res) {
       lean: true
     }, (err, ph1) => {
       if (err) {
-        res.status(400)
+        return res.status(400)
           .send({
             message: err.message
           });
@@ -31,6 +31,11 @@ exports.createPlate = function (req, res) {
         return res.status(400)
           .send({
             message: 'numPhage not set'
+          });
+      } else if (ph1 === null) {
+        return res.status(404)
+          .send({
+            message: 'Error finding the specified phage1'
           });
       } else {
         ph1.numPhage = phage1.numPhage;
@@ -49,9 +54,14 @@ exports.createPlate = function (req, res) {
                   message: err2.message
                 });
             } else if (phage2.hasOwnProperty('numPhage') === false) {
-              res.status(400)
+              return res.status(400)
                 .send({
                   message: 'numPhage not set'
+                });
+            } else if (ph2 === null) {
+              return res.status(404)
+                .send({
+                  message: 'Error finding the specified phage2'
                 });
             } else {
               ph2.numPhage = phage2.numPhage;
@@ -83,7 +93,7 @@ exports.createPlate = function (req, res) {
       } // end if not error
     }); // end find by id
   } else {
-    return req.status(400)
+    return res.status(400)
       .send({
         message: 'must specify at least 1 phage and a lawn type'
       });
@@ -114,7 +124,7 @@ exports.handlePlexer = function (req, res) {
     },
     (err, array) => {
       if (err) {
-        res.status(400)
+        return res.status(400)
           .send({
             message: 'Error finding a column phage'
           });
@@ -137,7 +147,7 @@ exports.handlePlexer = function (req, res) {
           },
           (err2, array2) => {
             if (err2) {
-              res.status(400)
+              return res.status(400)
                 .send({
                   message: 'Error finding row phage'
                 });

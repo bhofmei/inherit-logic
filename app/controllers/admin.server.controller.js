@@ -72,7 +72,7 @@ exports.listUsers = function (req, res) {
           .sort('name')
           .exec((err2, students) => {
             if (err2) {
-              res.status(500)
+              return res.status(500)
                 .send({
                   message: err2
                 });
@@ -88,7 +88,7 @@ exports.listUsers = function (req, res) {
       .sort('name')
       .exec((err2, students) => {
         if (err2) {
-          res.status(500)
+          return res.status(500)
             .send({
               message: err2
             });
@@ -105,8 +105,11 @@ exports.listUsers = function (req, res) {
 exports.getUser = function (req, res) {
   let tmp = req.student;
   tmp.populate('course', (err, student) => {
-    if(err){
-      return res.status(500).send({message: err});
+    if (err) {
+      return res.status(500)
+        .send({
+          message: err
+        });
     }
     delete student.password;
     var scenStatus = scenData.map((scenario) => {
@@ -124,7 +127,7 @@ exports.deleteUser = function (req, res) {
   let student = req.student; // student to be deleted
   student.remove((err, s) => {
     if (err) {
-      res.status(500)
+      return res.status(500)
         .send({
           message: getErrorMessage(err)
         });
@@ -136,13 +139,19 @@ exports.deleteUser = function (req, res) {
 
 exports.setRole = function (req, res) {
   let body = req.body; // includes role
-  User.findOneAndUpdate(
-    {userId: req.student.userId},
-    {role: body.role},
-    {new: true},
-    (err, result)=>{
-      if(err){
-        return res.status(500).send({message: getErrorMessage(err)});
+  User.findOneAndUpdate({
+      userId: req.student.userId
+    }, {
+      role: body.role
+    }, {
+      new: true
+    },
+    (err, result) => {
+      if (err) {
+        return res.status(500)
+          .send({
+            message: getErrorMessage(err)
+          });
       } else {
         res.json(result);
       }

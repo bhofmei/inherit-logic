@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [unreleased]
+- UPDATED responses on error in app controllers
+- ADDED check for null phage from DB when trying to create a plate
 
 ## [v1.0.9] - 2018-04-16
 - fixed issue with potential incorrect error dropping bact tube to plate directly

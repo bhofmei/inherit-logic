@@ -70,7 +70,7 @@ exports.stockFridge = function (req, res) {
     newPhage.save((err, phage) => {
       //console.log(phage);
       if (err)
-        res.status(500)
+        return res.status(500)
         .send({
           message: 'Unable to create new phage for scenario'
         });
@@ -109,7 +109,7 @@ exports.stockFridge = function (req, res) {
   // save fridge
   Fridge.create(newFridge, (err, fridge) => {
     if (err)
-      res.status(500)
+      return res.status(500)
       .send({
         message: 'Unable to save new fridge'
       });
@@ -146,7 +146,7 @@ exports.getFridge = function (req, res) {
             message: getErrorMessage(err)
           });
       } else if (!fridge) {
-        res.status(307)
+        return res.status(307)
           .send({
             message: 'No fridge for scenario/user'
           });
@@ -285,7 +285,7 @@ exports.addPhageToFridge = function (req, res) {
         },
         (err2, updated) => {
           if (err2) {
-            res.status(500)
+            return res.status(500)
               .send({
                 message: getErrorMessage(err2)
               })

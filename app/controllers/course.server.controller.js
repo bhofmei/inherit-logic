@@ -17,7 +17,7 @@ exports.isInstructor = function (req, res, next) {
   let instr = req.curUser;
   let id = JSON.stringify(instr._id);
   let course = req.course;
-  let instrIds = course.instructors.map((inst)=>{
+  let instrIds = course.instructors.map((inst) => {
     return JSON.stringify(inst._id);
   });
   // search for this user in list of instructors
@@ -53,7 +53,7 @@ exports.listCourses = function (req, res) {
     if (err) {
       return res.status(500)
         .send({
-          message: err
+          message: getErrorMessage(err)
         })
     } else if (!courses) {
       return res.status(404)
@@ -203,7 +203,7 @@ exports.getPossibleInstructors = function (req, res) {
   let admin = req.curUser;
   let courseId = new ObjectId(req.course._id);
 
-  let currInstr = req.course.instructors.map((elm)=>{
+  let currInstr = req.course.instructors.map((elm) => {
     return elm.userId;
   });
 
@@ -227,10 +227,10 @@ exports.getPossibleInstructors = function (req, res) {
       if (err) {
         return res.status(500)
           .send({
-            message: err
+            message: getErrorMessage(err)
           })
       } else {
-        let out = users.filter((elm)=>{
+        let out = users.filter((elm) => {
           return currInstr.indexOf(elm.userId) === -1;
         })
         res.json(out);
@@ -251,22 +251,32 @@ exports.setInstructor = function (req, res) {
   }
 
   User.findByIdAndUpdate(
-    newInstructor._id,
-    {role: (newInstructor.role === 'student' ? 'instr' : newInstructor.role)},
-    {new: true},
-    (err, updated)=>{
-      if(err){
-        return res.status(500).send({message: getErrorMessage(err)});
+    newInstructor._id, {
+      role: (newInstructor.role === 'student' ? 'instr' : newInstructor.role)
+    }, {
+      new: true
+    },
+    (err, updated) => {
+      if (err) {
+        return res.status(500)
+          .send({
+            message: getErrorMessage(err)
+          });
       } else {
         Course.findByIdAndUpdate(
-          course._id,
-          {$push: {
-            instructors: updated._id
-          }},
-          {new: true},
-          (err2, c)=>{
-            if(err2){
-              return res.status(400).send({message: getErrorMessage(err)});
+          course._id, {
+            $push: {
+              instructors: updated._id
+            }
+          }, {
+            new: true
+          },
+          (err2, c) => {
+            if (err2) {
+              return res.status(400)
+                .send({
+                  message: getErrorMessage(err)
+                });
             } else {
               res.json(c)
             }
@@ -316,17 +326,18 @@ exports.getScenarioStatus = function (req, res) {
 
 exports.courseByNum = function (req, res, next, id) {
   Course.findOne({
-    courseNum: id
-  }).populate('instructors', 'firstName lastName userId')
+      courseNum: id
+    })
+    .populate('instructors', 'firstName lastName userId')
     .exec((err, course) => {
-    if (err) {
-      return next(err);
-    }
-    if (!course) {
-      return next('Failed to load course ' + id);
-    }
-    req.course = course;
-    // Call the next middleware
-    next();
-  })
+      if (err) {
+        return next(err);
+      }
+      if (!course) {
+        return next('Failed to load course ' + id);
+      }
+      req.course = course;
+      // Call the next middleware
+      next();
+    })
 };
