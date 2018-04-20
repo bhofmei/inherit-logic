@@ -1,4 +1,9 @@
-import { AdminStudent, Course, User, Scenario, Fridge, StudentFridge, StudentPhage } from '../interfaces';
+import { AdminStudent, Course, User, Scenario, Fridge, StudentFridge, StudentPhage, plateResults } from '../interfaces';
+
+function createArray(l: number, v: any): any[]{
+  //return Array.apply(null, Array(l)).map(Number.prototype.valueOf,v);
+  return new Array(l).fill(v);
+}
 
 export var userAdmin: User = {
   id: 1,
@@ -197,7 +202,8 @@ export var listOfPhage: StudentPhage[] = [
     parents: [{id: 'a1', strainNum: 1}, {id: 'a2', strainNum: 2}],
     numParents: 2
   },
-  {id: 'a3',
+  {
+    id: 'a3',
    strainNum: 3,
    phageType: 'unknown',
    comment: 'del - no guesses',
@@ -205,7 +211,27 @@ export var listOfPhage: StudentPhage[] = [
    deletion: [50, 90],
    numParents: 2,
    parents: [{id: 'a1', strainNum: 1}]
-  }
+  },
+  {
+    id: 'b3',
+  strainNum: 6,
+  phageType: 'user',
+  mutationList:[],
+  comment: 'user WT',
+  deletion: [],
+  submitted: false,
+  parents: [{id: 'a0', strainNum: 0}],
+  numParents: 1},
+  {
+    id: 'a4',
+  strainNum: 7,
+  phageType: 'unknown',
+  mutationList:[-201],
+  comment: 'unknown FS',
+  deletion: [],
+  submitted: false,
+  parents: [],
+  numParents: 0}
 ]
 
 const _fridges: any[] = [
@@ -266,3 +292,73 @@ export const fridgeToCreate: Fridge = {
 }
 
 
+export const _singlePermPlates: plateResults[] = [
+  {
+    full: false,
+    smallPlaque: createArray(1300, 0),
+    largePlaque: [],
+    genotypes: [{shifts: [], deletion: []}],
+    parents: [{id: 'a0', strainNum: 0}]
+  },
+  {
+    full: false,
+    smallPlaque: [],
+    largePlaque: createArray(1300,0).concat([1,2]),
+    genotypes: [{shifts: [-77], deletion: []}, {shifts: [-77, -101], deletion: []}, {shifts: [-12, -77], deletion: []}],
+    parents: [{id: 'a1', strainNum: 1}]
+  }
+]
+
+export const _singleRestPlates: plateResults[] = [
+  {
+    full: false,
+    smallPlaque: [0],
+    largePlaque: [],
+    genotypes: [{shifts: [-77, 145], deletion: []}],
+    parents: [{id: 'a1', strainNum: 1}]
+  }
+]
+
+export const singleInputPlates: any = {
+  B: _singlePermPlates,
+  K: _singleRestPlates
+}
+
+export const _doublePermPlates: plateResults[] = [
+  {
+    full: true,
+    smallPlaque: [],
+    largePlaque: [],
+    genotypes: [],
+    parents: [{id: 'a0', strainNum: 0}, {id: 'b3', strainNum: 6}]
+  },
+  {
+    full: false,
+    smallPlaque: createArray(649,0).concat([2,3,4,5,6,7,8]),
+    largePlaque: createArray(826,1).concat([9,10,11,12,13,14,15,16,17,18,19,20]),
+    genotypes: [{shifts: [], deletion: []}, {shifts: [299], deletion: []}].concat(createArray(7, {shifts: [], deletion: []})).concat(createArray(12, {shifts: [299], deletion: []})),
+    parents: [{id: 'a0', strainNum: 0}, {id: 'b2', strainNum: 5}]
+  }
+]
+
+export const _doubleRestPlates: plateResults[] = [
+  {
+    full: false,
+    smallPlaque: [0,1,2,3,4,5,6,7],
+    largePlaque: [],
+    genotypes: [{shifts: [10, -77], deletion: []}].concat(createArray(7, {shifts: [-77, 180], deletion: []})),
+    parents: [{id: 'a1', strainNum: 1}, {id: 'a4', strainNum: 7}]
+  },
+    {
+    full: false,
+    smallPlaque: createArray(701, 0).concat([1,2,3,4,5,6,7]),
+    largePlaque: [],
+    genotypes: [{shifts: [], deletion: []}].concat(createArray(7, {shifts: [-77, 180], deletion: []})),
+    parents: [{id: 'a0', strainNum: 0}, {id: 'a4', strainNum: 7}]
+  }
+]
+
+export const doubleInputPlates: any = {
+  B: _doublePermPlates,
+  K: _doubleRestPlates
+}

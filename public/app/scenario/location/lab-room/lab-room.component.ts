@@ -6,7 +6,9 @@ import { ScenarioGlobals } from '../../scenario.globals';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../scenario.service';
 
-import { ExperimentPhage, GenotypePhage } from '../../../interfaces/phage.interface';
+import { ExperimentPhage, GenotypePhage, plateInput, plateResults, _genotype, Phage } from '../../../interfaces';
+
+import { readErrorMessage } from '../../../shared/read-error';
 
 /**
  * Component where phage are plated and mutated/crossed
@@ -17,8 +19,8 @@ import { ExperimentPhage, GenotypePhage } from '../../../interfaces/phage.interf
  */
 @Component({
     selector: 'lab-room',
-    templateUrl: './app/scenario/location/lab-room/lab-room.template.html',
-  styleUrls: ['./app/scenario/location/lab-room/lab-room.style.css']
+    templateUrl: 'app/scenario/location/lab-room/lab-room.template.html',
+  styleUrls: ['app/scenario/location/lab-room/lab-room.style.css']
 })
 export class LabRoomComponent {
 
@@ -81,8 +83,8 @@ export class LabRoomComponent {
   /**
    * genotypes which correspond to contents of smallPlaqueList and largePlaqueList
    */
-  private genotypes: GenotypePhage[];
-  private plateParents: string[];
+  private genotypes: _genotype[];
+  private plateParents: Phage[];
 
   private errorMessage: string = '';
 
@@ -412,7 +414,7 @@ export class LabRoomComponent {
    * @param {any} phage2 - second phage in cross, or null
    */
   _performCross(lawnType: string, phage1: ExperimentPhage, phage2: ExperimentPhage){
-    let newPlate = {
+    let newPlate: plateInput = {
       lawnType: lawnType,
       phage1: phage1,
       phage2: phage2,
@@ -436,7 +438,7 @@ export class LabRoomComponent {
       // success
     }, (err)=>{
       // error
-      this.errorMessage = err.error.message || err.message || 'Error';
+      this.errorMessage = readErrorMessage(err);
     });
   }
 
@@ -495,6 +497,13 @@ export class LabRoomComponent {
     }
   }
 
+  /**
+   * Removes a phage from the plate without adding it to the fridge
+   *
+   * Called on (dblclick) of plaque on the plate
+   *
+   * @param {string} src - source of plaque clicked; "large" or "small"
+   */
   delPhagePlate(src: string){
     if(src === 'small'){
       this.smallPlaqueList.shift();
