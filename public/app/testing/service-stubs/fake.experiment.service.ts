@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
-import { plateInput, plateResults } from '../../interfaces';
-import { singleInputPlates, doubleInputPlates } from '../sample-data';
+import { plateInput, plateResults, plexerInput } from '../../interfaces';
+import { singleInputPlates, doubleInputPlates, plexerResult } from '../sample-data';
 import * as _ from 'lodash';
 
 
@@ -26,6 +26,15 @@ export class ExperimentServiceStub {
         return Observable.throw({message: 'cannot find plate'});
     }
     return Observable.of(_.cloneDeep(results));
+  }
+
+  performPlexer(data: plexerInput): Observable<any>{
+    let results = plexerResult[data.lawnType];
+    if(results){
+      return Observable.of(results);
+    } else {
+      return Observable.throw({message: 'cannot find plate'});
+    }
   }
 
 }

@@ -31,5 +31,5 @@ function requireAll(requireContext) {
 }
 
 //var modules = requireAll(testContext);
-var modules = [require('./public/app/scenario/location/lab-room/lab-room.component.spec')
+var modules = [require('./public/app/scenario/location/plexer-room/plexer-room.component.spec')
 ];

@@ -2,7 +2,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { plateInput, plateResults } from '../../interfaces';
+import { plateInput, plateResults, plexerInput } from '../../interfaces';
 
 @Injectable()
 export class ExperimentService {
@@ -18,7 +18,7 @@ export class ExperimentService {
     return res;
   }
 
-  performPlexer(data: any): Observable<any>{
+  performPlexer(data: plexerInput): Observable<any>{
     // data will have rowPhage, colPhage, lawn type, location, specials, capacity, scenarioData
     var res = this._http
     .post(`${this._baseURL}/plexer`, data);

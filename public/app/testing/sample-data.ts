@@ -291,7 +291,6 @@ export const fridgeToCreate: Fridge = {
   strains: listOfPhage.slice(0,2)
 }
 
-
 export const _singlePermPlates: plateResults[] = [
   {
     full: false,
@@ -361,4 +360,27 @@ export const _doubleRestPlates: plateResults[] = [
 export const doubleInputPlates: any = {
   B: _doublePermPlates,
   K: _doubleRestPlates
+}
+
+
+export const _plexer1: any = {
+  0: [{smallPlaque: 0, largePlaque: 107, full: false},
+      {smallPlaque: 54, largePlaque: 89, full: false}],
+  1: [{smallPlaque: 38, largePlaque: 76, full: false},
+     {smallPlaque: 176, largePlaque: 0, full: false}],
+  2: [{smallPlaque: 75, largePlaque: 87, full: false},
+      {smallPlaque: 0, largePlaque: 0, full: true}]
+}
+
+export const _plexer2: any = {
+    0: [{smallPlaque: 99, largePlaque: 0, full: false},
+      {smallPlaque: 54, largePlaque: 0, full: false},
+       {smallPlaque: 0, largePlaque: 0, full: true}],
+  1: [{smallPlaque: 0, largePlaque: 0, full: false},
+     {smallPlaque: 4, largePlaque: 0, full: false},
+     {smallPlaque: 68, largePlaque: 0, full: false}]
+}
+export const plexerResult: any = {
+  B: _plexer1,
+  K: _plexer2
 }
