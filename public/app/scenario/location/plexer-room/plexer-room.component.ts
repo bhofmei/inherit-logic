@@ -6,6 +6,7 @@ import { ScenarioGlobals } from '../../scenario.globals';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../scenario.service'
 import { FridgePhage, ExperimentPhage, plexerInput } from '../../../interfaces';
+import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
     selector: 'plexer-room',
@@ -266,7 +267,7 @@ export class PlexerRoomComponent{
       this.results = this._unCleanResults(res);
       this._setSpinnerClass('hiding');
     }, (err)=>{
-      this.errorMessage = err.error.message || err.message || 'Unknown error';
+      this.errorMessage = readErrorMessage(err);
       this._setSpinnerClass('hiding');
     });
   }
