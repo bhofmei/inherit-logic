@@ -11,8 +11,11 @@ const ProfileRoutes: Routes = [
     canActivate: [LoggedInGuard],
     canActivateChild: [LoggedInGuard],
     children: [
-      {path: 'update-password',
-      component: UpdatePasswordComponent
+      { path: 'update-password',
+      component: UpdatePasswordComponent,
+       data: {
+         breadcrumbs: 'Update password'
+       }
       },
   {
     path: '',
