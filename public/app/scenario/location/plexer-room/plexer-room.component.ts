@@ -5,44 +5,82 @@ import { FormControl, Validators } from '@angular/forms';
 import { ScenarioGlobals } from '../../scenario.globals';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../scenario.service'
-import { FridgePhage, ExperimentPhage } from '../../../interfaces/phage.interface';
+import { FridgePhage, ExperimentPhage, plexerInput } from '../../../interfaces';
 
 @Component({
     selector: 'plexer-room',
-    templateUrl: './app/scenario/location/plexer-room/plexer-room.template.html',
-  styleUrls: ['./app/scenario/location/plexer-room/plexer-room.style.css']
+    templateUrl: 'app/scenario/location/plexer-room/plexer-room.template.html',
+  styleUrls: ['app/scenario/location/plexer-room/plexer-room.style.css']
 })
 export class PlexerRoomComponent{
 
+  /**
+   * E. coli strain chosen to plate on
+   */
   private chosenBact: string = 'none';
+  /**
+   * Value to dilute number of phage by
+   */
   private dilutionValue: number = ScenarioGlobals.defaultPlexerDilution;
   private plexerType: string = 'plexer';
+  /**
+   * Scenario details (from fridge) needed to perform the plexer
+   */
   private scenarioDetails: string;
+  /**
+   * Info for phage along the rows
+   */
   private rows: ExperimentPhage[];
+  /**
+   * Info for phage along the columns
+   */
   private cols: ExperimentPhage[];
+  /**
+   * Current number of strains in the rows and columns, respectively
+   */
   private nStrains: number[] = [0,0];
+  /**
+   * The plexer results
+   * Is Object form of a 2-D array where each cell has {smallPlaque: #, largePlaque: #}
+   */
   private results: Object;
   private errorMessage: string = '';
   private subscription: Subscription;
   private expSubscription: Subscription;
+  /**
+   * Control the dilution factor to a min/max value
+   */
   private dilutionControl: FormControl;
+  /**
+   * CSS classes for the submit spinner
+   * Visible after submit button hit and before results received
+   */
   private _spinnerClass: Object = {
     'hiding': true,
     'spinning': false,
     'oi oi-loop-circular': true
   };
 
+  /**
+   * Initialize data and set dilution control
+   */
   constructor( private _experimentService: ExperimentService,
                private _scenarioService: ScenarioService){
     this.dilutionControl = new FormControl("", [Validators.min(0.1), Validators.max(100)]);
     this._clearData();
   }
 
+  /**
+   * Initialize the component and get the scenario details
+   */
   ngOnInit() {
     this.subscription = this._scenarioService.getScenarioDetails
       .subscribe((details) => this.scenarioDetails = details);
   }
 
+  /**
+   * Destory the component and unsubscribe as needed
+   */
   ngOnDestroy(){
     if(this.subscription)
       this.subscription.unsubscribe();
@@ -79,7 +117,7 @@ export class PlexerRoomComponent{
   }
 
   /**
-   * Get the CSS class for each phage button based on which
+   * Get the CSS classes for each phage button based on which
    * phage type is set
    *
    * @param {string} src - button to get classes for
@@ -88,7 +126,6 @@ export class PlexerRoomComponent{
   getTubeClasses(src: string): Object {
     return {
       'btn border border-secondary': true,
-      //'': (this.chosenBact !== src),
       'chosen': (this.chosenBact === src),
       'btn-outline-info': (src==='B' && this.chosenBact !== src),
       'btn-info': (src==='B' && this.chosenBact === src),
@@ -100,6 +137,10 @@ export class PlexerRoomComponent{
   /**
    * Determine if user is able to submit plexer by disabling
    * the submit button when unable to submit
+   *
+   * Able to submit only when: (a) bacteria chosen, (b) at least
+   * one phage in each row and column, (c) dilution value is valid,
+   * and (d) not still waiting for previous submit response
    *
    * @returns {boolean} - true if user cannot submit
    */
@@ -124,10 +165,11 @@ export class PlexerRoomComponent{
    * Removes null elements from input array and dilutes the
    * number of phage
    *
-   * Used before submitting row/col phage
+   * Used before submitting row/col phage to service
    *
-   * @param {ExperimentPhage[]} inData - input array to be cleaned
-   * @returns {ExperimentPhage[]} - cleaned array
+   * @param {ExperimentPhage[]} inData - input array to be cleaned; can contain null values
+   *
+   * @returns {ExperimentPhage[]} - cleaned array; does not contain null values
    */
   _cleanArrays(inData: ExperimentPhage[]): ExperimentPhage[]{
     var clean = inData.filter((elt)=>{
@@ -144,8 +186,9 @@ export class PlexerRoomComponent{
   /**
    * Reformats the results to take into account of null in the rows/cols
    *
-   * @param {Object} results - results of computing the plexer
-   * @returns {Object} - updated results
+   * @param {Object} results - results of computing the plexer; does not contain null values
+   *
+   * @returns {Object} - updated results; can contain null values
    */
   _unCleanResults(results: Object):Object{
     let out = {},
@@ -174,11 +217,22 @@ export class PlexerRoomComponent{
     return out;
   }
 
+  /**
+   * Updates the spinner CSS classes based on the input state
+   *
+   * @param {string} newClass - updated state for the spinner
+   */
   private _setSpinnerClass(newClass: string){
     this._spinnerClass['hiding'] = (newClass === "spinning" ? false : true);
      this._spinnerClass['spinning'] = (newClass === "spinning" ? true : false);
   }
 
+  /**
+   * Return the current CSS classes for the spinner
+   *
+   * @returns {Object} - CSS classes for the spinner in the form
+   * {'class': boolean, ...}
+   */
   getSpinnerClass(){
     return this._spinnerClass;
   }
@@ -192,12 +246,12 @@ export class PlexerRoomComponent{
   performPlexer(){
     // set the spinner
     this._setSpinnerClass('spinning');
-    // need to deal with dilution values
+    // clean the row and column arrays
     let tmpRows = this.rows;
     let cleanRows = this._cleanArrays(tmpRows);
     let cleanCols = this._cleanArrays(this.cols);
     // gather data
-    var data = {
+    var data: plexerInput = {
       lawnType: this.chosenBact,
       rowPhage: cleanRows,
       colPhage: cleanCols,
@@ -206,21 +260,9 @@ export class PlexerRoomComponent{
       scenarioData: this.scenarioDetails,
       capacity: ScenarioGlobals.plexerCapacity
     };
-    /*setTimeout(()=>{
-      this.expSubscription = this._experimentService.performPlexer(data)
-    .subscribe((res)=>{
-      //this.results = res;
-      this.results = this._unCleanResults(res);
-      this._setSpinnerClass('hiding');
-    }, (err)=>{
-      this.errorMessage = err.error.message || err.message || 'Unknown error';
-      this._setSpinnerClass('hiding');
-    });
-    }, 5000);*/
     // use the service
     this.expSubscription = this._experimentService.performPlexer(data)
     .subscribe((res)=>{
-      //this.results = res;
       this.results = this._unCleanResults(res);
       this._setSpinnerClass('hiding');
     }, (err)=>{
@@ -230,7 +272,8 @@ export class PlexerRoomComponent{
   }
 
   /**
-   *  Add phage to row or column of plexer
+   * Add phage to row or column of plexer
+   * when successful, updates the row/col phage counts
    *
    * Called on (onDropSuccess) of row/col header
    *
