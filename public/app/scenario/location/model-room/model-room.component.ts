@@ -6,22 +6,44 @@ import 'rxjs/add/operator/takeUntil'
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { ScenarioService } from '../../scenario.service';
 import { ScenarioGlobals } from '../../scenario.globals';
+import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
     selector: 'model-room',
-    templateUrl: './app/scenario/location/model-room/model-room.template.html',
-  styleUrls: ['./app/scenario/location/model-room/model-room.style.css']
+    templateUrl: 'app/scenario/location/model-room/model-room.template.html',
+  styleUrls: ['app/scenario/location/model-room/model-room.style.css']
 })
 
 export class ModelRoomComponent {
 
+  /**
+   * Current user guesses
+   */
   private guesses: any;
+  /**
+   * Array of strain numbers included
+   */
   private keys: number[];
+  /**
+   *
+   */
   private geneAr: number[];
+  /**
+   * Size of each block
+   */
   private stepSize: number;
+  /**
+   * Scenario code
+   */
   private scenarioId: string;
+  /**
+   * User id
+   */
   private userId: number;
   private errorMessage: string = '';
+  /**
+   * CSS width of each block dependent on length of gene and step size
+   */
   private _width: string;
   private isDestroyed$: Subject<boolean>;
 
@@ -40,12 +62,13 @@ export class ModelRoomComponent {
     this._width = (100 / nBlocks).toString();
   }
 
+  /**
+   * Initialize the component
+   * 1. Get user id
+   * 2. Get the scenario id from parent URL
+   * 3. Get user guesses from scenario service (set by fridge)
+   */
   ngOnInit(){
-    /*this._authenticationService.getUser
-      .takeUntil(this.isDestroyed$)
-      .subscribe( (res) =>{
-      this.userId = res.id;
-    });*/
     let u = this._authenticationService.getUser();
     if(u){
       this.userId = u.id;
@@ -68,11 +91,25 @@ export class ModelRoomComponent {
     });
   }
 
+  /**
+   * Destroy the component by unsubscribing
+   */
   ngOnDestory(){
     this.isDestroyed$.next(true);
     this.isDestroyed$.unsubscribe();
   }
 
+  /**
+   * Get the CSS classes for a strain guess block
+   * Block indicates wheater user thinks that section of the chromosome
+   * is deleted in the strain
+   *
+   * @param {number} strain - strain number (matches nummber is fridge)
+   * @param {number} pos - block index
+   *
+   * @returns {Object} - applicable CSS classes in the form
+   * {'class': boolean, ...}
+   */
   getBlockClass(strain: number, pos: number){
     let posGuess = this.guesses[strain][pos];
     return {
@@ -82,12 +119,27 @@ export class ModelRoomComponent {
     }
   }
 
+  /**
+   * Toggle block guess from true to false OR false to true
+   *
+   * called on (click) of the block
+   *
+   * @param {number} strain - strain number (matches nummber is fridge)
+   * @param {number} pos - block index
+   */
   toggleBlock(strain: number, pos: number){
     let c = this.guesses[strain][pos];
     this.guesses[strain][pos] = !c;
   }
 
+  /**
+   * Saves the guesses to the backend/database using the service
+   *
+   * called on (click) of Save Button
+   */
   saveData(){
+    // clear error message beforehand
+    this.errorMessage = '';
     // use service and save data
     let out = JSON.stringify(this.guesses)
     this._scenarioService
@@ -96,6 +148,8 @@ export class ModelRoomComponent {
       .subscribe((dat)=>{
       this.guesses = JSON.parse(dat);
       this._scenarioService.setScenario(null, dat);
+    }, (err)=>{
+      this.errorMessage = readErrorMessage(err);
     });
   }
 }
