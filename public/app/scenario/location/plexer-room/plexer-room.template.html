@@ -23,23 +23,7 @@
       </div>
       <!-- end dilution-value -->
 
-      <!-- plexer type -->
-<!--
-      <div>
-        <label class="tb-label" for="plexer-type">Plexer</label>
-        <div id="plexer-type" class="col-12 col-sm-6 col-md-3 btn-group" role="group" aria-label="Plexer-type">
-          <button [ngClass]="getPlexerClasses('multi')" (click)="plexerType='multi'" title="Perform 2x8 cross">
-      <span>Multi</span>
-    </button>
-
-          <button [ngClass]="getPlexerClasses('super')" (click)="plexerType='super'" title="Perform 8x8 cross">
-      <span>Super</span>
-    </button>
-        </div>
-      </div>
--->
-      <!-- end plexer-type -->
-      <div class="col-12 col-sm-6 col-md-3 btn-group-vertical">
+      <div class="col-12 col-sm-6 col-md-3 btn-group-vertical" id="reset-submit-btns">
         <button class="btn btn-outline-primary btn-sm" (click)="reset()">Reset</button>
         <button class="btn btn-primary" [disabled]="submitDisabled()" (click)="performPlexer()">Submit</button>
       </div>
@@ -53,7 +37,7 @@
   <div class="row">
     <table class="w-100 h-100">
       <!-- header -->
-      <tr>
+      <tr class="data-table-header">
         <td class="text-center"><span [ngClass]="getSpinnerClass()"></span></td>
         <td *ngFor="let col of cols; let i=index" dnd-droppable (onDropSuccess)="addPhage($event, 'col', i)" class="plexer-td-label">
           <span *ngIf="col !== null">{{ col.strainNum+1 }}</span>
@@ -66,7 +50,7 @@
         </td>
         <td *ngFor="let col of cols; let j=index" class="plexer-td">
           <div *ngIf="results && results[i] && results[i][j]">
-            <div *ngIf="results[i][j].full">
+            <div *ngIf="results[i][j].full" class="plexer-td-over">
               Over capacity
             </div>
             <div *ngIf="!results[i][j].full" class="plexer-td-results">
