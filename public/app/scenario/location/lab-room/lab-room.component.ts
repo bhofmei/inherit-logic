@@ -84,6 +84,9 @@ export class LabRoomComponent {
    * genotypes which correspond to contents of smallPlaqueList and largePlaqueList
    */
   private genotypes: _genotype[];
+  /**
+   * Id and strain number of phage used to create this plate
+   */
   private plateParents: Phage[];
 
   private errorMessage: string = '';

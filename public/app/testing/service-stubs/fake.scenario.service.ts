@@ -1,12 +1,13 @@
 import { Observable } from 'rxjs/Observable';
 import { Scenario, Fridge, FridgePhage, GenotypePhage } from '../../interfaces';
-import { listOfScenarios, listOfFridges, fridgeToCreate, listOfPhage } from '../sample-data';
+import { listOfScenarios, listOfFridges, fridgeToCreate, listOfPhage, guesses } from '../sample-data';
 import * as _ from 'lodash';
 
 export class ScenarioServiceStub {
 
   private scenarios: Scenario[] = listOfScenarios;
   private fridges: Fridge[] = listOfFridges;
+  private guesses: any = guesses['test1'];
 
   private _findScenario(scenId: string): Scenario {
     let scenario = this.scenarios.find(h => h.scenCode === scenId);
@@ -26,7 +27,7 @@ export class ScenarioServiceStub {
   }
 
   getScenarioDetails = Observable.of('details');
-  getGuesses = Observable.of('guesses');
+  getGuesses = Observable.of(this.guesses);
   getScenarioCode = Observable.of(listOfScenarios[0].scenCode);
 
    resetScenario() {
@@ -36,11 +37,7 @@ export class ScenarioServiceStub {
     }
 
   setScenario(scenarioDetails: string, scenarioGuesses: string) {
-//        if (scenarioDetails !== null)
-//            this._scenarioDetails.next(scenarioDetails);
-//        if (scenarioDetails !== null)
-//            this._scenarioGuesses
-//              .next(JSON.parse(scenarioGuesses));
+    this.guesses = JSON.parse(scenarioGuesses);
     }
 
   listScenarios(): Observable<Scenario[]> {
@@ -55,8 +52,9 @@ export class ScenarioServiceStub {
       return Observable.throw({message: 'Failed to load scenario ' + scenId})
     }
   }
+
   saveDeletions(guesses: any, userId: number, scenId: string): Observable<any> {
-    return Observable.of(null);
+    return Observable.of(_.cloneDeep(JSON.stringify(guesses)));
   }
 
   createFridge(userId: number, scenId: string): Observable<Fridge> {

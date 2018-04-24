@@ -291,7 +291,7 @@ export const fridgeToCreate: Fridge = {
   strains: listOfPhage.slice(0,2)
 }
 
-export const _singlePermPlates: plateResults[] = [
+const _singlePermPlates: plateResults[] = [
   {
     full: false,
     smallPlaque: createArray(1300, 0),
@@ -308,7 +308,7 @@ export const _singlePermPlates: plateResults[] = [
   }
 ]
 
-export const _singleRestPlates: plateResults[] = [
+const _singleRestPlates: plateResults[] = [
   {
     full: false,
     smallPlaque: [0],
@@ -323,7 +323,7 @@ export const singleInputPlates: any = {
   K: _singleRestPlates
 }
 
-export const _doublePermPlates: plateResults[] = [
+const _doublePermPlates: plateResults[] = [
   {
     full: true,
     smallPlaque: [],
@@ -340,7 +340,7 @@ export const _doublePermPlates: plateResults[] = [
   }
 ]
 
-export const _doubleRestPlates: plateResults[] = [
+const _doubleRestPlates: plateResults[] = [
   {
     full: false,
     smallPlaque: [0,1,2,3,4,5,6,7],
@@ -362,8 +362,7 @@ export const doubleInputPlates: any = {
   K: _doubleRestPlates
 }
 
-
-export const _plexer1: any = {
+const _plexer1: any = {
   0: [{smallPlaque: 0, largePlaque: 107, full: false},
       {smallPlaque: 54, largePlaque: 89, full: false}],
   1: [{smallPlaque: 38, largePlaque: 76, full: false},
@@ -372,7 +371,7 @@ export const _plexer1: any = {
       {smallPlaque: 0, largePlaque: 0, full: true}]
 }
 
-export const _plexer2: any = {
+const _plexer2: any = {
     0: [{smallPlaque: 99, largePlaque: 0, full: false},
       {smallPlaque: 54, largePlaque: 0, full: false},
        {smallPlaque: 0, largePlaque: 0, full: true}],
@@ -383,4 +382,23 @@ export const _plexer2: any = {
 export const plexerResult: any = {
   B: _plexer1,
   K: _plexer2
+}
+
+const _guesses1_0: boolean[] = createArray(5, false).concat(createArray(4, true)).concat(createArray(26, false));
+
+const _guesses1_1: boolean[] = createArray(25, false).concat(createArray(8, true)).concat(createArray(2, false));
+
+const _guesses2_0: boolean[] = createArray(3, false).concat(createArray(15, true)).concat(createArray(17, false));
+
+const _guesses2_1: boolean[] = createArray(4, true).concat(createArray(31, false));
+
+export const guesses: any = {
+  'test1': {
+    '0': _guesses1_0,
+    '1': _guesses1_1
+  },
+  'test2': {
+    '2': _guesses2_0,
+    '3': _guesses2_1
+  }
 }

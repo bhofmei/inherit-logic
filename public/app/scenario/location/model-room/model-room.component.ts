@@ -17,7 +17,7 @@ import { readErrorMessage } from '../../../shared/read-error';
 export class ModelRoomComponent {
 
   /**
-   * Current user guesses
+   * Current user guesses as object
    */
   private guesses: any;
   /**
@@ -73,21 +73,20 @@ export class ModelRoomComponent {
     if(u){
       this.userId = u.id;
     }
-    this._route.parent.params
-      .takeUntil(this.isDestroyed$)
-      .subscribe(params =>{
-      this.scenarioId = params['scenId']
-    });
+    this.scenarioId = this._route.parent.snapshot.paramMap.get('scenId');
     this._scenarioService.getGuesses
       .takeUntil(this.isDestroyed$)
       .subscribe((dels) => {
       this.guesses = dels;
+
       this.keys = Object.keys(dels).map((k)=> {return Number.parseInt(k);});
       if(this.keys.length === 0){
         this.errorMessage = 'No phage available for modelling'
       } else {
         this.errorMessage = '';
       }
+    }, (err)=>{
+      this.errorMessage = readErrorMessage(err);
     });
   }
 
@@ -140,7 +139,7 @@ export class ModelRoomComponent {
   saveData(){
     // clear error message beforehand
     this.errorMessage = '';
-    // use service and save data
+    // use service and save data (as a string)
     let out = JSON.stringify(this.guesses)
     this._scenarioService
       .saveDeletions(this.guesses, this.userId, this.scenarioId)
