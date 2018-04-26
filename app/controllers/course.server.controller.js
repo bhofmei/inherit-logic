@@ -17,10 +17,10 @@ const getErrorMessage = function (err) {
  * Middleware to determine if current user is an instructor
  *
  * @params {Object} req - Express request object; should contain a "curUser" and "course"
- * @params {Object} res - Express response object
- * @params {function} next - next middleware
+ * @param {Object} res - Express response object
+ * @param {function} next - next middleware
  *
- * @returns {Object | undefined}
+ * @returns {Object}
  * a) If current user not authorized, return 403 to response
  * b) If successful, return nothing, go to next middleware
  */
@@ -52,7 +52,7 @@ exports.isInstructor = function (req, res, next) {
  * @params {Object} req - Express request object; should have current user id
  * @params {Object} res - Express response object
  *
- * @return {Object | undefined}
+ * @returns {Object}
  * a) If error, return 500 and message to response
  * b) If admin, return all courses
  * c) If instr, return courses instructor for
@@ -90,10 +90,10 @@ exports.listCourses = function (req, res) {
  * Return the list of course numbers that currently exist
  * This is used during sign-up and does not require a user to be logged in
  *
- * @params {Object} req - Express request object
- * @params {Object} res - Express response object
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
  *
- * @returns {Object | undefined}
+ * @returns {Object}
  * a) If error, return 500 and message to response
  * b) If no current courses, return 404 to response
  * c) Otherwise, return list of course numbers and course Ids
@@ -119,10 +119,10 @@ exports.listCourseNum = function (req, res) {
 /**
  *  Create a new course and set current user as instructor
  *
- * @params {Object} req - Express request object; should contain POST body which is the info for the new course
- * @params {Object} res - Express response object
+ * @param {Object} req - Express request object; should contain POST body which is the info for the new course
+ * @param {Object} res - Express response object
  *
- * @returns {Object | undefined}
+ * @returns {Object}
  * a) If error, return 400 and message to response
  * b) If successful, return new course
  */
@@ -151,7 +151,7 @@ exports.createCourse = function (req, res) {
 /**
  * get an existing course
  *
- * @params {Object} req - Express request object;
+ * @param {Object} req - Express request object;
  * has "course" from courseById middleware
  *
  * @returns {Object} - course information
@@ -165,11 +165,11 @@ exports.getCourse = function (req, res) {
  * Update the description of an existing course
  * Course is identified using courseById middleware
  *
- * @params {Object} req - Express request object;
+ * @param {Object} req - Express request object;
  * should contain "course" info and POST body content
- * @params {Object} res - Express response object
+ * @param {Object} res - Express response object
  *
- * @return {Object}
+ * @returns {Object}
  * a) If error, retrurn 400 and message to response
  * b) If successful, return updated course
  */
@@ -223,12 +223,12 @@ exports.deleteCourse = function (req, res) {
 /**
  * get list of students for a course
  *
- * @params {Object} req - Express request object;
+ * @param {Object} req - Express request object;
  * should contain "course" info from courseById middleware
- * @params {Object} res - Express response object
+ * @param {Object} res - Express response object
  *
- * @return {Object | undefined}
- * a) If error, return 500 and message to response
+ * @returns {Object}
+ * a) If error, return 500 and error message to response
  * b) If success, return list of students in the course (includes firstName, lastName, userId, accessGranted, and email)
  */
 exports.getStudents = function (req, res) {
@@ -255,11 +255,11 @@ exports.getStudents = function (req, res) {
  * Most useful when finished with semester and course is over
  * Does not remove the course itself
  *
- * @params {Object} req - Express request object;
+ * @param {Object} req - Express request object;
  * contains "course" from courseById
- * @params {Object} res - Express response object
+ * @param {Object} res - Express response object
  *
- * @returns {Object | undefined}
+ * @returns {Object}
  * a) If error, pass 500-status and message to response
  * b) If successfull, return list of students
  */
@@ -284,11 +284,11 @@ exports.deleteCourseStudents = function (req, res) {
  * Admin can add current instrctors or students in the course
  * Instructors can add other instrctors
  *
- * @params {Object} - Express request object;
+ * @param {Object} - Express request object;
  * contains course id and current user
- * @params {Object} - Express response object
+ * @param {Object} - Express response object
  *
- * @reeturn {Object | undefined}
+ * @returns {Object}
  * a) If error, return 500 and message to response
  * b) If successful, return list possible instructors
  */
@@ -336,12 +336,12 @@ exports.getPossibleInstructors = function (req, res) {
  * Make user "instructor" role if user is a student
  * Update course object
  *
- * @params {Object} req - Express request object;
+ * @param {Object} req - Express request object;
  * Contains "course" (to update) and "student" (user
  * to make an instructor)
- * @params {Object} res - Express response object
+ * @param {Object} res - Express response object
  *
- * @return {Object | undefined}
+ * @return {Object}
  * a) If error updating user, return 500 and message to reponse
  * b) If error updating course, return 400 and message to response
  * c) If successful, return updated course
@@ -432,14 +432,14 @@ exports.getScenarioStatus = function (req, res) {
 /**
  * Middleware to find course by course number
  *
- * @params {Object} req - Express request object
- * @params {Object} res - Express response object
- * @params {Function} next - next middleware function
- * @params {string} id - course number from URL
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - next middleware function
+ * @param {string} id - course number from URL
  *
- * @returns {string | undefined}
+ * @returns {Function}
  * a) If error, pass error message to next middle ware
- * b) If no error, attached course to request object and ove to next middleware
+ * b) If no error, attached course to request object and move to next middleware
  */
 exports.courseByNum = function (req, res, next, id) {
   Course.findOne({
