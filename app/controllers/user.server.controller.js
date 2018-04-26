@@ -35,6 +35,14 @@ const getErrorMessage = function (err) {
   return message;
 };
 
+/**
+ * Returns trimmed user info in a consistent manner
+ *
+ * @param {Object} user - user object from DB
+ *
+ * @returns {Object} - trimmed user object with "id", "firstName",
+ * "lastName, "email", and "role"
+ */
 const getUserInfo = function (user) {
   return {
     id: user.userId,
@@ -47,12 +55,30 @@ const getUserInfo = function (user) {
 
 /**
  * return user object
+ *
+ * @param {Object} req - Express request object;
+ * includes "curUser" from userById
+ * @param {Object} req - Express response object
+ *
+ * @returns {Object} - trimmed user object
  */
 exports.getUser = function (req, res) {
   let user = getUserInfo(req.curUser);
   res.json(user);
 };
 
+/**
+ * Update user info - name and/or email
+ *
+ * @param {Object} req - Express request object
+ * includes "curUser" from userById and "body" with updated content
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object}
+ * a) If error, return 500 and error message to response
+ * b) If unable to find user, return 404 and message to response
+ * c) If successful, return updated user to response
+ */
 exports.editUser = function (req, res) {
   // can update firstName, lastName, email
   debug('edit %d - %o', req.curUser.userId, req.body);
@@ -85,6 +111,19 @@ exports.editUser = function (req, res) {
     });
 };
 
+/**
+ * Update a user password
+ *
+ * @param {Object} req - Express request object;
+ * includes "curUser" from userById and "body" with old
+ * password and new password
+ * @param {Object} res - Express response object
+ *
+ * @return {Object}
+ * a) If user doesn't exist, return 404 and error message to response
+ * b) If error changing password, return 401 and error message to response
+ * c) If successful, return trimmed user to response
+ */
 exports.updatePassword = function (req, res) {
   debug('update password %d - %o', req.curUser.userId, req.body);
 
@@ -118,6 +157,19 @@ exports.updatePassword = function (req, res) {
     });
 };
 
+/**
+ * Sends an email to a user to allow user to reset password
+ *
+ * @param {Object} req - Express request object;
+ * includes "body" which has user email
+ * @param {Object} res - Express response object
+ * @param {Function} next - next middleware function
+ *
+ * @returns {Object}
+ * a) If email isn't a user, reutrns 404 and message to response
+ * b) If error, returns 422 and error message to response
+ * c) If successful, sends email and returns email message to response
+ */
 exports.resetPasswordEmail = function (req, res, next) {
   // error test if transporter not set up
   if (transporter === null) {
@@ -147,7 +199,6 @@ exports.resetPasswordEmail = function (req, res, next) {
         (err, user) => {
           if (err) {
             done(err, token, user);
-            //return res.status(400).send({message: getErrorMessage(err)})
           } else if (!user) {
             return res.status(404)
               .send({
@@ -192,6 +243,19 @@ exports.resetPasswordEmail = function (req, res, next) {
   }); // end async.waterfall
 };
 
+/**
+ * Allows user to reset the password using a token (sent by email)
+ *
+ * @param {Object} req - Express request object;
+ * includes "body" which has new password and token
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object}
+ * a) If error, returns 400 and error message to response
+ * b) If token invalid, returns 404 and message to response
+ * c) If toke expired, returns 403 and message to response
+ * d) If successful, returns message "updated" to response
+ */
 exports.resetPassword = function (req, res) {
   let token = req.body.token;
   debugPass('token %s', token);
@@ -242,7 +306,17 @@ exports.resetPassword = function (req, res) {
   });
 };
 
-// Create a new controller method that signin users
+/**
+ * Using user login in, attempts to sign users in
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - next middleware function
+ *
+ * @returns {Object | Function}
+ * a) If error, returns 400 and error message to response
+ * b) If successful, move to next function
+ */
 exports.signin = function (req, res, next) {
   passport.authenticate('local', (err, user, info) => {
     if (err || !user) {
@@ -270,7 +344,17 @@ exports.signin = function (req, res, next) {
   })(req, res, next);
 };
 
-// Create a new controller method that creates new 'regular' users
+/**
+ * Create new users
+ *
+ * @param {Object} req - Express request object;
+ * includes "body" with email, password, and other info
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object}
+ * a) If error, returns 400 and error message to response
+ * b) If succesful, returns trimmed user info to response
+ */
 exports.signup = function (req, res) {
   let tmp = req.body;
   //console.log(req.body);
@@ -309,7 +393,14 @@ exports.signup = function (req, res) {
   });
 };
 
-// Create a new controller method for signing out
+/**
+ * Sign out a logged in user via the request
+ *
+ * @param {Object} req - Express request object;
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object} - returns 200 and true to response
+ */
 exports.signout = function (req, res) {
   req.logout();
   return res.status(200)
@@ -319,6 +410,15 @@ exports.signout = function (req, res) {
 
 /**
  * grant access to student for specific scenario
+ *
+ * @param {Object} req - Express request object;
+ * includes "student" from userById, "scenario" from scenarioByCode,
+ * and "body" with true/false
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object}
+ * a) If error, returns 400 and error message to response
+ * b) If success, returns updated user information and/or 200 to response
  */
 exports.grantAccess = function (req, res) {
   let scenario = req.scenario;
@@ -350,6 +450,18 @@ exports.grantAccess = function (req, res) {
   }
 };
 
+/**
+ * Middleware to check if current user can access the path depending if they
+ * are logged in
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - next middleware to follow
+ *
+ * @returns {Object | Function}
+ * a) If error, returns 401 and message to response
+ * b) If success, move to next middleware
+ */
 exports.requiresLogin = function (req, res, next) {
   if (!req.isAuthenticated()) {
     return res.status(401)
@@ -360,6 +472,19 @@ exports.requiresLogin = function (req, res, next) {
   next();
 };
 
+/**
+ * Find user (if they exist) by the user id
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Object} next - Next function to go to
+ * @param {string} id - user's id as a string from URL
+ *
+ * @returns {Object, Function}
+ * a) If error, pass error to next function
+ * b) If user doesn't exist, pass error message to next function
+ * c) If it successful, set curUser or student
+ */
 exports.userById = function (req, res, next, id) {
   // check for negative id -> send error
   if (id < 0) {
