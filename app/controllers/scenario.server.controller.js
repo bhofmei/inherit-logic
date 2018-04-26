@@ -2,7 +2,6 @@
 const mongoose = require('mongoose');
 const Scenario = mongoose.model('Scenario');
 
-// Create a new error handling controller method
 const getErrorMessage = function (err) {
   if (err.errors) {
     for (const errName in err.errors) {
@@ -13,7 +12,16 @@ const getErrorMessage = function (err) {
   }
 };
 
-// Create a new controller method that retrieves a list of scenarios
+/**
+ * List all of the sceanrios in order of degree of difficulty
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object}
+ * a) If error, returns 400 and error message to response
+ * b) If success, returns list of scenairos to response
+ */
 exports.list = function (req, res) {
   Scenario.find({}, 'label scenCode purpose startingPoint relevance degOfDiff')
     .sort('degOfDiff')
@@ -31,7 +39,15 @@ exports.list = function (req, res) {
     });
 };
 
-// Create a new controller method that returns a scenario
+/**
+ * Get the details about a scenario
+ *
+ * @param {Object} req - Express request object;
+ * includes "scenario" from scenarioByCode
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object} - returns scenario to response
+ */
 exports.read = function (req, res) {
   let s = req.scenario;
   let out = {
@@ -46,7 +62,18 @@ exports.read = function (req, res) {
 };
 
 
-// Create a new controller middleware that retrieves a single existing scenario
+/**
+ * Retreives a scenario from a scendario code
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - next middleware to follow
+ * @param {string} id - scenario code from URL
+ *
+ * @returns {Function}
+ * a) If error, pass error message to next middleware
+ * b) If successful, set reqest scenario and move to next middleware
+ */
 exports.scenarioByCode = function (req, res, next, id) {
   Scenario.findOne({
     scenCode: id
