@@ -16,7 +16,16 @@ const getErrorMessage = function (err) {
 };
 
 /**
- * user must be instructor or admin
+ * Middleware to check if current user is instructor or admin
+ *
+ * @param {Object} req - Express request object;
+ * includes "curUser" from userById
+ * @param {Object} res - Express response object
+ * @param {Function} next - the next middleware function
+ *
+ * @returns {Object | Function}
+ * a) If not an admin, returns 403 and error message to response
+ b) If is instr/admin, go to next middleware
  */
 exports.hasAuthorization = function (req, res, next) {
   if (!(req.curUser.role === 'instr' || req.curUser.role === 'admin')) {
@@ -30,7 +39,16 @@ exports.hasAuthorization = function (req, res, next) {
 };
 
 /**
- * user must be admin
+ * Middleware to check if current user is admin
+ *
+ * @param {Object} req - Express request object;
+ * includes "curUser" from userById
+ * @param {Object} res - Express response object
+ * @param {Function} next - the next middleware function
+ *
+ * @returns {Object | Function}
+ * a) If not an admin, returns 403 and error message to response
+ b) If is admin, go to next middleware
  */
 exports.isAdmin = function (req, res, next) {
   if (req.curUser.role !== 'admin') {
@@ -45,6 +63,15 @@ exports.isAdmin = function (req, res, next) {
 /**
  *  list all users in the system for admin OR
  *  list all students for instructor courses for instructor
+ *
+ * @param {Object} req - Express request object;
+ * includes "curUser" (logged in user) from userById
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object | undefined}
+ * a) If error, returns 500 and error message to response
+ * b) If user is admin, returns list of all users
+ * c) If user is instr, returns list of students in instr's courses
  */
 exports.listUsers = function (req, res) {
 
@@ -59,7 +86,7 @@ exports.listUsers = function (req, res) {
       if (err) {
         return res.status(500)
           .send({
-            message: err
+            message: getErrorMessage(err)
           })
       } else {
         // we have courses
@@ -90,7 +117,7 @@ exports.listUsers = function (req, res) {
         if (err2) {
           return res.status(500)
             .send({
-              message: err2
+              message: getErrorMessage(err2)
             });
         } else {
           res.json(students);
@@ -100,7 +127,15 @@ exports.listUsers = function (req, res) {
 };
 
 /**
- * get user
+ * Get secondary user (not necessarily the user currently logged in)
+ *
+ * @param {Object} req - Express request object;
+ * includes "student" (the secondary user)
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object}
+ * a) If error, returns 500 and error message to response
+ * b) If successful, return cleaned up user info to response
  */
 exports.getUser = function (req, res) {
   let tmp = req.student;
@@ -108,7 +143,7 @@ exports.getUser = function (req, res) {
     if (err) {
       return res.status(500)
         .send({
-          message: err
+          message: getErrorMessage(err)
         });
     }
     delete student.password;
@@ -123,6 +158,17 @@ exports.getUser = function (req, res) {
   });
 };
 
+/**
+ * Delete a secondary user
+ *
+ * @param {Object} req - Express request object;
+ * Includes "student" (secondary user to delete)
+ * @param {Object} res - Express response object
+ *
+ * @return {Object}
+ * a) If error, returns 500 and error message to response
+ * b) If successful, returns deleted student to response
+ */
 exports.deleteUser = function (req, res) {
   let student = req.student; // student to be deleted
   student.remove((err, s) => {
@@ -137,6 +183,17 @@ exports.deleteUser = function (req, res) {
   });
 };
 
+/**
+ * Update the secondary user's role
+ *
+ * @param {Object} req - Express request object;
+ * Includes body, which has new role, and secondary user as "student"
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object}
+ * a) If error, returns 500 and error message to response
+ * b) If successful, returns updated secondary user to response
+ */
 exports.setRole = function (req, res) {
   let body = req.body; // includes role
   User.findOneAndUpdate({
