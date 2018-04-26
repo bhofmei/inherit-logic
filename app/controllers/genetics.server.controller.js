@@ -4,6 +4,18 @@ const Phage = mongoose.model('Phage');
 const plate = require('../genetics/plate.experiment');
 const plexer = require('../genetics/plexer.experiment');
 
+/**
+ * Creates a plate for the lab room
+ *
+ * @param {Object} req - Express request object;
+ * includes "body" with the info needed to create the plate--
+ * phage1 (numPhage and id), (optional) phage2, lawnType, location, capacity, and scenarioData
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object}
+ * a) If error with incoming info, returns 400 and error message to response
+ * b) If successful, returns plate ("full", "smallPlaque", "largePlaque", "genotypes", "parents") to response
+ */
 exports.createPlate = function (req, res) {
   // req must have 1-2 phage IDs with numPhage, lawn type, location, specials, capacity, scenarioData
 
@@ -100,6 +112,19 @@ exports.createPlate = function (req, res) {
   } // end if has property phage1
 }; // end createPlate
 
+/**
+ * Generates the NxM plates for the plexer
+ *
+ * @param {Object} req - Express request object;
+ * includes "body" with info needed to generate plexer --
+ * list of rowPhage, list of colPhage with ids and numPhage,
+ * scenarioData, lawnType, location, capacity
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object}
+ * a) If error, returns 400 and message to response
+ * b) If success, returns plexer results (2D array where each cell has "full", "smallPlaque", and "largePlaque")
+ */
 exports.handlePlexer = function (req, res) {
   let reqB = req.body;
   var lawnType = reqB.lawnType;
