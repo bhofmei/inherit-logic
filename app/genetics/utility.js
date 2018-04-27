@@ -1,21 +1,7 @@
 const pEnum = require('./phage.enum');
 const randGen = require('./random.generator');
 const debug = require('debug')('genetics:util');
-/*exports.howManyToMake = function(randGen, inList){
-  if(inList.length === 1){
-    return inList[0];
-  } else {
-    return randGen.integer(inList[0], inList[1]);
-  }
-}
 
-exports.holyRoller = function(randGen, numSides, numTimes){
-  var diceAr = randGen.dice(numSides, numTimes);
-  var sumDice = 0;
-  return diceAr.forEach((n)=>{
-    sumDice = sumDice + n;
-  });
-}*/
 exports.howManyToMake = function(engine, inList){
   if(inList.length === 1){
     return inList[0];

@@ -13,14 +13,41 @@ const debug = require('debug')('genetics'),
   debugExt = require('debug')('genetics:ext'),
   debugTest = require('debug')('genetics:test');
 
+/**
+ * Reset the random number generation engine using a "random" number
+ */
 exports.resetEngine = function () {
   randGen.reset(randEngine);
 }
 
+/**
+ * Set the random number generation seed value
+ * Used for testing
+ *
+ * @param {number} num - random number generation email
+ */
 exports.seedEngine = function (num) {
   randGen.setSeed(randEngine, num)
 }
 
+/**
+ * Creates the plate
+ *
+ * @param {Object} phage1 - first phage in the cross
+ * @param {Object} phage2 - second phage in the cross or null if not crossing
+ * @param {string} lawnType - E. coli bacteria type
+ * @param {Object} speciels - other special parameterss (not used)
+ * @param {number} capacity - max number of phage allowed on the plate
+ * @param {string} whoCalled - location/room asking to generate the plate
+ * @param {Object} scenData scenario information
+ *
+ * @returns {Object} - new plate
+ * "full" - boolean; plate over capacity?
+ * "smallPlaque" - number[]; individual small plaques, number is index of genotype in genotypes list
+ * "largePlaque" - number[]; individual large plaques, number is index of genotype in genotypes list
+ * "genotypes" - number[][]; list of genotypes for this plate
+ * "parents" - input phage
+ */
 exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData) {
   // combines createPlatePhage and generatePlate into one function
   // has: genoList and strainList
@@ -37,6 +64,9 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
   return plate;
 }
 
+/**
+ * Create the genotypes and strains for this plate
+ */
 exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capacity, whoCalled, scenData) {
   var lawnType = bacteria[lawnTypeStr];
   var startGenotypes, genoList, nPhage2Larger;
@@ -44,7 +74,6 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
   var deletesInPlay = false;
   var mutagenized = (specials === 'irrad');
   // phage 1 and 2 will be full objects previously retrieved from mongoose database and numPhage property
-  //console.log('plate', JSON.stringify(phage1), JSON.stringify(phage2));
   var parents = [];
   var newPhage1, newPhage2, phageRatio;
   var onePhage = false;
@@ -227,6 +256,9 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
   }
 } // end createPlage
 
+/**
+ * Phenotypes the plate phage and ensures not too many phage on the plate
+ */
 exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, scenData, numInput) {
   // return full, smallPlaque, largePlaque, genotypes -> this only applies to the lab scenario
   // lawn type is "B" or "K"
@@ -314,6 +346,16 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
   }
 } // end generatePlage
 
+/**
+ * Compute the recombination parameters
+ *
+ * @param {number} f1 - fraction of phage1
+ * @param {number} f2 - fraction of phage2
+ * @param {number} p - recombination probability
+ * @param {number} n - total number of offspring expected
+ *
+ * @returns {number[3]} - number of single, double, and triple recombinants to create
+ */
 const computeRecombParameters = function (f1, f2, p, n) {
   // f1 = fraction phage 1
   // f2 = fraction phage 2
@@ -331,6 +373,23 @@ const computeRecombParameters = function (f1, f2, p, n) {
   return numRecomb;
 }
 
+/**
+ * Compute the expected number of offspring
+ *
+ * @param {number} n1 - number of input for phage1
+ * @param {number} n2 - number of input for phage2
+ * @param {number} nR - ratio of phage1 to phage2
+ * @param {number} mutFreq - mutation frequency for the scenario
+ * @param {number} recFreq - frequency of recombination for scenario
+ * @param {boolean} identical - are the two phage identical
+ *
+ * @returns {Object} - numbers/types of offspring to create
+ * "numOffspring" - number of offspring aiming for
+ * "total" - actual number of offspring to be generated
+ * "numGeno" - number of each parental geonotype
+ * "numMuts" - number of mutants for each parental genotype
+ * "numRecomb" - number of single, double, and triple recomb
+ */
 const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
   let numOffspring = Math.max(n1, n2);
 
@@ -359,6 +418,12 @@ const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
   };
 }
 
+/**
+ * shuffle strains; force mutants/recombinants to be towards the front of the list
+ *
+ * @param {number[]} inList - strain list to shuffle
+ * @param {number} numInput - number of input/parent phage
+ */
 const shufflePlaqueList = function(inList, numInput){
   if(inList.length < 100){
     return randGen.randShuffle(inList, randEngine);

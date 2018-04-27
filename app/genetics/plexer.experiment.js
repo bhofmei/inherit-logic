@@ -11,15 +11,39 @@ const bacteria = require('../models/bacteria.server.model');
 const plateExper = require('./plate.experiment');
 const debug = require('debug')('genetics:plexer');
 
+/**
+ * Reset the random number generation engine using a "random" number
+ */
 exports.resetEngine = function(){
   // resets the plateExper engine
   plateExper.resetEngine();
 }
 
+/**
+ * Set the random number generation seed value
+ * Used for testing
+ *
+ * @param {number} num - random number generation email
+ */
 exports.seedEngine = function(num){
   randGen.setSeed(randEngine, num)
 }
 
+/**
+ * Creates the plexer results
+ *
+ * @param {Object[]} rowPhage - list of input phage representing the rows
+ * @param {Object[]} colPhage - list of input phage representing the columns
+ * @param {string} lawnType - E. coli bacteria type
+ * @param {Object} special - other parameters; not used
+ * @param {number} capacity - maximum number of phage per plate
+ * @param {string} whoCalled - location asking to create the plexer
+ * @param {Object} scenData - current scenario data
+ *
+ * @returns {Object} - plexer results
+ * Essentially 2D array (but as an object) where each cell is a "plate"
+ * and has "full" (plate over capacity), "smallPlaque" (number of small plaque on the plate), and "largePlaque" (number of large plaque on the plate)
+ */
 exports.createPlexerPlate = function (rowPhage, colPhage, lawnType, specials, capacity, whoCalled, scenData){
   var outMat = {};
   // loop through rowPhage
@@ -33,19 +57,31 @@ exports.createPlexerPlate = function (rowPhage, colPhage, lawnType, specials, ca
       let cPhage = colPhage[j];
       // generate the plate; has genoList and strainList
       var phagePlate = plateExper.createPlatePhage(rPhage, cPhage, lawnType, specials, capacity, whoCalled, scenData);
-      //console.log('**', i, j);
       phagePlate.genoList.forEach((geno)=>{
         //console.log(geno.shifts);
       });
       // has: full, smallPlaque, largePlaque
       var plate = this.generatePlexerPlate(lawnType, phagePlate.genoList, phagePlate.strainList, capacity, scenData);
       outMat[i][j] = plate;
-      //console.log(i, j, plate);
     } // end for j
   } // end for i
   return outMat;
 }
 
+/**
+ * Phenotype the phage and format results for front-end
+ *
+ * @param {string} lawnTypeStr - E. coli bacteria type
+ * @param {number[]} genoList - list of genotypes on the plate
+ * @param {number[]} strainList - list of strains which is the index to the genotype
+ * @param {number} capacity - capacity of each plexer plate
+ * @param {Object} scenData - current scenario data
+ *
+ * @returns {Object} - results for this single plexer plate
+ * "full" - boolean; is plate over capacity
+ * "smallPlaque" - number; number of small plaque on plate
+ * "largePlaque" - number; number of large plaque on plate
+ */
 exports.generatePlexerPlate = function (lawnTypeStr, genoList, strainList, capacity,  scenData) {
   // return full, smallPlaque, largePlaque
   // lawn type is "B" or "K"

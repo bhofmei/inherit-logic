@@ -7,20 +7,38 @@ const pEnum = require('./phage.enum');
 const debug = require('debug')('genetics:phage'),
   debugExt = require('debug', 'genetics:ext');
 
+/**
+ * Set the random number generation see to a "random" number
+ */
 exports.resetEngine = function () {
   randGen.reset(randEngine);
 }
 
+/**
+ * Set the random number generation seed to a specific number;
+ * used for testing
+ *
+ * @param {number} num - new seed value
+ */
 exports.seedEngine = function (num) {
   randGen.setSeed(randEngine, num)
 }
 
+/**
+ * Recombine 2 strains with specified number of crossovers and number of offspring
+ *
+ * @param {Object} phageGeno1 - genotype of phage 1
+ * @param {Object} phageGeno2 - genotype of phage 2
+ * @param {number} numXOver - number of corssovers
+ * @param {number} numToDo - how many offspring to create
+ *
+ * @retuns {Object[]} - list of recombined offspring
+ */
 exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
   var recGenos = [];
   for (let k = 0; k < numToDo; k++) {
     let debugText = '';
     let startGeno, endGeno;
-    //if (randGen.bool()) {
     if (randGen.randBool(randEngine)) {
       startGeno = clone(phageGeno1);
       endGeno = clone(phageGeno2);
@@ -33,7 +51,6 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
 
     let recSpot = [];
     for (let i = 0; i < numXOver; i++) {
-      //recSpot.push(randGen.integer(1, scenConfig.geneLength));
       recSpot.push(randGen.randInt(1, scenConfig.geneLength, randEngine));
     } // end for i
     recSpot.sort();
@@ -150,8 +167,16 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
 
 } // end recombine
 
+/**
+ * Create N number of mutants; checks that mutations aren't too close
+ * together on the chromosome
+ *
+ * @param {number[]} inList - mutations (shifts) of phage to mutagenize
+ * @param {number} numDesitred - number of new mutants to generate
+ *
+ * @returns {number[][]} - 2D array of new mutants; numDesired x (len. inList+1)
+ */
 exports.mutagenize = function (inList, numDesired) {
-  // TODO: mutangenize function
   var okDist = scenConfig.mutOkDist;
   var muteGuys = [];
   var maxTries = scenConfig.maxMuteTries;
@@ -161,7 +186,6 @@ exports.mutagenize = function (inList, numDesired) {
     let mutantList = [];
     while (!goodMute && count < maxTries) {
       mutantList = clone(inList);
-      //let spotShot = randGen.integer(1, scenConfig.geneLength);
       let spotShot = randGen.randInt(1, scenConfig.geneLength, randEngine);
       let kind = (randGen.randBool(randEngine) ? 1 : -1)
       mutantList.push(
@@ -189,7 +213,12 @@ exports.mutagenize = function (inList, numDesired) {
 
 /**
  * check if recombination position is within a deletion
- * return true if deletion is okay, false otherwise
+ *
+ * @param {number} checkPos - position to check
+ * @param {number[]} delList - lit of deletions for phage
+ *
+ * @returns {boolean} - true if recombination is valid (not in a deletion),
+ * false otherwise
  */
 const _validRecombDel = function (checkPos, delList) {
   if (delList.length === 0) {
@@ -205,6 +234,16 @@ const _validRecombDel = function (checkPos, delList) {
   return true;
 };
 
+/**
+ * Create a copy of deletions within the start and end positions of
+ * chromosome chunk to be copied
+ *
+ * @param {number} sPos - start position of chrosomome chunk to copy
+ * @param {number} ePos - end position of chromosome chunk to copy
+ * @param {number[]} delList - list of deletions for this phage
+ *
+ * @returns {number[]} - copy of the deletions
+ */
 const _copyDeletion = function (sPos, ePos, delList) {
   let outDel = [];
   let mLength = (delList.length % 2 === 0 ? delList.length : delList.length - 1);
