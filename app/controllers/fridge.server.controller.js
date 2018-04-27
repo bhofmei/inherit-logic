@@ -323,7 +323,6 @@ exports.deleteStudentFridge = function (req, res, next) {
           next()
         }
       });
-      next();
     }
   });
 }
