@@ -29,7 +29,7 @@ module.exports = {
           {loader: 'awesome-typescript-loader'},
           {loader: 'angular-router-loader'}
         ],
-        exclude: [/.(spec|e2e)\.ts/]
+        exclude: [/.(spec|e2e)\.ts/, /testing/]
       },
       {
         test: /\.css$/,

@@ -16,7 +16,9 @@
     "start:p": "concurrently \"npm run webpack:p\" \"npm run app\" ",
     "test:back": "NODE_ENV=test mocha --recursive --reporter spec -t 5000 app/tests/",
     "test:server": "NODE_ENV=test mocha --reporter spec -t 5000 app/tests/",
-    "test:genetics": "NODE_ENV=test DEBUG=genetics:test mocha --reporter spec app/tests/genetics"
+    "test:genetics": "NODE_ENV=test DEBUG=genetics:test mocha --reporter spec app/tests/genetics",
+    "cov:back": "NODE_ENV=test nyc --reporter=lcov mocha --recursive --reporter spec -t 5000 app/tests/",
+    "loc:back": "npx cloc --md --report-file=lines.app.md --by-file app/"
   },
   "keywords": [
     "genetics"
@@ -93,6 +95,7 @@
     "angular2-template-loader": "https://github.com/bhofmei/angular2-template-loader.git",
     "awesome-typescript-loader": "^3.4.1",
     "clean-webpack-plugin": "^0.1.18",
+    "cloc": "^2.3.3",
     "concurrently": "3.1.0",
     "copy-webpack-plugin": "^4.3.1",
     "css-loader": "^0.28.9",
