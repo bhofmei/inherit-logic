@@ -1,3 +1,6 @@
+/**
+* @module genetics-controller
+*/
 const mongoose = require('mongoose');
 const clone = require('clone');
 const Phage = mongoose.model('Phage');
