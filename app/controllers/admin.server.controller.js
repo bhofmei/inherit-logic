@@ -1,3 +1,9 @@
+/**
+ * The Admin-related controller functions
+ * @module admin.server.controller
+ * @name Admin Controller
+ * @type Controller
+ */
 const mongoose = require('mongoose');
 const User = require('mongoose')
   .model('User');
@@ -5,73 +11,23 @@ const Course = mongoose.model('Course');
 const ObjectId = mongoose.Types.ObjectId;
 const scenData = require('../../config/scenario.data');
 
-const getErrorMessage = function (err) {
-  if (err.errors) {
-    for (const errName in err.errors) {
-      if (err.errors[errName].message) return err.errors[errName].message;
-    }
-  } else {
-    return 'Unknown server error';
-  }
-};
+const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
 
 /**
- * Middleware to check if current user is instructor or admin
+ * list all users in the system for admin OR
+ * list all students for instructor courses for instructor
+ *
+ * @apiType GET
+ * @apiPath /api/admin/:userId/students
  *
  * @param {Object} req - Express request object;
- * includes "curUser" from userById
- * @param {Object} res - Express response object
- * @param {Function} next - the next middleware function
- *
- * @returns {Object | Function}
- * a) If not an admin, returns 403 and error message to response
- b) If is instr/admin, go to next middleware
- */
-exports.hasAuthorization = function (req, res, next) {
-  if (!(req.curUser.role === 'instr' || req.curUser.role === 'admin')) {
-    return res.status(403)
-      .send({
-        message: 'Not authorized'
-      });
-  }
-  // Call the next middleware
-  next();
-};
-
-/**
- * Middleware to check if current user is admin
- *
- * @param {Object} req - Express request object;
- * includes "curUser" from userById
- * @param {Object} res - Express response object
- * @param {Function} next - the next middleware function
- *
- * @returns {Object | Function}
- * a) If not an admin, returns 403 and error message to response
- b) If is admin, go to next middleware
- */
-exports.isAdmin = function (req, res, next) {
-  if (req.curUser.role !== 'admin') {
-    return res.status(403)
-      .send({
-        message: 'Not authorized'
-      });
-  }
-  next();
-}
-
-/**
- *  list all users in the system for admin OR
- *  list all students for instructor courses for instructor
- *
- * @param {Object} req - Express request object;
- * includes "curUser" (logged in user) from userById
+ * @proerty {User} curUser - logged in user from userById
  * @param {Object} res - Express response object
  *
- * @returns {Object | undefined}
- * a) If error, returns 500 and error message to response
- * b) If user is admin, returns list of all users
- * c) If user is instr, returns list of students in instr's courses
+ * @returns {Object}
+ * @yields {500} On error, sends description of error
+ * @yields {200_Success} If user is admin, returns list of all users<br>
+ * If user is instr, returns list of students in instr's courses
  */
 exports.listUsers = function (req, res) {
 
@@ -101,7 +57,7 @@ exports.listUsers = function (req, res) {
             if (err2) {
               return res.status(500)
                 .send({
-                  message: err2
+                  message: getErrorMessage(err2)
                 });
             } else {
               res.json(students);
@@ -127,15 +83,19 @@ exports.listUsers = function (req, res) {
 };
 
 /**
- * Get secondary user (not necessarily the user currently logged in)
+ * Get information about a secondary user (not necessarily the user currently logged in)
+ *
+ * @apiType GET
+ * @apiPath /api/admin/:userId/students/:studentId
  *
  * @param {Object} req - Express request object;
- * includes "student" (the secondary user)
+ * @property {User} student - the secondary user with id <code>studentId</code>
+ * @property {User} curUser - logged in user with id <code>userId</code>
  * @param {Object} res - Express response object
  *
  * @returns {Object}
- * a) If error, returns 500 and error message to response
- * b) If successful, return cleaned up user info to response
+ * @yields {500} On error, sends description of error as <code>{message: error-message}</code>
+ * @yields {200_Successful} Cleaned information about the user
  */
 exports.getUser = function (req, res) {
   let tmp = req.student;
@@ -161,15 +121,19 @@ exports.getUser = function (req, res) {
 /**
  * Delete a secondary user
  *
- * @param {Object} req - Express request object;
- * Includes "student" (secondary user to delete)
+ * @apiType DELETE
+ * @apiPath /api/admin/:userId/students/:studentId
+ *
+ * @param {Object} req - Express request object
+ * @property {User} student - the secondary user with id <code>studentId</code>
+ * @property {User} curUser - logged in user with id <code>userId</code>
  * @param {Object} res - Express response object
  *
- * @return {Object}
- * a) If error, returns 500 and error message to response
- * b) If successful, returns deleted student to response
+ * @returns {Object}
+ * @yields {500} On error, sends description of error as <code>{message: error-message}</code>
+ * @yields {200_Successful} Cleaned information about the user
  */
-exports.deleteUser = function (req, res) {
+ exports.deleteUser = function (req, res) {
   let student = req.student; // student to be deleted
   student.remove((err, s) => {
     if (err) {
@@ -184,15 +148,25 @@ exports.deleteUser = function (req, res) {
 };
 
 /**
- * Update the secondary user's role
+ * Update a user's role to "student", "instructor", or "admin"
  *
- * @param {Object} req - Express request object;
- * Includes body, which has new role, and secondary user as "student"
+ * @apiType POST
+ * @apiPath /api/admin/:userId/students/:studentId
+ *
+ * @param {Object} req - Express request object
+ * @property {User} student - the secondary user with id <code>studentId</code>
+ * @property {User} curUser - logged in user with id <code>userId</code>
+ * @property {Object} body - new role; one of "student", "instr", or "admin"
  * @param {Object} res - Express response object
  *
  * @returns {Object}
- * a) If error, returns 500 and error message to response
- * b) If successful, returns updated secondary user to response
+ * @yields {500} On error, sends description of error as <code>{message: error-message}</code>
+ * @yields {200_Successful} Updated user information
+ * @example <caption>Request</caption>
+ * <p><code>/api/admin/1/students/67</code>Make user 67 an instructor</p>
+ * {
+ *   role: "instr"
+ * }
  */
 exports.setRole = function (req, res) {
   let body = req.body; // includes role
@@ -215,3 +189,50 @@ exports.setRole = function (req, res) {
     }
   );
 };
+
+/**
+ * Middleware to check if current user is instructor or admin
+ * @protected
+ *
+ * @param {Object} req - Express request object
+ * @property {Object} curUser - from userById
+ * @param {Object} res - Express response object
+ * @param {Function} next - the next middleware function
+ *
+ * @returns {Object | Function}
+ * @yields {403} User is not an admin or instructor
+ * @yields {next} Go to the next middleware if user is admin or instructor
+ */
+exports.hasAuthorization = function (req, res, next) {
+  if (!(req.curUser.role === 'instr' || req.curUser.role === 'admin')) {
+    return res.status(403)
+      .send({
+        message: 'Not authorized'
+      });
+  }
+  // Call the next middleware
+  next();
+};
+
+/**
+ * Middleware to check if current user is admin
+ * @protected
+
+ * @param {Object} req - Express request object;
+ * @property {User} curUser - from userById
+ * @param {Object} res - Express response object
+ * @param {Function} next - the next middleware function
+ *
+ * @returns {Object | Function}
+ * @yields {403_Not_Authorized} User is not an admin
+ * @yields {next} Go to next middleware if user is an admin
+ */
+exports.isAdmin = function (req, res, next) {
+  if (req.curUser.role !== 'admin') {
+    return res.status(403)
+      .send({
+        message: 'Not authorized'
+      });
+  }
+  next();
+}
