@@ -18,11 +18,17 @@ export class NavComponent implements OnInit, OnDestroy {
    * included in the nav bar
    */
   private user: User;
+  /**
+   * Subscription stream for the authetnication service
+   */
   private subscription: any;
 
-    constructor(private _authService: AuthenticationService) {
+  constructor(private _authService: AuthenticationService) {
     }
 
+  /**
+   * Initiate the component by getting the current user
+   */
   ngOnInit(){
     this.subscription = this._authService.getUser$
     .subscribe((res)=>{
@@ -30,6 +36,9 @@ export class NavComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Destory the component by unsubscribing, if necessary
+   */
   ngOnDestroy(){
     if(this.subscription)
     this.subscription.unsubscribe();
