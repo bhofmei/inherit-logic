@@ -1,23 +1,32 @@
 /**
-* @module genetics-controller
+ * The controller which performs genetic crosses/manipulations in
+ * the lab and plexer rooms
+ * @module genetics.server.controller
+ * @name Genetics Controller
+ * @type Controller
 */
 const mongoose = require('mongoose');
 const clone = require('clone');
 const Phage = mongoose.model('Phage');
 const plate = require('../genetics/plate.experiment');
 const plexer = require('../genetics/plexer.experiment');
+const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
 
 /**
  * Creates a plate for the lab room
  *
- * @param {Object} req - Express request object;
- * includes "body" with the info needed to create the plate--
- * phage1 (numPhage and id), (optional) phage2, lawnType, location, capacity, and scenarioData
+ * @apiType POST
+ * @apiPath /api/cricket/plate
+ *
+ * @param {Object} req - Express request object
+ * @property {Object} body - info needed to create the plate; has properties `phage1` (numPhage and id), (optional) `phage2`, `lawnType`, `location`, `capacity`, and `scenarioData`
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * a) If error with incoming info, returns 400 and error message to response
- * b) If successful, returns plate ("full", "smallPlaque", "largePlaque", "genotypes", "parents") to response
+ * @returns {Object} - json object to response
+ * @yields {400_Bad_Request} Number of phage is not set for one of the phage, send error as `{message: 'numPhage not set'}`
+ * @yields {404_Not_found} Phage 1 is not found in DB, send error as `{message: Error finding the specified phage(1|2)'}`
+ * @yields {500_Internal_Server_Error} On error, sends error message as `{message: error-message}`
+ * @yields {200_OK} successfully generated plate; has properties `full`, `smallPlaque`, `largePlaque`, `genotypes`, and `parents`
  */
 exports.createPlate = function (req, res) {
   // req must have 1-2 phage IDs with numPhage, lawn type, location, specials, capacity, scenarioData
@@ -38,9 +47,9 @@ exports.createPlate = function (req, res) {
       lean: true
     }, (err, ph1) => {
       if (err) {
-        return res.status(400)
+        return res.status(500)
           .send({
-            message: err.message
+            message: getErrorMessage(err)
           });
       } else if (phage1.hasOwnProperty('numPhage') === false) {
         return res.status(400)
@@ -64,9 +73,9 @@ exports.createPlate = function (req, res) {
             lean: true
           }, (err2, ph2) => {
             if (err2) {
-              return res.status(400)
+              return res.status(500)
                 .send({
-                  message: err2.message
+                  message: getErrorMessage(err2)
                 });
             } else if (phage2.hasOwnProperty('numPhage') === false) {
               return res.status(400)
@@ -85,9 +94,9 @@ exports.createPlate = function (req, res) {
               if (newPlate)
                 res.json(newPlate);
               else {
-                return res.status(400)
+                return res.status(500)
                   .send({
-                    message: 'double phage - could not create plate'
+                    message: 'Could not create plate for double phage input'
                   });
               }
             }
@@ -99,9 +108,9 @@ exports.createPlate = function (req, res) {
           if (newPlate)
             res.json(newPlate);
           else {
-            return res.status(400)
+            return res.status(500)
               .send({
-                message: 'single phage - could not create plate'
+                message: 'Could not create plate for single phage input'
               });
           }
         } // end one vs two phage
@@ -118,15 +127,18 @@ exports.createPlate = function (req, res) {
 /**
  * Generates the NxM plates for the plexer
  *
+ * @apiType POST
+ * @apiPath /api/cricket/plexer
+ *
  * @param {Object} req - Express request object;
- * includes "body" with info needed to generate plexer --
- * list of rowPhage, list of colPhage with ids and numPhage,
- * scenarioData, lawnType, location, capacity
+ * @property {Object} body - info needed to generate plexer;
+ * has `rowPhage` (list with each having id and numPhage), * `colPhage`(list with each having id and numPhage), `scenarioData`,
+ * `lawnType`, `location`, `capacity`
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * a) If error, returns 400 and message to response
- * b) If success, returns plexer results (2D array where each cell has "full", "smallPlaque", and "largePlaque")
+ * @returns {Object} - json object to response
+ * @yields {500_Internal_Service_Error} On error finding phage in DB, send error as `{message: error-message}`
+ * @yields {200_OK} successfully generated plexer result as 2D array where each cell has `full`, `smallPlaque`, and `largePlaque`
  */
 exports.handlePlexer = function (req, res) {
   let reqB = req.body;
@@ -141,7 +153,6 @@ exports.handlePlexer = function (req, res) {
     return phage.id;
   });
   var colPhage, rowPhage;
-  //console.log(rowPhageId, colPhageId);
   // search for the col phage
   Phage.find({
       '_id': {
@@ -152,9 +163,9 @@ exports.handlePlexer = function (req, res) {
     },
     (err, array) => {
       if (err) {
-        return res.status(400)
+        return res.status(500)
           .send({
-            message: 'Error finding a column phage'
+            message: 'Error finding a column phage - ' + getErrorMessage(err)
           });
       } else {
         // duplicate colPhage as necessary
@@ -175,9 +186,9 @@ exports.handlePlexer = function (req, res) {
           },
           (err2, array2) => {
             if (err2) {
-              return res.status(400)
+              return res.status(500)
                 .send({
-                  message: 'Error finding row phage'
+                  message: 'Error finding row phage - ' + getErrorMessage(err2)
                 });
             } else {
               // duplicate rowPhage as necessary

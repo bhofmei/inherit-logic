@@ -1,4 +1,10 @@
-// Load the module dependencies
+/**
+ * The Fridge-related controller functions
+ * @module fidge.server.controller
+ * @name Fridge Controller
+ * @type Controller
+ */
+
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Fridge = mongoose.model('Fridge');
@@ -6,27 +12,17 @@ const Phage = mongoose.model('Phage');
 const phageScen = require('../genetics/phage.scenario');
 const phageEnum = require('../genetics/phage.enum');
 const scenDefaults = require('../../config/scenario.config.js');
-
-// Create a new error handling controller method
-const getErrorMessage = function (err) {
-  if (err.errors) {
-    for (const errName in err.errors) {
-      if (err.errors[errName].message) return err.errors[errName].message;
-    }
-  } else {
-    return 'Unknown server error';
-  }
-};
+const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
 
 /**
  * Helper method to return fridge details in consistent
  * format
- * Gets phage strains: comment, id, parents, strainNum, phageType, submitted, and numParents
- * Gets fridge: scenarioDetails, guesses, accessGranted, userId, and scenCode
  *
  * @param {Object} fridge - fridge object from DB
  *
- * @returns {Object} - cleaned up fridge object
+ * @returns {Object} - cleaned up fridge object with properties
+ * `scenarioDetails`, `guesses`, `accessGranted`, `userId`, `scenCode`, and `strains`
+ * Each strain of `strains` has `comment`, `id`, `parents`, `strainNum`, `phageType`, `submitted`, and `numParents`
  */
 const getFridgeInfo = function (fridge) {
   let strains = fridge.strains.map((strain) => {
@@ -53,13 +49,18 @@ const getFridgeInfo = function (fridge) {
 /**
  * Create a new fridge stocked with the scenario phage
  *
- * @param {Object} req - Express request object;
- * includes "curUser" from userById and "scenario" from scenarioByCode
+ * @apiType GET
+ * @apiPath /api/cricket/:userId/:scenarioId/new-fridge
+ *
+ * @param {Object} req - Express request object
+ * @property{User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * If error, returns 500 and error message to response
- * If sucessful, returns trimmed fridge info to response
+ * @returns {Object} - json object to response
+ * @yields {400_Bad_Request} Error creating phage for this fridge, sends error as `{message: 'Unable to create new phage for scenario'}`
+ * @yields {500_Internal_Server_Error} Error saving the new fridge, sends error as `{message: 'Unable to save new fridge'}`
+ * @yields {200_OK} Newly created fridge cleaned by [getFridgeInfo]{@link #getFridgeInfo}
  */
 exports.stockFridge = function (req, res) {
   var user = req.curUser;
@@ -90,7 +91,7 @@ exports.stockFridge = function (req, res) {
     let newPhage = new Phage(strain);
     newPhage.save((err, phage) => {
       if (err)
-        return res.status(500)
+        return res.status(400)
         .send({
           message: 'Unable to create new phage for scenario'
         });
@@ -142,16 +143,20 @@ exports.stockFridge = function (req, res) {
 
 /**
  * Get the current user's fridge
- * Only include info needed to be known as a student
+ * Only include info needed to be known for lab room, plexer room, and model room of scenario
  *
- * @param {Object} req - Express request object;
- * includes "curUser" from userById and "scenario" from scenarioByCode
+ * @apiType GET
+ * @apiPath /api/cricket/:userId/:scenarioId
+ *
+ * @param {Object} req - Express request object
+ * @property{User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
  * @param {Object} res - Express response object
  *
- * @returns {Object | undefined}
- * If error, returns 400 and error message to response
- * If fridge doesn't exist, returns 307 and message to response
- * If successful, returns trimmed fridge info to response
+ * @returns {Object} - json object to response
+ * @yields {500_Internal_Server_Error} On server/database error send description of error as `{message: error-message}`
+ * @yields{307_Temporary_Redirect} If fridge does not exist; used by front-end to know to make call to create a new fridge
+ * @yields {200_OK} User's fridge for this scenario cleaned by [getFridgeInfo]{@link #getFridgeInfo}
  */
 exports.getFridge = function (req, res) {
   var user = req.curUser;
@@ -174,7 +179,7 @@ exports.getFridge = function (req, res) {
     })
     .exec((err, fridge) => {
       if (err) {
-        return res.status(400)
+        return res.status(500)
           .send({
             message: getErrorMessage(err)
           });
@@ -194,14 +199,19 @@ exports.getFridge = function (req, res) {
  * Get a user's fridge and include lots of details only
  * admin/instrs should know
  *
- * @param {Object} req - Express request object;
- * includes "student" from userById and "scenario" from scenarioByCode
+ * @apiType GET
+ * @apiPath /api/admin/:userId/students/:studentId/:scenarioId
+ *
+ * @param {Object} req - Express request object
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {User} student - student of interest from [userById]{@link user.html#userById} with id `studentId`
+ * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
  * @param {Object} res - Express response object
  *
- * @returns {Object | undefined}
- * If error, returns 500 and error message to response
- * If fridge doesn't exist, return owner/scenario info as if the fridge exists to response (needed for front-end rendering)
- * If successful, returns fridge to response
+ * @returns {Object} - json object to response
+ * @yields {500_Internal_Server_Error} On server/database error send description of error as `{message: error-message}`
+ * @yields {200_OK} If fridge doesn't exist, return owner/scenario as if the fridge exists (information needed for front-end rendering)
+ * @yields{200_OK} If fridge exists, return fridge
  */
 exports.getStudentFridge = function (req, res) {
   let student = req.student;
@@ -242,13 +252,19 @@ exports.getStudentFridge = function (req, res) {
  * Update the deletion guesses for the fridge
  * guesses come in as object and are stringified when saving
  *
- * @param {Object} req - Express request object;
- * includes "fridge" from fridgeByOwnerScen and "body" with updated guesses
+ * @apiType POST
+ * @apiPath /api/cricket/:userId/:scenarioId/deletions
+ *
+ * @param {Object} req - Express request object
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
+ * @property {Fridge} fridge - logged in users's fridge for this scenario from [findFridgeByScenOwner]{@link #findFidgeByScenOwner}
+ * @property {Object} body - updated guesses to save
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * a) If error, returns 500 and message to response
- * b) If sucessful, returns stringified guesses to response
+ * @returns {Object} - json object to response
+ * @yields {500_Internal_Server_Error} On server/database error send description of error as `{message: error-message}`
+ * @yields {200_OK} returns stringified updated guesses to response
  */
 exports.saveDeletions = function (req, res) {
   let newGuesses = req.body;
@@ -267,40 +283,24 @@ exports.saveDeletions = function (req, res) {
   });
 };
 
-/*
-exports.saveFridge = function (req, res) {
-  const fridge = req.body;
-  let strains = fridge.strains;
-  let fridgeId = fridge.id;
-  Fridge.findOneAndUpdate(fridgeId, {
-    strains: strains
-  }, (err) => {
-    if (err) {
-      return res.status(400)
-        .send({
-          message: getErrorMessage(err)
-        });
-    } else {
-      // send back fridge
-      res.json(fridge);
-    }
-  });
-};
-*/
-
 /**
  * Middleware which deletes a fridge and all phage within the fridge
  * Called after granting access because new fridge
  * needs to be created for the user/scenario
+ * @protected
  *
- * @param {Object} req - Express request object;
- * includes "student" from userById and "scenario" from scenarioByCode
+ * @apiPath /api/admin/:userId/students/:studentId/:scenarioId
+ *
+ * @param {Object} req - Express request object
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {User} student - student of interest from [userById]{@link user.html#userById} with id `studentId`
+ * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
  * @param {Object} res - Express response object
  * @param {Function} next - next function to go to
  *
- * @returns {Function}
- * a) If error, pass error to next function
- * b) If successful, move to next function
+ * @returns {Function} - go to next middleware
+ * @yields{next(error)} If error, pass the error to the next middleware; can have error removing fridge and/or removing individual strains
+ * @yields {next()} If successful, delete the fridge and all phage in the fridge, then go to next middleware
  */
 exports.deleteStudentFridge = function (req, res, next) {
   let student = req.student;
@@ -312,7 +312,6 @@ exports.deleteStudentFridge = function (req, res, next) {
     if (err) {
       next(err);
     } else {
-      // TODO: remove the phage in the fridge
       Phage.remove({
         owner: student._id,
         scenarioOrigin: scen._id
@@ -328,18 +327,22 @@ exports.deleteStudentFridge = function (req, res, next) {
 }
 
 /**
- * Create new phage, save that to DB, and add to the current fridge
+ * Create new phage with phage type "user", save that to DB, and add to the current fridge
  *
- * @param {Object} req - Express request object;
- * includes "fridge" from "fridgeByScenOwner", "curUser" from
- * userById, "scenario" from scenarioByCode, and
- * "body" with new strain information
+ * @apiType POST
+ * @apiPath /api/cricket/:userId/:scenarioId/fridge-phage
+ *
+ * @param {Object} req - Express request object
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
+ * @property {Fridge} fridge - logged in users's fridge for this scenario from [findFridgeByScenOwner]{@link #findFidgeByScenOwner}
+ * @property {Object} body - information about new strain; has properties
  * @param {Object} res - Express response object
  *
- * @return {Object | undefined}
- * a) If error creating phage, return 400 and error message to response
- b) If error adding to fridge, return 500 and error message to response
- c) If successful, return new phage strain info (including parents info) to response
+ * @return {Object} - json object to response
+ * @yields {400_Bade_Request} On error creating new phage, sends description of error as `{message: error-message}`
+ * @yields {500_Internal_Server_Error} On error adding phage to fridge, sends description of error as `{message: error-message}`
+ *@yields {200_OK} Information about the newly added strain, including info about phage parents (fetch from DB)
  */
 exports.addPhageToFridge = function (req, res) {
   let fridge = req.fridge;
@@ -396,13 +399,19 @@ exports.addPhageToFridge = function (req, res) {
 /**
  * Update the comment or submitted state of a phage
  *
- * @param {Object} req - Express request object;
- * includes "strain" from strainById and "body" with updated strain details
+ * @apiType POST
+ * @apiPath /api/cricket/:userId/:scenarioId/:phageId
+ *
+ * @param {Object} req - Express request object
+ * @property {Phage} strain - phage strain from [phageById]{@link #phageById} with id `phageId`
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
+ * @property {Object} body - updated strain info; has `comment`, `strainNum`, and `submitted`
  * @param {Object} res - Express response object
  *
- * @return {Object | undefined}
- * a) If error, return 400 and error message to response
- * b) If successful, get strain parents details and return to response
+ * @return {Object} - json object to response
+ * @yields {400_Bad_Request} On error, sends description of error as `{message: error-message}`
+ * @yields {200_OK} return updated phage with information about phage parents (from DB)
  */
 exports.updatePhage = function (req, res) {
   // Get the strain from the 'request' object
@@ -440,14 +449,20 @@ exports.updatePhage = function (req, res) {
 /**
  * Delete a phage strain and remove it from the fridge
  *
- * @param {Object} req - Express request object;
- * includes "fridge" from findFridgeByScenOwner and "strain" from strainById
+ * @apiType DELETE
+ * @apiPath /api/cricket/:userId/:scenarioId/:phageId
+ *
+ * @param {Object} req - Express request object
+ * @property {Phage} strain - phage strain from [phageById]{@link #phageById} with id `phageId`
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
+ * @property {Fridge} fridge - logged in users's fridge for this scenario from [findFridgeByScenOwner]{@link #findFidgeByScenOwner}
  * @param {Object} res - Express response object
  *
- * @returns {Object | undefined}
- * a) If error updating fridge, return 500 and message to response
- * b) If error deleting phage, return 400 and error message to response
- * c) If successful, return deleted strain to response
+ * @returns {Object} - json object to response
+ * @yields {400_Bad_Request} On error deleting phage, sends description of error as `{message: error-message}`
+ * @yields {500_Internal_Server_Error} On error removing phage from fridge, sends error as `{message: "Unable to remove strain from fridge"}`
+ * @yields {200_OK} return the newly deleeted phage strain
  */
 exports.deletePhage = function (req, res) {
   var fridge = req.fridge;
@@ -478,16 +493,19 @@ exports.deletePhage = function (req, res) {
 /**
  * Middleware which identifies a phage strain based on the
  * id
+ * @protected
+ *
+ * @apiPath :phageId
  *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Function} next - next middleware function
  * @param {string} id - mongoDB id of phage strain to look for
  *
- * @returns {Function}
- * a) If error, pass error to next middleware
- * b) If strain doesn't exist, pass message to next middleware
- * c) If successful, set request strain and move to next middleware
+ * @returns {Function} - go to the next middleware
+ * @yields {next(error)} If error, pass error to next middleware
+ * @yields {next('Phage not found')} If phage doesn't exist, pass message to next middleware
+ * @yields {next()} If successful, set request `strain` and go to next middleware
  */
 exports.phageById = function (req, res, next, id) {
   Phage.findOne({
@@ -506,15 +524,18 @@ exports.phageById = function (req, res, next, id) {
 /**
  * Middleware to find a fridge by the current user and current scenario
  * user and scenario were set in previous middleware
+ * @protected
  *
- * @param {Object} req - Express request object;
- * includes "curUser" from userById and "scenario" from scenarioByCode
+ * @param {Object} req - Express request object
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
  * @param{Object} res - Express response object
  * @param {Function} next - next middleware function
  *
- * @returns {Function}
- * a) If fridge exists, set request "fridge" and go to next middleware
- * b) If fridge doesn't exist, send error message to next middleware
+ * @returns {Function} - go to next middleware
+ * @yields {next(error)} If error, pass error to next middleware
+ * @yields {next('Failed to find fridge')} If fridge doesn't exist, pass message to next middleware
+ * @yields {next()} If successful, set request `fridge` and go to next middleware
  */
 exports.findFridgeByScenOwner = function (req, res, next) {
   var user = req.curUser;
@@ -536,15 +557,18 @@ exports.findFridgeByScenOwner = function (req, res, next) {
 
 /**
  * Middleware to check if current user is fridge owner
+ * @protected
  *
  * @param {Object} req - Express request object;
- * includes "curUser" from userById and "fridge" from findFridgeByScenOwner
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
+ * @property {Fridge} fridge - logged in users's fridge for this scenario from [findFridgeByScenOwner]{@link #findFidgeByScenOwner}
  * @param {Object} res - Express response object
  * @param {Function} next - next middleware function
  *
- * @returns {Object | Function}
- * a) If not authorized, return 403 and error message to response
- * b) If authorized, move to next middleware
+ * @returns {Object | Function} - If not authorized, return json object with error to response otherwise go to next middleware
+ * @yields {403_Forbidden} If current user isn't owner, send error as `{message: 'User is not authorized'}`
+ * @yields {next()} If authorized, go to next middleware
  */
 exports.hasFridgeAuthorization = function (req, res, next) {
   // current user must be owner of fridge
@@ -561,15 +585,17 @@ exports.hasFridgeAuthorization = function (req, res, next) {
 /**
  * Middleware to determine if current user has authorization to
  * update a phage strain
+ * @protected
  *
  * @param {Object} req - Express request object;
- * Contains "strain" and "curUser"
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {Phage} strain - phage strain from [phageById]{@link #phageById} with id `phageId`
  * @param {Object} res - Express responses object
  * @param {Function} next - next middleware function
  *
- * @returns {Function}
- * a) If error, return 403 and error message to next middleware
- * b) If successful, move to next middleware
+ * @returns {Object | Function} - If not authorized, return json object with error to response otherwise go to next middleware
+ * @yields {403_Forbidden} If current user isn't owner, send error as `{message: 'User is not authorized'}`
+ * @yields {next()} If authorized, go to next middleware
  */
 exports.hasPhageAuthorization = function (req, res, next) {
   let ownerId = req.strain.owner.toString();

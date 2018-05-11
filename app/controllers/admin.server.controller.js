@@ -21,12 +21,12 @@ const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
  * @apiPath /api/admin/:userId/students
  *
  * @param {Object} req - Express request object;
- * @proerty {User} curUser - logged in user from userById
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * @yields {500} On error, sends description of error
- * @yields {200_Success} If user is admin, returns list of all users<br>
+ * @returns {Object} - json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error
+ * @yields {200_OK} If user is admin, returns list of all users<br>
  * If user is instr, returns list of students in instr's courses
  */
 exports.listUsers = function (req, res) {
@@ -89,13 +89,13 @@ exports.listUsers = function (req, res) {
  * @apiPath /api/admin/:userId/students/:studentId
  *
  * @param {Object} req - Express request object;
- * @property {User} student - the secondary user with id <code>studentId</code>
- * @property {User} curUser - logged in user with id <code>userId</code>
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {User} student - the secondary user from [userById]{@link user.html#userById} with id `studentId`
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * @yields {500} On error, sends description of error as <code>{message: error-message}</code>
- * @yields {200_Successful} Cleaned information about the user
+ * @returns {Object} - json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {200_OK} Cleaned information about the user
  */
 exports.getUser = function (req, res) {
   let tmp = req.student;
@@ -125,13 +125,13 @@ exports.getUser = function (req, res) {
  * @apiPath /api/admin/:userId/students/:studentId
  *
  * @param {Object} req - Express request object
- * @property {User} student - the secondary user with id <code>studentId</code>
- * @property {User} curUser - logged in user with id <code>userId</code>
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {User} student - the secondary user from [userById]{@link user.html#userById} with id `studentId`
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * @yields {500} On error, sends description of error as <code>{message: error-message}</code>
- * @yields {200_Successful} Cleaned information about the user
+ * @returns {Object} - json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {200_OK} Cleaned information about the user
  */
  exports.deleteUser = function (req, res) {
   let student = req.student; // student to be deleted
@@ -154,14 +154,14 @@ exports.getUser = function (req, res) {
  * @apiPath /api/admin/:userId/students/:studentId
  *
  * @param {Object} req - Express request object
- * @property {User} student - the secondary user with id <code>studentId</code>
- * @property {User} curUser - logged in user with id <code>userId</code>
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {User} student - the secondary user from [userById]{@link user.html#userById} with id `studentId`
  * @property {Object} body - new role; one of "student", "instr", or "admin"
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * @yields {500} On error, sends description of error as <code>{message: error-message}</code>
- * @yields {200_Successful} Updated user information
+ * @returns {Object} - json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {200_OK} Updated user information
  * @example <caption>Request</caption>
  * <p><code>/api/admin/1/students/67</code>Make user 67 an instructor</p>
  * {
@@ -195,13 +195,13 @@ exports.setRole = function (req, res) {
  * @protected
  *
  * @param {Object} req - Express request object
- * @property {Object} curUser - from userById
+ * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
  * @param {Object} res - Express response object
  * @param {Function} next - the next middleware function
  *
- * @returns {Object | Function}
- * @yields {403} User is not an admin or instructor
- * @yields {next} Go to the next middleware if user is admin or instructor
+ * @returns {Object | Function} - json object to response if not authorized otherwise go to next middleware
+ * @yields {403_Forbidden} If user is not an admin or instructor, sends error as `{message: 'Not authorized'}`
+ * @yields {next()} Go to the next middleware if user is admin or instructor
  */
 exports.hasAuthorization = function (req, res, next) {
   if (!(req.curUser.role === 'instr' || req.curUser.role === 'admin')) {
@@ -217,15 +217,15 @@ exports.hasAuthorization = function (req, res, next) {
 /**
  * Middleware to check if current user is admin
  * @protected
-
+ *
  * @param {Object} req - Express request object;
  * @property {User} curUser - from userById
  * @param {Object} res - Express response object
  * @param {Function} next - the next middleware function
  *
- * @returns {Object | Function}
- * @yields {403_Not_Authorized} User is not an admin
- * @yields {next} Go to next middleware if user is an admin
+ * @returns {Object | Function} - json object to response if not authorized otherwise next middleware
+ * @yields {403_Forbidden} If user is not an admin, sends error as `{message: 'Not authorized'}`
+ * @yields {next()} Go to next middleware if user is an admin
  */
 exports.isAdmin = function (req, res, next) {
   if (req.curUser.role !== 'admin') {

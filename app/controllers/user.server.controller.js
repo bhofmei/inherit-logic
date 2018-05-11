@@ -1,3 +1,10 @@
+/**
+ * The User-related controller functions
+ * @module user.server.controller
+ * @name User Controller
+ * @type Controller
+ */
+
 const User = require('mongoose')
   .model('User');
 const passport = require('passport');
@@ -12,36 +19,15 @@ const debug = require('debug')('user'),
 
 const roles = ['student', 'instr', 'admin']
 
-const getErrorMessage = function (err) {
-  let message = '';
-
-  if (typeof err === 'string') {
-    return err;
-  }
-  if (err.code) {
-    switch (err.code) {
-      case 11000:
-      case 11001:
-        message = 'Email already exists';
-        break;
-      default:
-        message = 'Something went wrong';
-    }
-  } else {
-    for (const errName in err.errors) {
-      if (err.errors[errName].message) message = err.errors[errName].message;
-    }
-  }
-  return message;
-};
+const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
 
 /**
  * Returns trimmed user info in a consistent manner
  *
- * @param {Object} user - user object from DB
+ * @param {User} user - user object from DB
  *
- * @returns {Object} - trimmed user object with "id", "firstName",
- * "lastName, "email", and "role"
+ * @returns {Object} - trimmed user object to have properties `id`, `firstName`,
+ * `lastName`, `email`, and `role`
  */
 const getUserInfo = function (user) {
   return {
@@ -54,13 +40,17 @@ const getUserInfo = function (user) {
 };
 
 /**
- * return user object
+ * Get information about a user
+ *
+ * @apiType GET
+ * @apiPath /api/users/:userId
  *
  * @param {Object} req - Express request object;
- * includes "curUser" from userById
+ * @property {User} curUser - logged in user from [userById]{@link #userById} with id `userId`
  * @param {Object} req - Express response object
  *
- * @returns {Object} - trimmed user object
+ * @returns {Object} - json object to response
+ * @yields {200_OK} Trimmed user information from [getUserInfo]{@link #getUserInfo}
  */
 exports.getUser = function (req, res) {
   let user = getUserInfo(req.curUser);
@@ -70,14 +60,18 @@ exports.getUser = function (req, res) {
 /**
  * Update user info - name and/or email
  *
+ * @apiType POST
+ * @apiPath /api/users/:userId
+ *
  * @param {Object} req - Express request object
- * includes "curUser" from userById and "body" with updated content
+ * @property {User} curUser - logged in user from [userById]{@link #userById} with id `userId`
+ * @property {Object} body - updated information about user, specifically `firstName`, `lastName`, and `email`
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * a) If error, return 500 and error message to response
- * b) If unable to find user, return 404 and message to response
- * c) If successful, return updated user to response
+ * @returns {Object} - json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {404_Not_Found} Unable to find user; sends error as `{message: 'User not found'}`
+ * @yields {200_OK} On successful update, send updated user cleaned by [getUserInfo]{@link #getUserInfo}
  */
 exports.editUser = function (req, res) {
   // can update firstName, lastName, email
@@ -114,15 +108,19 @@ exports.editUser = function (req, res) {
 /**
  * Update a user password
  *
- * @param {Object} req - Express request object;
- * includes "curUser" from userById and "body" with old
- * password and new password
+ * @apiType POST
+ * @apiPath /api/users/:userId/update-password
+ *
+ * @param {Object} req - Express request object
+ * @property {User} curUser - logged in user from [userById]{@link #userById} with id `userId`
+ * @property {Object} body - request body with `password` (old password) and `newPassword` (new password)
  * @param {Object} res - Express response object
  *
- * @return {Object}
- * a) If user doesn't exist, return 404 and error message to response
- * b) If error changing password, return 401 and error message to response
- * c) If successful, return trimmed user to response
+ * @return {Object} - json object for response
+ * @yields {500_Internal_Server_Error} On error finding user, sends description of error as `{message: error-message}`
+ * @yields {404_Not_Found} Unable to find user; sends error as `{message: 'User not found'}`
+ * @yields {401_Unauthorized} Error changing password, i.e. old password isn't correct, sends error as `{message: error-message}`
+ * @yields {200_OK} On successful update, send updated user cleaned by [getUserInfo]{@link #getUserInfo}
  */
 exports.updatePassword = function (req, res) {
   debug('update password %d - %o', req.curUser.userId, req.body);
@@ -136,9 +134,14 @@ exports.updatePassword = function (req, res) {
     (err, user) => {
       if (err) {
         debug('find user error', err)
-        return res.status(404)
+        return res.status(500)
           .send({
             message: getErrorMessage(err)
+          });
+      } else if(!user){
+        return res.status(404)
+          .send({
+            message: 'User not found'
           });
       }
       user.changePassword(oldPassword, newPassword,
@@ -160,15 +163,20 @@ exports.updatePassword = function (req, res) {
 /**
  * Sends an email to a user to allow user to reset password
  *
- * @param {Object} req - Express request object;
+ * @apiType POST
+ * @apiPath /api/auth/forget-password
+ *
+ * @param {Object} req - Express request object
+ * @property {Object} body - request body with `email`
  * includes "body" which has user email
  * @param {Object} res - Express response object
  * @param {Function} next - next middleware function
  *
- * @returns {Object}
- * a) If email isn't a user, reutrns 404 and message to response
- * b) If error, returns 422 and error message to response
- * c) If successful, sends email and returns email message to response
+ * @returns {Object} - json object for response
+ * @yields {500_Internal_Server_Error} If error with email transporter, send error as `{message: 'Error with server email service'}`
+ * @yields {404_Not_Found} If email doesn't belong to a current user send message as `{message: 'No account with that email.'}`
+ * @yields {422_Unprocessable_Entity} If error trying to send reset email, send error to response as `{message: error-message}`
+ * @yields {200_OK} Successfully sends the email and sends success message to response
  */
 exports.resetPasswordEmail = function (req, res, next) {
   // error test if transporter not set up
@@ -246,15 +254,20 @@ exports.resetPasswordEmail = function (req, res, next) {
 /**
  * Allows user to reset the password using a token (sent by email)
  *
- * @param {Object} req - Express request object;
- * includes "body" which has new password and token
+ * @apiType POST
+ * @apiPath /api/auth/reset-password
+ *
+ * @param {Object} req - Express request object
+ * @property {Object} body - request body with `password` (new password),
+ * `confirmPassword` (password entered second time) and `token` (token sent to email to allow password reset)
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * a) If error, returns 400 and error message to response
- * b) If token invalid, returns 404 and message to response
- * c) If toke expired, returns 403 and message to response
- * d) If successful, returns message "updated" to response
+ * @returns {Object} - json object for response
+ * @yields {500_Internal_Server_Error} If database error, send `{message: error-message}`
+ * @yields {404_Not_Found} If token is invalid, send error as `{message: 'Invalid token.'}`
+ * @yields {403_Forbidden} If token is expired, send error as `{message: 'Token has expired'}`
+ * @yields {400_Bad_Request} If password and confirm password don't match, send error as `{message: 'Confirm password does not match.'}`
+ * @yields {200_OK} If successfully update password, send `{message: 'Password has been reset.'}`
  */
 exports.resetPassword = function (req, res) {
   let token = req.body.token;
@@ -266,7 +279,7 @@ exports.resetPassword = function (req, res) {
   }, (err, user) => {
     debugPass('user %d', (user ? user.userId : -1));
     if (err) {
-      return res.status(400)
+      return res.status(500)
         .send({
           message: getErrorMessage(err)
         });
@@ -293,7 +306,7 @@ exports.resetPassword = function (req, res) {
       user.save((err2) => {
         debugPass('saved');
         if (err2) {
-          return res.status(400)
+          return res.status(500)
             .send({message: getErrorMessage(err2)})
         } else {
           // successful
@@ -307,15 +320,19 @@ exports.resetPassword = function (req, res) {
 };
 
 /**
- * Using user login in, attempts to sign users in
+ * Using passport authenticate and request login in, attempts to sign users in
+ *
+ * @apiType POST
+ * @apiPath /api/autho/signin
  *
  * @param {Object} req - Express request object
+ * @property {Object} body - request body with `username` (email) and `password`
  * @param {Object} res - Express response object
  * @param {Function} next - next middleware function
  *
- * @returns {Object | Function}
- * a) If error, returns 400 and error message to response
- * b) If successful, move to next function
+ * @returns {Object | Function} - json object on error or go to next middleware on success
+ * @yields {400_Bad_Request} On error, send error as `{message: error-message}`
+ * @yields {next()} On success, go to next middleware
  */
 exports.signin = function (req, res, next) {
   passport.authenticate('local', (err, user, info) => {
@@ -345,19 +362,23 @@ exports.signin = function (req, res, next) {
 };
 
 /**
- * Create new users
+ * Create a new user
  *
- * @param {Object} req - Express request object;
- * includes "body" with email, password, and other info
+ * @apiType POST
+ * @apiPath /api/auth/signup
+ *
+ * @param {Object} req - Express request object
+ * @property {Object} body - request body with `username` (email), `password`,
+ * `firstName`, `lastName`, and `courseNum`
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * a) If error, returns 400 and error message to response
- * b) If succesful, returns trimmed user info to response
+ * @returns {Object} - json object for response
+ * @yields {500_Internal_Server_Error} On error creating/saving user, sends `{message: error-message}`
+ * @yields {400_Bad_Request} On error logging in, sends `{message: error-message}`
+ * @yields {200_OK} On successful update, send updated user cleaned by [getUserInfo]{@link #getUserInfo}
  */
 exports.signup = function (req, res) {
   let tmp = req.body;
-  //console.log(req.body);
   tmp.email = tmp.username;
   // initialize scenario access
   let access = {};
@@ -370,7 +391,7 @@ exports.signup = function (req, res) {
 
   user.save((err) => {
     if (err) {
-      return res.status(400)
+      return res.status(500)
         .send({
           message: getErrorMessage(err)
         });
@@ -394,12 +415,16 @@ exports.signup = function (req, res) {
 };
 
 /**
- * Sign out a logged in user via the request
+ * Sign out a logged in user
+ *
+ * @apiType GET
+ * @apiPath /api/auth/signout
  *
  * @param {Object} req - Express request object;
  * @param {Object} res - Express response object
  *
- * @returns {Object} - returns 200 and true to response
+ * @returns {Object} - json object to response
+ * @yields {200_OK} Sends `true`
  */
 exports.signout = function (req, res) {
   req.logout();
@@ -410,15 +435,22 @@ exports.signout = function (req, res) {
 
 /**
  * grant access to student for specific scenario
+ * Note: this function is called after [deleteStudentFridge]{@link fridge.html#deleteStudentFridge} middleware
  *
- * @param {Object} req - Express request object;
- * includes "student" from userById, "scenario" from scenarioByCode,
- * and "body" with true/false
+ * @apiType POST
+ * @apiPath /api/admin/:userId/students/:studentId/:scenarioId
+ *
+ * @param {Object} req - Express request object
+ * @property {User} curUser - logged in user from [userById]{@link #userById} with id `userId`
+ * @property {User} student - student to grant access for from [userById]{@link #userById} with id `studentId`
+ * @property {Scenario} scenario - scenario to grant access for from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
+ * @property {Object} body - request body with `access` indicating to grant (true) or revoke (false) access
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * a) If error, returns 400 and error message to response
- * b) If success, returns updated user information and/or 200 to response
+ * @returns {Object} - json object for response
+ * @yields {500_Internal_Server_Error} On error, send error as `{message: error-message}`
+ * @yields {200_OK} If user doesn't have accessGranted property, send 200 response as if it was successful
+ * @yields {200_OK} If successfully update user, send updated user
  */
 exports.grantAccess = function (req, res) {
   let scenario = req.scenario;
@@ -451,16 +483,16 @@ exports.grantAccess = function (req, res) {
 };
 
 /**
- * Middleware to check if current user can access the path depending if they
- * are logged in
+ * Middleware to check if current user can access the path depending if they are logged in
+ * @protected
  *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Function} next - next middleware to follow
  *
- * @returns {Object | Function}
- * a) If error, returns 401 and message to response
- * b) If success, move to next middleware
+ * @returns {Object | Function} - json response when not logged in otherwise go to next middleware
+ * @yields {401_Unauthorized} If not currently logged in, send error as `{message: 'User is not logged in'}`
+ * @yields {next()} If logged in, go to next middleware
  */
 exports.requiresLogin = function (req, res, next) {
   if (!req.isAuthenticated()) {
@@ -474,16 +506,22 @@ exports.requiresLogin = function (req, res, next) {
 
 /**
  * Find user (if they exist) by the user id
+ * @protected
+ *
+ * @apiPath :userId | :studentId
  *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Object} next - Next function to go to
  * @param {string} id - user's id as a string from URL
  *
- * @returns {Object, Function}
- * a) If error, pass error to next function
- * b) If user doesn't exist, pass error message to next function
- * c) If it successful, set curUser or student
+ * @returns {Function} - next middleware
+ * @yields {next('Invalid user')} If id is invalid, pass message to next middleware
+ * @yields {next(error)} If some error, pass error to next middleware
+ * @yields {next('User not found')} If id doesn't belong to a user, pass message to next middleware
+ * @yield {next()} Able to find user<br>
+ * If `req.curUser` isn't set, set request `curUser` as the logged in user and go to next middleware;<br>
+ * If `req.curUser` is set, set request `student` as the secondary user and go to next middleware
  */
 exports.userById = function (req, res, next, id) {
   // check for negative id -> send error

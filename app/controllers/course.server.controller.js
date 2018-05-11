@@ -59,7 +59,7 @@ exports.isInstructor = function (req, res, next) {
  *
  * @returns {Object} - json object to response
  * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
- * @yields {404_Not_Found} User is admin and there are no courses OR user is instr role but not the instructor of any courses
+ * @yields {404_Not_Found} User is admin and there are no courses OR user is instr role but not the instructor of any courses; sends message as `{message: 'No courses found'}`
  * @yields {200_OK} List of courses; courses in the list depend on user role
  */
 exports.listCourses = function (req, res) {
