@@ -17,8 +17,8 @@ import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
   selector: 'course-edit',
-  templateUrl: 'app/admin/course/course-edit/course-edit.template.html',
-  styleUrls: ['app/admin/course/course-edit/course-edit.style.css']
+  templateUrl: './course-edit.template.html',
+  styleUrls: ['./course-edit.style.css']
 })
 
 /**

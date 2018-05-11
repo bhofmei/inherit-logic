@@ -19,8 +19,8 @@ import { readErrorMessage } from '../../../shared/read-error';
  */
 @Component({
     selector: 'lab-room',
-    templateUrl: 'app/scenario/location/lab-room/lab-room.template.html',
-  styleUrls: ['app/scenario/location/lab-room/lab-room.style.css']
+    templateUrl: './lab-room.template.html',
+  styleUrls: ['./lab-room.style.css']
 })
 export class LabRoomComponent {
 

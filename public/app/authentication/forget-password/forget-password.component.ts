@@ -6,8 +6,7 @@ import { readErrorMessage } from '../../shared/read-error';
 
 @Component({
     selector: 'forget-pswd',
-    templateUrl: 'app/authentication/forget-password/forget-password.template.html',
-  //styleUrls: ['app/authentication/signin/signin.style.css']
+    templateUrl: './forget-password.template.html'
 })
 export class ForgetPasswordComponent {
     private errorMessage: string = '';

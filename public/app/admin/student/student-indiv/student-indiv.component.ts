@@ -21,20 +21,37 @@ import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
     selector: 'student-indiv',
-    templateUrl: 'app/admin/student/student-indiv/student-indiv.template.html',
-    //styleUrls: ['app/admin/student/student-indiv/student-indiv.style.css']
+    templateUrl: './student-indiv.template.html'
 })
 
 export class StudentIndivComponent {
 
+  /**
+   * Student we are viewing
+   */
     protected student: AdminStudent;
+  /**
+   * List of all scenarios
+   */
     private scenarios: Scenario[];
     private isDestroyed$: Subject<boolean>;
     private paramObserver: any;
+  /**
+   * Logged in user who must be an admin or instructor
+   */
     private _admin: User;
+  /**
+   * List of possible roles
+   */
     private roles = StudentRolesArray;
+  /**
+   * New role to change to if allowed
+   */
     private newRole: string;
 
+  /**
+   * Potential error message
+   */
     private errorMessage: string = '';
 
     constructor(private _router: Router,
@@ -238,6 +255,10 @@ export class StudentIndivComponent {
     })
   }
 
+  /**
+   * Destroy the component by unsubscribing to the services
+   * This prevents a memory leak
+   */
     ngOnDestroy() {
         this.paramObserver.unsubscribe();
         this.isDestroyed$.next(true);

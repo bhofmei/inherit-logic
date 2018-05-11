@@ -14,8 +14,7 @@ import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
   selector: 'student-fridge',
-  templateUrl: 'app/admin/student/student-fridge/student-fridge.template.html',
-  //styleUrls: ['app/admin/student/student-indiv/student-indiv.style.css']
+  templateUrl: './student-fridge.template.html'
 })
 
 export class StudentFridgeComponent{

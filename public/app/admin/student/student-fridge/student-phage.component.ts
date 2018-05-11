@@ -4,7 +4,7 @@ import { StudentPhage } from '../../../interfaces/phage.interface';
 
 @Component({
   selector: 'student-phage',
-  templateUrl: 'app/admin/student/student-fridge/student-phage.template.html'
+  templateUrl: './student-phage.template.html'
 })
 
 /**

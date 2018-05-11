@@ -1,26 +1,27 @@
-// Load the module dependencies
+/**
+ * The Scenario-related controller functions
+ * @module scenario.server.controller
+ * @name Scenario Controller
+ * @type Controller
+ */
 const mongoose = require('mongoose');
 const Scenario = mongoose.model('Scenario');
 
-const getErrorMessage = function (err) {
-  if (err.errors) {
-    for (const errName in err.errors) {
-      if (err.errors[errName].message) return err.errors[errName].message;
-    }
-  } else {
-    return 'Unknown server error';
-  }
-};
+const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
 
 /**
  * List all of the sceanrios in order of degree of difficulty
  *
+ * @apiType GET
+ * @apiPath /api/cricket
+ *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  *
- * @returns {Object}
- * a) If error, returns 400 and error message to response
- * b) If success, returns list of scenairos to response
+ * @returns {Object} - json object to response
+ * @yields {500_Internal_Server_Error} On error, send error as `{message: error-message}`
+ * @yields {200_OK} Return list of scenarios
+ * each scenario has properties `label`, `scenCode`, `purpose`, `startingPoint`, `relevance`, and `degOfDifficulty`
  */
 exports.list = function (req, res) {
   Scenario.find({}, 'label scenCode purpose startingPoint relevance degOfDiff')
@@ -28,7 +29,7 @@ exports.list = function (req, res) {
     .exec((err, scenarios) => {
       if (err) {
         // If an error occurs send the error message
-        return res.status(400)
+        return res.status(500)
           .send({
             message: getErrorMessage(err)
           });
@@ -40,13 +41,16 @@ exports.list = function (req, res) {
 };
 
 /**
- * Get the details about a scenario
+ * Get the details about a specifc scenario
+ *
+ * @apiType GET
+ * @apiPath /api/cricket/:scenarioId
  *
  * @param {Object} req - Express request object;
- * includes "scenario" from scenarioByCode
+ * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
  * @param {Object} res - Express response object
  *
- * @returns {Object} - returns scenario to response
+ * @returns {Object} - returns json object of scenario to response with properties `label`, `scenCode`, `purpose`, `startingPoint`, `relevance`, and `degOfDiff`
  */
 exports.read = function (req, res) {
   let s = req.scenario;
@@ -61,18 +65,21 @@ exports.read = function (req, res) {
   res.json(out);
 };
 
-
 /**
  * Retreives a scenario from a scendario code
+ * @protected
+ *
+ * @apiPath :scenarioId
  *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Function} next - next middleware to follow
  * @param {string} id - scenario code from URL
  *
- * @returns {Function}
- * a) If error, pass error message to next middleware
- * b) If successful, set reqest scenario and move to next middleware
+ * @returns {Function} - next middleware
+ * @yields {next(error)} On error, pass the error to next middleware
+ * @yields {next('Failed to load scenario id')} - If scenario doesn't exist, pass message to next middleware
+ * @yields {next()} - if successful, set request `scenario` and go to next middleware
  */
 exports.scenarioByCode = function (req, res, next, id) {
   Scenario.findOne({

@@ -8,7 +8,7 @@ module.exports = function(app){
   app.route('/api/auth/signup').post(user.signup);
 //    app.route('/api/auth/signin').post(limiter.authLimiter.prevent, user.signin);
   app.route('/api/auth/signin').post(user.signin);
-    app.route('/api/auth/signout').get(user.signout);
+  app.route('/api/auth/signout').get(user.signout);
 
     // functions to reset password
   //app.route('/api/auth/forget-password').post(limiter.authLimiter.prevent, user.resetPasswordEmail);

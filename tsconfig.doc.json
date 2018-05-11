@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "removeComments": false,
+    "noImplicitAny": false,
+    "typeRoots": [
+      "node_modules/@types/"
+    ],
+    "lib": [
+      "es2015",
+      "es6",
+      "dom",
+      "dom.iterable"
+    ]
+  },
+  "include": [
+    "public/app/**/*.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts",
+    "**/testing/**/*.ts"
+  ]
+}

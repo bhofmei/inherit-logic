@@ -10,8 +10,8 @@ import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
     selector: 'plexer-room',
-    templateUrl: 'app/scenario/location/plexer-room/plexer-room.template.html',
-  styleUrls: ['app/scenario/location/plexer-room/plexer-room.style.css']
+    templateUrl: './plexer-room.template.html',
+  styleUrls: ['./plexer-room.style.css']
 })
 export class PlexerRoomComponent{
 

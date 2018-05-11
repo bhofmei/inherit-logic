@@ -10,7 +10,7 @@ import { FridgePhage } from '../../interfaces/phage.interface';
  */
 @Component({
   selector: 'phage-dialog-content',
-  templateUrl: 'app/scenario/fridge/phage-dialog.template.html'
+  templateUrl: './phage-dialog.template.html'
 })
 export class PhageDialogComponent {
   @Input() phage: FridgePhage;

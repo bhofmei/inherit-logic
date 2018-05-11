@@ -13,7 +13,7 @@ import { User } from '../interfaces/user.interface';
  */
 @Component({
   selector: 'admin',
-  templateUrl: 'app/admin/admin.template.html'
+  templateUrl: './admin.template.html'
 })
 
 export class AdminComponent{

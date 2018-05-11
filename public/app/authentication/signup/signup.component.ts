@@ -11,7 +11,7 @@ import { CourseService } from '../../admin/course/course.service';
 
 @Component({
     selector: 'signup',
-    templateUrl: 'app/authentication/signup/signup.template.html'
+    templateUrl: './signup.template.html'
 })
 export class SignupComponent implements OnDestroy {
     errorMessage: string = '';

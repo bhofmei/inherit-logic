@@ -7,7 +7,7 @@ import { readErrorMessage } from '../../shared/read-error';
 
 @Component({
     selector: 'signin',
-    templateUrl: 'app/authentication/signin/signin.template.html'
+    templateUrl: './signin.template.html'
 })
 export class SigninComponent {
     errorMessage: string;

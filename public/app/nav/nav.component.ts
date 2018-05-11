@@ -8,8 +8,8 @@ import { User } from '../interfaces/user.interface';
  */
 @Component({
     selector: 'cricket-nav',
-    templateUrl: 'app/nav/nav.template.html',
-    styleUrls: ['app/nav/nav.style.css']
+    templateUrl: './nav.template.html',
+    styleUrls: ['./nav.style.css']
 })
 export class NavComponent implements OnInit, OnDestroy {
 

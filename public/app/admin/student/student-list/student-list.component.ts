@@ -14,7 +14,7 @@ import { AdminStudent, sortStudents } from '../../../interfaces/student.interfac
  */
 @Component({
     selector: 'student-list',
-    templateUrl: 'app/admin/student/student-list/student-list.template.html'
+    templateUrl: './student-list.template.html'
 })
 export class StudentListComponent implements OnInit, OnDestroy {
   /**

@@ -8,7 +8,6 @@ import { AuthenticationService } from '../authentication.service';
 @Component({
   selector: 'signout',
   template: ''
-  //templateUrl: 'app/authentication/signout/signout.template.html'
 })
 
 export class SignoutComponent{

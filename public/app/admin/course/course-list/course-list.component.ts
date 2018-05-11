@@ -13,7 +13,7 @@ import { Course, User } from '../../../interfaces';
  */
 @Component({
     selector: 'course-list',
-    templateUrl: 'app/admin/course/course-list/course-list.template.html'
+    templateUrl: './course-list.template.html'
 })
 export class CourseListComponent implements OnInit, OnDestroy{
   /**
