@@ -21,8 +21,8 @@ import { readErrorMessage } from '../../shared/read-error';
  */
 @Component({
     selector: 'fridge',
-    templateUrl: 'app/scenario/fridge/fridge.template.html',
-  styleUrls: ['app/scenario/fridge/fridge.style.css']
+    templateUrl: './fridge.template.html',
+  styleUrls: ['./fridge.style.css']
 })
 export class FridgeComponent implements OnInit, OnDestroy{
 

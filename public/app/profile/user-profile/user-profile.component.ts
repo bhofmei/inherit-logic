@@ -8,9 +8,8 @@ import { User } from '../../interfaces/user.interface';
 import { readErrorMessage } from '../../shared/read-error';
 
 @Component({
-  selector: 'user-profile-cmp',
-  templateUrl: 'app/profile/user-profile/user-profile.template.html',
-  //styleUrls: ['app/profile/profile.style.css']
+  selector: 'user-profile',
+  templateUrl: './user-profile.template.html'
 })
 
 export class UserProfileComponent{

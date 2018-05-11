@@ -12,7 +12,7 @@ import { Scenario } from '../../../interfaces/scenario.interface';
  */
 @Component({
   selector: 'landing-room',
-  templateUrl: 'app/scenario/location/landing-room/landing-room.template.html'
+  templateUrl: './landing-room.template.html'
 })
 
 export class LandingRoomComponent {

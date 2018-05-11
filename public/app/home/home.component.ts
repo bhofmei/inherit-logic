@@ -5,8 +5,8 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { User } from '../interfaces/user.interface';
 @Component({
   selector: 'home',
-  templateUrl: 'app/home/home.template.html',
-  styleUrls: ['app/home/home.style.css']
+  templateUrl: './home.template.html',
+  styleUrls: ['./home.style.css']
 })
 
 export class HomeComponent{

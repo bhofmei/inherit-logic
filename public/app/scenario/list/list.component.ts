@@ -11,7 +11,7 @@ import { Scenario } from '../../interfaces/scenario.interface';
  */
 @Component({
     selector: 'scenario-list',
-    templateUrl: 'app/scenario/list/list.template.html'
+    templateUrl: './list.template.html'
 })
 export class ListComponent implements OnInit, OnDestroy{
   /**

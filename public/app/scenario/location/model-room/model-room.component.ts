@@ -10,8 +10,8 @@ import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
     selector: 'model-room',
-    templateUrl: 'app/scenario/location/model-room/model-room.template.html',
-  styleUrls: ['app/scenario/location/model-room/model-room.style.css']
+    templateUrl: './model-room.template.html',
+  styleUrls: ['./model-room.style.css']
 })
 
 export class ModelRoomComponent {

@@ -8,8 +8,8 @@ import { User } from '../../../interfaces/user.interface';
 
 @Component({
   selector: 'course-create',
-  templateUrl: 'app/admin/course/course-create/course-create.template.html',
-  styleUrls: ['app/admin/course/course-create/course-create.style.css']
+  templateUrl: './course-create.template.html',
+  styleUrls: ['./course-create.style.css']
 })
 
 export class CourseCreateComponent {

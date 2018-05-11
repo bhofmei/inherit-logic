@@ -9,9 +9,8 @@ import { User } from '../../interfaces/user.interface';
 import { readErrorMessage } from '../../shared/read-error';
 
 @Component({
-  selector: 'user-password-cmp',
-  templateUrl: 'app/profile/update-password/update-password.template.html',
-  //styleUrls: ['app/profile/profile.style.css']
+  selector: 'user-password',
+  templateUrl: './update-password.template.html'
 })
 
 export class UpdatePasswordComponent{
