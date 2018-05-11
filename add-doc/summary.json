@@ -1,0 +1,29 @@
+[{
+  "title": "Controllers",
+  "file": "controllers.md",
+  "children": [{
+      "title": "Admin",
+      "file": "controllers/admin.md"
+    },
+    {
+      "title": "Course",
+      "file": "controllers/course.md"
+    },
+    {
+      "title": "Fridge",
+      "file": "controllers/fridge.md"
+    },
+    {
+      "title": "Genetics",
+      "file": "controllers/genetics.md"
+    },
+    {
+      "title": "Scenario",
+      "file": "controllers/scenario.md"
+    },
+    {
+      "title": "User",
+      "file": "controllers/User.md"
+    }
+  ]
+}]
