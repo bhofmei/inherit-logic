@@ -1,0 +1,29 @@
+<div class="container">
+  <form (ngSubmit)="signin()" class="form-signin" style="max-width: 900px; margin: 0px auto;">
+    <h2 class="form-signin-heading  mt-4 text-dark">Sign in</h2>
+    <div class="form-group row mb-2" id="rowEmail">
+      <label for="inputEmail" class="col-sm-3 col-form-label">Email</label>
+      <div class="col-sm-9">
+        <input type="email" id="inputEmail" class="form-control" required autofocus placeholder="Email address" [(ngModel)]="credentials.username" name="username">
+      </div>
+    </div>
+    <!-- end rowEmail -->
+    <div class="form-group row mb-2" id="rowPassword">
+      <label for="inputPassword" class="col-sm-3 col-form-label">Password</label>
+      <div class="col-sm-9">
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" [(ngModel)]="credentials.password" name="password">
+      </div>
+    </div>
+    <p class="text-danger">{{errorMessage}}</p>
+    <div class="row">
+      <div class="col-sm-3">
+        <button class="btn btn-primary" type="submit">Sign in </button>
+      </div>
+      <div class="col-sm-9">
+        <a [routerLink]="['/authentication/forget-password']">Forget password?</a>
+      </div>
+    </div>
+
+  </form>
+
+</div>

@@ -1,0 +1,34 @@
+<div class="container-fluid pl-0 pr-0">
+  <div class="jumbotron" id="home-jumbotron">
+    <div id="jumbotron-contents" class="text-center">
+    <h2 class="display-4">Welcome to Crick <i>et al.</i></h2>
+
+    <p class="lead">Relive the logic of Crick and collegues as they discover the "words" of the genetic code.</p>
+    <hr class="my-4">
+    <div *ngIf="user" class="row">
+      <div class="col-12 col-md-6 text-md-left">
+        <a *ngIf="user.role==1" class="larger-link" [routerLink]="['/admin']">Instructor Page</a>
+        <a *ngIf="user.role==2" class="larger-link" [routerLink]="['/admin']">Administrator Page</a>
+      </div>
+      <div class="col-12 col-md-6 text-md-left">
+        <a class="larger-link float-md-right" [routerLink]="['/authentication/signout']">Sign out</a>
+      </div>
+    </div>
+    <!-- end user -->
+    <div *ngIf="!user" class="row">
+      <div class="col-12 col-md-6 text-md-left">
+        <a class="larger-link" [routerLink]="['/authentication/signin']">Sign in</a>
+        </div>
+      <div class="col-12 col-md-6 text-md-center">
+        <a class="larger-link float-md-right" [routerLink]="['/authentication/signup']">Sign up</a>
+      </div>
+    </div>
+    <!-- end !user -->
+
+  </div>
+    </div>
+  <!-- end jumbotron -->
+</div>
+<div *ngIf="user" class="text-center">
+  <a class="btn btn-primary btn-lg" [routerLink]="['/scenarios']">Go to Scenarios</a>
+</div>

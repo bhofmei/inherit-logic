@@ -1,0 +1,10 @@
+<div class="container">
+<h4 class="text-dark">Courses</h4>
+<div class="col-12">
+  <a [routerLink]="['create']">Create new course</a>
+  <div class="list-group mt-2">
+      <a *ngFor="let course of courses" [routerLink]="[course.courseNum]" class="list-group-item list-group-item-action">{{course.courseNum}}</a>
+  </div> <!-- end list-group -->
+</div> <!-- end col-12 -->
+</div>
+

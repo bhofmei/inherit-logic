@@ -34,12 +34,12 @@ module.exports = {
               configFileName: './tsconfig.test.json'
             }
           },
-          {
+          /*{
             loader: 'angular2-template-loader',
             options: {
               baseRef: ROOT('public')
             }
-          }
+          }*/
         ]
         //          use: [
         //            {loader: 'awesome-typescript-loader',

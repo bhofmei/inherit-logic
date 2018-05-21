@@ -1,0 +1,42 @@
+<div *ngIf="phage" class="row">
+<div class="strain-num text-primary col-2 col-xl-1" id="phageNum">
+  {{ phage.strainNum + 1 }}
+</div>
+<!-- phage.strainNum -->
+<div class="col-2 col-xl-1" id="phageType">
+    <div class="row">
+      {{ formatPhageType() }}
+    </div>
+  <div class="row phageImage">
+    <span [class]="'p-0 strain-image strain-image-'+phage.phageType"></span>
+  </div>
+</div> <!-- end phageType -->
+<div class="col-6 col-xl-10" id="phage-details">
+  <div class="row phage-row-comment">
+    <label for="phageComment" class="col-sm-3 text-secondary col-label">Comment</label>
+    <div class="col-sm-9" id="phageComment">{{ phage.comment }}</div>
+  </div>
+  <div class="row phage-row-mutations" *ngIf="phage.mutationList.length > 0">
+    <label for="phageMutations" class="col-sm-3 text-secondary col-label">Mutations</label>
+    <div class="col-sm-9" id="phageMutations">
+      {{ phage.mutationList | phageMutations }}
+    </div>
+  </div>
+  <!-- end phage-row-mutations -->
+  <div class="row phage-row-deletions" *ngIf="phage.deletion.length > 0">
+    <label for="phageDeletion" class="col-sm-3 text-secondary col-label">Deletion</label>
+    <div class="col-sm-9" id="phageDeletion">
+      {{phage.deletion | phageDeletions}}
+    </div>
+  </div>
+  <!-- end phage-row-deletion -->
+  <div class="row phage-row-guesses" *ngIf="phage.guesses.length > 0">
+    <label for="phageGuess" class="col-sm-3 text-secondary col-label">Guess</label>
+    <div class="col-sm-9" id="phageGuess">
+      {{ phage.guesses | phageGuesses }}
+    </div>
+  </div>
+  <!-- end phage-row-deletion -->
+</div>
+<!-- end phage-details -->
+</div>

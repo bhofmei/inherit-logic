@@ -1,0 +1,75 @@
+.test-tube-outer{
+  height: 150px;
+  margin: 0px auto;
+  text-align: center;
+}
+.test-tube-inner{
+  background: url('../../../../img/empty.svg') no-repeat center center;
+  height: 100%;
+  padding-top: 5px;
+}
+
+.tube-b .test-tube-inner{
+  background-image: url('../../../../img/testtube-b.svg')
+}
+.tube-k .test-tube-inner{
+  background-image: url('../../../../img/testtube-k.svg')
+}
+
+/* bacteria tube styles */
+
+.bact-tube{
+  width: 50%;
+}
+.bact-tube span.coli {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.phage-label-1{
+  margin-top: 35px;
+}
+.phage-label-2{
+  margin-top: 5px;
+}
+
+#bact-tube-K{
+  color: #dc3545;
+}
+#bact-tube-B{
+  color: #17a2b8;
+}
+
+/* dilution tube styles */
+.dil-tube{
+  width: 25%;
+}
+
+/* plate styles */
+
+#lab-plate{
+  min-height: 200px;
+  padding: 0px;
+  margin: 20px auto 0px auto;
+  border-width: 2px!important;
+}
+
+.inner-plate{
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  margin: 0px;
+  transform: translate(-50%, -50%);
+  font-weight:600;
+}
+
+.plaque{
+  font-weight: normal;
+}
+
+/* other styles */
+.tb-lab-label{
+  display: block;
+  text-align: center;
+}

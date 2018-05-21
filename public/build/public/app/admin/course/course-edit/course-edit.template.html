@@ -1,0 +1,47 @@
+<div class="container-fluid">
+  <div *ngIf="errorMessage !== ''" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="courseInfo" id="course-info">
+    <h4 class="row">{{ courseInfo.courseNum }}</h4>
+
+    <div id="currInstructors">
+      <div class="text-secondary d-block">
+        Instructors
+      </div>
+      <div class="list-group">
+        <div *ngFor="let instr of courseInfo.instructors" class="ml-2">{{ instr | personName }}</div>
+      </div>
+    </div>
+
+    <div id="addInstructor">
+      <div class="text-secondary d-block">
+        Add Instructor
+      </div>
+      <div class="input-group input-group-sm">
+        <select class="form-control" [(ngModel)]="selectedAdd" name="addInstr">
+        <option value="undefined" disabled>Instructor to add</option>
+        <option *ngFor="let instr of possibleInstr" [value]="instr.userId">{{instr | personName:true }}</option>
+      </select>
+        <div class="input-group-append">
+          <button class="btn btn-secondary" (click)="addInstructor()">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="text-secondary d-block">
+      Description
+    </div>
+    <textarea type="text" id="desc-input" class="form-control" [(ngModel)]="courseInfo.description" placeholder="Course description" name="description"></textarea>
+    <div class="">
+      <div class="btn-group">
+        <button class="btn btn-primary" type="submit" (click)="update()">Submit</button>
+        <button class="btn btn-outline-secondary" type="button" (click)="onCancel()">Cancel</button>
+      </div>
+    </div>
+    <div *ngIf="courseInfo.courseNum !== 'NA'" class="btn-group mt-3" id="delete-course-btns">
+      <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteCourse()">Delete course</button>
+      <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteCourseStudents()">Delete students in course</button>
+    </div>
+  </div>
+  <!-- end course info -->
+</div>

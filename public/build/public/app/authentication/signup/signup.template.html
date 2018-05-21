@@ -1,0 +1,50 @@
+<div class="container">
+  <form (ngSubmit)="signup()" class="form-signup" style="max-width: 900px; margin: 0px auto;">
+    <h2 class="form-signup-heading mt-4 text-dark">Sign up </h2>
+
+    <div class="form-row" id="rowName">
+      <div class="col-md-6 mb-2">
+        <label for="inputFirstName">First name</label>
+        <input type="text" id="inputFirstName" class="form-control" required autofocus placeholder="First" [(ngModel)]="user.firstName" name="firstName">
+      </div>
+
+      <div class="col-md-6 mb-2">
+        <label for="inputLastName">Last name</label>
+        <input type="text" id="inputLastName" class="form-control" required autofocus placeholder="Last" [(ngModel)]="user.lastName" name="lastName">
+      </div>
+    </div>
+    <!-- end rowName -->
+
+    <div class="form-row mb-2" id="rowEmail">
+      <label for="inputEmail">Email address</label>
+      <input type="email" id="inputEmail" class="form-control" required placeholder="Email address" [(ngModel)]="user.username" name="username">
+    </div>
+    <!-- end rowEmail -->
+
+    <div class="form-row mb-2" id="rowCourse">
+      <label for="inputCourse">Course</label>
+      <select class="form-control" [(ngModel)]="user.course" name="course" placeholder="Select a course">
+        <option value="undefined" disabled>Select course</option>
+        <option *ngFor="let course of courses" [value]="course.id">{{ course.courseNum }}</option>
+      </select>
+    </div>
+    <!-- end rowCourse -->
+
+    <div class="form-row mb-2" id="rowPassword">
+      <div class="col-md-6">
+        <label for="inputPassword">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" [(ngModel)]="user.password" name="password">
+        <small id="passwordHelp" class="text-muted">
+        Must have at least 6 characters
+        </small>
+      </div>
+      <div class="col-md-6">
+         <label for="confirmPassword" style="white-space: pre"> </label>
+        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm" [(ngModel)]="cPassword" name="confirmPassword">
+      </div>
+    </div>
+    <div *ngIf="errorMessage !== ''" class="alert alert-danger">{{errorMessage}}</div>
+    <button class="btn btn-primary" type="submit">Sign up</button>
+
+  </form>
+</div>

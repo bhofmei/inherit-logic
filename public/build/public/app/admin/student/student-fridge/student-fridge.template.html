@@ -1,0 +1,40 @@
+<div class="container">
+  <div *ngIf="errorMessage !== ''" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="fridge">
+    <div class="row" id="student-name">
+      <a [routerLink]="['../']" class="text-dark">
+        <h4>{{ fridge.owner | personName }}</h4>
+      </a>
+    </div>
+
+    <div class="row d-flex mb-3" id="scenario-info">
+      <div class="text-weight-bold text-primary mr-2">{{ fridge.scenario.scenCode }}</div>
+      <div class="text-secondary">{{ fridge.scenario.label }}</div>
+      <div *ngIf="hasFridge" class="ml-auto">
+        Access granted: {{ fridge.accessGranted }}
+      </div>
+    </div>
+
+    <div *ngIf="!hasFridge" id="no-fridge">
+      Fridge does not exist yet
+    </div>
+    <!-- end not hasFridge -->
+    <div *ngIf="hasFridge" id="fridge-outer">
+      <div class="row m-0">
+        <div class="btn-group" role="group">
+          <button [ngClass]="getButtonClass('all')" (click)="setPhage('all')">All Strains</button>
+          <button [ngClass]="getButtonClass('graded')" (click)="setPhage('graded')">Graded Strains</button>
+        </div>
+      </div>
+      <div class="list-group mt-3" id="fridge">
+        <div class="list-group-item" *ngFor="let strain of strainList">
+          <student-phage [phage]="strain"></student-phage>
+        </div>
+      </div> <!-- end fridge -->
+    </div>
+    <!-- end hasFridge -->
+  </div>
+  <!-- end if fridge -->
+</div>

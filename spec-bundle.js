@@ -31,5 +31,6 @@ function requireAll(requireContext) {
 }
 
 //var modules = requireAll(testContext);
-var modules = [require('./public/app/scenario/location/model-room/model-room.component.spec')
+//var modules = [require('./public/app/scenario/location/model-room/model-room.component.spec')
+var modules = [require('./public/app/admin/admin.component.spec')
 ];

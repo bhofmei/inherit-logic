@@ -11,42 +11,58 @@ module.exports = {
     'vendor': './public/vendor',
     'bootstrap': './public/bootstrap'
   },
-//  devtool: 'source-map',
+  //  devtool: 'source-map',
   resolve: {
     extensions: ['.js', '.ts']
   },
   output: {
     chunkFilename: '[name]-chunk.js',
-    path:  path.resolve(__dirname, 'public/build'),
+    path: path.resolve(__dirname, 'public/build'),
     filename: '[name].js',
     publicPath: 'build/'
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.ts$/,
-        use: [
-          {loader: 'awesome-typescript-loader'},
-          {loader: 'angular-router-loader'}
+        use: [{
+            loader: 'awesome-typescript-loader'
+          },
+          {
+            loader: 'angular-router-loader'
+          },
+          {
+            loader: 'angular2-template-loader?keepUrl=true'
+          }
         ],
         exclude: [/.(spec|e2e)\.ts/, /testing/]
       },
       {
+        test: /\.(html|css)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]'
+        }
+      },
+      {
+        test: /\.(svg|png)/,
+        loader: 'url-loader'
+      }
+      /*{
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: 'css-loader'
         })
-      }
+      }*/
     ]
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
       name: ['bootstrap', 'vendor', 'polyfills']
     }),
-//    new webpack.optimize.CommonsChunkPlugin({
-//      name: 'manifest'
-//    }),
+    //    new webpack.optimize.CommonsChunkPlugin({
+    //      name: 'manifest'
+    //    }),
     new HtmlWebpackPlugin({
       title: 'Cricket',
       filename: 'index.ejs',
@@ -60,14 +76,14 @@ Please wait.
 </div>
 </cricket-app>`,
       links: [{
-        href: './img/cricket-icon.png',
-        rel: 'shortcut icon',
-        type: 'image/png'
-      },
+          href: './img/cricket-icon.png',
+          rel: 'shortcut icon',
+          type: 'image/png'
+        },
         "lib/bootstrap/dist/css/bootstrap.min.css",
         "lib/ng2-dnd/bundles/style.css",
         "lib/open-iconic/font/css/open-iconic-bootstrap.css"
-        ],
+      ],
       scripts: [
         "lib/jquery/dist/jquery.min.js",
         "lib/popper.js/dist/umd/popper.min.js",

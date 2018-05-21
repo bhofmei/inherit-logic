@@ -1,0 +1,50 @@
+<div class="container-fluid">
+  <div *ngIf="errorMessage !== ''" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="courseInfo" id="course-info">
+    <div class="row mb-0" id="course-name">
+      <div class="m-0 p-0">
+        <h4 class="text-dark">
+          {{ courseInfo.courseNum }}
+        </h4>
+      </div>
+      <a class="ml-auto btn btn-sm btn-outline-primary" [routerLink]="['./edit']">Edit</a>
+    </div>
+
+    <div class="row mt-2" id="course-desc">
+      <div class="col-6 col-md-4 col-xl-2">
+          Description
+        </div>
+        <div class="col-6 col-md-8 col-xl-10 text-secondary">{{ courseInfo.description }}</div>
+    </div> <!-- end course-desc -->
+    <div class="row" id="course-instr">
+      <div class="col-6 col-md-4 col-xl-2">
+          Instructors
+        </div>
+        <div *ngIf="courseInfo.instructors" class="col-6 col-md-8 col-xl-10 text-secondary">{{ courseInfo.instructors | peopleListNames }}</div>
+    </div> <!-- course-instr -->
+  </div>
+  <!-- end course info -->
+  <div id="scenario-status">
+      <h5 class="pt-3">View Scenario Status </h5>
+    <div class="row">
+      <div id="statusByStudent" class="col-12 col-lg-6">
+        <h6 class="mb-2">By Student</h6>
+        <div class="list-group">
+          <a *ngFor="let student of students" [routerLink]="['/admin/students', student.userId]" class="list-group-item list-group-item-action">{{ student | personName:true }}</a>
+        </div>
+        <!-- end students -->
+      </div>
+      <!-- end statusByStudent -->
+      <div id="statusByScenario" class="col-12 col-lg-6">
+        <h6 class="mb-2">By Scenario</h6>
+        <div class="list-group">
+          <a *ngFor="let scen of scenarios" [routerLink]="['./', scen.scenCode]" class="list-group-item list-group-item-action">{{ scen.label }}</a>
+        </div>
+      </div>
+      <!-- statusByScenario -->
+    </div>
+    <!-- end row -->
+    </div> <!-- end scenario-status -->
+</div>

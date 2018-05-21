@@ -1,0 +1,43 @@
+.navbar-nav .navlinks-container {
+  position: relative;
+}
+
+.navbar-nav .navlinks-children {
+  background-color: #343a40;
+  width: auto;
+  display: none;
+  z-index: 100;
+}
+
+.navbar-nav .navlinks-container .navlinks-children a {
+  display: inline-block;
+  padding: 10px;
+  white-space: nowrap;
+}
+
+@media only screen and (max-width: 767px) {
+  .navbar-nav .navlinks-container .navlinks-children {
+    display: block;
+  }
+  .navbar-nav .navlinks-container .navlinks-children a {
+    padding: 5px 5px 5px 30px;
+  }
+  .navbar-nav .navlinks-container .navlinks-children a:hover {
+    background-color: #343a40!important;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .navbar-nav .navlinks-container .navlinks-children {
+    display: none;
+  }
+  .navbar-nav .navlinks-container:hover .navlinks-children {
+    display: block;
+    right: 0px;
+  }
+  .navbar-nav .navlinks-children {
+    position: absolute;
+    text-align: right;
+    float: right;
+  }
+}
