@@ -1,4 +1,4 @@
-import { AdminStudent, Course, User, Scenario, Fridge, StudentFridge, StudentPhage, plateResults } from '../interfaces';
+import { AdminStudent, Course, User, Scenario, Fridge, StudentFridge, StudentPhage, PlateResults } from '../interfaces';
 
 function createArray(l: number, v: any): any[]{
   //return Array.apply(null, Array(l)).map(Number.prototype.valueOf,v);
@@ -291,7 +291,7 @@ export const fridgeToCreate: Fridge = {
   strains: listOfPhage.slice(0,2)
 }
 
-const _singlePermPlates: plateResults[] = [
+const _singlePermPlates: PlateResults[] = [
   {
     full: false,
     smallPlaque: createArray(1300, 0),
@@ -308,7 +308,7 @@ const _singlePermPlates: plateResults[] = [
   }
 ]
 
-const _singleRestPlates: plateResults[] = [
+const _singleRestPlates: PlateResults[] = [
   {
     full: false,
     smallPlaque: [0],
@@ -323,7 +323,7 @@ export const singleInputPlates: any = {
   K: _singleRestPlates
 }
 
-const _doublePermPlates: plateResults[] = [
+const _doublePermPlates: PlateResults[] = [
   {
     full: true,
     smallPlaque: [],
@@ -340,7 +340,7 @@ const _doublePermPlates: plateResults[] = [
   }
 ]
 
-const _doubleRestPlates: plateResults[] = [
+const _doubleRestPlates: PlateResults[] = [
   {
     full: false,
     smallPlaque: [0,1,2,3,4,5,6,7],

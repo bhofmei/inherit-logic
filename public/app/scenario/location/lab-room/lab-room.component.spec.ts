@@ -11,7 +11,7 @@ import { LabRoomComponent } from './lab-room.component';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
 
-import { ExperimentPhage, GenotypePhage, FridgePhage, Phage, plateInput, plateResults } from '../../../interfaces';
+import { ExperimentPhage, GenotypePhage, FridgePhage, Phage, PlateInput, PlateResults } from '../../../interfaces';
 import { listOfPhage } from '../../../testing/sample-data';
 import { ScenarioServiceStub, ExperimentServiceStub } from '../../../testing/service-stubs';
 

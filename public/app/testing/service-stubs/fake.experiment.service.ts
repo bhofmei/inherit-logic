@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs/Observable';
-import { plateInput, plateResults, plexerInput } from '../../interfaces';
+import { PlateInput, PlateResults, PlexerInput } from '../../interfaces';
 import { singleInputPlates, doubleInputPlates, plexerResult } from '../sample-data';
 import * as _ from 'lodash';
 
 
 export class ExperimentServiceStub {
 
-  createPlate(plate: plateInput): Observable<plateResults>{
-    var results: plateResults;
+  createPlate(plate: PlateInput): Observable<PlateResults>{
+    var results: PlateResults;
     if (plate.phage2 === null) {
       // single plate inputs
       let tmpPlates = singleInputPlates[plate.lawnType];
@@ -28,7 +28,7 @@ export class ExperimentServiceStub {
     return Observable.of(_.cloneDeep(results));
   }
 
-  performPlexer(data: plexerInput): Observable<any>{
+  performPlexer(data: PlexerInput): Observable<any>{
     let results = plexerResult[data.lawnType];
     if(results){
       return Observable.of(results);

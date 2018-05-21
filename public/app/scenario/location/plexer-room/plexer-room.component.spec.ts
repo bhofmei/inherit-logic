@@ -11,7 +11,7 @@ import { PlexerRoomComponent } from './plexer-room.component';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../../scenario/scenario.service';
 
-import { ExperimentPhage, GenotypePhage, FridgePhage, Phage, plexerInput } from '../../../interfaces';
+import { ExperimentPhage, GenotypePhage, FridgePhage, Phage, PlexerInput } from '../../../interfaces';
 import { listOfPhage } from '../../../testing/sample-data';
 import { ScenarioServiceStub, ExperimentServiceStub } from '../../../testing/service-stubs';
 

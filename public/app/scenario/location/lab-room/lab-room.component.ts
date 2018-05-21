@@ -6,7 +6,7 @@ import { ScenarioGlobals } from '../../scenario.globals';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../scenario.service';
 
-import { ExperimentPhage, GenotypePhage, plateInput, plateResults, _genotype, Phage } from '../../../interfaces';
+import { ExperimentPhage, GenotypePhage, PlateInput, PlateResults, _genotype, Phage } from '../../../interfaces';
 
 import { readErrorMessage } from '../../../shared/read-error';
 
@@ -417,7 +417,7 @@ export class LabRoomComponent {
    * @param {any} phage2 - second phage in cross, or null
    */
   _performCross(lawnType: string, phage1: ExperimentPhage, phage2: ExperimentPhage){
-    let newPlate: plateInput = {
+    let newPlate: PlateInput = {
       lawnType: lawnType,
       phage1: phage1,
       phage2: phage2,

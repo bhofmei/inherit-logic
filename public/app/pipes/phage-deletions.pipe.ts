@@ -1,5 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/**
+ * Format the textual presentation of a phage strain's deletions
+ */
 @Pipe({name: 'phageDeletions'})
 export class PhageDeletionsPipe implements PipeTransform {
 

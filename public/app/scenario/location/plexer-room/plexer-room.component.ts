@@ -5,7 +5,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ScenarioGlobals } from '../../scenario.globals';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../scenario.service'
-import { FridgePhage, ExperimentPhage, plexerInput } from '../../../interfaces';
+import { FridgePhage, ExperimentPhage, PlexerInput } from '../../../interfaces';
 import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
@@ -252,7 +252,7 @@ export class PlexerRoomComponent{
     let cleanRows = this._cleanArrays(tmpRows);
     let cleanCols = this._cleanArrays(this.cols);
     // gather data
-    var data: plexerInput = {
+    var data: PlexerInput = {
       lawnType: this.chosenBact,
       rowPhage: cleanRows,
       colPhage: cleanCols,

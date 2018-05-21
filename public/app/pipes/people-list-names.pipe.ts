@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 /*
- * Format a user's or studets frist and last name as "firstName lastName"
+ * Format a list of user's or students frist and last name as "firstName lastName"
  * When reverse is true, format as "lastName, firstName"
  * Handles when only first or last name is set
  * Usage:
  *   person | formatName:isReverse
-*/
+ */
 @Pipe({name: 'peopleListNames'})
 export class PeopleListNamesPipe implements PipeTransform {
 
