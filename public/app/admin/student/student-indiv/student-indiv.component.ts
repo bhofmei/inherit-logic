@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -19,12 +19,17 @@ import { AdminStudent } from '../../../interfaces/student.interface';
 import { Scenario } from '../../../interfaces/scenario.interface';
 import { readErrorMessage } from '../../../shared/read-error';
 
+/**
+ * Component to view information for a single student
+ * This includes email/name/role information and access status
+ * for all scenarios
+ */
 @Component({
     selector: 'student-indiv',
     templateUrl: './student-indiv.template.html'
 })
 
-export class StudentIndivComponent {
+export class StudentIndivComponent implements OnInit, OnDestroy {
 
   /**
    * Student we are viewing
@@ -34,7 +39,14 @@ export class StudentIndivComponent {
    * List of all scenarios
    */
     private scenarios: Scenario[];
+  /**
+   * Boolean state variable to make unsubscribing from multiple
+   * observables easier
+   */
     private isDestroyed$: Subject<boolean>;
+  /**
+   * Subscription for URL parameters
+   */
     private paramObserver: any;
   /**
    * Logged in user who must be an admin or instructor

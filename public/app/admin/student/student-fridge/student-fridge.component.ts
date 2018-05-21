@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subject } from 'rxjs/Subject';
@@ -17,7 +17,7 @@ import { readErrorMessage } from '../../../shared/read-error';
   templateUrl: './student-fridge.template.html'
 })
 
-export class StudentFridgeComponent{
+export class StudentFridgeComponent implements OnInit, OnDestroy {
 
   /**
    * Fridge object (if it exists)
@@ -27,7 +27,13 @@ export class StudentFridgeComponent{
    * If fridge exists determine by if this.fridge has strains
    */
   protected hasFridge: boolean = false;
+  /**
+   * Boolean state variable to make unsubscribing from multiple observables easier
+   */
   private isDestroyed$: Subject<boolean>;
+   /**
+   * Subscription for URL parameters
+   */
   private paramObserver: any;
 
   /**
@@ -42,6 +48,9 @@ export class StudentFridgeComponent{
    */
   private strainList: StudentPhage[];
 
+  /**
+   * Error message from the server
+   */
   private errorMessage: string = '';
 
   constructor(private _router: Router,
@@ -134,6 +143,10 @@ export class StudentFridgeComponent{
     }
   }
 
+  /**
+   * When destorying the component, unsubscribe from services and
+   * observables to prevent memory leak
+   */
   ngOnDestroy(){
     this.paramObserver.unsubscribe();
     this.isDestroyed$.next(true);

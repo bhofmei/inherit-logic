@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { AdminGuard } from './admin.guard.service';
 import { LoggedInGuard } from '../authentication/logged-in.guard.service';
@@ -8,7 +8,7 @@ import { AdminComponent } from './admin.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { NotAuthComponent } from './not-auth/not-auth.component';
 
-const AdminRoutes: Routes = [
+export const AdminRoutes: Routes = [
   {
     path: 'admin',
     data: {
@@ -43,13 +43,3 @@ const AdminRoutes: Routes = [
     component: NotAuthComponent
   }
 ];
-
-@NgModule({
-  imports: [
-    RouterModule.forChild(AdminRoutes)
-  ],
-  exports: [
-    RouterModule
-  ]
-})
-export class AdminRouteModule {}

@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { LocationComponent } from './location.component';
 import { LoggedInGuard } from '../../authentication/logged-in.guard.service';
@@ -41,13 +40,3 @@ export const LocationRoutes: Routes = [
     ]
   }
 ];
-
-@NgModule({
-  imports: [
-    RouterModule.forChild(LocationRoutes)
-  ],
-  exports: [
-    RouterModule
-  ]
-})
-export class LocationRouteModule {}

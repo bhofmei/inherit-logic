@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 
-import { ScenarioRouteModule } from './scenario.route.module';
+import { ScenarioRoutes } from './scenario.routes';
 import { ScenarioComponent } from './scenario.component';
 import { ListComponent } from './list/list.component';
 
 @NgModule({
   imports: [
     SharedModule,
-    ScenarioRouteModule
+    RouterModule.forChild(ScenarioRoutes)
   ],
   declarations: [
     ScenarioComponent,

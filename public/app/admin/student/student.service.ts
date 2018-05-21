@@ -12,6 +12,9 @@ import { AdminStudent, StudentFridge } from '../../interfaces';
 @Injectable()
 export class StudentService {
 
+  /**
+   * Beginning of the server-side URL routes
+   */
   private _baseURL = 'api/admin';
 
   constructor(private _http: HttpClient) {}
@@ -65,7 +68,7 @@ export class StudentService {
    * @param {number} adminId - userId of logged in user
    * @param {number} studentId - userId of student to delete
    *
-   * @returns {Observable<any>} - student who was just deleted or error
+   * @returns {Observable<any>} student who was just deleted or error
    */
   deleteStudent(adminId: number, studentId: number): Observable<any>{
     return this._http
@@ -79,7 +82,7 @@ export class StudentService {
    * @param {number} studentId - userId of student
    * @param {string} scenId - scenario Id for fridge to find
    *
-   * @returns{Observable<StudentFridge>} - the student's fridge or error
+   * @returns{Observable<StudentFridge>} the student's fridge or error
    */
   getFridge(adminId: number, studentId: number, scenId: string): Observable<StudentFridge>{
     return this._http
@@ -93,7 +96,7 @@ export class StudentService {
    * @param {number} studentId - userId of student
    * @param {boolean} updatedState - true to grant access, false to revoke access
    *
-   * @returns {Observable<AdminStudent>} - updated student
+   * @returns {Observable<AdminStudent>} updated student
    */
   grantScenAccess(adminId: number, studentId: number, scenId: string, updatedState: boolean): Observable<AdminStudent>{
     return this._http

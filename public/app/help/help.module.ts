@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 
-import { HelpRouteModule } from './help.route.module';
+import { HelpRoutes } from './help.routes';
 import { HelpComponent } from './help.component';
 
 @NgModule({
   imports: [
     SharedModule,
-    HelpRouteModule
+    RouterModule.forChild(HelpRoutes)
   ],
   declarations: [
     HelpComponent

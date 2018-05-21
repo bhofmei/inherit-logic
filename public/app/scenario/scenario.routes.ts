@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { ScenarioComponent } from './scenario.component';
 import { ScenarioResolver } from './scenario.resolver';
 import { ListComponent } from './list/list.component';
 
-const ScenarioRoutes: Routes = [
+export const ScenarioRoutes: Routes = [
   {
     path: 'scenarios',
     data: {
@@ -30,13 +29,3 @@ const ScenarioRoutes: Routes = [
     ]
   }
 ];
-
-@NgModule({
-  imports: [
-    RouterModule.forChild(ScenarioRoutes)
-  ],
-  exports: [
-    RouterModule
-  ]
-})
-export class ScenarioRouteModule {}

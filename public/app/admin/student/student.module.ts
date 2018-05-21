@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 
-import { StudentRouteModule } from './student.route.module';
+import { StudentRoutes } from './student.routes';
 
 import { StudentListComponent } from './student-list/student-list.component';
 import { StudentIndivComponent } from './student-indiv/student-indiv.component';
@@ -17,7 +18,7 @@ import { PhageDeletionsPipe } from '../../pipes/phage-deletions.pipe';
 @NgModule({
   imports: [
     SharedModule,
-    StudentRouteModule
+    RouterModule.forChild(StudentRoutes)
   ],
   declarations: [
     StudentListComponent,

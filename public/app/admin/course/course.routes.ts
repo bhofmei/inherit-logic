@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { CourseResolver } from './course.resolver';
 import { ScenarioResolver } from '../../scenario/scenario.resolver';
@@ -42,13 +41,3 @@ export const CourseRoutes: Routes = [
      ]
 }
 ];
-
-@NgModule({
-  imports: [
-    RouterModule.forChild(CourseRoutes)
-  ],
-  exports: [
-    RouterModule
-  ]
-})
-export class CourseRouteModule {}

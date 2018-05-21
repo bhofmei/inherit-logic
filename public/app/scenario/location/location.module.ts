@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 
-import { LocationRouteModule } from './location.route.module';
+import { LocationRoutes } from './location.routes';
 
 import { ExperimentService } from './experiment.service';
 
@@ -17,7 +18,7 @@ import { ModelRoomComponent } from './model-room/model-room.component';
 @NgModule({
   imports: [
     SharedModule,
-    LocationRouteModule
+    RouterModule.forChild(LocationRoutes)
   ],
   declarations: [
     FridgeComponent,

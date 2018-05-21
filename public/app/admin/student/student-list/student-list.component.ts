@@ -21,7 +21,13 @@ export class StudentListComponent implements OnInit, OnDestroy {
    * List of students
    */
     private students: AdminStudent[];
+  /**
+   * Boolean state variable to make unsubscribing from multiple observables easier
+   */
     private isDestroyed$: Subject<boolean>;
+  /**
+   * Error message from server
+   */
     private errorMessage: string = '';
 
     constructor(
@@ -48,6 +54,9 @@ export class StudentListComponent implements OnInit, OnDestroy {
             });
     }
 
+  /**
+   * Destory the component by unsubscribing from all observables
+   */
     ngOnDestroy() {
         this.isDestroyed$.next(true);
         this.isDestroyed$.unsubscribe();

@@ -1,11 +1,9 @@
-import { NgModule } from '@angular/core';
-
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { LoggedInGuard } from '../authentication/logged-in.guard.service';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UpdatePasswordComponent } from './update-password/update-password.component';
 
-const ProfileRoutes: Routes = [
+export const ProfileRoutes: Routes = [
   {
     path: 'profile',
     canActivate: [LoggedInGuard],
@@ -27,13 +25,3 @@ const ProfileRoutes: Routes = [
     }
   }
 ];
-
-@NgModule({
-  imports: [
-    RouterModule.forChild(ProfileRoutes)
-  ],
-  exports: [
-    RouterModule
-  ]
-})
-export class ProfileRouteModule {}

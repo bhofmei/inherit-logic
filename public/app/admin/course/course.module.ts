@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 
 import { CourseCreateComponent } from './course-create/course-create.component';
@@ -8,13 +9,13 @@ import { CourseListComponent } from './course-list/course-list.component';
 import { CourseScenarioComponent } from './course-scenario/course-scenario.component';
 import { ConfirmDeleteDialogComponent } from '../../shared/confirm-delete-dialog.component';
 
-import { CourseRouteModule } from './course.route.module';
+import { CourseRoutes } from './course.routes';
 import { CourseResolver } from './course.resolver';
 
 @NgModule({
   imports: [
     SharedModule,
-    CourseRouteModule
+    RouterModule.forChild(CourseRoutes)
   ],
   declarations: [
     CourseCreateComponent,
