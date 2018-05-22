@@ -7,7 +7,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { Scenario, Fridge, FridgePhage, GenotypePhage } from '../interfaces';
 
-
+/**
+ * Scenario/fridge related functions that get/send data to the backend server
+ */
 @Injectable()
 export class ScenarioService {
     private _baseURL = 'api/cricket';
@@ -46,11 +48,11 @@ export class ScenarioService {
   /**
   * Set the scenario details and scenario guesses
   *
-  *
-  @param {string} scenarioDetails - scenario details; necessary for performing experiments
-  @param {string} scenarioGuesses - current scenario guesses
+  * @param {string} scenarioDetails - scenario details
+  * - necessary for performing experiments
+  * @param {string} scenarioGuesses current scenario guesses
   */
-    setScenario(scenarioDetails: string, scenarioGuesses: string) {
+  setScenario(scenarioDetails: string, scenarioGuesses: string) {
         if (scenarioDetails !== null)
             this._scenarioDetails.next(scenarioDetails);
         if (scenarioDetails !== null)
@@ -61,7 +63,7 @@ export class ScenarioService {
   /**
    * List available scenarios
    *
-   * @returns {Observable<Scenario[]>} - list of scenarios
+   * @returns {Observable<Scenario[]>} list of scenarios
    */
     listScenarios(): Observable<Scenario[]> {
         return this._http
@@ -71,10 +73,10 @@ export class ScenarioService {
   /**
    * Get information about a specific scenario
    *
-   * @param {string} scenId - scenario identifier
+   * @param {string} scenId scenario identifier
    *
    * @returns {Scenario} - scenario information
-   * or error "Failed to load scenario <scenId>" if doesn't exist
+   * - or error "Failed to load scenario <scenId>" if doesn't exist
    */
     getScenario(scenId: string): Observable<Scenario> {
         this._scenarioCode.next(scenId);
@@ -85,13 +87,13 @@ export class ScenarioService {
   /**
    * Send updated guesses for the scenario to be saved in database
    *
-   * @param {any} guesses - string of updated guesses
-   * @param {number} userId - userId of logged in user
-   * @param {string} scenId - scenario code of current scenario
+   * @param {any} guesses string of updated guesses
+   * @param {number} userId userId of logged in user
+   * @param {string} scenId scenario code of current scenario
    *
-   * @returns {Observable<any>} updated guesses
-   * or error "Failed to find fridge" if fridge doesn't exist
-   * or error "Could not save new guesses" if couldn't update
+   * @returns {Observable<any>} - updated guesses
+   * - or error "Failed to find fridge" if fridge doesn't exist
+   * - or error "Could not save new guesses" if couldn't update
    */
     saveDeletions(guesses: any, userId: number, scenId: string): Observable<any> {
         return this._http
@@ -101,12 +103,12 @@ export class ScenarioService {
   /**
    * Create a new fridge for the user/scenario
    *
-   * @param {number} userId - userId of logged in user
-   * @param {string} scenId - scenario code of current scenario
+   * @param {number} userId userId of logged in user
+   * @param {string} scenId scenario code of current scenario
    *
    * @returns {Observable<Fridge>} - newly created fridge
-   * or error "Unable to create new phage for scenario" if issue create phage
-   * or error "Unable to save new fridge" if couldn't create
+   * - or error "Unable to create new phage for scenario" if issue create phage
+   * - or error "Unable to save new fridge" if couldn't create
    */
     createFridge(userId: number, scenId: string): Observable<Fridge> {
         return this._http.get<Fridge>(`${this._baseURL}/${userId}/${scenId}/new-fridge`);
@@ -115,11 +117,11 @@ export class ScenarioService {
   /**
    * Get an existing fridge for user/scenario
    *
-    * @param {number} userId - userId of logged in user
-   * @param {string} scenId - scenario code of current scenario
+   * @param {number} userId userId of logged in user
+   * @param {string} scenId scenario code of current scenario
    *
    * @returns {Observable<Fridge>} - existing fridge
-   * or error "No fridge for scenario/user" if fridge does not exist
+   * - or error "No fridge for scenario/user" if fridge does not exist
    */
     getFridge(userId: number, scenId: string): Observable<Fridge> {
         var res = this._http
@@ -127,25 +129,19 @@ export class ScenarioService {
         return res;
     }
 
-    saveFridge(fridge: any): Observable<any> {
-        let userId = fridge.owner.userId;
-        let scenCode = fridge.scenario.scenCode;
-        return this._http
-            .post(`${this._baseURL}/${userId}/${scenCode}`, fridge)
-    }
-
   /**
    * Add a new phage strain to the fridge;
    * Server uses userId and scenCode to find the fridge
    *
-   * @param {number} userId - userId of logged in user
-   * @param {string} scenId - scenario code of current scenario
-   * @param {any} strain - new phage to add to fridge; has strainNum, mutationList, and deletion
+   * @param {number} userId userId of logged in user
+   * @param {string} scenId scenario code of current scenario
+   * @param {any} strain - new phage to add to fridge
+   * - has strainNum, mutationList, and deletion
    *
    * @returns {Observable<FridgePhage>} - newly saved phage
-   * or error "User not found" if user not found
-   * or error "" if scenario not found
-   * or error "Failed to find fridge" if fridge doesn't exist
+   * - or error "User not found" if user not found
+   * - or error "Failed to load scenario <scenId>" if scenario not found
+   * - or error "Failed to find fridge" if fridge doesn't exist
    */
     addStrain(userId: number, scenId: string, strain: any): Observable<FridgePhage> {
         return this._http
@@ -155,12 +151,13 @@ export class ScenarioService {
   /**
    * Update details/information about an existing phage in the fridge
    *
-   * @param {number} userId - userId of logged in user
-   * @param {string} scenId - scenario code of current scenario
-   * @param {FridgePhage} strain - strain to update; use strain id to specify strain and send updated info
+   * @param {number} userId userId of logged in user
+   * @param {string} scenId scenario code of current scenario
+   * @param {FridgePhage} strain - strain to update
+   * - use strain id to specify strain and send updated info
    *
    * @returns {Observable<FridgePhage>} - updated strain
-   * or error "Phage not found" if strain doesn't exist
+   * - or error "Phage not found" if strain doesn't exist
    */
     updateStrain(userId: number, scenId: string, strain: FridgePhage): Observable<FridgePhage> {
         let strainId = strain.id;
@@ -169,10 +166,12 @@ export class ScenarioService {
     }
 
   /**
+   * Delete a strain from the fridge (and database)
    *
    * @returns {any} - the strain just deleted
-   * or error "Failed to find fridge" if fridge doesn't exist
-   * or error "Unable to remove strain from fridge" if couldn't delete
+   * - or error "Phage not found" if strain doesn't exist
+   * - or error "Failed to find fridge" if fridge doesn't exist
+   * - or error "Unable to remove strain from fridge" if couldn't delete
    */
     deleteStrain(userId: number, scenId: string, strain: FridgePhage): Observable<any> {
         let strainId = strain.id;
