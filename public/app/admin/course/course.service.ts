@@ -13,7 +13,7 @@ export class CourseService {
   /**
    * Leading url path
    */
-  private _baseURL = 'api/admin';
+  private _baseURL = '/api/admin';
 
   /**
    * Construct the service
