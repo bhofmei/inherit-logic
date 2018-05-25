@@ -12,6 +12,10 @@ import { Scenario, Fridge, FridgePhage, GenotypePhage } from '../interfaces';
  */
 @Injectable()
 export class ScenarioService {
+    /**
+     * Leading backend url path to be able to group related functions
+     * to a consistent URL from across the application.
+     */
     private _baseURL = 'api/cricket';
   /**
    * The current scenario details which is needed when performing
@@ -31,12 +35,17 @@ export class ScenarioService {
     private _scenarioCode = new BehaviorSubject<string>('');
     getScenarioCode = this._scenarioCode.asObservable();
 
-
+    /**
+     * Construct the service
+     *
+     * @param {HttpClient} _http Anguar mechanism to make calls to backend server
+     */
     constructor(private _http: HttpClient) {}
 
   /**
    * Reset the save scenario stuff:
    * scenarioDetails, scenarioGuesses, and scenarioCode
+   *
    * Used when navigating away from scenario component
    */
   resetScenario() {
@@ -76,7 +85,8 @@ export class ScenarioService {
    * @param {string} scenId scenario identifier
    *
    * @returns {Scenario} - scenario information
-   * - or error "Failed to load scenario <scenId>" if doesn't exist
+   * - or error "Failed to load scenario <scenId>" if scenario doesn't exist
+   * - or other server/database error
    */
     getScenario(scenId: string): Observable<Scenario> {
         this._scenarioCode.next(scenId);
@@ -94,6 +104,7 @@ export class ScenarioService {
    * @returns {Observable<any>} - updated guesses
    * - or error "Failed to find fridge" if fridge doesn't exist
    * - or error "Could not save new guesses" if couldn't update
+   * - or other server/database error
    */
     saveDeletions(guesses: any, userId: number, scenId: string): Observable<any> {
         return this._http
@@ -109,6 +120,7 @@ export class ScenarioService {
    * @returns {Observable<Fridge>} - newly created fridge
    * - or error "Unable to create new phage for scenario" if issue create phage
    * - or error "Unable to save new fridge" if couldn't create
+   * - or other server/database error
    */
     createFridge(userId: number, scenId: string): Observable<Fridge> {
         return this._http.get<Fridge>(`${this._baseURL}/${userId}/${scenId}/new-fridge`);
@@ -122,6 +134,7 @@ export class ScenarioService {
    *
    * @returns {Observable<Fridge>} - existing fridge
    * - or error "No fridge for scenario/user" if fridge does not exist
+   * - or other server/database error
    */
     getFridge(userId: number, scenId: string): Observable<Fridge> {
         var res = this._http
@@ -142,6 +155,7 @@ export class ScenarioService {
    * - or error "User not found" if user not found
    * - or error "Failed to load scenario <scenId>" if scenario not found
    * - or error "Failed to find fridge" if fridge doesn't exist
+   * - or other server/database error
    */
     addStrain(userId: number, scenId: string, strain: any): Observable<FridgePhage> {
         return this._http
@@ -154,10 +168,11 @@ export class ScenarioService {
    * @param {number} userId userId of logged in user
    * @param {string} scenId scenario code of current scenario
    * @param {FridgePhage} strain - strain to update
-   * - use strain id to specify strain and send updated info
+   * - use strain `id` to specify strain and send updated info
    *
    * @returns {Observable<FridgePhage>} - updated strain
    * - or error "Phage not found" if strain doesn't exist
+   * - or other server/database error
    */
     updateStrain(userId: number, scenId: string, strain: FridgePhage): Observable<FridgePhage> {
         let strainId = strain.id;
@@ -168,10 +183,16 @@ export class ScenarioService {
   /**
    * Delete a strain from the fridge (and database)
    *
+   * @param {number} userId userId of logged in user
+   * @param {string} scenId scenario code of current scenario
+   * @param {FridgePhage} strain - the strain to delete
+   * - use strain `id` to specify which strain to delete
+   *
    * @returns {any} - the strain just deleted
    * - or error "Phage not found" if strain doesn't exist
    * - or error "Failed to find fridge" if fridge doesn't exist
    * - or error "Unable to remove strain from fridge" if couldn't delete
+   * - or other server/database error
    */
     deleteStrain(userId: number, scenId: string, strain: FridgePhage): Observable<any> {
         let strainId = strain.id;

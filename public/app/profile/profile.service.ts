@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-//import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { User } from '../interfaces/user.interface';
 
 /**
@@ -16,11 +15,6 @@ export class ProfileService {
    */
   private _baseUrl: string = '/api/users/';
 
-  /**
-   * Construct the service
-   *
-   * @param {HttpClient} _http Anguar mechanism to make calls to backend server
-   */
   constructor(private http: HttpClient){}
 
   /**
@@ -34,6 +28,7 @@ export class ProfileService {
    *
    * @returns {Observable<User>} - The updated user information
    * - or error "User does not exist" if non-existant user
+   * - or other server/database error
    */
   editProfile(userId: number, details: any): Observable<User>{
     return this.http.post<User>(this._baseUrl + userId, details);
@@ -49,6 +44,7 @@ export class ProfileService {
    * @returns {Observable<User>} - information about the user just updated
    * - or error "User does not exist" if non-existant user
    * - or error "Incorrect password" if wrong old password
+   * - or other server/database error
    */
   updatePassword(userId: number, credentials: any): Observable<User>{
     return this.http.post<User>(this._baseUrl + userId + '/update-password', credentials);
