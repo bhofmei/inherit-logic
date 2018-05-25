@@ -51,8 +51,18 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * number of slots per shelf
    */
   spots: number;
+  /**
+   * potential backend error message
+   */
   errorMessage: string = '';
-  private isDestroyed$: Subject<boolean>
+  /**
+   * State to monitior if component active to make unsubscribing to
+   * multiple streams easier
+   */
+  private isDestroyed$: Subject<boolean>;
+  /**
+   * Observes the scenCode of the URL
+   */
   private paramObserver: any;
 
   constructor(private _router: Router,
@@ -93,6 +103,10 @@ export class FridgeComponent implements OnInit, OnDestroy{
     });
   }
 
+  /**
+   * When destroying the component, unsubscribe from services
+   * to prevent memory leak
+   */
   ngOnDestroy(){
     this.paramObserver.unsubscribe();
     this.isDestroyed$.next(true);

@@ -3,6 +3,12 @@ import { Component } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
 
 import { User } from '../interfaces/user.interface';
+
+/**
+ * The home landing page when going to the website
+ * Mainly a view component, but some aspects are dependent
+ * on if a user is logged in and the user role
+ */
 @Component({
   selector: 'home',
   templateUrl: './home.template.html',
@@ -10,8 +16,10 @@ import { User } from '../interfaces/user.interface';
 })
 
 export class HomeComponent{
+  /**
+   * The logged in user, if any
+   */
   private user: User;
-  private errorMessage: string;
 
   constructor(private _authenticationService: AuthenticationService){}
 
