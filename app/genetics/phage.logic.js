@@ -5,12 +5,20 @@ const scenConfig = require('../../config/scenario.config');
 const pEnum = require('./phage.enum');
 
 /**
+ * Functions which compute frameshift/phenotype type
+ * @module genetics.phage.logic
+ * @name Phage Logic
+ * @type Genetics
+ */
+
+
+/**
  * Determine the phenotype of a phage based on the list of mutations
  *
  * @param {number[]} mutantList - mutations for this phage strain
  * @param {number[]} stopList - locations of stop codons for varying frameshifts
  *
- * @returns {string} - phenotype; "allTranslated", "frameShifted", "deleted", or "stopped"
+ * @returns {string} phenotype; one of `"allTranslated"`, `"frameShifted"`, `"deleted"`, or `"stopped"`
  */
 exports.doPheno = function (mutantList, stopList) {
   if (mutantList.deletion.length !== 0)
@@ -40,7 +48,7 @@ exports.doPheno = function (mutantList, stopList) {
  * @param {number[]} mutantList - mutatations in this phage
  * @param {number[]} stopList - locations of stop codons depending on framshift
  *
- * @return {Object} - includes "frame", frameshift number of gene as a whole, and "frameList", frameshift cummulatively for each frame
+ * @return {Object} includes `frame` (frameshift number of gene as a whole) and `frameList` (frameshift cummulatively for each frame)
  */
 exports.getFrames = function (whoSays, mutantList, stopList) {
   var intStopList = [];

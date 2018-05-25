@@ -8,7 +8,15 @@ const debug = require('debug')('genetics:phage'),
   debugExt = require('debug', 'genetics:ext');
 
 /**
+ * Functions which perform experiments on the phage strains
+ * @module genetics.phage.experiment
+ * @name Phage Experiments
+ * @type Genetics
+ */
+
+/**
  * Set the random number generation see to a "random" number
+ * @ignore
  */
 exports.resetEngine = function () {
   randGen.reset(randEngine);
@@ -17,6 +25,7 @@ exports.resetEngine = function () {
 /**
  * Set the random number generation seed to a specific number;
  * used for testing
+ * @ignore
  *
  * @param {number} num - new seed value
  */
@@ -27,12 +36,12 @@ exports.seedEngine = function (num) {
 /**
  * Recombine 2 strains with specified number of crossovers and number of offspring
  *
- * @param {Object} phageGeno1 - genotype of phage 1
- * @param {Object} phageGeno2 - genotype of phage 2
- * @param {number} numXOver - number of corssovers
+ * @param {Object} phageGeno1 - genotype of phage 1 (`shifts` and `deletion`)
+ * @param {Object} phageGeno2 - genotype of phage 2 (`shifts` and `deletion`)
+ * @param {number} numXOver - number of crossovers
  * @param {number} numToDo - how many offspring to create
  *
- * @retuns {Object[]} - list of recombined offspring
+ * @returns {Object[]} list of recombined offspring genotypes (`shifts` and `deletion`)
  */
 exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
   var recGenos = [];
@@ -168,13 +177,15 @@ exports.recombine = function (phageGeno1, phageGeno2, numXOver, numToDo) {
 } // end recombine
 
 /**
- * Create N number of mutants; checks that mutations aren't too close
- * together on the chromosome
+ * Create `N` number of mutants
+ *
+ * checks that mutations aren't too close together on the chromosome
  *
  * @param {number[]} inList - mutations (shifts) of phage to mutagenize
- * @param {number} numDesitred - number of new mutants to generate
+ * @param {number} numDesired - number of new mutants to generate
  *
- * @returns {number[][]} - 2D array of new mutants; numDesired x (len. inList+1)
+ * @returns {number[][]} 2D array of new mutants;
+ * Dimensions: `numDesired` x `inList.length+1`
  */
 exports.mutagenize = function (inList, numDesired) {
   var okDist = scenConfig.mutOkDist;
@@ -213,12 +224,12 @@ exports.mutagenize = function (inList, numDesired) {
 
 /**
  * check if recombination position is within a deletion
- *
+ * @protected
+
  * @param {number} checkPos - position to check
- * @param {number[]} delList - lit of deletions for phage
+ * @param {number[]} delList - list of deletions for phage
  *
- * @returns {boolean} - true if recombination is valid (not in a deletion),
- * false otherwise
+ * @returns {boolean} `true` if recombination is valid (not in a deletion); `false` otherwise
  */
 const _validRecombDel = function (checkPos, delList) {
   if (delList.length === 0) {
@@ -237,12 +248,13 @@ const _validRecombDel = function (checkPos, delList) {
 /**
  * Create a copy of deletions within the start and end positions of
  * chromosome chunk to be copied
+ * @protected
  *
  * @param {number} sPos - start position of chrosomome chunk to copy
  * @param {number} ePos - end position of chromosome chunk to copy
  * @param {number[]} delList - list of deletions for this phage
  *
- * @returns {number[]} - copy of the deletions
+ * @returns {number[]} copy of the deletions
  */
 const _copyDeletion = function (sPos, ePos, delList) {
   let outDel = [];

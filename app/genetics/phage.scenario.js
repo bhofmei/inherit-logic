@@ -1,12 +1,18 @@
 const util = require('./utility');
 const clone = require('clone');
-//const randGen = require('./random.generator')();
 const randGen = require('./random.generator');
 const randEngine = randGen.getEngine();
 const scenConfig = require('../../config/scenario.config');
 const pEnum = require('./phage.enum');
 const phageLogic = require('./phage.logic');
 const debug = require('debug')('genetics');
+
+/**
+ * Functions which handle creating  phage for different scenarios
+ * @module genetics.phage.scenario
+ * @name Phage Scenario
+ * @type Genetics
+ */
 
 exports.resetEngine = function(){
   randGen.reset(randEngine);
@@ -19,11 +25,19 @@ exports.seedEngine = function(num){
 /**
  * Generates all of the phage and other necessary info for a given scenario
  *
- * @param {Object} scenario - parameters for the scenario
- * includes: mutationFreq (number), recombinationFreq (number),
- * gcProb (number), minStops (number),
- * intraMuteDist (number[]), interMuteDist (number),
- * referencePhage (string[]), otherPhage (string[])
+ * @param {Object} scenario - parameters for the scenario; includes:
+ * - mutationFreq (`number`): chance of mutation as decimal
+ * - recombinationFreq (`number`): chance of single recombination as decimal
+ * - gcProb (`number`): percent of G/C's to use in gene
+ * - minStops (`number`): minimum number of stop codons when out of frame
+ * - intraMuteDist (`number[]`)
+ * - interMuteDist (`number`)
+ * - referencePhage (`string[]`): descriptions of reference phage; known WT or mut
+ * - otherPhage (`string[]`): descriptions of non-reference phage; unknown WT or mut
+ *
+ * @returns {Object} all info needed for a new scenario
+ * - strains (`Object[]`): list of strains
+ * - scenarioDetails (`Object`): scenario info needed for experiments later
  */
 exports.generateScenario = function (scenario) {
   // scenario = scenario details - mutationFreq, recombinationFreq, gcProb, minStops, intraMuteDist, interMuteDist, referencePhage, otherPhage, alternatePhage
@@ -117,15 +131,15 @@ exports.generateScenario = function (scenario) {
 
 /**
  * Make a WT gene - has no stop codons normally but has at least
- * "minStops" with frameshifts
+ * `minStops` with frameshifts
  *
  * @param {number} gcProb - GC probability (percent G/C vs A/T)
  * @param {number} minStops - minimum number of stops for frameshifted gene
  *
- * @returns {Object}
- * "wtGene" - string, for nucleic acids that consitute this gene,
- * "realStops"  - number[], location of stop codons ,
- * "frameStopList" - number[][], location and which frameshift the stop occurs
+ * @returns {Object} the nucleotide sequence to be used; includes:
+ * - wtGene (`string`): nucleic acids that consitute this gene
+ * - realStops (`number[]`): location of stop codons
+ * - frameStopList (`number[][]`): location and which frameshift the stop occurs
  */
 exports.makeGene = function (gcProb, minStops) {
   // input: scenario
@@ -200,12 +214,14 @@ exports.makeGene = function (gcProb, minStops) {
 /**
  * Create a phage strain
  *
- * @param {object} phageDetails - specification for phage to create
+ * @param {Object} phageDetails - phage config info (from scenario config)
  * @param {number} strainNum - strain number
  * @param {string} phageType - reference or unknown
  * @param {Object} scenData - scenario parameters
  *
- * @returns {Object} - newly created strain with "phage" and "scenData"
+ * @returns {Object} newly created strain
+ * - phage (`Object`): has properties strainNum, phageType, mutationList, deletion, and comment
+ * - scenData (`Object`)
  */
 exports.makePhage = function (phageDetails, strainNum, phageType, scenData) {
   var outPhage; // note: has phage and updated scenData
@@ -230,12 +246,14 @@ exports.makePhage = function (phageDetails, strainNum, phageType, scenData) {
 /**
  * Create a WT phage - no mutations
  *
- * @param {Object} phage - phage config info
+ * @param {Object} phage - phage config info (from scenario config)
  * @param {number} strainNum - strain number
  * @param {string} phageType - reference or unknown
  * @param {Object} scenData - computed scenario info
  *
- * @returns {Object} - newly crated phage with "phage" and "scenData"
+ * @returns {Object} newly crated phage strain
+ * - phage (`Object`): has properties strainNum, phageType, mutationList, deletion, and comment
+ * - scenData (`Object`)
  */
 exports.makeWTPhage = function (phage, strainNum, phageType, scenData) {
   return {
@@ -258,7 +276,9 @@ exports.makeWTPhage = function (phage, strainNum, phageType, scenData) {
  * @param {string} phageType - reference or unknown
  * @param {Object} scenData - current scenario information; used to generate new, valid strain
  *
- * @returns {Object} - newly created frameshift phage with "phage" and "scenData"
+ * @returns {Object} newly crated phage strain
+ * - phage (`Object`): has properties strainNum, phageType, mutationList, deletion, and comment
+ * - scenData (`Object`)
  */
 exports.makeFrameshiftPhage = function (phage, strainNum, phageType, scenData) {
   // return {phage: phageObj, scenData: updatedScenData}
@@ -325,13 +345,14 @@ exports.makeFrameshiftPhage = function (phage, strainNum, phageType, scenData) {
 
 /**
  * Attempt to generate a single frameshift mutation
+ * @protected
  *
  * @param {number} shiftType - should it be insertion, deletion, or random
  * @param {number} nShifts - number of shifts total for this phage
  * @param {string} readable - should be gene be in frame or not
  * @param {Object} scenData - current scenario data to ensure valid phage
  *
- * @returns {number[]} - valid mutation(s) for this new phage or empty list if no valid mutation found
+ * @returns {number[]} valid mutation(s) for this new phage or empty list if no valid mutation found
  */
 const generateFrameshift = function (shiftType, nShifts, readable, scenData) {
   // attempts to generate a single frameshift mutation
@@ -393,11 +414,12 @@ const generateFrameshift = function (shiftType, nShifts, readable, scenData) {
 /**
  * Check that the potential frameshift(s) are valid given the
  * mutations in other phage in the scenario
+ * @protected
  *
  * @param {number[]} keyMutes - mutations to check
  * @param {Object} scenData - current scenario data
  *
- * @returns {boolean} - true if mutations are valid based on scenario parameters, false otherwise
+ * @returns {boolean} is the frameshift valid?
  */
 const checkPhageFrameshift = function (keyMutes, scenData) {
   let chainLength = keyMutes.length;
@@ -422,7 +444,6 @@ const checkPhageFrameshift = function (keyMutes, scenData) {
       } // end if stopSpot.kind/location
       if (sameKind < 16 && otherKind < 16) {
         // can't be supppressed by changes within 15 on one side or the other
-        //console.log('samekind, otherkind');
         return false;
       }
     } // end for stopSpot
@@ -439,7 +460,6 @@ const checkPhageFrameshift = function (keyMutes, scenData) {
     for (let j = 0; j < scenData.usedShiftSpots; j++) {
       let usedMute = Math.abs(scenData.usedShiftSpots[j]);
       if (Math.abs(usedMute - absMute) < scenConfig.shiftMin) {
-        //console.log('shift spot')
         return false;
       }
     } // end for j
@@ -454,21 +474,18 @@ const checkPhageFrameshift = function (keyMutes, scenData) {
  * @param {number} lastMade - the last mutation made
  * @param {Object} scenData - current scenario configuration info
  *
- * @returns {number} - location of new frameshift mutation if valid mutation can be found
+ * @returns {number} location of new frameshift mutation that isn't too close to other mutations
  */
 const getNewSpot = function (lastMade, scenData) {
   var newSpot;
   // if interMuteDist not defined
   if (scenData.interMuteDist === -1) {
     if (lastMade === null) {
-      //newSpot = randGen.integer(25, 300);
       newSpot = randGen.randDie(300, randEngine) + 25;
     } else {
       let friendly = false;
       while (!friendly) {
-        //let newDist = randGen.integer(scenData.intraMuteDist[0], scenData.intraMuteDist[1]);
         let newDist = randGen.randInt(scenData.intraMuteDist[0], scenData.intraMuteDist[1], randEngine);
-        //newSpot = (randGen.bool() ? lastMade + newDist : lastMade - newDist);
         newSpot = (randGen.randBool(randEngine) ? lastMade + newDist : lastMade - newDist);
         if (newSpot > 0 && Math.abs(newSpot - lastMade) > 10)
           friendly = true;
@@ -479,10 +496,8 @@ const getNewSpot = function (lastMade, scenData) {
     if (scenData.usedShiftSpots.length === 0) {
       let tmp = (350 - scenData.interMuteDist + 50);
       // first shift to be made
-      //newSpot = randGen.integer(25, (350 - scenData.interMuteDisance + 50));
       newSpot = randGen.randDie(tmp, randEngine)+25;
       // allow mutation to be at either end
-      //newSpot = (randGen.bool() ? 350 - newSpot : newSpot);
       newSpot = (randGen.randBool(randEngine) ? 350 - newSpot : newSpot);
     } else {
       let friendly = false;
@@ -506,7 +521,9 @@ const getNewSpot = function (lastMade, scenData) {
  * @param {string} phageType - reference or unknown
  * @param {Object} scenData - configuration for current scenario
  *
- * @returns {Object} - newly created phage which has "phage" and "scenData"
+ * @returns {Object} newly crated phage strain
+ * - phage (`Object`): has properties strainNum, phageType, mutationList, deletion, and comment
+ * - scenData (`Object`)
  */
 exports.makeDeletionPhage = function (phage, strainNum, phageType, scenData) {
   if (scenData.usedDeleteSpots === undefined) {
@@ -556,7 +573,7 @@ exports.makeDeletionPhage = function (phage, strainNum, phageType, scenData) {
  *
  * @param {number[]} usedDeleteSpots - list of deletion spots already used
  *
- * @return {number[2]} - new valid deletion if found or throws error
+ * @return {number[]} new valid deletion if found or throws error
  */
 const generateDeletion = function (usedDeleteSpots) {
   var deleteTries = 0;
@@ -616,10 +633,10 @@ const generateDeletion = function (usedDeleteSpots) {
 /**
  * Check that deletion is valid; far enough away from other deletions
  *
- * @param {number[2]} keyMutes - deletion to check
+ * @param {number[]} keyMutes - deletion to check
  * @param {number[]} usedDeleteSpots - deletions already in play for scenario
  *
- * @returns {boolean} - true if deletion if valid; false otherwise
+ * @returns {boolean} is the deletion valid?
  */
 const checkPhageDeletion = function (keyMutes, usedDeleteSpots) {
   for (let i = 0; i < usedDeleteSpots.length; i++) {

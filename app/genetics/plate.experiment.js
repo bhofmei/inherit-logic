@@ -14,7 +14,15 @@ const debug = require('debug')('genetics'),
   debugTest = require('debug')('genetics:test');
 
 /**
+ * Functions which handle creating plates of phage crosses
+ * @module genetics.plate.experiment
+ * @name Plate Exeriment
+ * @type Genetics
+ */
+
+/**
  * Reset the random number generation engine using a "random" number
+ * @ignore
  */
 exports.resetEngine = function () {
   randGen.reset(randEngine);
@@ -23,6 +31,7 @@ exports.resetEngine = function () {
 /**
  * Set the random number generation seed value
  * Used for testing
+ * @ignore
  *
  * @param {number} num - random number generation email
  */
@@ -34,19 +43,19 @@ exports.seedEngine = function (num) {
  * Creates the plate
  *
  * @param {Object} phage1 - first phage in the cross
- * @param {Object} phage2 - second phage in the cross or null if not crossing
+ * @param {Object|null} phage2 - second phage in the cross or null if not crossing
  * @param {string} lawnType - E. coli bacteria type
  * @param {Object} speciels - other special parameterss (not used)
  * @param {number} capacity - max number of phage allowed on the plate
  * @param {string} whoCalled - location/room asking to generate the plate
  * @param {Object} scenData scenario information
  *
- * @returns {Object} - new plate
- * "full" - boolean; plate over capacity?
- * "smallPlaque" - number[]; individual small plaques, number is index of genotype in genotypes list
- * "largePlaque" - number[]; individual large plaques, number is index of genotype in genotypes list
- * "genotypes" - number[][]; list of genotypes for this plate
- * "parents" - input phage
+ * @returns {Object} new plate
+ * - full (`boolean`): plate over capacity?
+ * - smallPlaque (`number[]`): individual small plaques; number is index of genotype in *genotypes* list
+ * - largePlaque (`number[]`): individual large plaques, number is index of genotype in *genotypes* list
+ * - genotypes (`number[][]`): list of genotypes for this plate
+ * - parents (`string[]`): ids of input phage
  */
 exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, whoCalled, scenData) {
   // combines createPlatePhage and generatePlate into one function
@@ -66,6 +75,11 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
 
 /**
  * Create the genotypes and strains for this plate
+ *
+ * @returns {Object} phage for this plate
+ * - genoList (): list of genotypes
+ * - strainList (`number[]`): list of indices corresponding to genoList
+ * - parents (`string`): ID's for original phage used to create plate
  */
 exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capacity, whoCalled, scenData) {
   var lawnType = bacteria[lawnTypeStr];
@@ -258,6 +272,14 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
 
 /**
  * Phenotypes the plate phage and ensures not too many phage on the plate
+ *
+ * This function is only used in the lab room
+ *
+ * @returns {object} representation of plate
+ * - full (`boolean`): plate over capacity?
+ * - smallPlaque (`number[]`): individual small plaques; number is index of genotype in *genotypes* list
+ * - largePlaque (`number[]`): individual large plaques; number is index of genotype in *genotypes* list
+ * - genotypes
  */
 exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, scenData, numInput) {
   // return full, smallPlaque, largePlaque, genotypes -> this only applies to the lab scenario
@@ -348,19 +370,16 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
 
 /**
  * Compute the recombination parameters
+ * @protected
  *
  * @param {number} f1 - fraction of phage1
  * @param {number} f2 - fraction of phage2
  * @param {number} p - recombination probability
  * @param {number} n - total number of offspring expected
  *
- * @returns {number[3]} - number of single, double, and triple recombinants to create
+ * @returns {number[]} - number of single, double, and triple recombinants to create
  */
 const computeRecombParameters = function (f1, f2, p, n) {
-  // f1 = fraction phage 1
-  // f2 = fraction phage 2
-  // p = recombFreq
-  // n = numOffspring
   var numRecomb = [];
   for (let i = 0; i < 3; i++) {
     let pR = Math.pow(p, i + 1) * n * 2 * f1 * f2;
@@ -375,6 +394,7 @@ const computeRecombParameters = function (f1, f2, p, n) {
 
 /**
  * Compute the expected number of offspring
+ * @protected
  *
  * @param {number} n1 - number of input for phage1
  * @param {number} n2 - number of input for phage2
@@ -383,12 +403,12 @@ const computeRecombParameters = function (f1, f2, p, n) {
  * @param {number} recFreq - frequency of recombination for scenario
  * @param {boolean} identical - are the two phage identical
  *
- * @returns {Object} - numbers/types of offspring to create
- * "numOffspring" - number of offspring aiming for
- * "total" - actual number of offspring to be generated
- * "numGeno" - number of each parental geonotype
- * "numMuts" - number of mutants for each parental genotype
- * "numRecomb" - number of single, double, and triple recomb
+ * @returns {Object} numbers/types of offspring to create
+ * - numOffspring (`number`): number of offspring aiming for
+ * - total (`number`): actual number of offspring to be generated
+ * - numGeno (`number[]`): number of each parental geonotype
+ * - numMuts (`number[]`): number of mutants for each parental genotype
+ * - numRecomb (`number[]`): number of single, double, and triple recomb
  */
 const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
   let numOffspring = Math.max(n1, n2);
@@ -420,9 +440,12 @@ const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
 
 /**
  * shuffle strains; force mutants/recombinants to be towards the front of the list
+ * @protected
  *
  * @param {number[]} inList - strain list to shuffle
  * @param {number} numInput - number of input/parent phage
+ *
+ * @returns {number[]} shuffled strain list
  */
 const shufflePlaqueList = function(inList, numInput){
   if(inList.length < 100){
