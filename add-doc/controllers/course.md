@@ -66,12 +66,8 @@
   <table class="table table-sm table-bordered">
     <tbody>
       <tr>
-        <td class="col-md-4"><code>isInstructor(res, next) ⇒ <code>Object</code> \| <code>function</code></code></td>
+        <td class="col-md-4"><code>isInstructor(req, res, next) ⇒ <code>Object</code> \| <code>function</code></code></td>
       </tr>
-        <tr>
-          <td class="col-md-4">
-</td>
-        </tr>
         <tr>
           <td class="col-md-4">
             <div class="io-description">Middleware to allow only admin and the instructor of the course to proceed</div>
@@ -90,6 +86,9 @@
   </thead>
   <tbody>
 <tr>
+        <td>req</td><td><code>Object</code></td><td><p>Express request object</p>
+</td>
+      </tr><tr>
         <td>res</td><td><code>Object</code></td><td><p>Express response object</p>
 </td>
       </tr><tr>
@@ -281,7 +280,7 @@ This is used during sign-up and does not require a user to be logged in</div>
     <td><code>500 Internal Server Error</code></td><td><p>On error, sends description of error as <code>{message: error-message}</code></p>
 </td>
     </tr><tr>
-    <td><code>404 Not Found</code></td><td><p>there are no courses</p>
+    <td><code>404 Not Found</code></td><td><p>there are no courses; sends message as <code>{message: &quot;No courses found&quot;}</code></p>
 </td>
     </tr><tr>
     <td><code>200 OK</code></td><td><p>List of courses with properties <code>courseNum</code> and <code>id</code> (DB id)</p>
@@ -347,7 +346,7 @@ This is used during sign-up and does not require a user to be logged in</div>
   </thead>
   <tbody>
 <tr>
-      <td>curUser</td><td><code>User</code></td><td><p>logged in user from <a href="user.html#userById">userById</a> with id <code>userId</code></p>
+      <td>curUser</td><td><code>User</code></td><td><p>logged in user from <a href="user-controller.html#userById">userById</a> with id <code>userId</code></p>
 </td>
       </tr><tr>
       <td>body</td><td><code>Object</code></td><td><p>details about new course: courseNum and description</p>
@@ -436,7 +435,7 @@ This is used during sign-up and does not require a user to be logged in</div>
   </thead>
   <tbody>
 <tr>
-      <td>curUser</td><td><code>User</code></td><td><p>logged in user from <a href="user.html#userById">userById</a> with id <code>userId</code></p>
+      <td>curUser</td><td><code>User</code></td><td><p>logged in user from <a href="user-controller.html#userById">userById</a> with id <code>userId</code></p>
 </td>
       </tr><tr>
       <td>course</td><td><code>Course</code></td><td><p>course details from <a href="#courseByNum">courseByNum</a> with course number <code>courseNum</code></p>
@@ -479,9 +478,9 @@ This is used during sign-up and does not require a user to be logged in</div>
         <td class="col-md-4"><code>editCourse(req, res) ⇒ <code>Object</code></code></td>
       </tr>
         <tr>
-          <td class="col-md-4">    <span class="modifier" style="background:#9a9a9a;margin-right:10px;">POST
-APIPATH /API/ADMIN/:USERID/COURSES/:COURSENUM</span>
+          <td class="col-md-4">    <span class="modifier" style="background:#10a54a;margin-right:10px;">POST</span>
 
+    <code>/api/admin/:userId/courses/:courseNum</code>
 </td>
         </tr>
         <tr>
@@ -522,7 +521,7 @@ APIPATH /API/ADMIN/:USERID/COURSES/:COURSENUM</span>
   </thead>
   <tbody>
 <tr>
-      <td>curUser</td><td><code>User</code></td><td><p>logged in user from <a href="user.html#userById">userById</a>  with id <code>userId</code></p>
+      <td>curUser</td><td><code>User</code></td><td><p>logged in user from <a href="user-controller.html#userById">userById</a>  with id <code>userId</code></p>
 </td>
       </tr><tr>
       <td>course</td><td><code>Course</code></td><td><p>course details from <a href="#courseByNum">courseByNum</a> with course number <code>courseNum</code></p>
@@ -1101,6 +1100,11 @@ students in a course</div>
       <tr>
         <td class="col-md-4"><code>courseByNum(req, res, next, id) ⇒ <code>function</code></code></td>
       </tr>
+        <tr>
+          <td class="col-md-4">
+    <code>:courseNum</code>
+</td>
+        </tr>
         <tr>
           <td class="col-md-4">
             <div class="io-description">Middleware to find course by course number</div>

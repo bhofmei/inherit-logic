@@ -54,29 +54,29 @@
 <path fill="none" stroke="#000000" d="M1074,-122.2921C1074,-144.2057 1074,-178 1074,-178 1074,-178 634.6703,-178 634.6703,-178"/>
 <polygon fill="#000000" stroke="#000000" points="634.6704,-174.5001 624.6703,-178 634.6703,-181.5001 634.6704,-174.5001"/>
 </g>
-<!-- CourseIndivComponent -->
-<g id="node2" class="node">
-<title>CourseIndivComponent</title>
-<polygon fill="#ffffb3" stroke="#000000" points="977.0407,-122 826.9593,-122 826.9593,-86 977.0407,-86 977.0407,-122"/>
-<text text-anchor="middle" x="902" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">CourseIndivComponent</text>
-</g>
-<!-- CourseIndivComponent&#45;&gt;CourseModule -->
-<g id="edge2" class="edge">
-<title>CourseIndivComponent&#45;&gt;CourseModule</title>
-<path fill="none" stroke="#000000" d="M902,-122.1061C902,-141.3391 902,-169 902,-169 902,-169 634.6643,-169 634.6643,-169"/>
-<polygon fill="#000000" stroke="#000000" points="634.6643,-165.5001 624.6643,-169 634.6642,-172.5001 634.6643,-165.5001"/>
-</g>
 <!-- CourseEditComponent -->
-<g id="node3" class="node">
+<g id="node2" class="node">
 <title>CourseEditComponent</title>
-<polygon fill="#ffffb3" stroke="#000000" points="809.323,-122 664.677,-122 664.677,-86 809.323,-86 809.323,-122"/>
-<text text-anchor="middle" x="737" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">CourseEditComponent</text>
+<polygon fill="#ffffb3" stroke="#000000" points="977.323,-122 832.677,-122 832.677,-86 977.323,-86 977.323,-122"/>
+<text text-anchor="middle" x="905" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">CourseEditComponent</text>
 </g>
 <!-- CourseEditComponent&#45;&gt;CourseModule -->
-<g id="edge3" class="edge">
+<g id="edge2" class="edge">
 <title>CourseEditComponent&#45;&gt;CourseModule</title>
-<path fill="none" stroke="#000000" d="M737,-122.027C737,-138.3976 737,-160 737,-160 737,-160 634.9272,-160 634.9272,-160"/>
-<polygon fill="#000000" stroke="#000000" points="634.9272,-156.5001 624.9272,-160 634.9272,-163.5001 634.9272,-156.5001"/>
+<path fill="none" stroke="#000000" d="M905,-122.1061C905,-141.3391 905,-169 905,-169 905,-169 634.7616,-169 634.7616,-169"/>
+<polygon fill="#000000" stroke="#000000" points="634.7617,-165.5001 624.7616,-169 634.7616,-172.5001 634.7617,-165.5001"/>
+</g>
+<!-- CourseIndivComponent -->
+<g id="node3" class="node">
+<title>CourseIndivComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="815.0407,-122 664.9593,-122 664.9593,-86 815.0407,-86 815.0407,-122"/>
+<text text-anchor="middle" x="740" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">CourseIndivComponent</text>
+</g>
+<!-- CourseIndivComponent&#45;&gt;CourseModule -->
+<g id="edge3" class="edge">
+<title>CourseIndivComponent&#45;&gt;CourseModule</title>
+<path fill="none" stroke="#000000" d="M740,-122.027C740,-138.3976 740,-160 740,-160 740,-160 634.9532,-160 634.9532,-160"/>
+<polygon fill="#000000" stroke="#000000" points="634.9532,-156.5001 624.9532,-160 634.9532,-163.5001 634.9532,-156.5001"/>
 </g>
 <!-- CourseListComponent -->
 <g id="node4" class="node">
