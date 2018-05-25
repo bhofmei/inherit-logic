@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { ScenarioService } from '../../scenario.service';
-import { Scenario } from '../../../interfaces/scenario.interface';
+import { Scenario } from '../../../interfaces';
 
 /**
  * This component shows the scenario details including
@@ -15,11 +15,23 @@ import { Scenario } from '../../../interfaces/scenario.interface';
   templateUrl: './landing-room.template.html'
 })
 
-export class LandingRoomComponent {
+export class LandingRoomComponent implements OnInit, OnDestroy {
 
-  scenario: any;
+  /**
+   * The current scenario we are viewing
+   */
+  scenario: Scenario;
+  /**
+   * Subscription to the getScenario method of scenario service
+   */
   private subscription: any;
 
+  /**
+   * Component contructor
+   * @param {Router} _router Angular router
+   * @param {ActivatedRoute} _route The current URL route to get scenario id
+   * @param {ScenarioService} _scenarioService Service to get scenario information
+   */
   constructor(private _router: Router,
                private _route: ActivatedRoute,
                private _scenarioService: ScenarioService){
@@ -44,7 +56,12 @@ export class LandingRoomComponent {
     );
   }
 
-  ngOnDestory(){
+  /**
+   * When destroying the component, unsubscribe if necessary to
+   * prevent memory leaks
+   */
+  ngOnDestroy(){
+    if(this.subscription)
     this.subscription.unsubscribe();
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { FormControl, Validators } from '@angular/forms';
 
@@ -8,12 +8,19 @@ import { ScenarioService } from '../../scenario.service'
 import { FridgePhage, ExperimentPhage, PlexerInput } from '../../../interfaces';
 import { readErrorMessage } from '../../../shared/read-error';
 
+/**
+ * Component for the multiplexer room which allows for
+ * NxM phage crosses at once
+ *
+ * Offspring phage cannot be saved to the fridge, but the user
+ * gets a count of small and large plaque for each cross
+ */
 @Component({
     selector: 'plexer-room',
     templateUrl: './plexer-room.template.html',
   styleUrls: ['./plexer-room.style.css']
 })
-export class PlexerRoomComponent{
+export class PlexerRoomComponent implements OnInit, OnDestroy {
 
   /**
    * E. coli strain chosen to plate on
@@ -23,6 +30,9 @@ export class PlexerRoomComponent{
    * Value to dilute number of phage by
    */
   private dilutionValue: number = ScenarioGlobals.defaultPlexerDilution;
+  /**
+   * Location call used by backend
+   */
   private plexerType: string = 'plexer';
   /**
    * Scenario details (from fridge) needed to perform the plexer
@@ -45,8 +55,17 @@ export class PlexerRoomComponent{
    * Is Object form of a 2-D array where each cell has {smallPlaque: #, largePlaque: #}
    */
   private results: Object;
+  /**
+   * Possible backend error message
+   */
   private errorMessage: string = '';
+  /**
+   * Scenario service subscription for scenario details
+   */
   private subscription: Subscription;
+  /**
+   * Experiment service subscription to preform plexer
+   */
   private expSubscription: Subscription;
   /**
    * Control the dilution factor to a min/max value
@@ -64,6 +83,9 @@ export class PlexerRoomComponent{
 
   /**
    * Initialize data and set dilution control
+   *
+   * @param {ExperimentService} _experimentService used to generate the results of the plexer
+   * @param {ScenarioService} _scenarioService used to get the scenario details needed to perform plexer
    */
   constructor( private _experimentService: ExperimentService,
                private _scenarioService: ScenarioService){
@@ -92,7 +114,7 @@ export class PlexerRoomComponent{
   /**
    * Initalize/clear row and column phage
    */
-  _clearData(){
+  protected _clearData(){
     this.rows = [];
     this.cols = [];
     for(let i = 0; i < 8; i++){
@@ -105,7 +127,7 @@ export class PlexerRoomComponent{
   /**
    * Reset the plexer and parameters
    *
-   * Called on (click) of reset button
+   * Called on `(click)` of reset button
    */
   reset(){
     this.chosenBact = 'none';
@@ -121,8 +143,10 @@ export class PlexerRoomComponent{
    * Get the CSS classes for each phage button based on which
    * phage type is set
    *
-   * @param {string} src - button to get classes for
-   * @returns {Object} - classes which apply to this button
+   * @param {string} src button to get classes for
+   *
+   * @returns {Object} classes which apply to this button in the
+   * form `{'class':boolean, 'class2': boolean}`
    */
   getTubeClasses(src: string): Object {
     return {
@@ -139,11 +163,14 @@ export class PlexerRoomComponent{
    * Determine if user is able to submit plexer by disabling
    * the submit button when unable to submit
    *
-   * Able to submit only when: (a) bacteria chosen, (b) at least
-   * one phage in each row and column, (c) dilution value is valid,
-   * and (d) not still waiting for previous submit response
+   * Able to submit only when:
+   * 1. bacteria chosen
+   * 2. at least one phage in each row and column
+   * 3. dilution value is valid, AND
+   * 4. not still waiting for previous submit response
    *
-   * @returns {boolean} - true if user cannot submit
+   * @returns {boolean} - `true` if user can submit (all conditions met)
+   * - `false` otherwise
    */
   submitDisabled(): boolean {
 
@@ -168,11 +195,13 @@ export class PlexerRoomComponent{
    *
    * Used before submitting row/col phage to service
    *
-   * @param {ExperimentPhage[]} inData - input array to be cleaned; can contain null values
+   * @param {ExperimentPhage[]} inData - input array to be cleaned
+   * - can contain null values
    *
-   * @returns {ExperimentPhage[]} - cleaned array; does not contain null values
+   * @returns {ExperimentPhage[]} - cleaned array
+   * - does not contain null values
    */
-  _cleanArrays(inData: ExperimentPhage[]): ExperimentPhage[]{
+  protected _cleanArrays(inData: ExperimentPhage[]): ExperimentPhage[]{
     var clean = inData.filter((elt)=>{
       return elt !== null
     }).map((elt)=>{
@@ -187,11 +216,13 @@ export class PlexerRoomComponent{
   /**
    * Reformats the results to take into account of null in the rows/cols
    *
-   * @param {Object} results - results of computing the plexer; does not contain null values
+   * @param {Object} results - results of computing the plexer
+   * - does not contain null values
    *
-   * @returns {Object} - updated results; can contain null values
+   * @returns {Object} - updated results
+   * - can contain null values
    */
-  _unCleanResults(results: Object):Object{
+  protected _unCleanResults(results: Object):Object{
     let out = {},
         newCols = {};
     let curRow = 0,
@@ -221,7 +252,7 @@ export class PlexerRoomComponent{
   /**
    * Updates the spinner CSS classes based on the input state
    *
-   * @param {string} newClass - updated state for the spinner
+   * @param {string} newClass updated state for the spinner
    */
   private _setSpinnerClass(newClass: string){
     this._spinnerClass['hiding'] = (newClass === "spinning" ? false : true);
@@ -232,7 +263,7 @@ export class PlexerRoomComponent{
    * Return the current CSS classes for the spinner
    *
    * @returns {Object} - CSS classes for the spinner in the form
-   * {'class': boolean, ...}
+   * `{'class': boolean, ...}`
    */
   getSpinnerClass(){
     return this._spinnerClass;
@@ -242,7 +273,7 @@ export class PlexerRoomComponent{
    * Gets experiment data and submits to service to get results
    * of the multiplexer
    *
-   * Called on (click) of submit button
+   * Called on `(click)` of submit button
    */
   performPlexer(){
     // set the spinner
@@ -276,11 +307,11 @@ export class PlexerRoomComponent{
    * Add phage to row or column of plexer
    * when successful, updates the row/col phage counts
    *
-   * Called on (onDropSuccess) of row/col header
+   * Called on `(onDropSuccess)` of row/col header
    *
-   * @param {any} $event - dragEvent; includes phage data
-   * @param {string} dir - add to "row" or "col"
-   * @param {number} spot - position to add phage
+   * @param {any} $event dragEvent; includes phage data
+   * @param {string} dir direction; add to `row` or `col`
+   * @param {number} spot position to add phage
    */
   addPhage($event: any, dir: string, spot: number){
     let fphage: FridgePhage = $event.dragData;
