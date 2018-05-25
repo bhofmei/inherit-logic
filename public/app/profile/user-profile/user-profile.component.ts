@@ -7,6 +7,10 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 import { User } from '../../interfaces/user.interface';
 import { readErrorMessage } from '../../shared/read-error';
 
+/**
+ * Main user profile component; aimed for use to edit name and
+ * email address. Also access update password link to update password
+ */
 @Component({
   selector: 'user-profile',
   templateUrl: './user-profile.template.html'
@@ -14,11 +18,30 @@ import { readErrorMessage } from '../../shared/read-error';
 
 export class UserProfileComponent{
 
-  private userId: number
+  /**
+   * Database user id
+   */
+  private userId: number;
+  /**
+   * User details (as an object)
+   * Currently includes: firstName, lastName, and email
+   */
   private userInfo: any;
+  /**
+   * State to maintain open subscriptions until component is destoryed
+   */
   private isDestroyed$: Subject<boolean>;
+  /**
+   * Potential error message
+   */
   private errorMessage: string = '';
 
+  /**
+   * Class constructor; includes services to fetch info
+   *
+   * @param {ProfileService} _profileService Service for updating the information
+   * @param {AuthenticationService} _authService Service to get the current user information
+   */
   constructor(
     private _profileService: ProfileService,
     private _authService: AuthenticationService
@@ -26,6 +49,11 @@ export class UserProfileComponent{
       this.isDestroyed$ = new Subject<boolean>();
     }
 
+  /**
+   * Initialize the component on creation
+   * 1. Get the logged in user
+   * 2. Save the user's details to object to be able to edit
+   */
   ngOnInit(){
     // get current user info
     this._authService.getUser$
@@ -42,6 +70,10 @@ export class UserProfileComponent{
     });
   }
 
+  /**
+   * Attempts to update the profile if possible or set error
+   * message if there's a problem
+   */
   updateProfile(){
     this._profileService.editProfile(this.userId, this.userInfo)
       .takeUntil(this.isDestroyed$)
@@ -55,6 +87,10 @@ export class UserProfileComponent{
     });
   }
 
+  /**
+   * On component destruction, unsubscribe from services to prevent
+   * memory leaks
+   */
   ngOnDestroy(){
     this.isDestroyed$.next(true);
     this.isDestroyed$.unsubscribe();

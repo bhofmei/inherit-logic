@@ -8,6 +8,10 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 import { User } from '../../interfaces/user.interface';
 import { readErrorMessage } from '../../shared/read-error';
 
+/**
+ * Component for a logged in user to update their password
+ * by entering their current password then the new password
+ */
 @Component({
   selector: 'user-password',
   templateUrl: './update-password.template.html'
@@ -15,12 +19,34 @@ import { readErrorMessage } from '../../shared/read-error';
 
 export class UpdatePasswordComponent{
 
+  /**
+   * The logged in user
+   */
   private user: User;
+  /**
+   * Password information include old password, new password, and confirm new password
+   */
   private credentials: any;
+  /**
+   * State to keep track of compoenent alive
+   */
   private isDestroyed$: Subject<boolean>;
+  /**
+   * potential backend error message displayed prominantly
+   */
   private errorMessage: string = '';
+  /**
+   * Error message about submission and why the submission didn't work as expected
+   */
   private passwordMessage: string = '';
 
+  /**
+   * Class constructor for this component;
+   * Includes router (for navigation) and services to fetch info
+   *
+   * @param {router} _router Navigate to a page not using the browser
+   * @param {ProfileService} _profileService Service when sends request to backend and handles updating the exisitng information
+   */
   constructor(
     private _router: Router,
     private _profileService: ProfileService,
@@ -34,6 +60,11 @@ export class UpdatePasswordComponent{
       };
     }
 
+  /**
+   * Initialize the component
+   * 1. Get the logged in user info
+   * 2. Set up the credentials with email address
+   */
   ngOnInit(){
     // get current user info
     this._authService.getUser$
@@ -46,6 +77,11 @@ export class UpdatePasswordComponent{
     });
   }
 
+  /**
+   * Attempt to update the password
+   * If successful, redirects to profile page
+   * If there's an error, displays error message
+   */
   updatePassword(){
     // do checks
     this.passwordMessage = this._checkPasswords();
@@ -63,7 +99,15 @@ export class UpdatePasswordComponent{
     }
   }
 
-  _checkPasswords(){
+  /**
+   * Does various checks to ensure the password fields are valid
+   * 1. All fields are filled in
+   * 2. New password is different from old password
+   * 3. Confirm password matches new password
+   *
+   * @returns {string} error message if at least one condition isn't met or `''` if everything is valid
+   */
+  protected _checkPasswords(){
     let p = this.credentials.password;
     let n = this.credentials.newPassword;
     let c = this.credentials.confirmPassword;
@@ -82,6 +126,10 @@ export class UpdatePasswordComponent{
     }
   }
 
+  /**
+   * On component destruction, unsubscribe to services/streams
+   * to prevent memory leaks
+   */
   ngOnDestroy(){
     this.isDestroyed$.next(true);
     this.isDestroyed$.unsubscribe();
