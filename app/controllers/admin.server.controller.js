@@ -12,6 +12,10 @@ const ObjectId = mongoose.Types.ObjectId;
 const scenData = require('../../config/scenario.data');
 
 const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
+/**
+ * @external USER
+ * @see {@link ../models/user-model.html}
+ */
 
 /**
  * list all users in the system for admin OR
@@ -21,7 +25,7 @@ const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
  * @apiPath /api/admin/:userId/students
  *
  * @param {Object} req - Express request object;
- * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
  * @param {Object} res - Express response object
  *
  * @returns {Object} - json object to response
@@ -89,8 +93,8 @@ exports.listUsers = function (req, res) {
  * @apiPath /api/admin/:userId/students/:studentId
  *
  * @param {Object} req - Express request object;
- * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
- * @property {User} student - the secondary user from [userById]{@link user.html#userById} with id `studentId`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:USER} student - the secondary user from [userById]{@link user-controller.html#userById} with id `studentId`
  * @param {Object} res - Express response object
  *
  * @returns {Object} - json object to response
@@ -125,8 +129,8 @@ exports.getUser = function (req, res) {
  * @apiPath /api/admin/:userId/students/:studentId
  *
  * @param {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
- * @property {User} student - the secondary user from [userById]{@link user.html#userById} with id `studentId`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:USER} student - the secondary user from [userById]{@link user-controller.html#userById} with id `studentId`
  * @param {Object} res - Express response object
  *
  * @returns {Object} - json object to response
@@ -148,15 +152,15 @@ exports.getUser = function (req, res) {
 };
 
 /**
- * Update a user's role to "student", "instructor", or "admin"
+ * Update a user's role to `"student"`, `"instructor"`, or `"admin"`
  *
  * @apiType POST
  * @apiPath /api/admin/:userId/students/:studentId
  *
  * @param {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
- * @property {User} student - the secondary user from [userById]{@link user.html#userById} with id `studentId`
- * @property {Object} body - new role; one of "student", "instr", or "admin"
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:USER} student - the secondary user from [userById]{@link user-controller.html#userById} with id `studentId`
+ * @property {Object} body - new role; one of `"student", "instr", "admin"`
  * @param {Object} res - Express response object
  *
  * @returns {Object} - json object to response
@@ -195,7 +199,7 @@ exports.setRole = function (req, res) {
  * @protected
  *
  * @param {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user.html#userById} with id `userId`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
  * @param {Object} res - Express response object
  * @param {Function} next - the next middleware function
  *
@@ -219,7 +223,7 @@ exports.hasAuthorization = function (req, res, next) {
  * @protected
  *
  * @param {Object} req - Express request object;
- * @property {User} curUser - from userById
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
  * @param {Object} res - Express response object
  * @param {Function} next - the next middleware function
  *

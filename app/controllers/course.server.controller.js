@@ -12,18 +12,31 @@ const User = mongoose.model('User');
 const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
 
 /**
+ * @external USER
+ * @see {@link ../models/user-model.html}
+ */
+/**
+ * @external COURSE
+ * @see {@link ../models/course-model.html}
+ */
+/**
+ * @external SCENARIO
+ * @see {@link ../models/scenario-model.html}
+ */
+
+/**
  * Middleware to allow only admin and the instructor of the course to proceed
  * @protected
  *
  * @param {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user-controller.html#userById}
- * @property {Course} course - course details from [courseByNum]{@link #courseByNum}
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById}
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum}
  * @param {Object} res - Express response object
  * @param {function} next - next middleware
  *
  * @returns {Object | Function} json object to response not allowed or next middleware if allowed
- * @yields {403_Forbidden} - current user not authorized
- * @yields {next()} - If user authorized, go to next middleware
+ * @yields {403_Forbidden} current user not authorized, send error as `{message: 'Not instructor of this course'}`
+ * @yields {next()} If user authorized, go to next middleware
  */
 exports.isInstructor = function (req, res, next) {
   let instr = req.curUser;
@@ -54,7 +67,7 @@ exports.isInstructor = function (req, res, next) {
  * @apiPath /api/admin/:userId/courses
  *
  * @params {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user-controller.html#userById}
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById}
  * @params {Object} res - Express response object
  *
  * @returns {Object} json object to response
@@ -92,6 +105,7 @@ exports.listCourses = function (req, res) {
 
 /**
  * Return the list of course numbers that currently exist
+ *
  * This is used during sign-up and does not require a user to be logged in
  *
  * @apiType GET
@@ -130,7 +144,7 @@ exports.listCourseNum = function (req, res) {
  * @apiPath /api/admin/:userId/courses
  *
  * @param {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
  * @property {Object} body - details about new course: `courseNum` and `description`
  * @param {Object} res - Express response object
  *
@@ -167,8 +181,8 @@ exports.createCourse = function (req, res) {
  * @apiPath /api/admin/:userId/courses/:courseNum
  *
  * @param {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
- * @property {Course} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
  * @param {Object} res - Express response object
  *
  * @returns {Object} json object to response
@@ -186,8 +200,8 @@ exports.getCourse = function (req, res) {
  * @apiPath /api/admin/:userId/courses/:courseNum
  *
  * @param {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user-controller.html#userById}  with id `userId`
- * @property {Course} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById}  with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
  * @property {Object} body - course information to update - the description
  * @param {Object} res - Express response object
  *
@@ -222,8 +236,8 @@ exports.editCourse = function (req, res) {
  * @apiPath /api/admin/:userId/courses/:courseNum
  *
  * @params {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
- * @property {Course} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
  * @params {Object} res - Express response object
  *
  * @returns {Object} json object to response
@@ -253,8 +267,8 @@ exports.deleteCourse = function (req, res) {
  * @apiPath /api/admin/:userId/courses/:courseNum/students
  *
  * @param {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
- * @property {Course} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
  * @param {Object} res - Express response object
  *
  * @return {Object} json object to response
@@ -289,8 +303,8 @@ exports.getStudents = function (req, res) {
  * @apiPath /api/admin/:userId/courses/:courseNum/students
  *
  * @param {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
- * @property {Course} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
  * @param {Object} res - Express response object
  *
  * @returns {Object} json object to response
@@ -322,8 +336,8 @@ exports.deleteCourseStudents = function (req, res) {
  * @apiPath /api/admin/:userId/courses/:courseNum/instructors
  *
  * @param {Object} - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user-controller.html#userById}  with id `userId`
- * @property {Course} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById}  with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
  * @param {Object} - Express response object
  *
  * @returns {Object} json object to response
@@ -376,9 +390,9 @@ exports.getPossibleInstructors = function (req, res) {
  * @apiPath /api/admin/:userId/courses/:courseNum/instructors/:studentId'
  *
  * @param {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
- * @property {Course} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
- * @property {User} student - user to make instructor; identified with [userById]{@link user-controller.html#userById} with id `studentId`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @property {external:USER} student - user to make instructor; identified with [userById]{@link user-controller.html#userById} with id `studentId`
  * @param {Object} res - Express response object
  *
  * @return {Object} json object to response
@@ -440,9 +454,9 @@ exports.setInstructor = function (req, res) {
  * @apiPath /api/admin/:userId/courses/:courseNum/:scenarioId
  *
  * @param {Object} req - Express request object
- * @property {User} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
- * @property {Course} course - course details from [courseByNum]{@link #courseByNum}
- * @property {Scenario} scenario - scenario of interested; identified with [scenarioByCode]{@link scenario-controller.html#scenarioByCode} with id `scenarioId`
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum}
+ * @property {external:SCENARIO} scenario - scenario of interested; identified with [scenarioByCode]{@link scenario-controller.html#scenarioByCode} with id `scenarioId`
  * @param {Object} res - Express response object
  *
  * @return {Object} json object to response

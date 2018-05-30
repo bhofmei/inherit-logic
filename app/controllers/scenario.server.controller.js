@@ -7,6 +7,11 @@
 const mongoose = require('mongoose');
 const Scenario = mongoose.model('Scenario');
 
+/**
+ * @external SCENARIO
+ * @see {@link ../models/scenario-model.html}
+ */
+
 const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
 
 /**
@@ -18,7 +23,7 @@ const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  *
- * @returns {Object} - json object to response
+ * @returns {Object} json object to response
  * @yields {500_Internal_Server_Error} On error, send error as `{message: error-message}`
  * @yields {200_OK} Return list of scenarios
  * each scenario has properties `label`, `scenCode`, `purpose`, `startingPoint`, `relevance`, and `degOfDifficulty`
@@ -47,10 +52,10 @@ exports.list = function (req, res) {
  * @apiPath /api/cricket/:scenarioId
  *
  * @param {Object} req - Express request object;
- * @property {Scenario} scenario - current scenario from [scenarioByCode](@link scenario.html#scenarioByCode) with scenCode `scenarioId`
+ * @property {external:SCENARIO} scenario - current scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
  * @param {Object} res - Express response object
  *
- * @returns {Object} - returns json object of scenario to response with properties `label`, `scenCode`, `purpose`, `startingPoint`, `relevance`, and `degOfDiff`
+ * @returns {Object} returns json object of scenario to response with properties `label`, `scenCode`, `purpose`, `startingPoint`, `relevance`, and `degOfDiff`
  */
 exports.read = function (req, res) {
   let s = req.scenario;
@@ -66,7 +71,7 @@ exports.read = function (req, res) {
 };
 
 /**
- * Retreives a scenario from a scendario code
+ * Retreives a scenario from a scenario code
  * @protected
  *
  * @apiPath :scenarioId
@@ -74,7 +79,7 @@ exports.read = function (req, res) {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Function} next - next middleware to follow
- * @param {string} id - scenario code from URL
+ * @param {String} id - scenario code from URL
  *
  * @returns {Function} - next middleware
  * @yields {next(error)} On error, pass the error to next middleware

@@ -132,8 +132,9 @@ exports.createPlate = function (req, res) {
  *
  * @param {Object} req - Express request object;
  * @property {Object} body - info needed to generate plexer;
- * has `rowPhage` (list with each having id and numPhage), * `colPhage`(list with each having id and numPhage), `scenarioData`,
- * `lawnType`, `location`, `capacity`
+ * has `rowPhage` (list with each having id and numPhage),
+ * `colPhage`(list with each having id and numPhage),
+ * `scenarioData`, `lawnType`, `location`, `capacity`
  * @param {Object} res - Express response object
  *
  * @returns {Object} - json object to response
