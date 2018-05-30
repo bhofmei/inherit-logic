@@ -40,13 +40,15 @@ exports.seedEngine = function (num) {
 }
 
 /**
- * Creates the plate
+ * Creates the lab room plate
+ *
+ * Only used in the lab room
  *
  * @param {Object} phage1 - first phage in the cross
  * @param {Object|null} phage2 - second phage in the cross or null if not crossing
- * @param {string} lawnType - E. coli bacteria type
- * @param {Object} speciels - other special parameterss (not used)
- * @param {number} capacity - max number of phage allowed on the plate
+ * @param {string} lawnType - E. coli bacteria type `"B"` or `"K"`
+ * @param {Object} specials - other special parameters (not used)
+ * @param {number} capacity - max number of plaques allowed on the plate
  * @param {string} whoCalled - location/room asking to generate the plate
  * @param {Object} scenData scenario information
  *
@@ -75,6 +77,8 @@ exports.createPlate = function (phage1, phage2, lawnType, specials, capacity, wh
 
 /**
  * Create the genotypes and strains for this plate
+ *
+ * Used by both the lab room and plexer room
  *
  * @returns {Object} phage for this plate
  * - genoList (): list of genotypes
@@ -216,7 +220,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
     let identical = util.identicalGenotypes(startGenotypes[0], startGenotypes[1]);
     numNewGenos = 1;
     // compute offspring counts
-    var nOffspring = computeNumOffspring(newPhage1.numPhage, newPhage2.numPhage, phageRatio, scenData.mutationFreq, scenData.recombinationFreq, identical);
+    var nOffspring = _computeNumOffspring(newPhage1.numPhage, newPhage2.numPhage, phageRatio, scenData.mutationFreq, scenData.recombinationFreq, identical);
     debugTest('num offspring %o', nOffspring);
     // check capacity for PERM bact
     if (nOffspring.total > capacity && (lawnType.kind === plateEnum.BACTTYPE.PERM)) {
@@ -268,7 +272,7 @@ exports.createPlatePhage = function (phage1, phage2, lawnTypeStr, specials, capa
     strainList: replicaStrainList,
     parents: parents
   }
-} // end createPlage
+} // end createPlatePhage
 
 /**
  * Phenotypes the plate phage and ensures not too many phage on the plate
@@ -358,15 +362,15 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
     }
   }
   // shuffle plaques
-  smallPlaqueList = shufflePlaqueList(smallPlaqueList, numInput);
-  largePlaqueList = shufflePlaqueList(largePlaqueList, numInput);
+  smallPlaqueList = _shufflePlaqueList(smallPlaqueList, numInput);
+  largePlaqueList = _shufflePlaqueList(largePlaqueList, numInput);
   return {
     full: overwhelm,
     genotypes: genoList,
     smallPlaque: smallPlaqueList,
     largePlaque: largePlaqueList
   }
-} // end generatePlage
+} // end generatePlate
 
 /**
  * Compute the recombination parameters
@@ -379,7 +383,7 @@ exports.generatePlate = function (lawnTypeStr, genoList, strainList, capacity, s
  *
  * @returns {number[]} - number of single, double, and triple recombinants to create
  */
-const computeRecombParameters = function (f1, f2, p, n) {
+const _computeRecombParameters = function (f1, f2, p, n) {
   var numRecomb = [];
   for (let i = 0; i < 3; i++) {
     let pR = Math.pow(p, i + 1) * n * 2 * f1 * f2;
@@ -390,7 +394,7 @@ const computeRecombParameters = function (f1, f2, p, n) {
   }
   debugExt('nrecomb %o', numRecomb);
   return numRecomb;
-}
+} // end _computeRecombParameters
 
 /**
  * Compute the expected number of offspring
@@ -410,7 +414,7 @@ const computeRecombParameters = function (f1, f2, p, n) {
  * - numMuts (`number[]`): number of mutants for each parental genotype
  * - numRecomb (`number[]`): number of single, double, and triple recomb
  */
-const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
+const _computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
   let numOffspring = Math.max(n1, n2);
 
   let errAdj = 2 * Math.sqrt(numOffspring);
@@ -418,7 +422,7 @@ const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
   // compute number of each recombinant
   let f1 = (nR) / (nR + 1);
   let f2 = 1 - f1;
-  let numRecomb = (identical ? [0, 0, 0] : computeRecombParameters(f1, f2, recFreq, numOffspring));
+  let numRecomb = (identical ? [0, 0, 0] : _computeRecombParameters(f1, f2, recFreq, numOffspring));
   let numGeno = [Math.round(f1 * numOffspring), Math.round(f2 * numOffspring)];
   let numMut = numGeno.map((nGeno) => {
     let nMut = Math.round(mutFreq * nGeno);
@@ -436,7 +440,7 @@ const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
     numMut: numMut,
     numRecomb: numRecomb
   };
-}
+} // end _computeNumOffspring
 
 /**
  * shuffle strains; force mutants/recombinants to be towards the front of the list
@@ -447,7 +451,7 @@ const computeNumOffspring = function (n1, n2, nR, mutFreq, recFreq, identical) {
  *
  * @returns {number[]} shuffled strain list
  */
-const shufflePlaqueList = function(inList, numInput){
+const _shufflePlaqueList = function(inList, numInput){
   if(inList.length < 100){
     return randGen.randShuffle(inList, randEngine);
   }
@@ -471,4 +475,4 @@ const shufflePlaqueList = function(inList, numInput){
     // just shuffle everything
     return randGen.randShuffle(inList, randEngine);
   }
-}
+} // end _shufflePlaqueList

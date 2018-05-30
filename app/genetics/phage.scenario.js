@@ -314,12 +314,12 @@ exports.makeFrameshiftPhage = function (phage, strainNum, phageType, scenData) {
   let maxTries = scenConfig.maxFrameTries;
   var goodPhage = false;
   while (!goodPhage && iTries < maxTries) {
-    muteList = generateFrameshift(shiftType, nShifts, shiftInfo.readable, scenData);
+    muteList = _generateFrameshift(shiftType, nShifts, shiftInfo.readable, scenData);
     iTries++;
     //console.log(muteList);
     // have a mutation list, check the frameshift
     if (muteList.length > 0) {
-      goodPhage = checkPhageFrameshift(muteList, scenData);
+      goodPhage = _checkPhageFrameshift(muteList, scenData);
     }
   } // end while !goodPhage
 
@@ -354,7 +354,7 @@ exports.makeFrameshiftPhage = function (phage, strainNum, phageType, scenData) {
  *
  * @returns {number[]} valid mutation(s) for this new phage or empty list if no valid mutation found
  */
-const generateFrameshift = function (shiftType, nShifts, readable, scenData) {
+const _generateFrameshift = function (shiftType, nShifts, readable, scenData) {
   // attempts to generate a single frameshift mutation
   var goodPhage = true;
   var muteList = [];
@@ -376,7 +376,7 @@ const generateFrameshift = function (shiftType, nShifts, readable, scenData) {
       default:
         shifter = ((shiftType + i) % 2 ? -1 : 1);
     } // end switch shiftType
-    var newSpot = getNewSpot(lastMade, scenData);
+    var newSpot = _getNewSpot(lastMade, scenData);
     // add to mutation list
     muteList.push(shifter*newSpot);
     lastMade = newSpot;
@@ -409,7 +409,7 @@ const generateFrameshift = function (shiftType, nShifts, readable, scenData) {
   } // end if goodPhage
   // return good mutation list or empty mutation if not good
   return (goodPhage ? muteList : []);
-} // end generateFrameShift
+} // end _generateFrameshift
 
 /**
  * Check that the potential frameshift(s) are valid given the
@@ -421,7 +421,7 @@ const generateFrameshift = function (shiftType, nShifts, readable, scenData) {
  *
  * @returns {boolean} is the frameshift valid?
  */
-const checkPhageFrameshift = function (keyMutes, scenData) {
+const _checkPhageFrameshift = function (keyMutes, scenData) {
   let chainLength = keyMutes.length;
   for (let i = 0; i < chainLength; i++) {
     let stopSpot;
@@ -466,17 +466,18 @@ const checkPhageFrameshift = function (keyMutes, scenData) {
   } // end for mute
   // made it through all mutations
   return true;
-} // end checkPhageFrameshift
+} // end _checkPhageFrameshift
 
 /**
  * Attempt to create a new mutation
+ * @protected
  *
  * @param {number} lastMade - the last mutation made
  * @param {Object} scenData - current scenario configuration info
  *
  * @returns {number} location of new frameshift mutation that isn't too close to other mutations
  */
-const getNewSpot = function (lastMade, scenData) {
+const _getNewSpot = function (lastMade, scenData) {
   var newSpot;
   // if interMuteDist not defined
   if (scenData.interMuteDist === -1) {
@@ -511,7 +512,7 @@ const getNewSpot = function (lastMade, scenData) {
     } // end if usedShiftSpots
   } // end if interMuteDist
   return newSpot;
-} // end getNewSpot
+} // end _getNewSpot
 
 /**
  * Create a phage strain with a large deletion
@@ -547,7 +548,7 @@ exports.makeDeletionPhage = function (phage, strainNum, phageType, scenData) {
   } // end deleteSizes.length
   // predefined deletion couldn't be found, generate one
   if(!goodDelete)
-    realDelete = generateDeletion(scenData.usedDeleteSpots);
+    realDelete = _generateDeletion(scenData.usedDeleteSpots);
 
   // have a deletion
   if (realDelete.length > 0) {
@@ -570,12 +571,13 @@ exports.makeDeletionPhage = function (phage, strainNum, phageType, scenData) {
 
 /**
  * Attempt to generate a deletion if we run out of preset deletion spots/lengths
+ * @protected
  *
  * @param {number[]} usedDeleteSpots - list of deletion spots already used
  *
  * @return {number[]} new valid deletion if found or throws error
  */
-const generateDeletion = function (usedDeleteSpots) {
+const _generateDeletion = function (usedDeleteSpots) {
   var deleteTries = 0;
   var goodDelete = false;
   var realDelete;
@@ -623,22 +625,23 @@ const generateDeletion = function (usedDeleteSpots) {
       } // end while unsatisfactory
       realDelete = [leftSide, rightSide];
     } // end deleteKind
-    goodDelete = checkPhageDeletion(realDelete, usedDeleteSpots);
+    goodDelete = _checkPhageDeletion(realDelete, usedDeleteSpots);
   } //end while not goodDelete
   if (deleteTries === maxDeleteTries)
     throw new Error('no deleteion in', maxDeleteTries, ' tries');
   return realDelete;
-} // end generateDeletion
+} // end _generateDeletion
 
 /**
  * Check that deletion is valid; far enough away from other deletions
+ * @protected
  *
  * @param {number[]} keyMutes - deletion to check
  * @param {number[]} usedDeleteSpots - deletions already in play for scenario
  *
  * @returns {boolean} is the deletion valid?
  */
-const checkPhageDeletion = function (keyMutes, usedDeleteSpots) {
+const _checkPhageDeletion = function (keyMutes, usedDeleteSpots) {
   for (let i = 0; i < usedDeleteSpots.length; i++) {
     let inDelete = usedDeleteSpots[i];
     let dist00 = Math.abs(keyMutes[0] - inDelete[0]);
@@ -657,4 +660,4 @@ const checkPhageDeletion = function (keyMutes, usedDeleteSpots) {
       return false;
   }
   return true;
-} // end checkPhageDeletion
+} // end _checkPhageDeletion
