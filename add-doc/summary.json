@@ -52,4 +52,30 @@
       "file": "genetics/plexer-experiment.md"
     }
   ]
+},
+{
+  "title": "Models",
+  "file": "models.md",
+  "children": [
+    {
+      "title": "Course Model",
+      "file": "models/course-model.md"
+    },
+    {
+      "title": "Fridge Model",
+      "file": "models/fridge-model.md"
+    },
+    {
+      "title": "Phage Model",
+      "file": "models/phage-model.md"
+    },
+    {
+      "title": "Scenario Model",
+      "file": "models/scenario-model.md"
+    },
+    {
+      "title": "User Model",
+      "file": "models/user-model.md"
+    }
+  ]
 }]
