@@ -12,6 +12,10 @@ import { ConfirmDeleteDialogComponent } from '../../shared/confirm-delete-dialog
 import { CourseRoutes } from './course.routes';
 import { CourseResolver } from './course.resolver';
 
+/**
+ * Module for course-related tasks like adding, editing, 
+ * deleting, and viewing a course and the students in a course
+ */
 @NgModule({
   imports: [
     SharedModule,

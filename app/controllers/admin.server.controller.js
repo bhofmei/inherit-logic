@@ -28,7 +28,7 @@ const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
  * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
  * @param {Object} res - Express response object
  *
- * @returns {Object} - json object to response
+ * @returns {Object} json object to response
  * @yields {500_Internal_Server_Error} On error, sends description of error
  * @yields {200_OK} If user is admin, returns list of all users<br>
  * If user is instr, returns list of students in instr's courses
@@ -97,7 +97,7 @@ exports.listUsers = function (req, res) {
  * @property {external:USER} student - the secondary user from [userById]{@link user-controller.html#userById} with id `studentId`
  * @param {Object} res - Express response object
  *
- * @returns {Object} - json object to response
+ * @returns {Object} json object to response
  * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
  * @yields {200_OK} Cleaned information about the user
  */
@@ -133,7 +133,7 @@ exports.getUser = function (req, res) {
  * @property {external:USER} student - the secondary user from [userById]{@link user-controller.html#userById} with id `studentId`
  * @param {Object} res - Express response object
  *
- * @returns {Object} - json object to response
+ * @returns {Object} json object to response
  * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
  * @yields {200_OK} Cleaned information about the user
  */
@@ -163,7 +163,7 @@ exports.getUser = function (req, res) {
  * @property {Object} body - new role; one of `"student", "instr", "admin"`
  * @param {Object} res - Express response object
  *
- * @returns {Object} - json object to response
+ * @returns {Object} json object to response
  * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
  * @yields {200_OK} Updated user information
  * @example <caption>Request</caption>
@@ -203,7 +203,7 @@ exports.setRole = function (req, res) {
  * @param {Object} res - Express response object
  * @param {Function} next - the next middleware function
  *
- * @returns {Object | Function} - json object to response if not authorized otherwise go to next middleware
+ * @returns {Object | Function} json object to response if not authorized otherwise go to next middleware
  * @yields {403_Forbidden} If user is not an admin or instructor, sends error as `{message: 'Not authorized'}`
  * @yields {next()} Go to the next middleware if user is admin or instructor
  */
@@ -227,7 +227,7 @@ exports.hasAuthorization = function (req, res, next) {
  * @param {Object} res - Express response object
  * @param {Function} next - the next middleware function
  *
- * @returns {Object | Function} - json object to response if not authorized otherwise next middleware
+ * @returns {Object | Function} json object to response if not authorized otherwise next middleware
  * @yields {403_Forbidden} If user is not an admin, sends error as `{message: 'Not authorized'}`
  * @yields {next()} Go to next middleware if user is an admin
  */

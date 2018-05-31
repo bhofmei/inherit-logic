@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subject } from 'rxjs/Subject';
@@ -9,42 +9,50 @@ import { ScenarioService } from '../../../scenario/scenario.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { StudentService } from '../../student/student.service';
 
-import { Course } from '../../../interfaces/course.interface';
-import { Student } from '../../../interfaces/student.interface';
-import { Scenario } from '../../../interfaces/scenario.interface';
-import { User } from '../../../interfaces/user.interface';
+import { Course, Student, Scenario, User } from '../../../interfaces/';
 
 import { readErrorMessage } from '../../../shared/read-error';
-
-@Component({
-  selector: 'course-scen',
-  templateUrl: './course-scenario.template.html',
-  styleUrls: ['./course-scenario.style.css']
-})
 
 /**
  * This component displays the scenario status of all students
  * within the course and allows for navigation to student fridges
  * and grant access for a student
  */
-export class CourseScenarioComponent{
+@Component({
+  selector: 'course-scen',
+  templateUrl: './course-scenario.template.html',
+  styleUrls: ['./course-scenario.style.css']
+})
+
+export class CourseScenarioComponent implements OnInit, OnDestroy {
 
   /**
    * List of students in the course
    */
   protected students: Student[] = [];
+  /**
+   * The course number
+   */
   private courseNum: string;
   /**
    * Information about the scenario
    */
   protected scenario: Scenario;
+  /**
+   * State variable to make unsubscribing from services easier
+   */
   private isDestroyed$: Subject<boolean>;
+  /**
+   * Subscription to observe url `courseNum` parameter
+   */
   private paramObserver: any;
   /**
   * The logged in admin user
   */
   private admin: User;
-
+  /**
+   * Potential backend error messages
+   */
   private errorMessage: string = '';
 
   constructor(private _router: Router,
@@ -104,11 +112,12 @@ export class CourseScenarioComponent{
   }
 
   /**
-   * On "Grant access" button click, calls service to grant
-   * the student access to the scenario
+   * Calls service to grant the student access to the scenario
    *
-   * @param {number} studentIndex - positional index of student in the list of students
-   * This is NOT the student's userId
+   * Called on `(click)` of "Grant access" button for a student
+   * 
+   * @param {number} studentIndex - positional index of student in the list of students; 
+   * This is **NOT** the student's userId
    */
   grantAccess(studentIndex: number){
     let scenId = this.scenario.scenCode;
@@ -128,12 +137,17 @@ export class CourseScenarioComponent{
    * On "View Fridge" button, navigates to that student's fridge
    * for this scenario
    *
+   * Called on `(click)` of "View Fridge" button of a student
+   *
    * @param {number} studentId - the student's userID
    */
   goToFridge(studentId: number){
     this._router.navigate(['/admin/students/', studentId, this.scenario.scenCode]);
   }
 
+  /**
+   * When destroying component, unsubscribe from services to prevent memory leaks
+   */
   ngOnDestroy(){
     this.paramObserver.unsubscribe();
     this.isDestroyed$.next(true);

@@ -15,6 +15,10 @@ import { PhageGuessesPipe } from '../../pipes/phage-guesses.pipe';
 import { PhageMutationsPipe } from '../../pipes/phage-mutations.pipe';
 import { PhageDeletionsPipe } from '../../pipes/phage-deletions.pipe';
 
+/**
+ * Module for admin-regulated student things like setting the
+ * role, viewing fridges for grading, and listing all students
+ */
 @NgModule({
   imports: [
     SharedModule,

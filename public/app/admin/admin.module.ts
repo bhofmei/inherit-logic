@@ -11,6 +11,9 @@ import { AdminGuard } from './admin.guard.service';
 
 import { StudentService } from './student/student.service';
 
+/**
+ * Module for admin functions having to deal with students and courses that should not be accessed by a regular user
+ */
 @NgModule({
   imports: [
     SharedModule,

@@ -4,17 +4,13 @@ import { Observable } from 'rxjs/Observable';
 
 import { AdminStudent, StudentFridge } from '../../interfaces';
 
-
 /**
  * Service which deals with all student-related backend calls
  * from an admin
  */
 @Injectable()
 export class StudentService {
-
-  /**
-   * Beginning of the server-side URL routes
-   */
+  
   private _baseURL = 'api/admin';
 
   constructor(private _http: HttpClient) {}
@@ -22,8 +18,9 @@ export class StudentService {
   /**
    * List of students, content is dependent of logged in user role
    *
-   * If "admin", return all students/users
-   * If "instr", returns students of courses instr teachs
+   * If `admin`, return all students/users
+   * 
+   * If `instr`, returns students of courses instr teachs
    *
    * @param {number} adminId - userId of logged in user
    *
@@ -40,7 +37,8 @@ export class StudentService {
    * @param {number} adminId - userId for logged in user
    * @param {number} studentId - userId for student to be looked up
    *
-   * @returns {Observable<AdminStudent>} - details about specified student or error if does not exist
+   * @returns {Observable<AdminStudent>} - details about specified student
+   * - or other server/database error
    */
   getStudent(adminId: number, studentId: number): Observable<AdminStudent>{
     return this._http
@@ -52,9 +50,10 @@ export class StudentService {
    *
    * @param {number} adminId - userId for logged in user
    * @param {number} studentId - userId for student to update
-   * @param {string} role - new role to be assigned; one of: "admin", "instr", or "student"
+   * @param {string} role - new role to be assigned; one of: `"admin", "instr", "student"`
    *
    * @returns {Observable<any>} - the updated student
+   * - or other server/database error
    */
   setStudentRole(adminId: number, studentId: number, role: string): Observable<any>{
     let body = {role: role};
@@ -68,7 +67,8 @@ export class StudentService {
    * @param {number} adminId - userId of logged in user
    * @param {number} studentId - userId of student to delete
    *
-   * @returns {Observable<any>} student who was just deleted or error
+   * @returns {Observable<any>} - student who was just deleted
+   * - or other server/database error
    */
   deleteStudent(adminId: number, studentId: number): Observable<any>{
     return this._http
@@ -97,6 +97,7 @@ export class StudentService {
    * @param {boolean} updatedState - true to grant access, false to revoke access
    *
    * @returns {Observable<AdminStudent>} updated student
+   * - or other server/database error
    */
   grantScenAccess(adminId: number, studentId: number, scenId: string, updatedState: boolean): Observable<AdminStudent>{
     return this._http

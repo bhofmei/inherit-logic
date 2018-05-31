@@ -7,9 +7,9 @@ import { AuthenticationService } from '../../../authentication/authentication.se
 import { Course, User } from '../../../interfaces';
 
 /**
- * Component which lists available courses based on logged-in user role
- * If admin, lists all available courses
- * If instr, list courses which instructor of
+ * - Component which lists available courses based on logged-in user role
+ * - If admin, lists all available courses
+ * - If instr, list courses which instructor of
  */
 @Component({
     selector: 'course-list',
@@ -38,6 +38,9 @@ export class CourseListComponent implements OnInit, OnDestroy{
       });
     }
 
+  /**
+   * On component destruction, unsubscribe from services if necessary
+   */
   ngOnDestroy(){
     if(this.subscription)
       this.subscription.unsubscribe();

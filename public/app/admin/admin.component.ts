@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil'
 
@@ -16,7 +16,7 @@ import { User } from '../interfaces/user.interface';
   templateUrl: './admin.template.html'
 })
 
-export class AdminComponent{
+export class AdminComponent implements OnInit {
   /**
    * Logged in user
    */
@@ -27,6 +27,9 @@ export class AdminComponent{
     private _authenticationService: AuthenticationService
   ){}
 
+  /**
+   * When initializing the component, get the currently logged in user's information
+   */
   ngOnInit(){
     this.adminUser = this._authenticationService.getUser();
   }

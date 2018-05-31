@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -25,7 +25,7 @@ import { readErrorMessage } from '../../../shared/read-error';
  * Component for editting course details such as
  * adding/removing instructors, updating course description
  */
-export class CourseEditComponent{
+export class CourseEditComponent implements OnInit, OnDestroy{
 
   /**
    * Course being edited
@@ -40,18 +40,24 @@ export class CourseEditComponent{
    */
   selectedAdd: number;
   /**
-   * the logged in user
+   * The logged in user
    */
   private _admin: User;
   private paramObserver: any;
+  /**
+   * State variable to make unsubscribing from services easier
+   */
   private isDestroyed$: Subject<boolean>;
+  /**
+   * Potential error messages from the backend server
+   */
   private errorMessage: string = '';
 
   constructor(private _router: Router,
-        private _route: ActivatedRoute,
-               private _courseService: CourseService,
-              private _authService: AuthenticationService,
-              private _modalService: NgbModal){
+    private _route: ActivatedRoute,
+    private _courseService: CourseService,
+    private _authService: AuthenticationService,
+    private _modalService: NgbModal){
     this.isDestroyed$ = new Subject<boolean>();
   }
 
@@ -60,7 +66,7 @@ export class CourseEditComponent{
    * 1. get the logged in user
    * 2. Use the url param to get course number
    * 3. Get course details (using coureNum)
-   * 3. Get possible instructors (using courseNum)
+   * 4. Get possible instructors (using courseNum)
    */
   ngOnInit(){
     this._admin = this._authService.getUser();
@@ -109,9 +115,9 @@ export class CourseEditComponent{
   }
 
   /**
-   * When add instructor button is clicked, send the selected
+   * - When add instructor button is clicked, send the selected
    * instructor (by userId) to the backend to be added as an instructor
-   * If successful, update list of possible instructors
+   * - If successful, update list of possible instructors
    */
   addInstructor(){
     if(this.selectedAdd){
@@ -131,10 +137,10 @@ export class CourseEditComponent{
   // TODO: remove instructor
 
   /**
-   * When clicking delete course button, open a dialog
+   * - When clicking delete course button, open a dialog
    * to confirm deletion
-   * If confirmed, call helper method
-   * If cancel, do nothing
+   * - If confirmed, call helper method
+   * - If cancel, do nothing
    */
   deleteCourse(){
     const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm', windowClass: 'delete-modal'});
@@ -164,10 +170,10 @@ export class CourseEditComponent{
   }
 
   /**
-   * When delete students button is click,
+   * - When delete students button is click,
    * open a dialog to confirm deletion
-   * If confirm, call helper method
-   * If cancel, do nothing
+   * - If confirm, call helper method
+   * - If cancel, do nothing
    */
   deleteCourseStudents(){
     const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm'});
@@ -197,6 +203,9 @@ export class CourseEditComponent{
     })
   }
 
+  /**
+   * Unsubscribe from services to prevent a memory leak
+   */
   ngOnDestroy(){
     this.paramObserver.unsubscribe();
     this.isDestroyed$.next(true);

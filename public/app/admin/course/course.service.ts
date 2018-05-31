@@ -15,11 +15,6 @@ export class CourseService {
    */
   private _baseURL = '/api/admin';
 
-  /**
-   * Construct the service
-   *
-   * @param {HttpClient} _http Anguar mechanism to make calls to backend server
-   */
   constructor(private _http: HttpClient) {
   }
 
@@ -29,8 +24,8 @@ export class CourseService {
    *
    * @param {number} adminId database user ID of the logged in user
    *
-   * @returns {Observable<Course[]>} - When successful and admin, list of all courses
-   * - When successful and instr, list of courses in which user is an instructor for
+   * @returns {Observable<Course[]>} - When successful and `admin`, list of all courses
+   * - When successful and `instr`, list of courses in which user is an instructor for
    * - or error "No courses found" if no courses to list
    * - or other server/database error message
    */

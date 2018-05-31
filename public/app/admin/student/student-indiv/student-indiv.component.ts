@@ -78,8 +78,9 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
   /**
    * Initialize component
    * 1. Get logged in user
-   * 2. Get id of student of interest, then get the student's info
-   * 3. Get list of all scenarios
+   * 2. Get id of student of interest from URL
+   * 3. Get the student's info
+   * 4. Get list of all scenarios
    */
     ngOnInit() {
         this._admin = this._authService.getUser();
@@ -108,7 +109,7 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
    *
    * @param {string} scenCode - scenario to look up
    *
-   * @returns {string} - "Access granted", "Access not granted", or "NA"
+   * @returns {string} `"Access granted"`, `"Access not granted"`, or `"NA"`
    */
     getScenStatus(scenCode: string): string {
         let isGranted = this.student.accessGranted[scenCode];
@@ -122,12 +123,11 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
     }
 
   /**
-   * Get a formatted HTML string based on the student
+   * - Get a formatted HTML string based on the student
+   * - If student has a course, returns link to the course page
+   * - If student doesn't have a course, returns 'No course'
    *
-   * If student has a course, returns link to the course page
-   * If student doesn't have a course, returns 'No course'
-   *
-   * @returns {string} - formatted HTML
+   * @returns {string} formatted HTML
    */
     getStudentCourse(): string {
         let s: AdminStudent = this.student;
@@ -141,14 +141,15 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
   /**
    * Grant access for a specific scenario by calling student service
    *
-   * @param {string} scenCode - scenario to grant access for
+   * Called on `(click)` of one of the scenario buttons
+   *
+   * @param {string} scenCode scenario to grant access for
    */
     grantAccess(scenCode: string) {
         this._studentService.grantScenAccess(this._admin.id, this.student.userId, scenCode, true)
             .takeUntil(this.isDestroyed$)
             .subscribe((res) => {
                 if (res !== undefined && res !== null) {
-                    //this.student.accessGranted[scenCode] = res.accessGranted[scenCode];
                   this.student = res;
                 }
             }, (err) => {
@@ -161,7 +162,7 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
    *
    * @param {string} src - name of button/role
    *
-   * @returns {boolean} - disable for roles greater than current user
+   * @returns {boolean} disable for roles greater than current user
    * and if viewing page of current user
    */
     roleDisabled(src: string): boolean {
@@ -184,7 +185,7 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
    *
    * @param {string} src - name of button/role
    *
-   * @returns {Object} - possible classes with true/false as applicable
+   * @returns {Object} possible classes with true/false as applicable
    *
    * @example
    * Current student has role "student"
@@ -203,6 +204,8 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
    * When clicking a role button, update the student role
    * by calling student service
    *
+   * Called on `(click)` of one of the role buttons
+   *
    * @param {string} src - role of button pushed
    */
     clickButton(src: string) {
@@ -218,7 +221,8 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
   /**
    * Determine if delete button should be disabled
    *
-   * @returns {boolean} - true if viewing page of logged in user or if student is an admin
+   * @returns {boolean} - `true` if viewing page of logged in user or if student is an admin
+   * `false` otherwise
    */
   deleteDisabled(){
     if(this._admin === undefined){
@@ -233,9 +237,11 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * when clicking delete button, open a modal dialog to confirm delete
-   * if confirm, delete and redirect to students
-   * otherwise, do nothing
+   * - when clicking delete button, open a modal dialog to confirm delete
+   * - if confirm, delete and redirect to students
+   * - otherwise, do nothing
+   *
+   * Called on `(click)` of the "Delete" button
    */
   checkDelete(){
     const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm'});
@@ -254,7 +260,6 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
   /**
    * Helper function which implements delete student after user
    * confirmed deletion
-   * Calls student service
    */
   protected _callDelete(){
     this._studentService.deleteStudent(this._admin.id, this.student.userId)

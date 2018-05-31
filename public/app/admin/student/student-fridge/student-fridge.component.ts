@@ -12,13 +12,18 @@ import { Course, AdminStudent, Scenario, StudentPhage, StudentFridge } from '../
 
 import { readErrorMessage } from '../../../shared/read-error';
 
+/**
+ * Component to view the phage strains for a specific student
+ * and scenario
+ *
+ * Admin is able to see each phage's mutations, deletions, comments, and possibly mutation guesses
+ */
 @Component({
   selector: 'student-fridge',
   templateUrl: './student-fridge.template.html'
 })
 
 export class StudentFridgeComponent implements OnInit, OnDestroy {
-
   /**
    * Fridge object (if it exists)
    */
@@ -40,14 +45,14 @@ export class StudentFridgeComponent implements OnInit, OnDestroy {
    * Option to show all strains in fridge or
    * only strains of interest for grading (unknown
    * and submitted)
-   * Should be "all" or "graded"
+   *
+   * Should be `"all"` or `"graded"`
    */
   private viewStrains: string = 'all';
   /**
    * List of phage currently being viewed
    */
   private strainList: StudentPhage[];
-
   /**
    * Error message from the server
    */
@@ -104,10 +109,9 @@ export class StudentFridgeComponent implements OnInit, OnDestroy {
    *
    * @param {string} src - button determining classes for
    *
-   * @returns {Object} - classes which appy to this button in the form {"class": boolean, ...}
+   * @returns {Object} classes which appy to this button in the form {"class": boolean, ...}
    *
-   * @example
-   * View stains is "all"
+   * @example <caption>View strains is "all"</caption>
    * getButtonClass('all') -> {'btn btn-small': true, 'btn-primary': true, 'btn-primary-outline': false}
    * getButtonClass('graded') -> {'btn btn-small': true, 'btn-primary': false, 'btn-primary-outline': true}
    */
@@ -120,11 +124,11 @@ export class StudentFridgeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * When a viewStrain button is clicked,
    * update the list of visible phage appropriately
    *
+   * Called on `(click)` of "View Strain" button
    * @param {string} src - button which was clicked;
-   * Should be one of ["all", "graded"]
+   * Should be one of `["all", "graded"]`
    */
   setPhage(src: string){
     this.viewStrains = src;

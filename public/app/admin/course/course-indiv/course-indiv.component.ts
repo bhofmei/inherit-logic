@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subject } from 'rxjs/Subject';
@@ -22,20 +22,23 @@ import { Course, Student, sortStudents, Scenario, User } from '../../../interfac
  * Component to view an individual course
  * Includes information such as course number, description, instructors, and students
  */
-export class CourseIndivComponent{
+export class CourseIndivComponent implements OnInit, OnDestroy{
 
   /**
    * List of students enrolled in the course
    */
   private students: Student[] = [];
   /**
-   * Course info: courseNum, description, instructors
+   * Course info including `courseNum`, `description`, `instructors`
    */
   courseInfo: Course;
   /**
    * list of available scenarios (used for linking)
    */
   private scenarios: Scenario[];
+  /**
+   * State variable to make unsubscribing from services easier
+   */
   private isDestroyed$: Subject<boolean>;
   private paramObserver: any;
 
@@ -55,6 +58,10 @@ export class CourseIndivComponent{
 
   /**
    * Initialize all content on the page using several services
+   * 1. Get the logged in user
+   * 2. Get the course information (description, instructors)
+   * 3. Get the list of students in the course
+   * 4. Get the list of scenarios
    */
   ngOnInit(){
     let admin: User = this._authService.getUser();
@@ -81,7 +88,7 @@ export class CourseIndivComponent{
   }
 
   /**
-   * Unsubscribe from subscriptions
+   * Unsubscribe from subscriptions to prevent memory leaks
    */
   ngOnDestroy(){
     this.paramObserver.unsubscribe();

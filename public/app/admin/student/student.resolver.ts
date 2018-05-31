@@ -6,8 +6,8 @@ import { StudentService } from './student.service';
 import { AdminStudent } from '../../interfaces/student.interface';
 
 /**
- * Needed for breadcrumbs
- * Resolves the studentId in the URL to the student it represents
+ * - Needed for breadcrumbs
+ * - Resolves the studentId in the URL to the student it represents
  */
 @Injectable()
 export class StudentResolver implements Resolve<AdminStudent> {
@@ -16,7 +16,7 @@ export class StudentResolver implements Resolve<AdminStudent> {
               private _authService: AuthenticationService) { }
 
   /**
-   * Based on the URL 'studentId' parameter, find the user
+   * Based on the URL `studentId` parameter, find the user
    * it belongs to
    *
    * @param {ActivatedRouteSnapshot} route - route URL at the moment
