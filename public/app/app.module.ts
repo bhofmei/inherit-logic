@@ -24,13 +24,17 @@ import { ScenarioModule } from './scenario/scenario.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { HomeComponent } from './home/home.component';
 
+/**
+ * The main bootstrapped module
+ */
 @NgModule({
     imports: [
         BrowserModule,
       SharedModule,
         HttpClientModule,
-      HomeModule,
+      //HomeModule,
       HelpModule,
       AdminModule,
       ProfileModule,
@@ -42,6 +46,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     declarations: [
         AppComponent,
         NavComponent,
+      HomeComponent,
       PageNotFoundComponent
     ],
     providers: [

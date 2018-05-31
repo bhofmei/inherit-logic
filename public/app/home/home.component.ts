@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { AuthenticationService } from '../authentication/authentication.service';
 
@@ -15,7 +15,7 @@ import { User } from '../interfaces/user.interface';
   styleUrls: ['./home.style.css']
 })
 
-export class HomeComponent{
+export class HomeComponent implements OnInit, OnDestroy{
   /**
    * The logged in user, if any
    */
@@ -23,10 +23,16 @@ export class HomeComponent{
 
   constructor(private _authenticationService: AuthenticationService){}
 
+  /**
+   * When intializing component, get the logged in user, if any
+   */
   ngOnInit(){
     this.user = this._authenticationService.getUser();
   }
 
+  /**
+   * When destroying the component, unset the user variable
+   */
   ngOnDestroy(){
     this.user = undefined;
   }
