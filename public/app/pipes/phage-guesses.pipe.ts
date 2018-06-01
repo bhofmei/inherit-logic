@@ -2,6 +2,20 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { ScenarioGlobals } from '../scenario/scenario.globals';
 
+/**
+ * Format the textual presentation of the deletion guessses for
+ * a user's phage strain; uses a [scenario global]{@link
+ * ScenarioGlobals} variable `deletionGuessLength` to determine
+ * the ranges
+ *
+ * **Usage:** `{{ guessList | phageGuesses }}`
+ *
+ * @example <caption>One deletion guess:  </caption>
+ * <code>[false, true, true, true, false, ...]</code> becomes "10-40"
+ * @example <caption>No deletion guesses:  </caption>
+ * <code>[false, ..., false]</code> becomes "None"
+ */
+
 @Pipe({name: 'phageGuesses'})
 export class PhageGuessesPipe implements PipeTransform {
 

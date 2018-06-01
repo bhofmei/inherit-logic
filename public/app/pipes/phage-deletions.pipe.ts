@@ -1,7 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 /**
- * Format the textual presentation of a phage strain's deletions
+ * Format the textual presentation of a phage strain's deletions (if any)
+ *
+ * **Usage:** `{{ deletionlist | phageDeletions }}`
+ *
+ * @example <caption>One deletion:  </caption>
+ * <code>[50,145]</code> becomes "50 - 145"
+ * @example <caption>Multiple deletions:  </caption>
+ * <code>[50, 140, 190, 260]</code> becomes "50 - 140, 190 - 260"
  */
 @Pipe({name: 'phageDeletions'})
 export class PhageDeletionsPipe implements PipeTransform {

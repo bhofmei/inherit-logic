@@ -1,11 +1,18 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-/*
+/**
  * Format a list of user's or students frist and last name as "firstName lastName"
- * When reverse is true, format as "lastName, firstName"
- * Handles when only first or last name is set
- * Usage:
- *   person | formatName:isReverse
+ * - When reverse is true, format as "lastName, firstName"
+ * - Able to handle when only first or last name is set
+ *
+ * **Usage:** `{{ peopleList | peopleListNames:isReverse }}`
+ *
+ * @example <caption>Normal output :  </caption>
+ * <code>[{firstName: "Mary", lastName: "One"}, {firstName: "Bob", lastName: "Two"}]</code> becomes "Mary One, Bob Two"
+ * @example <caption>Reverse ouput :  </caption>
+ * <code>[{firstName: "Mary", lastName: "One"}, {firstName: "Bob", lastName: "Two"}]</code> becomes "One, Mary; Two, Bob"
+ * @example <caption>Missing names :  </caption>
+ * <code>[{firstName: undefined, lastName: "One"}, {firstName: "Bob", lastName: undefined}]</code> becomes "One, Bob"
  */
 @Pipe({name: 'peopleListNames'})
 export class PeopleListNamesPipe implements PipeTransform {
