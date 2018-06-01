@@ -1,7 +1,6 @@
 import { AdminStudent, Course, User, Scenario, Fridge, StudentFridge, StudentPhage, PlateResults } from '../interfaces';
 
 function createArray(l: number, v: any): any[]{
-  //return Array.apply(null, Array(l)).map(Number.prototype.valueOf,v);
   return new Array(l).fill(v);
 }
 

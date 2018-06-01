@@ -23,14 +23,13 @@ export class PhageGuessesPipe implements PipeTransform {
     let stepSize = ScenarioGlobals.deletionGuessLength;
     let out = '';
     let x=-1;
-    //for(let y=0; y < guesses.length; y++){
     for(let i in guesses){
       let y: number = +i;
       // start new deletion
       if(x < 0 && guesses[y]){
         x = stepSize * y;
       } // end a deletion
-      else if(x > 0 && guesses[y] === false){
+      else if(x >= 0 && guesses[y] === false){
         let z = (stepSize * y);
         out += (out === '' ? '' : ', ');
         out += x + ' - ' + z;

@@ -8,11 +8,11 @@ import { Pipe, PipeTransform } from '@angular/core';
  * **Usage:** `{{ peopleList | peopleListNames:isReverse }}`
  *
  * @example <caption>Normal output :  </caption>
- * <code>[{firstName: "Mary", lastName: "One"}, {firstName: "Bob", lastName: "Two"}]</code> becomes "Mary One, Bob Two"
+ * <code>[{firstName: "Mickey", lastName: "Mouse"}, {firstName: "Donald", lastName: "Duck"}]</code> becomes "Mickey Mouse, Donald Duck"
  * @example <caption>Reverse ouput :  </caption>
- * <code>[{firstName: "Mary", lastName: "One"}, {firstName: "Bob", lastName: "Two"}]</code> becomes "One, Mary; Two, Bob"
+ * <code>[{firstName: "Mickey", lastName: "Mouse"}, {firstName: "Donald", lastName: "Duck"}]</code> becomes "Mouse, Mickey; Duck, Donald"
  * @example <caption>Missing names :  </caption>
- * <code>[{firstName: undefined, lastName: "One"}, {firstName: "Bob", lastName: undefined}]</code> becomes "One, Bob"
+ * <code>[{firstName: undefined, lastName: "Mouse"}, {firstName: "Donald", lastName: undefined}]</code> becomes "Mouse, Donald"
  */
 @Pipe({name: 'peopleListNames'})
 export class PeopleListNamesPipe implements PipeTransform {
@@ -20,11 +20,11 @@ export class PeopleListNamesPipe implements PipeTransform {
   transform(personList: any[], reverse: boolean): string {
     let out = '';
     for(let person of personList){
-      if(out !== ''){
-        out += (reverse ? '; ' : ', ');
-      }
       let fName: string = person.firstName || '';
       let lName: string = person.lastName || '';
+      if(out !== '' && (fName !== '' || lName !== '')){
+        out += (reverse ? '; ' : ', ');
+      }
     if(reverse){
       out += lName + (fName!=='' && lName !== '' ? ', ' : '')+fName;
       } else {

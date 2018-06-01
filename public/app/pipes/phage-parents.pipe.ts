@@ -28,6 +28,9 @@ export class PhageParentsPipe implements PipeTransform {
     if(numParents === undefined){
       numParents = parents.length
     }
+    if(parents.length === 0){
+      return out;
+    }
     let sorted: Phage[] = parents.sort((n1, n2)=>{return n1.strainNum - n2.strainNum});
     let nums = sorted.map((phage)=>{return (phage.strainNum+1).toString()});
 

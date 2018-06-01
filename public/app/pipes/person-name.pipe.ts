@@ -8,11 +8,11 @@ import { Pipe, PipeTransform } from '@angular/core';
  * **Usage:** `{{ person | personName:isReverse }}`
  *
  * @example <caption>Normal output :  </caption>
- * <code>{firstName: "Mary", lastName: "Boyd"}</code> becomes "Mary Boyd"
+ * <code>{firstName: "Mickey", lastName: "Mouse"}</code> becomes "Mickey Mouse"
  * @example <caption>Reverse output :  </caption>
- * <code>{firstName: "Mary", lastName: "Boyd"}</code> becomes "Boyd, Mary"
+ * <code>{firstName: "Mickey", lastName: "Mouse"}</code> becomes "Mouse, Mickey"
  * @example <caption>First name only :  </caption>
- * <code>{firstName: "Mary", lastName: undefined}</code> becomes "Mary"
+ * <code>{firstName: "Mickey", lastName: undefined}</code> becomes "Mickey"
 */
 @Pipe({name: 'personName'})
 export class PersonNamePipe implements PipeTransform {
