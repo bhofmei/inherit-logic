@@ -25,7 +25,7 @@ export class SignoutComponent implements OnInit, OnDestroy{
   /**
    * On component creation
    * 1. Sign out user on server
-   * 2. Unset {@link authenticationService} user
+   * 2. Unset [AuthenticationService]{@link AuthenticationService} user
    * 3. Redirect to home page
    */
   ngOnInit(){
