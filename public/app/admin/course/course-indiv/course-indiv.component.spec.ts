@@ -106,7 +106,7 @@ describe('Course Indiv Component', ()=>{
     it('Should have student links', ()=>{
       let scenDE = fixture.debugElement.query(By.css('#statusByStudent'));
       let scenLinks = getAllRouterLinks(scenDE);
-      expect(scenLinks.length).toBe(2);
+      expect(scenLinks.length).toBe(1);
       expect(scenLinks[0].linkParams[0]).toMatch(/admin\/students/);
 
     }); // end Should have scenario links

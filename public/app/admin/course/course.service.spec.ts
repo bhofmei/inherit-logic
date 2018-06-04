@@ -20,7 +20,7 @@ describe('Course Service', ()=>{
   }); // end beforeEach
 
   describe('Test listCourses', ()=>{
-    it('should get list of courses',
+    it('Should get list of courses',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -43,7 +43,7 @@ describe('Course Service', ()=>{
         }) // end inject
     ); // end should get list of courses
 
-    it('should not have list of courses',
+    it('Should not have list of courses',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -72,7 +72,7 @@ describe('Course Service', ()=>{
       courseNum: 'TEST003',
       description: 'New course to be created'
     };
-    it('should create course',
+    it('Should create course',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -99,7 +99,7 @@ describe('Course Service', ()=>{
   }); // end Test createCourse
 
   describe('Test getCourse', ()=>{
-    it('should get course',
+    it('Should get course',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -123,7 +123,7 @@ describe('Course Service', ()=>{
         }) // end inject
     ); // end should get course
 
-    it('should not get course - course does not exist',
+    it('Should not get course - course does not exist',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -148,7 +148,7 @@ describe('Course Service', ()=>{
   }); // end Test getCourse
 
     describe('Test getStudents', ()=>{
-    it('should get students',
+    it('Should get students',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -171,7 +171,7 @@ describe('Course Service', ()=>{
         }) // end inject
     ); // end should get students
 
-    it('should not get students - course does not exist',
+    it('Should not get students - course does not exist',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -196,7 +196,7 @@ describe('Course Service', ()=>{
   }); // end Test getStudents
 
   describe('Test getPossibleInstructors', ()=>{
-    it('should get possible instructors',
+    it('Should get possible instructors',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -220,7 +220,7 @@ describe('Course Service', ()=>{
         }) // end inject
     ); // end should get possible instructors
 
-    it('should not get possible instructors - course does not exist',
+    it('Should not get possible instructors - course does not exist',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -245,7 +245,7 @@ describe('Course Service', ()=>{
   }); // end Test getPossibleInstructors
 
   describe('Test addInstructor', ()=>{
-    it('should add an instructor',
+    it('Should add an instructor',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -273,7 +273,7 @@ describe('Course Service', ()=>{
         }) // end inject
     ); // end should add an instructor
 
-    it('should not get possible instructors - course does not exist',
+    it('Should not get possible instructors - course does not exist',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -300,7 +300,7 @@ describe('Course Service', ()=>{
   describe('Test editCourse', ()=>{
     const body = {description: "updated course description"};
     const userId = sampleInstr.userId;
-    it('should edit course',
+    it('Should edit course',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -325,7 +325,7 @@ describe('Course Service', ()=>{
         }) // end inject
     ); // end should edit course
 
-    it('should not edit course - course does not exist',
+    it('Should not edit course - course does not exist',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -350,7 +350,7 @@ describe('Course Service', ()=>{
 
   describe('Test deleteCourse', ()=>{
     const userId = sampleInstr.userId;
-    it('should delete course',
+    it('Should delete course',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -373,7 +373,7 @@ describe('Course Service', ()=>{
         }) // end inject
     ); // end should delete course
 
-    it('should not delete course - course does not exist',
+    it('Should not delete course - course does not exist',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -398,7 +398,7 @@ describe('Course Service', ()=>{
 
   describe('Test deleteStudents', ()=>{
     const userId = sampleInstr.userId;
-    it('should delete students in course',
+    it('Should delete students in course',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -421,7 +421,7 @@ describe('Course Service', ()=>{
         }) // end inject
     ); // end should delete students in course
 
-    it('should not delete students in course - course does not exist',
+    it('Should not delete students in course - course does not exist',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -443,7 +443,7 @@ describe('Course Service', ()=>{
         }) // end inject
     ); // end should not delete students course - course does not exist
 
-    it('should not delete students in course - no students in course',
+    it('Should not delete students in course - no students in course',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -470,7 +470,7 @@ describe('Course Service', ()=>{
     const testCourse = listOfCourses[0];
     const userId = sampleInstr.userId;
     const scenId = 'test1';
-    it('should get scenario status',
+    it('Should get scenario status',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -497,7 +497,7 @@ describe('Course Service', ()=>{
         }) // end inject
     ); // end should get scenario status
 
-    it('should not get scenario status - course does not exist',
+    it('Should not get scenario status - course does not exist',
       inject(
         [HttpTestingController, CourseService],
         (
@@ -519,7 +519,7 @@ describe('Course Service', ()=>{
         }) // end inject
     ); // end not get scenario status - course does not exist
 
-    it('should not get scenario status - scenario does not exist',
+    it('Should not get scenario status - scenario does not exist',
       inject(
         [HttpTestingController, CourseService],
         (

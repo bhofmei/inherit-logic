@@ -7,7 +7,7 @@ import { AuthenticationService } from '../../../authentication/authentication.se
 import { Course, User } from '../../../interfaces';
 
 /**
- * - Component which lists available courses based on logged-in user role
+ * Component which lists available courses based on logged-in user role
  * - If admin, lists all available courses
  * - If instr, list courses which instructor of
  */
@@ -20,6 +20,9 @@ export class CourseListComponent implements OnInit, OnDestroy{
    * List of courses
    */
     private courses: Course[];
+  /**
+   * Subscription to course service
+   */
   private subscription: Subscription;
 
     constructor(
