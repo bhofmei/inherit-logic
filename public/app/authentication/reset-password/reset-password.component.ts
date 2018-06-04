@@ -1,19 +1,43 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AuthenticationService } from '../authentication.service';
 import { readErrorMessage } from '../../shared/read-error';
 
+/**
+ * After user requests to reset password and they have a token,
+ * this component allows them to set the password to a new password
+ * (assuming token is valid)
+ */
 @Component({
     selector: 'reset-pswd',
     templateUrl: './reset-password.template.html'
 })
-export class ResetPasswordComponent {
+export class ResetPasswordComponent implements OnInit, OnDestroy {
+  /**
+   * Potential error message from server
+   */
     private errorMessage: string = '';
+  /**
+   * Message when new password successfully saved
+   */
   private successMessage: string = '';
+  /**
+   * Email and new passwords to be able to update the database
+   * - `password` - the new password to set
+   * - `confirmPassword` - confirm password typed correctly
+   * - `token` - password reset token to confirm user had access to the email and didn't wait too long
+   */
     private credentials: any;
+  /**
+   * Subscription to {@link AuthenticationService} when retting
+   */
   private subscription: Subscription;
+  /**
+   * Is the submit button disabled; this would happen when
+   * there is no token
+   */
   private isDisabled: boolean = false;
 
     constructor(
@@ -26,7 +50,11 @@ export class ResetPasswordComponent {
         token: null
       }
     }
-
+  /**
+   * When initializing the component, get the token from the URL
+   *
+   * If there is no token, give error message and disable submit button
+   */
   ngOnInit(){
     this.credentials.token = this._route.snapshot.paramMap.get('token');
     if(this.credentials.token === ''){
@@ -35,6 +63,13 @@ export class ResetPasswordComponent {
     }
   }
 
+  /**
+   * Attempts to reset the new password
+   * 1. Check the input passwords for errors
+   * 2. If no errors, send credentials to server
+   * 3. Password correctly reset, displays the success message
+   * 4. If error reseting the password, displays error message
+   */
     sendReset() {
       this.successMessage = '';
        this.errorMessage = this._checkPasswords();
@@ -53,6 +88,9 @@ export class ResetPasswordComponent {
       }
     }
 
+  /**
+   * Compares the input passwords to make sure they are both specified and that they match each other
+   */
   _checkPasswords(){
     let p = this.credentials.password;
     let c = this.credentials.confirmPassword;
@@ -67,6 +105,9 @@ export class ResetPasswordComponent {
     }
   }
 
+  /**
+   * On component destruction, unsubscribe from authentication service if necessary
+   */
   ngOnDestroy(){
     if(this.subscription)
     this.subscription.unsubscribe();
