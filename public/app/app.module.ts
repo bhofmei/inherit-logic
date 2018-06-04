@@ -17,7 +17,6 @@ import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { HelpModule } from './help/help.module';
-import { HomeModule } from './home/home.module';
 import { ProfileModule } from './profile/profile.module';
 import { ScenarioModule } from './scenario/scenario.module';
 
@@ -34,12 +33,10 @@ import { HomeComponent } from './home/home.component';
         BrowserModule,
       SharedModule,
         HttpClientModule,
-      //HomeModule,
       HelpModule,
       AdminModule,
       ProfileModule,
         AuthenticationModule,
-        //ArticleModule,
       ScenarioModule,
       RouterModule.forRoot(AppRoutes)
     ],

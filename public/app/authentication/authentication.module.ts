@@ -10,6 +10,10 @@ import { SignoutComponent } from './signout/signout.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
+/**
+ * Module which deals with anything related to authenticating users,
+ * i.e. logging in/out users and resetting forgotten passwords
+ */
 @NgModule({
     imports: [
         CommonModule,

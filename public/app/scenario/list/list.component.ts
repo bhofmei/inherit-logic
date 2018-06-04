@@ -29,6 +29,10 @@ export class ListComponent implements OnInit, OnDestroy{
 
     }
 
+  /**
+   * Initialize the component by using the service to fetch the
+   * list of scenarios
+   */
     ngOnInit() {
       this.user = this._authenticationService.getUser();
       this.sSubscription = this._scenarioService.listScenarios()
@@ -37,6 +41,10 @@ export class ListComponent implements OnInit, OnDestroy{
       });
     }
 
+  /**
+   * When destroying component, unsubscribe from service if necessary
+   * to prevent memory leaks
+   */
   ngOnDestroy(){
     if(this.sSubscription)
     this.sSubscription.unsubscribe();

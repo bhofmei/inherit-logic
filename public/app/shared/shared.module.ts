@@ -13,6 +13,13 @@ import { PersonNamePipe } from '../pipes/person-name.pipe';
 import { PeopleListNamesPipe } from '../pipes/people-list-names.pipe';
 import { PhageParentsPipe } from '../pipes/phage-parents.pipe';
 
+/**
+ * The Shared Module contains modules, pipes, and components
+ * that are needed across the application
+ *
+ * Saves time by importing this module rather than the
+ * pipes/modules/components individually
+ */
 @NgModule({
     imports: [
       CommonModule,

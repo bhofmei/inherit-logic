@@ -16,7 +16,9 @@ import { readErrorMessage } from '../../shared/read-error';
 /**
  * One of the main components of the app - the fridge stores the phage for
  * the given user/scenario
+ *
  * Needs to get existing fridge/create new one; edit and remove existing strains;
+ *
  * add new strains; change shelf
  */
 @Component({
@@ -30,6 +32,9 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * The logged in user
    */
   user: User;
+  /**
+   * The fridge object
+   */
   fridge: Fridge;
   /**
    * list of strains in the fridge, including empty ones
@@ -86,7 +91,6 @@ export class FridgeComponent implements OnInit, OnDestroy{
     this.user = this._authenticationService.getUser();
 
     let userId = this.user.id;
-    //let scenId = this._route.snapshot.paramMap.get('scenId');
     this.paramObserver = this._route.params.subscribe((params) => {
        let scenId = params['scenId'];
       this._scenarioService.getFridge(userId, scenId)
@@ -115,6 +119,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
 
   /**
    * Creates a new fridge because this user doesn't have one for this scenario
+   *
    * On success, inializes fridge
    *
    * @param {number} userId - logged in user's id
@@ -148,7 +153,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
    *
    * @param {FridgePhage[]} fridgeStrains - array of strains actually in the fridge
    *
-   * @returns {FridgePhage[]} - array of all slots in fridge, including empty
+   * @returns {FridgePhage[]} array of all slots in fridge, including empty
    */
   _fillStrains(fridgeStrains: FridgePhage[]): FridgePhage[]{
     var out: FridgePhage[] = [];
@@ -177,7 +182,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
    *
    * @param {number} src - strain number of phage
    *
-   * @returns {Object} - classes which appy to this button in the form {"class": boolean, ...}
+   * @returns {Object} classes which appy to this button in the form {"class": boolean, ...}
    */
   getPhageClass(src: number): Object{
     let phage = this.strains[src];
@@ -192,7 +197,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
   /**
    * Increase or decrease visible shelf then update the visible strains
    *
-   * Called by (click) of prev/next buttons
+   * Called by `(click)` of prev/next buttons
    *
    * @param {number} inc - amount to change shelf by
    */
@@ -224,11 +229,11 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * Determine if strain can be dropped in a slot
    * can be dropped if slot is empty and src is small or large
    *
-   * Called by [allowDrop] of fridge slot
+   * Called by `[allowDrop]` of fridge slot
    *
    * @param {number} spot - spot to test to see if can drop
    *
-   * @returns {any} - function which returns true or false if
+   * @returns {any} function which returns true or false if
    * strain can be dropped in slot
    */
   canDrop(spot: number): any {
@@ -249,7 +254,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
   /**
    * Adds a new strain to a fridge
    *
-   * Called by (onDropSucess) of slot
+   * Called by `(onDropSucess)` of slot
    *
    * @param {any} $event - drag event, incuding data for strain to add;
    * has: shifts, deletion, parents
@@ -287,6 +292,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
 
   /**
    * opens a dialog box to edit/learn more about selected phage
+   *
    * This function opens the box calls helper methods based on box output
    *
    * @param {number} src - strain number to open box for
@@ -316,6 +322,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
 
   /**
    * Helper function which updates the phage after dialog box has closed
+   *
    * Updates the strain on success and sets error message on error
    *
    * @param {number} src - strain number to update
@@ -334,6 +341,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
 
   /**
    * Helper function which deletes the phage from the fridge after dialog box has closed
+   *
    * Sets spot to empty phage on success and sets error message on error
    *
    * @param {number} src - strain number to delete

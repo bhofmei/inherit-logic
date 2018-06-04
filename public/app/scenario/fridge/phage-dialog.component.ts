@@ -13,6 +13,9 @@ import { FridgePhage } from '../../interfaces/phage.interface';
   templateUrl: './phage-dialog.template.html'
 })
 export class PhageDialogComponent {
+  /**
+   * The phage we are viewing
+   */
   @Input() phage: FridgePhage;
 
   constructor(public activeModal: NgbActiveModal) {

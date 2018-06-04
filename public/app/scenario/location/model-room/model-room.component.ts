@@ -8,6 +8,10 @@ import { ScenarioService } from '../../scenario.service';
 import { ScenarioGlobals } from '../../scenario.globals';
 import { readErrorMessage } from '../../../shared/read-error';
 
+/**
+ * This room is used for students to submit their deletion guesses
+ * for phage
+ */
 @Component({
     selector: 'model-room',
     templateUrl: './model-room.template.html',
@@ -40,11 +44,18 @@ export class ModelRoomComponent {
    * User id
    */
   private userId: number;
+  /**
+   * Potential backend error messages
+   */
   private errorMessage: string = '';
   /**
    * CSS width of each block dependent on length of gene and step size
    */
   private _width: string;
+  /**
+   * Boolean state variable used to make unsubscribing from
+   * multiple services easier
+   */
   private isDestroyed$: Subject<boolean>;
 
   constructor(private _router: Router,
@@ -106,8 +117,8 @@ export class ModelRoomComponent {
    * @param {number} strain - strain number (matches nummber is fridge)
    * @param {number} pos - block index
    *
-   * @returns {Object} - applicable CSS classes in the form
-   * {'class': boolean, ...}
+   * @returns {Object} applicable CSS classes in the form
+   * `{'class': boolean, ...}`
    */
   getBlockClass(strain: number, pos: number){
     let posGuess = this.guesses[strain][pos];
@@ -121,7 +132,7 @@ export class ModelRoomComponent {
   /**
    * Toggle block guess from true to false OR false to true
    *
-   * called on (click) of the block
+   * Called on `(click)` of the block
    *
    * @param {number} strain - strain number (matches nummber is fridge)
    * @param {number} pos - block index
@@ -134,7 +145,7 @@ export class ModelRoomComponent {
   /**
    * Saves the guesses to the backend/database using the service
    *
-   * called on (click) of Save Button
+   * Called on `(click)` of Save Button
    */
   saveData(){
     // clear error message beforehand

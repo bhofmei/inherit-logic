@@ -10,9 +10,6 @@ import { Course, Student, AdminStudent } from '../../interfaces';
 @Injectable()
 export class CourseService {
 
-  /**
-   * Leading url path
-   */
   private _baseURL = '/api/admin';
 
   constructor(private _http: HttpClient) {

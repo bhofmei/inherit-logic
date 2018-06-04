@@ -12,14 +12,11 @@ import { Scenario, Fridge, FridgePhage, GenotypePhage } from '../interfaces';
  */
 @Injectable()
 export class ScenarioService {
-    /**
-     * Leading backend url path to be able to group related functions
-     * to a consistent URL from across the application.
-     */
+
     private _baseURL = 'api/cricket';
   /**
-   * The current scenario details which is needed when performing
-   * crosses
+   * The current scenario details which is needed when
+   * performing crosses
    */
     private _scenarioDetails = new BehaviorSubject<string>('');
     getScenarioDetails = this._scenarioDetails.asObservable();
@@ -29,7 +26,9 @@ export class ScenarioService {
     private _scenarioGuesses = new BehaviorSubject<any>({});
     getGuesses = this._scenarioGuesses.asObservable();
   /**
-   * The current scenario code; used by fridge and location components
+   * The current scenario code
+   *
+   * Used by fridge and location components
    * to get the code without the route
    */
     private _scenarioCode = new BehaviorSubject<string>('');
@@ -84,7 +83,8 @@ export class ScenarioService {
    *
    * @param {string} scenId scenario identifier
    *
-   * @returns {Scenario} - scenario information
+   * @returns {Scenario}
+   * - scenario information
    * - or error "Failed to load scenario <scenId>" if scenario doesn't exist
    * - or other server/database error
    */
@@ -101,7 +101,8 @@ export class ScenarioService {
    * @param {number} userId userId of logged in user
    * @param {string} scenId scenario code of current scenario
    *
-   * @returns {Observable<any>} - updated guesses
+   * @returns {Observable<any>}
+   * - updated guesses
    * - or error "Failed to find fridge" if fridge doesn't exist
    * - or error "Could not save new guesses" if couldn't update
    * - or other server/database error
@@ -117,7 +118,8 @@ export class ScenarioService {
    * @param {number} userId userId of logged in user
    * @param {string} scenId scenario code of current scenario
    *
-   * @returns {Observable<Fridge>} - newly created fridge
+   * @returns {Observable<Fridge>}
+   * - newly created fridge
    * - or error "Unable to create new phage for scenario" if issue create phage
    * - or error "Unable to save new fridge" if couldn't create
    * - or other server/database error
@@ -132,7 +134,8 @@ export class ScenarioService {
    * @param {number} userId userId of logged in user
    * @param {string} scenId scenario code of current scenario
    *
-   * @returns {Observable<Fridge>} - existing fridge
+   * @returns {Observable<Fridge>}
+   * - existing fridge
    * - or error "No fridge for scenario/user" if fridge does not exist
    * - or other server/database error
    */
@@ -151,7 +154,8 @@ export class ScenarioService {
    * @param {any} strain - new phage to add to fridge
    * - has strainNum, mutationList, and deletion
    *
-   * @returns {Observable<FridgePhage>} - newly saved phage
+   * @returns {Observable<FridgePhage>}
+   * - newly saved phage
    * - or error "User not found" if user not found
    * - or error "Failed to load scenario <scenId>" if scenario not found
    * - or error "Failed to find fridge" if fridge doesn't exist
@@ -170,7 +174,8 @@ export class ScenarioService {
    * @param {FridgePhage} strain - strain to update
    * - use strain `id` to specify strain and send updated info
    *
-   * @returns {Observable<FridgePhage>} - updated strain
+   * @returns {Observable<FridgePhage>}
+   * - updated strain
    * - or error "Phage not found" if strain doesn't exist
    * - or other server/database error
    */
@@ -188,7 +193,8 @@ export class ScenarioService {
    * @param {FridgePhage} strain - the strain to delete
    * - use strain `id` to specify which strain to delete
    *
-   * @returns {any} - the strain just deleted
+   * @returns {any}
+   * - the strain just deleted
    * - or error "Phage not found" if strain doesn't exist
    * - or error "Failed to find fridge" if fridge doesn't exist
    * - or error "Unable to remove strain from fridge" if couldn't delete

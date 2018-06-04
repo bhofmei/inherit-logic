@@ -51,7 +51,7 @@ export class PlexerRoomComponent implements OnInit, OnDestroy {
    */
   private nStrains: number[] = [0,0];
   /**
-   * The plexer results
+   * The plexer results;
    * Is Object form of a 2-D array where each cell has {smallPlaque: #, largePlaque: #}
    */
   private results: Object;
@@ -72,8 +72,8 @@ export class PlexerRoomComponent implements OnInit, OnDestroy {
    */
   private dilutionControl: FormControl;
   /**
-   * CSS classes for the submit spinner
-   * Visible after submit button hit and before results received
+   * - CSS classes for the submit spinner
+   * - Visible after submit button hit and before results received
    */
   private _spinnerClass: Object = {
     'hiding': true,
@@ -169,7 +169,8 @@ export class PlexerRoomComponent implements OnInit, OnDestroy {
    * 3. dilution value is valid, AND
    * 4. not still waiting for previous submit response
    *
-   * @returns {boolean} - `true` if user can submit (all conditions met)
+   * @returns {boolean}
+   * - `true` if user can submit (all conditions met)
    * - `false` otherwise
    */
   submitDisabled(): boolean {
@@ -198,7 +199,8 @@ export class PlexerRoomComponent implements OnInit, OnDestroy {
    * @param {ExperimentPhage[]} inData - input array to be cleaned
    * - can contain null values
    *
-   * @returns {ExperimentPhage[]} - cleaned array
+   * @returns {ExperimentPhage[]}
+   * - cleaned array
    * - does not contain null values
    */
   protected _cleanArrays(inData: ExperimentPhage[]): ExperimentPhage[]{
@@ -219,7 +221,8 @@ export class PlexerRoomComponent implements OnInit, OnDestroy {
    * @param {Object} results - results of computing the plexer
    * - does not contain null values
    *
-   * @returns {Object} - updated results
+   * @returns {Object}
+   * - updated results
    * - can contain null values
    */
   protected _unCleanResults(results: Object):Object{
@@ -262,7 +265,7 @@ export class PlexerRoomComponent implements OnInit, OnDestroy {
   /**
    * Return the current CSS classes for the spinner
    *
-   * @returns {Object} - CSS classes for the spinner in the form
+   * @returns {Object} CSS classes for the spinner in the form
    * `{'class': boolean, ...}`
    */
   getSpinnerClass(){

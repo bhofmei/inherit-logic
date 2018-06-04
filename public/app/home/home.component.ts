@@ -6,6 +6,7 @@ import { User } from '../interfaces/user.interface';
 
 /**
  * The home landing page when going to the website
+ *
  * Mainly a view component, but some aspects are dependent
  * on if a user is logged in and the user role
  */
