@@ -11,7 +11,7 @@ import { AdminStudent, StudentFridge } from '../../interfaces';
 @Injectable()
 export class StudentService {
   
-  private _baseURL = 'api/admin';
+  private _baseURL = '/api/admin';
 
   constructor(private _http: HttpClient) {}
 
@@ -53,6 +53,7 @@ export class StudentService {
    * @param {string} role - new role to be assigned; one of: `"admin", "instr", "student"`
    *
    * @returns {Observable<any>} - the updated student
+   * - error `Value "role" is not a valid role` if role isn't one of `admin`, `instr`, `student`
    * - or other server/database error
    */
   setStudentRole(adminId: number, studentId: number, role: string): Observable<any>{
@@ -82,7 +83,9 @@ export class StudentService {
    * @param {number} studentId - userId of student
    * @param {string} scenId - scenario Id for fridge to find
    *
-   * @returns{Observable<StudentFridge>} the student's fridge or error
+   * @returns{Observable<StudentFridge>} - the student's fridge
+   * - an empty fridge if the fridge doesn't exist yet
+   * - or other server error
    */
   getFridge(adminId: number, studentId: number, scenId: string): Observable<StudentFridge>{
     return this._http
