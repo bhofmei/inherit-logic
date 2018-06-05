@@ -238,7 +238,7 @@ const _fridges: any[] = [
     user: listOfStudents[0],
     scenario: listOfScenarios[0],
     scenarioDetails: 'student1 test1',
-    guesses: '{}',
+    guesses: '{"2":[false, true, false]}',
     accessGranted: listOfStudents[0].accessGranted[listOfScenarios[0].scenCode], // true
     strains: listOfPhage.slice(1,5)
   },

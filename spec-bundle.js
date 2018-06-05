@@ -23,14 +23,13 @@ testing.TestBed.initTestEnvironment(
   browser.platformBrowserDynamicTesting()
 );
 
-var testContext = require.context('./public/app', true, /.spec\.ts/)
+var testContext = require.context('./public/app/admin/student', true, /.spec\.ts/)
 
 function requireAll(requireContext) {
   return requireContext.keys()
     .map(requireContext);
 }
 
-//var modules = requireAll(testContext);
-//var modules = [require('./public/app/scenario/location/model-room/model-room.component.spec')
-var modules = [require('./public/app/admin/admin.component.spec')
-];
+var modules = requireAll(testContext);
+//var modules = [require('./public/app/admin/course/course-list/course-list.component.spec')];
+//var modules = [require('./public/app/admin/student/student-fridge/student-phage.component.spec')];
