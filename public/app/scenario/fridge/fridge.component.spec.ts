@@ -307,7 +307,7 @@ describe('Fridge Component', ()=>{
     }); // end Should create a fridge
 
     it('Should have strain 1 reference', ()=>{
-         let strain = page.strains[0];
+        let strain = page.strains[0];
         let isRef = isPhageType(strain, 'reference');
         expect(isRef).toBe(true);
         let strainNum = strain.query(By.css('.strain-num')).nativeElement.innerHTML;

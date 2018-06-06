@@ -58,14 +58,15 @@ export class ScenarioServiceStub {
   }
 
   createFridge(userId: number, scenId: string): Observable<Fridge> {
-    let f: Fridge = {
-      userId: userId,
-      scenCode: scenId,
-      scenarioDetails: 'new fridge',
-      guesses: '',
-      accessGranted: false,
-      strains: [listOfPhage[0]]
-    }
+//    let f: Fridge = {
+//      userId: userId,
+//      scenCode: scenId,
+//      scenarioDetails: 'new fridge',
+//      guesses: '',
+//      accessGranted: false,
+//      strains: [listOfPhage[0]]
+//    }
+    let f = _.cloneDeep(fridgeToCreate);
     return Observable.of(f);
   }
 

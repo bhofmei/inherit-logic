@@ -285,7 +285,7 @@ export const fridgeToCreate: Fridge = {
   userId: listOfStudents[0].userId,
   scenCode: listOfScenarios[1].scenCode,
   scenarioDetails: 'student1 test2',
-  guesses: '',
+  guesses: '{}',
   accessGranted: listOfStudents[0].accessGranted[listOfScenarios[1].scenCode], // false
   strains: listOfPhage.slice(0,2)
 }
