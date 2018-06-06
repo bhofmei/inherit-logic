@@ -24,7 +24,10 @@ export class UpdatePasswordComponent{
    */
   private user: User;
   /**
-   * Password information include old password, new password, and confirm new password
+   * - Password information to send to server to update password
+   * - Has fields `password` (current password), `newPassword` (password to change to), 
+   * `confirmPassword` (confirms typing of new password), and 
+   * `username` (user's email)
    */
   private credentials: any;
   /**
@@ -32,7 +35,7 @@ export class UpdatePasswordComponent{
    */
   private isDestroyed$: Subject<boolean>;
   /**
-   * potential backend error message displayed prominantly
+   * Potential backend error message displayed prominantly
    */
   private errorMessage: string = '';
   /**
@@ -40,13 +43,6 @@ export class UpdatePasswordComponent{
    */
   private passwordMessage: string = '';
 
-  /**
-   * Class constructor for this component;
-   * Includes router (for navigation) and services to fetch info
-   *
-   * @param {router} _router Navigate to a page not using the browser
-   * @param {ProfileService} _profileService Service when sends request to backend and handles updating the exisitng information
-   */
   constructor(
     private _router: Router,
     private _profileService: ProfileService,
@@ -79,8 +75,8 @@ export class UpdatePasswordComponent{
 
   /**
    * Attempt to update the password
-   * If successful, redirects to profile page
-   * If there's an error, displays error message
+   * - If successful, redirects to profile page
+   * - If there's an error, displays error message
    */
   updatePassword(){
     // do checks

@@ -42,9 +42,8 @@
          <label for="confirmPassword" style="white-space: pre"> </label>
         <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm" [(ngModel)]="cPassword" name="confirmPassword">
       </div>
-    </div>
+    </div> <!-- end rowPassword -->
     <div *ngIf="errorMessage !== ''" class="alert alert-danger">{{errorMessage}}</div>
     <button class="btn btn-primary" type="submit">Sign up</button>
-
   </form>
 </div>

@@ -9,7 +9,7 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "back:docs": "./add-doc/gen-backend-docs.sh",
-    "ng:docs": "./node_modules/.bin/compodoc public -p tsconfig.doc.json -d docs --includes add-doc --includesName 'Backend Documentation' -t -n Cricket --disableDomTree --hideGenerator",
+    "ng:docs": "./node_modules/.bin/compodoc public -p tsconfig.doc.json -d docs --includes add-doc --includesName 'Backend Documentation' -t -n Cricket --disableDomTree --hideGenerator --customFavicon ./public/img/cricket-docs.png",
     "build:docs": "yarn run back:docs; yarn run ng:docs",
     "webpack": "webpack --watch --config webpack.dev.js",
     "webpack:p": "webpack --watch --config webpack.prod.js",
@@ -113,6 +113,7 @@
     "jsdoc-to-markdown": "^4.0.1",
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.2",
     "karma-jasmine": "^1.1.1",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-remap-coverage": "^0.1.5",

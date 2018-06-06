@@ -23,7 +23,7 @@ testing.TestBed.initTestEnvironment(
   browser.platformBrowserDynamicTesting()
 );
 
-var testContext = require.context('./public/app/admin', true, /.spec\.ts/)
+var testContext = require.context('./public/app', true, /.spec\.ts/)
 
 function requireAll(requireContext) {
   return requireContext.keys()
@@ -32,4 +32,4 @@ function requireAll(requireContext) {
 
 var modules = requireAll(testContext);
 //var modules = [require('./public/app/admin/admin.component.spec2')];
-//var modules = [require('./public/app/admin/student/student-fridge/student-phage.component.spec')];
+//var modules = [require('./public/app/scenario/location/plexer-room/plexer-room.component.spec')];

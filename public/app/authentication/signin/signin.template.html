@@ -13,7 +13,7 @@
       <div class="col-sm-9">
         <input type="password" id="inputPassword" class="form-control" placeholder="Password" [(ngModel)]="credentials.password" name="password">
       </div>
-    </div>
+    </div> <!-- end rowPassword -->
     <p class="text-danger">{{errorMessage}}</p>
     <div class="row">
       <div class="col-sm-3">
@@ -22,8 +22,6 @@
       <div class="col-sm-9">
         <a [routerLink]="['/authentication/forget-password']">Forget password?</a>
       </div>
-    </div>
-
+    </div> <!-- end row for submission -->
   </form>
-
 </div>

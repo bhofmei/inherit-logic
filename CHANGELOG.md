@@ -6,22 +6,23 @@
 - FIXED testing error with deleting fridge
 
 ## [v1.0.9] - 2018-04-16
-- fixed issue with potential incorrect error dropping bact tube to plate directly
+- FIXED issue with potential incorrect error dropping bact tube to plate directly
 - UPDATED plexer submission
   - when submit button is pushed, a spinner appears in the top left of the results table and the submit button is disabled
   - spinner is hidden and button is active once the results come back from the server
   - this will hopefully minimize students sending the same plexer request several times bc they weren't sure if it went through--this causes server overload
 
 ## [v1.0.8] - 2018-02-26
-- Save parent id of phage from plate to fridge
-- Get parent info about phage when getting fridge
-- Display phage parent strain number in dialog
+- ADDED track new phage strains parent info
+  - Save parent id of phage from plate to fridge
+  - Get parent info about phage when getting fridge
+  - Display phage parent strain number in dialog
 
 ## [v1.0.7] - 2018-02-23
 - UPDATED the way phage mutations are stored to save memory
-  - updated all genetics components
-  - updated model
-  - updated front end interface and pipe
+  - Updated all genetics components
+  - Updated model
+  - Updated front end interface and pipe
 - UPDATED on rest bacteria, only WT-like genotypes sent to client so smaller data transfer
 - REMOVED rate limiting (causing server errors)
 - FIXED over capacity for plexer

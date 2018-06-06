@@ -34,12 +34,9 @@ module.exports = {
               configFileName: './tsconfig.test.json'
             }
           },
-          /*{
-            loader: 'angular2-template-loader',
-            options: {
-              baseRef: ROOT('public')
-            }
-          }*/
+          {
+            loader: 'angular2-template-loader?keepUrl=true'
+          }
         ]
         //          use: [
         //            {loader: 'awesome-typescript-loader',
@@ -52,10 +49,17 @@ module.exports = {
         //          ],
         //          exclude: [/\.e2e\.ts$/]
       },
-      {
+      /*{
         test: /\.(html|css)$/,
         loader: 'raw-loader'
-      },
+      },*/
+      {
+        test: /\.(html|css)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]'
+        }
+      },      
             /*{
               test: /\.css$/,
               use: [
