@@ -1,9 +1,12 @@
 # CHANGELOG
 
 ## [unreleased]
+
+## [v1.0.10]
 - UPDATED responses on error in app controllers
 - ADDED check for null phage from DB when trying to create a plate
 - FIXED testing error with deleting fridge
+- ADDED unit testing and documentation for most of the application
 
 ## [v1.0.9] - 2018-04-16
 - FIXED issue with potential incorrect error dropping bact tube to plate directly
