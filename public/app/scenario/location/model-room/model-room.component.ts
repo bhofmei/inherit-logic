@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/takeUntil'
+import { Subject } from 'rxjs';
+
 
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { ScenarioService } from '../../scenario.service';

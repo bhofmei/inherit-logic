@@ -2,7 +2,7 @@ import { fakeAsync, tick, async, TestBed, ComponentFixture } from '@angular/core
 import { Directive, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Rx';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { Router, RouterStub, ActivatedRoute, ActivatedRouteStub, RouterLinkStubDirective, getAllRouterLinks, recurCSSQuery, click, addMatchers } from '../../../testing';
 import * as _ from 'lodash';
 

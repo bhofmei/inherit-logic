@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/takeUntil'
+import { Subject } from 'rxjs';
+
 
 import { ScenarioGlobals } from '../../scenario.globals';
 import { ExperimentService } from '../experiment.service';

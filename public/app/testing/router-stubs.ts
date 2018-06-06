@@ -33,8 +33,7 @@ export class RouterStub {
 
 
 // Only implements params and part of snapshot.params
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject ,  Observable } from 'rxjs';
 //import { convertToParamMap } from '@angular/router';
 
 @Injectable()

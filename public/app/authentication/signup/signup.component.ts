@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/takeUntil'
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/concat'
+import { Subject } from 'rxjs';
+
+
+
 
 import { AuthenticationService } from '../authentication.service';
 import { CourseService } from '../../admin/course/course.service';

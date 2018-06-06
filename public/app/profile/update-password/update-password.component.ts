@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/takeUntil'
+import { Subject } from 'rxjs';
+
 
 import { ProfileService } from '../profile.service';
 import { AuthenticationService } from '../../authentication/authentication.service';

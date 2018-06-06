@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/takeUntil'
+import { Subject } from 'rxjs';
+
 
 import { AuthenticationService } from '../authentication/authentication.service';
 import { User } from '../interfaces/user.interface';

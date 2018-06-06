@@ -1,5 +1,5 @@
 // fake authentication service used in testing
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { User } from '../../interfaces';
 import { userAdmin } from '../sample-data';
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import { ScenarioService } from '../scenario.service';
 import { AuthenticationService } from '../../authentication/authentication.service';

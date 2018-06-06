@@ -1,4 +1,5 @@
-import {Observable } from 'rxjs/Observable';
+
+import { Observable } from 'rxjs';
 import { AdminStudent, StudentFridge } from '../../interfaces';
 import { listOfUsers, listOfStudentFridges, listOfScenarios } from '../sample-data';
 import * as _ from 'lodash';

@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs/Observable';
+
+import { Observable } from 'rxjs';
 import { Scenario, Fridge, FridgePhage, GenotypePhage } from '../../interfaces';
 import { listOfScenarios, listOfFridges, fridgeToCreate, listOfPhage, guesses } from '../sample-data';
 import * as _ from 'lodash';

@@ -1,5 +1,5 @@
-// fake course service used in testing
-import { Observable } from 'rxjs/Observable';
+
+import { Observable } from 'rxjs';
 import { Course, Student, AdminStudent, _User } from '../../interfaces';
 import { listOfCourses, listOfStudents, sampleInstr, instructorToAdd } from '../sample-data';
 

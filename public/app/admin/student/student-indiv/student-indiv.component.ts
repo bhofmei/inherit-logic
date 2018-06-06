@@ -3,9 +3,8 @@ import { SharedModule } from '../../../shared/shared.module';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/takeUntil';
+import { Subscription ,  Subject } from 'rxjs';
+
 
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { StudentService } from '../student.service';

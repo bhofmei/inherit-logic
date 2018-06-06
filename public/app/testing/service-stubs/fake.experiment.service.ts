@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs/Observable';
+
+import { Observable } from 'rxjs';
 import { PlateInput, PlateResults, PlexerInput } from '../../interfaces';
 import { singleInputPlates, doubleInputPlates, plexerResult } from '../sample-data';
 import * as _ from 'lodash';
