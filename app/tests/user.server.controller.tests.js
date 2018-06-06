@@ -146,7 +146,7 @@ describe('User Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             should.exist(res.error);
-            res.error.should.have.property('status', 400);
+            res.error.should.have.property('status', 500);
             res.error.text.should.match(/Email is required/i);
             done();
           });
@@ -161,7 +161,7 @@ describe('User Controller Unit Tests:', () => {
           .expect(200)
           .end((err, res) => {
             should.exist(res.error);
-            res.error.should.have.property('status', 400);
+            res.error.should.have.property('status', 500);
             res.error.text.should.match(/Password should be longer/i);
             done();
           });
