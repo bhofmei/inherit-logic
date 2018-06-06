@@ -175,7 +175,7 @@ describe('Scenario Service', () => {
               // fridge has: scenarioDetails, guesses, strains, accessGranted, userId, scenCode
               expect(res.userId).toBe(userId);
               expect(res.scenCode).toBe(scenCode);
-              expect(res.guesses).toEqual('{}');
+              expect(res.guesses).toEqual('{"2":[false, true, false]}');
               expect(res.strains.length).toBe(4);
             }, (err) => {
               fail('There should not be an error');
