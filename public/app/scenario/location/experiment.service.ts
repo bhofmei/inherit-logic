@@ -11,7 +11,7 @@ import { PlateInput, PlateResults, PlexerInput } from '../../interfaces';
 @Injectable()
 export class ExperimentService {
 
-  private _baseURL = 'api/cricket';
+  private _baseURL = '/api/cricket';
 
   constructor(private _http: HttpClient) { }
 
@@ -22,8 +22,11 @@ export class ExperimentService {
    * @param {PlateInput} plate - information needed to generate the new plate
    * - Includes 1-2 phage with numPhage each, lawn type, location, specials, plate capacity, and scenario data
    *
-   * @returns {Observable<PlateResults>} - newly generate plate with info about parents and (is plate full or list of small and large plaques)
-   * - or error
+   * @returns {Observable<PlateResults>}
+   * - newly generate plate with info about parents and (is plate full or list of small and large plaques)
+   * - or error "numPhage not set" if number of phage isn't set
+   * - or error "Error finding the specified phage 1/2" if phage not in database
+   * - or error message for other server error
    */
   createPlate(plate: PlateInput): Observable<PlateResults>{
     var res = this._http
@@ -40,9 +43,11 @@ export class ExperimentService {
    * lawn type, location, specials, individual plexer plate capacity
    * and scenario data
    *
-   * @returns {Observable<any>} the results of the plexer as a 2D array
+   * @returns {Observable<any>}
+   * - the results of the plexer as a 2D array
    * were each cell in the array represents a plate and has
    * is plate full or counts of small/large plaques
+   * - or error if server error
    */
   performPlexer(data: PlexerInput): Observable<any>{
     // data will have rowPhage, colPhage, lawn type, location, specials, capacity, scenarioData
