@@ -38,38 +38,26 @@ module.exports = {
             loader: 'angular2-template-loader?keepUrl=true'
           }
         ]
-        //          use: [
-        //            {loader: 'awesome-typescript-loader',
-        //            query: {
-        //              sourceMap: false,
-        //              inlineSourceMap: true,
-        //              compilerOptions: {removeComments: true}
-        //            }},
-        //            'angular-router-loader'
-        //          ],
-        //          exclude: [/\.e2e\.ts$/]
       },
-      /*{
-        test: /\.(html|css)$/,
-        loader: 'raw-loader'
-      },*/
       {
         test: /\.(html|css)$/,
         loader: 'file-loader',
         options: {
           name: '[path][name].[ext]'
         }
-      },      
-            /*{
-              test: /\.css$/,
-              use: [
-                'style-loader',
-                'css-loader'
-              ]
-            },*/
+      },
       {
         test: /\.(png|jpg|jpeg|svg)$/,
         loader: 'file-loader'
+      },
+      {
+        enforce: "post",
+        test: /.(js|ts)$/,
+        loader: 'istanbul-instrumenter-loader',
+        include: ROOT('public', 'app'),
+        exclude: [/\.(e2e|spec)\.ts$/,
+          /node_modules/, /testing*\.ts/
+        ]
       }
     ]
   },

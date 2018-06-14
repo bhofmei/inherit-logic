@@ -32,4 +32,4 @@ function requireAll(requireContext) {
 
 var modules = requireAll(testContext);
 //var modules = [require('./public/app/admin/admin.component.spec2')];
-//var modules = [require('./public/app/scenario/location/plexer-room/plexer-room.component.spec')];
+//var modules = [require('./public/app/scenario/location/experiment.service.spec')];

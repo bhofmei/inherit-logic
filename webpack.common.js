@@ -71,7 +71,7 @@ module.exports = {
       baseHref: '/',
       bodyHtmlSnippet: `<cricket-app>
 <div class="container">
-<h1>Loading Cricket...</h1>
+<h1 id="load-header">Loading Cricket...</h1>
 Please wait.
 </div>
 </cricket-app>`,

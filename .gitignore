@@ -13,3 +13,5 @@ config/credentials/*
 !config/credentials/*public*
 
 /config/env.production.js
+/.nyc_output/
+coverage/**/html/*
