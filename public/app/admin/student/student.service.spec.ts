@@ -57,6 +57,7 @@ describe('Student Service', ()=>{
             (res) => {
               expect(res.length).toBe(1);
               expect(res[0].firstName).toBe('Student3');
+              expect(res[0].lastName).toBe('ZTester');
               expect(res[0].email).toBe('student3@test.com');
             }, (err) => {
               fail('There should not be an error');

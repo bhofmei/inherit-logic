@@ -109,6 +109,59 @@ describe('Model Room Component', ()=>{
       expect(c).toContain('bg-dark')
     })); // end Should have save on button click
   }); // end Test scenario 1
+
+  describe('Test scenario 3 - error saving', ()=>{
+    let scenario = 'test3';
+    beforeEach(fakeAsync(()=>{
+      activateRoute.parent.testParams = {scenId: scenario};
+      createComponent(scenario);
+      tick();
+      page.addElements();
+      addMatchers();
+    })); // end beforeEach fakeAsync
+
+    it('Should have one row of buttons', ()=>{
+      expect(page.strainLabels.length).toBe(1);
+      expect(page.row1Blocks).not.toBeNull();
+      expect(page.row2Blocks).toBeNull();
+    }); // end Should have one row of buttons
+
+    it('Should have error on button click', fakeAsync(()=>{
+      click(page.row1Blocks[0]);
+      tick();
+      fixture.detectChanges();
+      click(page.saveBtn);
+      tick();
+      fixture.detectChanges();
+      page.addElements();
+      let wasCalled = page.saveDelSpy.calls.any();
+      expect(wasCalled).toBeTruthy();
+      let eMessage = page.errorMessage.innerHTML;
+      expect(eMessage).toTemplateMatch('Error saving deletions');
+    })); // end Should have save on button click
+  }); // end Test scenario 3 - error saving
+
+  describe('Test scenario 4 - no phage for guessing', ()=>{
+     let scenario = 'test4';
+    beforeEach(fakeAsync(()=>{
+      activateRoute.parent.testParams = {scenId: scenario};
+      createComponent(scenario);
+      tick();
+      page.addElements();
+      addMatchers();
+    })); // end beforeEach fakeAsync
+
+    it('Should have error message', ()=>{
+      let eMessage = page.errorMessage.innerHTML;
+      expect(eMessage).toTemplateMatch('No phage available for modelling');
+    }); // end Should have error message
+
+    it('Should have no phage', ()=>{
+      expect(page.strainLabels.length).toBe(0);
+      expect(page.row1Blocks).toBeNull();
+      expect(page.row2Blocks).toBeNull();
+    }); // end Should have no phage
+  }); // end Test scenario 4 - no phage for guessing
 }); // end Model Room Component
 
 class Page {
@@ -127,18 +180,21 @@ class Page {
 
   addElements(){
     let de = fixture.debugElement;
+    if(de){
     this.saveBtn = de.query(By.css('button'));
 
-    this.strainLabels = de.query(By.css('#modeller'))
-      .queryAll(By.css('div.row.text-secondary'))
-      .map((el)=>{return el.nativeElement});
-
+    let l = de.query(By.css('#modeller'))
+    this.strainLabels = ( l ?
+      l.queryAll(By.css('div.row.text-secondary'))
+      .map((el)=>{return el.nativeElement}) : [] )
     let rows = de.queryAll(By.css('.phage-delete-row'));
-    this.row1Blocks = rows[0].queryAll(By.css('div'));
-    this.row2Blocks = rows[1].queryAll(By.css('div'));
+
+    this.row1Blocks = ( rows.length > 0 ? rows[0].queryAll(By.css('div')): null );
+    this.row2Blocks = ( rows.length > 1 ? rows[1].queryAll(By.css('div')) : null );
 
     let tmp = fixture.debugElement.query(By.css('.alert'));
     this.errorMessage = (tmp ? tmp.nativeElement : null);
+    }
   }
 }
 
@@ -148,9 +204,10 @@ function createComponent(scenId: string){
   scenarioService = TestBed.get(ScenarioService);
   let s = guesses[scenId];
   if(s){
-    scenarioService.setScenario('', JSON.stringify(s));
+    scenarioService.getGuesses = Observable.of(s);
   } else {
-    scenarioService.setScenario('', JSON.stringify({}));
+      scenarioService.getGuesses = Observable.of({});
+    //scenarioService.setScenario('', '{}');
   }
 
   page = new Page();

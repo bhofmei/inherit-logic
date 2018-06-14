@@ -52,7 +52,7 @@ describe('Student List Component', ()=>{
       expect(studentNames[1]).toBe('Tester, Instr');
       expect(studentNames[2]).toBe('Tester, Student1');
       expect(studentNames[3]).toBe('Tester, Student2');
-      expect(studentNames[4]).toBe('Tester, Student3');
+      expect(studentNames[4]).toBe('ZTester, Student3');
     }); // end Should have the correct names
 
     it('Should have correct links', ()=>{
@@ -80,7 +80,7 @@ describe('Student List Component', ()=>{
 
     it('Should have the correct names', ()=>{
       let studentNames = fixture.debugElement.queryAll(By.css('.text-primary')).map((de)=>{return de.nativeElement.innerHTML});
-      expect(studentNames[0]).toBe('Tester, Student3');
+      expect(studentNames[0]).toBe('ZTester, Student3');
     }); // end Should have the correct names
 
     it('Should have correct links', ()=>{

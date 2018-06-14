@@ -107,7 +107,7 @@ export var listOfUsers: AdminStudent[] = [
   },
   {
     firstName: 'Student3',
-    lastName: 'Tester',
+    lastName: 'ZTester',
     userId: 17,
     email: 'student3@test.com',
     course: listOfCourses[1],
@@ -399,5 +399,6 @@ export const guesses: any = {
   'test2': {
     '2': _guesses2_0,
     '3': _guesses2_1
-  }
+  },
+  'test3': {'0': _guesses1_0}
 }

@@ -55,7 +55,11 @@ export class ScenarioServiceStub {
   }
 
   saveDeletions(guesses: any, userId: number, scenId: string): Observable<any> {
+    if(scenId === 'test3'){
+      return Observable.throw({message: 'Error saving deletions'});
+    } else {
     return Observable.of(_.cloneDeep(JSON.stringify(guesses)));
+    }
   }
 
   createFridge(userId: number, scenId: string): Observable<Fridge> {

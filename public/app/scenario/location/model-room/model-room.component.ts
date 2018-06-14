@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -18,7 +18,7 @@ import { readErrorMessage } from '../../../shared/read-error';
   styleUrls: ['./model-room.style.css']
 })
 
-export class ModelRoomComponent {
+export class ModelRoomComponent implements OnInit, OnDestroy {
 
   /**
    * Current user guesses as object
@@ -104,7 +104,7 @@ export class ModelRoomComponent {
   /**
    * Destroy the component by unsubscribing
    */
-  ngOnDestory(){
+  ngOnDestroy(){
     this.isDestroyed$.next(true);
     this.isDestroyed$.unsubscribe();
   }
