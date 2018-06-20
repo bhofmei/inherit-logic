@@ -77,7 +77,9 @@ export class AuthenticationService {
    * @param {any} credentials - `username` (as email) and `password` to be tested for logging in
    *
    * @returns {Observable<User>} - the successfully logged in user
-   * - or error message for server/database/authentication error
+   * - error message `Invalid password` if password is incorrect
+   * - error message `User not found` if invalid email
+   * - error message for server/database/authentication error
    */
   signin(credentials: any): Observable<User> {
       let body = JSON.stringify(credentials);
@@ -92,8 +94,8 @@ export class AuthenticationService {
    * @param {any} user - user details including `firstName`, `lastName`, `username` (email), `course`, and `password`
    *
    * @returns {Observable<User>} - The new logged-in user when successfully create new user
-   * - or error 400 if errror logging in
-   * - or error 500 if error creating user
+   * - error 400 if errror logging in
+   * - error 500 if error creating user
    */
   signup(user: any): Observable<User> {
       let body = JSON.stringify(user);
@@ -135,7 +137,7 @@ export class AuthenticationService {
    * @param {any} credentials - info needed to reset password: `password, `confirmPassword`, and `token`
    *
    * @returns {Observable<any>} - If successful, sends success message `Passwords has been reset`.
-   * - error message `Invalid token` if token doesn't match a user
+   * - error message `Invalid token` if token doesn't exist
    * - error message `Token has expired` for valid tokens but user took too long to attempt to reset
    * - error message for all other errors
    */
