@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { AuthenticationService } from '../authentication.service';
 import { readErrorMessage } from '../../shared/read-error';
@@ -21,7 +22,12 @@ export class SigninComponent implements OnDestroy {
   /**
    * Login credentials for user including `username` (email) and `password`
    */
-    credentials: any = {};
+    //credentials: any = {};
+  /*credentials = new FormGroup({
+    username: new FormControl(''),
+    password: new FormControl(''),
+  });*/
+  credentials: FormGroup;
   /**
    * Authetnication service subscription from when trying to login the user
    */
@@ -30,6 +36,12 @@ export class SigninComponent implements OnDestroy {
     constructor(private _authenticationService: AuthenticationService,
         private _router: Router) { }
 
+  ngOnInit(){
+    this.credentials = new FormGroup({
+    username: new FormControl(''),
+    password: new FormControl(''),
+  });
+  }
   /**
    * Upon form submission, attempts to sign in the user with `credentials` (using the service)
    *
@@ -41,7 +53,7 @@ export class SigninComponent implements OnDestroy {
    */
     signin() {
         this.subscription = this._authenticationService
-          .signin(this.credentials)
+          .signin(this.credentials.value)
           .subscribe((result) => {
           // TODO: update
           this._authenticationService.setUser(result);

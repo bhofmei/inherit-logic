@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { DndModule } from 'ng2-dnd';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { McBreadcrumbsModule } from 'ngx-breadcrumbs';
@@ -24,6 +25,7 @@ import { PhageParentsPipe } from '../pipes/phage-parents.pipe';
     imports: [
       CommonModule,
       FormsModule,
+      ReactiveFormsModule,
       DndModule.forRoot(),
       NgbModule.forRoot(),
       McBreadcrumbsModule.forRoot(),
@@ -38,6 +40,7 @@ import { PhageParentsPipe } from '../pipes/phage-parents.pipe';
     exports: [
       CommonModule,
       FormsModule,
+      ReactiveFormsModule,
       DndModule,
       NgbModule,
       McBreadcrumbsModule,

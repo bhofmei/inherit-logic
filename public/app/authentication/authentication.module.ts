@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from '../shared/shared.module'
 
 import { AuthenticationRoutes } from './authentication.routes';
 import { SigninComponent } from './signin/signin.component';
@@ -18,6 +19,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     imports: [
         CommonModule,
         FormsModule,
+      SharedModule,
         RouterModule.forChild(AuthenticationRoutes)
     ],
     declarations: [
