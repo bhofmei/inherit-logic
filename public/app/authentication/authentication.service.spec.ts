@@ -243,7 +243,7 @@ describe('Authentication Service', ()=>{
     ); // end should not sign up - email required
   }); // end Test signup
 
-/*  describe('Test signout', ()=>{
+  describe('Test signout', ()=>{
     it('Should signout',
       inject(
         [HttpTestingController, AuthenticationService],
@@ -253,17 +253,17 @@ describe('Authentication Service', ()=>{
         ) => {
           service.signout().subscribe(
             (res) => {
-              expect(res).toBeTruthy()
+              expect(res.message).toBeTruthy()
             }, (err) => {
               fail('There should not be an error');
             }
           ); // end subscribe
 
           const mockReq = backend.expectOne('/api/auth/signout');
-          mockReq.flush(true);
+          mockReq.flush({message: true});
         }) // end inject
        ); // end Should signout
-  }); // end Test signout*/
+  }); // end Test signout
 
   describe('Test forgetPassword', ()=>{
      it('Should send reset email',

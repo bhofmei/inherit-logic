@@ -5,6 +5,7 @@ import { userAdmin } from '../sample-data';
 
 export class AuthServiceStub {
   private _user: User = userAdmin;
+  public redirectUrl: string = '/';
   getUser$ = Observable.of(this._user);
 
   setUser(user: User){
@@ -27,8 +28,15 @@ export class AuthServiceStub {
     }
   }
   signin(credentials: any): Observable<User>{
-    if(credentials.email && credentials.password)
-    return Observable.of(this._user);
+    if(!(credentials.username && credentials.password)){
+      return Observable.throw({message: 'Missing Credentials'});
+    } else if(credentials.username !== this._user.email){
+      return Observable.throw({message: 'User not found'});
+    } else if(credentials.password === 'invalid'){
+      return Observable.throw({message: 'Invalid password'})
+    } else {
+      return Observable.of(this._user);
+    }
   }
 
    signup(user: any): Observable<User>{

@@ -64,5 +64,15 @@ export class ActivatedRouteStub {
   set parentParams(params: {}){
     this.parent.testParams = params;
   }
-
 }
+
+@Injectable()
+export class ActivatedRouteSnapshotStub {
+  private _testParams: {};
+  get testParams() {return this._testParams};
+  set testParams(params: {}){
+    this._testParams = params;
+  }
+}
+
+

@@ -1,10 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Subject } from 'rxjs';
-
-
-
 
 import { AuthenticationService } from '../authentication.service';
 import { CourseService } from '../../admin/course/course.service';

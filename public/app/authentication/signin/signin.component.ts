@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
+import { patternValidator } from '../../shared/pattern-validator';
 
 import { AuthenticationService } from '../authentication.service';
 import { readErrorMessage } from '../../shared/read-error';
@@ -12,7 +13,8 @@ import { readErrorMessage } from '../../shared/read-error';
  */
 @Component({
     selector: 'signin',
-    templateUrl: './signin.template.html'
+    templateUrl: './signin.template.html',
+  styleUrls: ['./signin.styles.css']
 })
 export class SigninComponent implements OnDestroy {
   /**
@@ -38,7 +40,7 @@ export class SigninComponent implements OnDestroy {
 
   ngOnInit(){
     this.credentials = new FormGroup({
-    username: new FormControl(''),
+    username: new FormControl(''/*, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)*/),
     password: new FormControl(''),
   });
   }

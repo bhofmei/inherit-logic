@@ -77,6 +77,7 @@ export class AuthenticationService {
    * @param {any} credentials - `username` (as email) and `password` to be tested for logging in
    *
    * @returns {Observable<User>} - the successfully logged in user
+   * error message `Missing credentials` if no email or password
    * - error message `Invalid password` if password is incorrect
    * - error message `User not found` if invalid email
    * - error message for server/database/authentication error
