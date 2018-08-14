@@ -14,6 +14,7 @@ import { PersonNamePipe } from '../pipes/person-name.pipe';
 import { PeopleListNamesPipe } from '../pipes/people-list-names.pipe';
 import { PhageParentsPipe } from '../pipes/phage-parents.pipe';
 
+import { FormErrorsModule } from './form-errors/form-errors.module';
 /**
  * The Shared Module contains modules, pipes, and components
  * that are needed across the application
@@ -26,6 +27,7 @@ import { PhageParentsPipe } from '../pipes/phage-parents.pipe';
       CommonModule,
       FormsModule,
       ReactiveFormsModule,
+      FormErrorsModule,
       DndModule.forRoot(),
       NgbModule.forRoot(),
       McBreadcrumbsModule.forRoot(),
@@ -41,6 +43,7 @@ import { PhageParentsPipe } from '../pipes/phage-parents.pipe';
       CommonModule,
       FormsModule,
       ReactiveFormsModule,
+      FormErrorsModule,
       DndModule,
       NgbModule,
       McBreadcrumbsModule,
@@ -48,7 +51,8 @@ import { PhageParentsPipe } from '../pipes/phage-parents.pipe';
       PeopleListNamesPipe,
       PhageParentsPipe,
       SkyhookDndModule,
-      ConfirmDeleteDialogComponent
+      ConfirmDeleteDialogComponent,
+      //EmailErrorComponent
     ],
 })
 export class SharedModule {

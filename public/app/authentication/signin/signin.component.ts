@@ -1,12 +1,12 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { patternValidator } from '../../shared/pattern-validator';
 
 import { AuthenticationService } from '../authentication.service';
 import { readErrorMessage } from '../../shared/read-error';
-
+import { SharedModule} from '../../shared/shared.module';
 /**
  * Component for existing users to sign in and be able
  * to access their scenarios/fridges
@@ -14,13 +14,13 @@ import { readErrorMessage } from '../../shared/read-error';
 @Component({
     selector: 'signin',
     templateUrl: './signin.template.html',
-  styleUrls: ['./signin.styles.css']
+  styleUrls: ['../../shared/form-errors/form-errors.styles.css']
 })
 export class SigninComponent implements OnDestroy {
   /**
    * Potential error message
    */
-  errorMessage: string;
+  errorMessage: string = '';
   /**
    * Login credentials for user including `username` (email) and `password`
    */
@@ -40,10 +40,13 @@ export class SigninComponent implements OnDestroy {
 
   ngOnInit(){
     this.credentials = new FormGroup({
-    username: new FormControl(''/*, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)*/),
-    password: new FormControl(''),
+    username: new FormControl('',[Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
   });
   }
+
+  get username() { return this.credentials.get('username');}
+  get password() { return this.credentials.get('password');}
   /**
    * Upon form submission, attempts to sign in the user with `credentials` (using the service)
    *

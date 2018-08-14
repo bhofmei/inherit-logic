@@ -5,22 +5,24 @@
       <label for="inputEmail" class="col-sm-3 col-form-label">Email</label>
       <div class="col-sm-9">
         <input type="email" id="inputEmail" class="form-control" required autofocus placeholder="Email address" formControlName="username" name="username">
+        <email-error [email]="username"></email-error>
       </div>
     </div>
     <!-- end rowEmail -->
     <div class="form-group row mb-2" id="rowPassword">
       <label for="inputPassword" class="col-sm-3 col-form-label">Password</label>
       <div class="col-sm-9">
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" formControlName="password" name="password">
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required formControlName="password" name="password">
+        <password-error [password]="password"></password-error>
       </div>
     </div> <!-- end rowPassword -->
-    <p class="text-danger">{{errorMessage}}</p>
+    <div *ngIf="errorMessage !== ''" class="alert alert-danger">{{errorMessage}}</div>
     <div class="row">
       <div class="col-sm-3">
-        <button class="btn btn-primary" type="submit">Sign in </button>
+         <a [routerLink]="['/authentication/forget-password']">Forget password?</a>
       </div>
       <div class="col-sm-9">
-        <a [routerLink]="['/authentication/forget-password']">Forget password?</a>
+        <button class="btn btn-primary" type="submit" [disabled]="!credentials.valid">Sign in </button>
       </div>
     </div> <!-- end row for submission -->
   </form>
