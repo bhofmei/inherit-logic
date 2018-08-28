@@ -1,5 +1,6 @@
-<div *ngIf="email.invalid &&(email.touched || email.dirty)" class="form-error text-muted">
+<div *ngIf="email.invalid &&(email.touched || email.dirty)" class="invalid-feedback d-block">
   <div *ngIf="email.errors.required">Email is required.</div>
   <div *ngIf="!email.errors.required && email.errors.email">Email is invalid.</div>
 </div>
 <!-- end username error -->
+

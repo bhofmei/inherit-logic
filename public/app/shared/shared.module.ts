@@ -15,6 +15,7 @@ import { PeopleListNamesPipe } from '../pipes/people-list-names.pipe';
 import { PhageParentsPipe } from '../pipes/phage-parents.pipe';
 
 import { FormErrorsModule } from './form-errors/form-errors.module';
+//import { CustomValidators } from './custom-validators';
 /**
  * The Shared Module contains modules, pipes, and components
  * that are needed across the application
@@ -51,8 +52,7 @@ import { FormErrorsModule } from './form-errors/form-errors.module';
       PeopleListNamesPipe,
       PhageParentsPipe,
       SkyhookDndModule,
-      ConfirmDeleteDialogComponent,
-      //EmailErrorComponent
+      ConfirmDeleteDialogComponent
     ],
 })
 export class SharedModule {
