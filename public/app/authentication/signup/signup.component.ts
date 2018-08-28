@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -32,12 +33,9 @@ export class SignupComponent implements OnInit, OnDestroy {
    * - `username` (email address)
    * - `course` (database course ID not course name)
    * - `passsword`
+   * - `confirmPassword`
    */
-  user: any = {};
-  /**
-   * Confirmation password; must match `user.password` to submit the signup form
-   */
-  private cPassword: string;
+  user: FormGroup;
   /**
    * Boolean state object to make unsubscribing from multiple services easier
    */
@@ -48,6 +46,39 @@ export class SignupComponent implements OnInit, OnDestroy {
         private _router: Router) {
       this.isDestroyed$ = new Subject<boolean>();
     }
+
+  /**
+   * On component creation, get the list of available courses and order them
+   */
+  ngOnInit(){
+    this.user = new FormGroup({
+      'firstName': new FormControl(''),
+      'lastName': new FormControl('', Validators.required),
+      'username': new FormControl('',[Validators.required, Validators.email]),
+      'course': new FormControl('', Validators.required),
+      'password': new FormControl('',[Validators.required, Validators.minLength(6)]),
+      'confirmPassword': new FormControl('', [Validators.required, this.passwordMatchValidator]),
+    });
+
+    this._courseService.getCourseList()
+      .takeUntil(this.isDestroyed$)
+      .subscribe((res)=>{
+        let tmp = this._reorderCourses(res);
+        this.courses = tmp;
+    }, (err)=>{
+      this.errorMessage = readErrorMessage(err);
+      this.courses = [];
+    });
+  }
+
+  // accessors for form validation
+  get firstName() { return this.user.get('firstName'); }
+  get lastName() { return this.user.get('lastName'); }
+  get username() { return this.user.get('username'); }
+  get course() { return this.user.get('course'); }
+  get password() { return this.user.get('password'); }
+  get confirmPassword() { return this.user.get('confirmPassword'); }
+
 
   /**
    * Order the courses so the "NA" course is at the top
@@ -65,34 +96,13 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * On component creation, get the list of available courses and order them
-   */
-  ngOnInit(){
-    this._courseService.getCourseList()
-      .takeUntil(this.isDestroyed$)
-      .subscribe((res)=>{
-        let tmp = this._reorderCourses(res);
-        this.courses = tmp;
-    }, (err)=>{
-      this.errorMessage = readErrorMessage(err);
-      this.courses = [];
-    });
-  }
-
-  /**
    * - Attempts to sign the user up when they submit the form
    * - Includes error checks for selecting a course and passwords match
-   * - When sign-up is successful, sets the [logged in user]
-   * {@link authentication.service} and navigates to the home page
+   * - When sign-up is successful, sets the [logged in user]{@link authentication.service} and navigates to the home page
    */
   signup() {
-      if(this.user.course === undefined){
-        this.errorMessage = 'Select a course'
-      } else if(this.user.password !== this.cPassword){
-        this.errorMessage = 'Passwords must match'
-      } else {
           this._authenticationService
-          .signup(this.user)
+          .signup(this.user.value)
       .takeUntil(this.isDestroyed$)
           .subscribe((result) => {
           this._authenticationService.setUser(result);
@@ -101,8 +111,46 @@ export class SignupComponent implements OnInit, OnDestroy {
             (error) => {
           this.errorMessage = readErrorMessage(error)
         });
+    }
+
+  /**
+  * Custom validator to check that input password and confirmation password are the same
+  *
+  * @param ac {AbstractControl} reactive form control for `confirmPassword` input
+  *
+  * @returns {null | Object } - `null` when passwords match or before form is initialized
+  * - `{mismatch:true}` when passwords don't match
+  */
+  passwordMatchValidator(ac: AbstractControl){
+    let fg = ac.parent;
+    if(!fg){
+      return null;
+    } else {
+      return fg.get('password').value === fg.get('confirmPassword').value ? null : {mismatch: true};
+    }
+  }
+
+  /**
+  * Get the form input CSS classes styling to provide feedback to user
+  * whether input is valid on not
+  *
+  * Always has `.form-control` then `.is-invalid` or `.is-valid` are set once input has been touched
+  *
+  * @param {string} formLabel - form group name look-up input state
+  *
+  * @returns {Object} CSS classes which apply to this input
+  */
+  getInputClass(formLabel: string) {
+    let out = {'form-control': true};
+    if(this.user && this.user.get(formLabel)){
+      let ac = this.user.get(formLabel);
+      if(ac.dirty || ac.touched){
+        out['is-invalid'] = ac.invalid;
+        out['is-valid'] = ac.valid;
       }
     }
+    return out;
+  }
 
   /**
    * On component desctruction, unsubscribe from services to prevent a memory leak
