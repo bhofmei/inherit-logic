@@ -197,7 +197,7 @@ describe('User Controller Unit Tests:', () => {
           .end((err, res) => {
             should.not.exist(err);
             res.error.should.equal(false);
-            res.body.should.equal(true);
+            res.body.should.have.property('message', true);
             done();
           });
       }); // end Should signout

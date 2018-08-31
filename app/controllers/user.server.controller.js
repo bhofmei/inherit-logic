@@ -438,7 +438,7 @@ exports.signup = function (req, res) {
 exports.signout = function (req, res) {
   req.logout();
   return res.status(200)
-    .send(true);
+    .send({message: true});
   //res.redirect('/');
 };
 
