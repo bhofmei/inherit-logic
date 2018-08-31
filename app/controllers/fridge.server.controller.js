@@ -12,6 +12,7 @@ const Phage = mongoose.model('Phage');
 const phageScen = require('../genetics/phage.scenario');
 const phageEnum = require('../genetics/phage.enum');
 const scenDefaults = require('../../config/scenario.config.js');
+const cryptr = require('../../config/client.cryptr');
 const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
 /**
  * @external FRIDGE
@@ -30,6 +31,18 @@ const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
  * @see {@link ../models/user-model.html}
  */
 
+const getStrainInfo = function(strain){
+  return {
+      comment: strain.comment,
+      id: strain.id,
+      parents: strain.parents,
+      strainNum: strain.strainNum,
+      phageType: strain.phageType,
+      submitted: strain.submitted,
+      numParents: strain.numParents
+    }
+}
+
 /**
  * Helper method to return fridge details in consistent
  * format
@@ -42,18 +55,10 @@ const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
  */
 const getFridgeInfo = function (fridge) {
   let strains = fridge.strains.map((strain) => {
-    return {
-      comment: strain.comment,
-      id: strain.id,
-      parents: strain.parents,
-      strainNum: strain.strainNum,
-      phageType: strain.phageType,
-      submitted: strain.submitted,
-      numParents: strain.numParents
-    }
+    return getStrainInfo(strain);
   });
   return {
-    scenarioDetails: fridge.scenarioDetails,
+    scenarioDetails: fridge.scenarioDetails ? cryptr.encrypt(fridge.scenarioDetails) : '',
     guesses: fridge.guesses,
     strains: strains,
     accessGranted: fridge.accessGranted,
@@ -352,7 +357,7 @@ exports.deleteStudentFridge = function (req, res, next) {
  * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
  * @property {external:SCENARIO} scenario - current scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
  * @property {external:FRIDGE} fridge - logged in users's fridge for this scenario from [findFridgeByScenOwner]{@link #findFidgeByScenOwner}
- * @property {Object} body - information about new strain; has properties
+ * @property {Object} body - information about new strain; has properties `deletion`, `mutationList`, `parents`, and `strainNum`
  * @param {Object} res - Express response object
  *
  * @return {Object} json object to response
@@ -366,6 +371,8 @@ exports.addPhageToFridge = function (req, res) {
   let user = req.curUser;
   let scen = req.scenario;
   // create the phage
+  strain.mutationList = JSON.parse(cryptr.decrypt(strain.mutationList));
+  strain.deletion = JSON.parse(cryptr.decrypt(strain.deletion));
   strain.owner = user;
   strain.scenarioOrigin = scen;
   strain.phageType = phageEnum.PHAGETYPE.USER;
@@ -401,9 +408,9 @@ exports.addPhageToFridge = function (req, res) {
               select: 'strainNum'
             }, (err3, newPhage2) => {
               if (!err && newPhage2) {
-                res.json(newPhage2)
+                res.json(getStrainInfo(newPhage2))
               } else {
-                res.json(newPhage);
+                res.json(getStrainInfo(newPhage));
               }
             }); // end populate
           }

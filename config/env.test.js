@@ -2,6 +2,7 @@
 module.exports = {
 	db: 'mongodb://localhost/cricket-test',
 	sessionSecret: 'testSessionSecret',
+  encodeKey: 'ImATestKey',
   loadScenario: false,
   phageSeed: 100,
   email: require('./credentials/email.test.js'),

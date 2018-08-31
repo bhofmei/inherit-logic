@@ -9,7 +9,7 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "back:docs": "./add-doc/gen-backend-docs.sh",
-    "ng:docs": "./node_modules/.bin/compodoc public -p tsconfig.doc.json -d docs --includes add-doc --includesName 'Backend Documentation' -t -n Cricket --disableDomTree --hideGenerator --customFavicon ./public/img/cricket-docs.png",
+    "ng:docs": "./node_modules/.bin/compodoc public -p tsconfig.doc.json -d docs2 --includes add-doc --includesName 'Backend Documentation' -t -n Cricket --disableDomTree --hideGenerator --customFavicon ./public/img/cricket-docs.png --templates ./templates --unitTestCoverage coverage/coverage-summary.json",
     "build:docs": "yarn run back:docs; yarn run ng:docs",
     "webpack": "webpack --watch --config webpack.dev.js",
     "webpack:p": "webpack --config webpack.prod.js",
@@ -18,9 +18,9 @@
     "start:p": "concurrently \"npm run webpack:p\" \"npm run app\" ",
     "test:back": "NODE_ENV=test mocha --recursive --reporter spec -t 5000 app/tests/",
     "test:server": "NODE_ENV=test mocha --reporter spec -t 5000 app/tests/",
-    "test:genetics": "NODE_ENV=test DEBUG=genetics:test mocha --reporter spec app/tests/genetics",
+    "test:genetics": "NODE_ENV=test mocha --reporter spec app/tests/genetics",
     "test:ng": "karma start",
-    "cov:back": "NODE_ENV=test nyc --reporter=html mocha --recursive --reporter spec -t 5000 app/tests/"
+    "cov:back": "NODE_ENV=test nyc --reporter=json-summary mocha --recursive --reporter spec -t 5000 app/tests/"
   },
   "keywords": [
     "genetics"
@@ -51,6 +51,7 @@
     "connect-mongo": "^1.3.2",
     "cookie-parser": "^1.4.3",
     "core-js": "2.4.1",
+    "cryptr": "^4.0.0",
     "debug": "^3.1.0",
     "ejs": "^2.5.2",
     "eslint": "^4.1.1",

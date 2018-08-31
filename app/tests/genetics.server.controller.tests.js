@@ -8,7 +8,8 @@ const Phage = mongoose.model('Phage');
 const scenDefaults = require('../../config/scenario.config');
 const phageScen = require('../genetics/phage.scenario');
 const phageExp = require('../genetics/phage.experiment');
-const plateExp = require('../genetics/plate.experiment');;
+const plateExp = require('../genetics/plate.experiment');
+const cryptr = require('../../config/client.cryptr');
 
 // Define global test variables
 let scenario, scenDat, scenario2, scenDat2;
@@ -49,7 +50,7 @@ describe('Genetics Controller Unit Tests:', () => {
       plateExp.resetEngine();
       let tmp = phageScen.generateScenario(scenario);
       // has strainList and scenData
-      scenDat = JSON.stringify(tmp.scenData);
+      scenDat = cryptr.encrypt(JSON.stringify(tmp.scenData));
 
       Phage.create(tmp.strainList, function (err, strains) {
         phageList = [];
@@ -842,7 +843,7 @@ describe('Genetics Controller Unit Tests:', () => {
       plateExp.resetEngine();
       let tmp = phageScen.generateScenario(scenario2);
       // has strainList and scenData
-      scenDat2 = JSON.stringify(tmp.scenData);
+      scenDat2 = cryptr.encrypt(JSON.stringify(tmp.scenData));
       //console.log(tmp.strainList);
       tmp.strainList.forEach((strain) => {
         //console.log(strain.mutationList);

@@ -10,6 +10,7 @@ const clone = require('clone');
 const Phage = mongoose.model('Phage');
 const plate = require('../genetics/plate.experiment');
 const plexer = require('../genetics/plexer.experiment');
+const cryptr = require('../../config/client.cryptr');
 const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
 
 /**
@@ -35,7 +36,7 @@ exports.createPlate = function (req, res) {
   var lawnType = reqB.lawnType;
   var location = reqB.location;
   var capacity = reqB.capacity;
-  var scenData = JSON.parse(reqB.scenarioData);
+  var scenData = JSON.parse(cryptr.decrypt(reqB.scenarioData));
   var phage1 = reqB.phage1;
   var phage2 = reqB.phage2;
 
@@ -91,8 +92,16 @@ exports.createPlate = function (req, res) {
               ph2.numPhage = phage2.numPhage;
               var newPlate = plate.createPlate(ph1, ph2, lawnType, null, capacity, location, scenData);
               // has full, smallPlaque, largePlaque, genotypes
-              if (newPlate)
-                res.json(newPlate);
+              if (newPlate){
+            // encode genotypes
+            newPlate.genotypes = newPlate.genotypes.map((genoElt)=>{
+              return {
+                shifts: cryptr.encrypt(JSON.stringify(genoElt.shifts)),
+                deletion: cryptr.encrypt(JSON.stringify(genoElt.deletion))
+              }
+            });
+            res.json(newPlate);
+          }
               else {
                 return res.status(500)
                   .send({
@@ -105,8 +114,16 @@ exports.createPlate = function (req, res) {
           // has one phage
           var newPlate = plate.createPlate(ph1, null, lawnType, null, capacity, location, scenData);
           // has full, smallPlaque, largePlaque, genotypes
-          if (newPlate)
+          if (newPlate){
+            // encode genotypes
+            newPlate.genotypes = newPlate.genotypes.map((genoElt)=>{
+              return {
+                shifts: cryptr.encrypt(JSON.stringify(genoElt.shifts)),
+                deletion: cryptr.encrypt(JSON.stringify(genoElt.deletion))
+              }
+            });
             res.json(newPlate);
+          }
           else {
             return res.status(500)
               .send({
@@ -146,7 +163,7 @@ exports.handlePlexer = function (req, res) {
   var lawnType = reqB.lawnType;
   var location = reqB.location;
   var capacity = reqB.capacity;
-  var scenData = JSON.parse(reqB.scenarioData);
+  var scenData = JSON.parse(cryptr.decrypt(reqB.scenarioData));
   var rowPhageId = reqB.rowPhage.map((phage) => {
     return phage.id
   });

@@ -4,6 +4,7 @@ module.exports = {
   // Production configuration options
   db: 'mongodb://localhost/cricket',
   sessionSecret : process.env.SES_SEC || 'defaultSessSec',
+  encodeKey: process.env.ENC_KEY || 'encodeKey',
   loadScenario: true,
   email: require('./credentials/email.production.js'),
   pathToKey: '/path/to/ssl/private/key',
