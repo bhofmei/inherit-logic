@@ -46,6 +46,7 @@ const UserSchema = new Schema({
   /**
    * @member {string} email - user's email address
    * @required
+   * @validate
    */
   email: {
     type: String,
@@ -58,6 +59,7 @@ const UserSchema = new Schema({
    */
   password: {
     type: String,
+    required: 'Password is required',
     validate: [
       function(password){
         return password.length >= 6;

@@ -16,7 +16,8 @@ describe('Admin Controller Unit Tests', () => {
   before((done) => {
     tmpUserDetails = {
       name: 'Temp',
-      email: 'tmp@test.com'
+      email: 'tmp@test.com',
+      password: 'tmpuserpassword'
     };
     adminDetails = {
       name: 'Administrator',
@@ -207,9 +208,12 @@ describe('Admin Controller Unit Tests', () => {
       let tmpUser;
       beforeEach((done) => {
         User.create(tmpUserDetails, (err, res) => {
-          if (!err)
+          if (!err){
             tmpUser = res;
-          done();
+            done();
+            } else {
+            done('err')
+          }
         });
       });
 
@@ -354,9 +358,9 @@ describe('Admin Controller Unit Tests', () => {
       let tmpUser;
       beforeEach((done) => {
         User.create(tmpUserDetails, (err, res) => {
-          if (!err)
+          if (!err){
             tmpUser = res;
-          done();
+          done();} else {done('err')}
         });
       });
       it('Should not be able to delete user as instr', (done) => {
@@ -471,9 +475,12 @@ describe('Admin Controller Unit Tests', () => {
       let tmpUser;
       beforeEach((done) => {
         User.create(tmpUserDetails, (err, res) => {
-          if (!err)
+          if (!err){
             tmpUser = res;
-          done();
+            done();
+          }else{
+            done('error')
+          }
         });
       });
       it('Should not be able to delete user as student', (done) => {

@@ -248,7 +248,8 @@ describe('Course Controller Unit Tests', () => {
       beforeEach((done) => {
         tmpUser = new User({
           name: 'tmp',
-          email: 'tmp@test.com'
+          email: 'tmp@test.com',
+          password: 'atemppassword'
         });
         tmpCourse = new Course({
           courseNum: 'TEMP',
@@ -498,7 +499,8 @@ describe('Course Controller Unit Tests', () => {
       beforeEach((done) => {
         tmpUser = new User({
           name: 'tmp',
-          email: 'tmp@test.com'
+          email: 'tmp@test.com',
+          password: 'atemppassword'
         });
         tmpCourse = new Course({
           courseNum: 'TEMP',
