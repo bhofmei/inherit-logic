@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { AuthenticationService } from '../authentication.service';
 import { CourseService } from '../../admin/course/course.service';
 import { readErrorMessage } from '../../shared/read-error'
+import { passwordMatchValidator } from '../../shared/confirm-password.validator';
 
 /**
  * This component allows new users to sign up to use Cricket.
@@ -57,7 +58,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       'username': new FormControl('',[Validators.required, Validators.email]),
       'course': new FormControl('', Validators.required),
       'password': new FormControl('',[Validators.required, Validators.minLength(6)]),
-      'confirmPassword': new FormControl('', [Validators.required, this.passwordMatchValidator]),
+      'confirmPassword': new FormControl('', [Validators.required, passwordMatchValidator]),
     });
 
     this._courseService.getCourseList()
@@ -112,23 +113,6 @@ export class SignupComponent implements OnInit, OnDestroy {
           this.errorMessage = readErrorMessage(error)
         });
     }
-
-  /**
-  * Custom validator to check that input password and confirmation password are the same
-  *
-  * @param ac {AbstractControl} reactive form control for `confirmPassword` input
-  *
-  * @returns {null | Object } - `null` when passwords match or before form is initialized
-  * - `{mismatch:true}` when passwords don't match
-  */
-  passwordMatchValidator(ac: AbstractControl){
-    let fg = ac.parent;
-    if(!fg){
-      return null;
-    } else {
-      return fg.get('password').value === fg.get('confirmPassword').value ? null : {mismatch: true};
-    }
-  }
 
   /**
   * Get the form input CSS classes styling to provide feedback to user

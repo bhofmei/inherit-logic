@@ -93,7 +93,7 @@ describe('Signup Component', ()=>{
         expect(page.warnings.length).toBe(1);
         let warning = page.warnings[0].nativeElement.innerHTML;
         expect(warning).toTemplateMatch('First name is required.');
-      })); // endshould have first name required warning
+      })); // end should have first name required warning
 
       it('should have last name required warning', fakeAsync(()=>{
         lastName.setValue('');
