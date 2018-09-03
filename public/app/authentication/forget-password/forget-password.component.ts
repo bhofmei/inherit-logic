@@ -1,5 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { FormControl, Validators } from '@angular/forms';
 
 import { AuthenticationService } from '../authentication.service';
 import { readErrorMessage } from '../../shared/read-error';
@@ -28,7 +29,7 @@ export class ForgetPasswordComponent implements OnDestroy{
   /**
    * User's email to check if an account exists
    */
-  private email: string;
+  email: FormControl;
   /**
    * Authentication service subscription
    */
@@ -36,6 +37,12 @@ export class ForgetPasswordComponent implements OnDestroy{
 
     constructor(private _authenticationService: AuthenticationService) { }
 
+  /**
+   * Initialize the form on component creation
+   */
+  ngOnInit(){
+    this.email = new FormControl('', [Validators.required, Validators.email]);
+  }
   /**
    * After submitting form, reset _success_ and _error_ messages, send email to the server, and wait for response
    *
@@ -45,7 +52,7 @@ export class ForgetPasswordComponent implements OnDestroy{
     sendForget() {
       this.successMessage = '';
       this.errorMessage = '';
-      let body = {email: this.email};
+      let body = {email: this.email.value};
         this.subscription = this._authenticationService
           .forgetPassword(body)
           .subscribe((result) => {
@@ -56,6 +63,22 @@ export class ForgetPasswordComponent implements OnDestroy{
           this.errorMessage = readErrorMessage(error)
         });
     }
+
+  /**
+   * Get the CSS class for the email input based on it's validity
+   *
+   * Always has `.form-control` then `.is-invalid` or `.is-valid` are set once input has been touched
+   *
+   * @returns {Object} CSS classes which apply
+   */
+  getInputClass(){
+    let out = {'form-control': true};
+    if(this.email && (this.email.dirty || this.email.touched)){
+      out['is-invalid'] = this.email.invalid;
+      out['is-valid'] = this.email.valid;
+    }
+    return out;
+  }
 
   /**
    * When destroying component, unsubscribe from authentication service to prevent memory leaks

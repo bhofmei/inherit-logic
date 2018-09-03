@@ -49,8 +49,18 @@ export class AuthServiceStub {
   }
 
   forgetPassword(body: any): Observable<any>{
-    return Observable.of(true);
+    if(!body.email){
+      return Observable.throw({message: 'required'})
+    } else if(body.email === 'error@test.com'){
+      // fake a sever error message
+      return Observable.throw({message: 'Error with server email service.'});
+    } else if (body.email !== this._user.email){
+      return Observable.throw({message: 'No account with that email.'})
+    } {
+      return Observable.of({message: 'An email has been sent to '+body.email+' with further instructions'});
+    }
   }
+
   resetPassword(credentials: any): Observable<any>{
     return Observable.of(true);
   }
