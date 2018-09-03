@@ -95,7 +95,7 @@ export class CourseServiceStub {
   }
 
   getCourseList(): Observable<any>{
-    let tmp = this.courses.map((el)=>{return el.courseNum});
+    let tmp = this.courses.map((el, i)=>{return {courseNum: el.courseNum, id: 'id'+i}});
     return Observable.of(tmp);
   }
 }
