@@ -62,6 +62,14 @@ export class AuthServiceStub {
   }
 
   resetPassword(credentials: any): Observable<any>{
-    return Observable.of(true);
+    if(!credentials.token){
+      return Observable.throw({message: 'Invalid token.'});
+    } else if (credentials.token === 'expired-token'){
+      return Observable.throw({message: 'Token has expired.'});
+    } else if(credentials.password !== credentials.confirmPassword){
+      return Observable.throw({message: 'Confirm password does not match.'});
+    } else {
+      return Observable.of({message: 'Password has been reset.'})
+    }
   }
 }
