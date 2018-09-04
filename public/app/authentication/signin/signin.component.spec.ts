@@ -50,17 +50,20 @@ describe('Signin Component', ()=>{
   }); // end Test links
 
   describe('Test form validity', ()=>{
+    let email, password;
     beforeEach(fakeAsync(()=>{
       createComponent();
       tick();
+      email = comp.username;
+      password = comp.password;
     })); // end beforeEach fakeAsync
 
     it('should be invalid when empty', ()=>{
-      expect(comp.credentials.valid).toBeFalsy();
+      let form = email.parent;
+      expect(form.valid).toBeFalsy();
     }); // end should be invalid when empty
 
     it('should have invalid email', ()=>{
-      let email = comp.credentials.controls['username'];
       email.setValue('invaidemail');
       expect(email.valid).toBeFalsy();
       let errors = email.errors || {};
@@ -68,7 +71,6 @@ describe('Signin Component', ()=>{
     }); // end should have invalid email
 
     it('should have valid email', ()=>{
-      let email = comp.credentials.controls['username'];
       email.setValue(userAdmin.email);
       expect(email.valid).toBeTruthy();
       let errors = email.errors || {};
@@ -76,7 +78,6 @@ describe('Signin Component', ()=>{
     }); // end should have valid email
 
     it('should have too short of password', ()=>{
-      let password = comp.credentials.controls['password'];
       password.setValue('abc');
       expect(password.valid).toBeFalsy();
       let errors = password.errors || {};
@@ -84,7 +85,6 @@ describe('Signin Component', ()=>{
     }); // end should ahve too short of password
 
     it('should have acceptable password', ()=>{
-      let password = comp.credentials.controls['password'];
       password.setValue('long-acceptable-password');
       expect(password.valid).toBeTruthy();
       let errors = password.errors || {};
@@ -93,10 +93,13 @@ describe('Signin Component', ()=>{
   }); // end Test form validity
 
   describe('Test form warnings', ()=>{
+    let email, password;
     beforeEach(fakeAsync(()=>{
       createComponent();
       tick();
       page.addElements();
+      email = comp.username;
+      password = comp.password;
     })); // end beforeEach fakeAsync
 
     it('should have no warnings', ()=>{
@@ -104,7 +107,6 @@ describe('Signin Component', ()=>{
     }); // end should have no warnings
 
     it('should have email required warning', fakeAsync(()=>{
-      let email = comp.credentials.controls['username'];
       email.setValue('');
       email.markAsTouched();
       fixture.detectChanges();
@@ -115,7 +117,6 @@ describe('Signin Component', ()=>{
     })); // end should have email required warning
 
     it('should have email invalid warning', fakeAsync(()=>{
-      let email = comp.credentials.controls['username'];
       email.setValue('invalid-email');
       email.markAsTouched();
       fixture.detectChanges();
@@ -126,7 +127,6 @@ describe('Signin Component', ()=>{
     })); // end should have email invalid warning
 
     it('should have password required warning', fakeAsync(()=>{
-      let password = comp.credentials.controls['password'];
       password.setValue('');
       password.markAsTouched();
       fixture.detectChanges();
@@ -137,7 +137,6 @@ describe('Signin Component', ()=>{
     })); // end should have password required warning
 
     it('should have password length warning', fakeAsync(()=>{
-      let password = comp.credentials.controls['password'];
       password.setValue('abc');
       password.markAsTouched();
       fixture.detectChanges();
@@ -148,10 +147,8 @@ describe('Signin Component', ()=>{
     })); // end should have password length warning
 
     it('should have no warnings with valid input', fakeAsync(()=>{
-      let email = comp.credentials.controls['username'];
       email.setValue('valid@email.com');
       email.markAsTouched();
-      let password = comp.credentials.controls['password'];
       password.setValue('abcdefghi');
       password.markAsTouched();
       fixture.detectChanges();
@@ -163,6 +160,7 @@ describe('Signin Component', ()=>{
   describe('Test form submission', ()=>{
         let aService, signinSpy;
     let testEmail = userAdmin.email;
+    let email, password;
     beforeEach(fakeAsync(()=>{
       createComponent();
       tick();
@@ -170,6 +168,8 @@ describe('Signin Component', ()=>{
       aService = fixture.debugElement.injector.get(AuthenticationService);
       signinSpy = spyOn(aService, 'signin').and.callThrough();
       addMatchers();
+      email = comp.username;
+      password = comp.password;
     })); // end beforeEach fakeAsync
 
     it('should have disabled button', ()=>{
@@ -178,9 +178,7 @@ describe('Signin Component', ()=>{
     }); // end should have disabled button
 
     it('should not have disabled button', fakeAsync(()=>{
-      let email = comp.credentials.controls['username'];
       email.setValue(testEmail);
-      let password = comp.credentials.controls['password'];
       password.setValue('abcdefgh');
       fixture.detectChanges();
       page.addElements();
@@ -189,13 +187,9 @@ describe('Signin Component', ()=>{
     })); // end should not have disabled button
 
     it('should submit', fakeAsync(()=>{
-      let email = comp.credentials.controls['username'];
       email.setValue(testEmail);
-      let password = comp.credentials.controls['password'];
       password.setValue('abcdefgh');
       fixture.detectChanges();
-//      page.addElements();
-//      click(page.submitButton);
       comp.signin();
       let didUpdate = signinSpy.calls.any();
       expect(didUpdate).toBe(true);
@@ -203,8 +197,8 @@ describe('Signin Component', ()=>{
 
 
       it('should navigate home on submit', fakeAsync(()=>{
-        comp.credentials.controls['username'].setValue(testEmail);
-        comp.credentials.controls['password'].setValue('abcdefgh');
+        email.setValue(testEmail);
+        password.setValue('abcdefgh');
         fixture.detectChanges();
         comp.signin();
         tick();
@@ -217,8 +211,8 @@ describe('Signin Component', ()=>{
       let testRedirect = '/admin';
       aService.redirectUrl = testRedirect;
       tick();
-        comp.credentials.controls['username'].setValue(testEmail);
-        comp.credentials.controls['password'].setValue('abcdefgh');
+        email.setValue(testEmail);
+        password.setValue('abcdefgh');
         fixture.detectChanges();
         comp.signin();
         tick();

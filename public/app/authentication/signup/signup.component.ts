@@ -36,7 +36,7 @@ export class SignupComponent implements OnInit, OnDestroy {
    * - `passsword`
    * - `confirmPassword`
    */
-  user: FormGroup;
+  private user: FormGroup;
   /**
    * Boolean state object to make unsubscribing from multiple services easier
    */

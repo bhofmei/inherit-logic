@@ -43,7 +43,6 @@ describe('Signup Component', ()=>{
 
     it('should have courses in correct order', ()=>{
       let course = page.courseNames;
-     console.log(course);
       expect(course.length).toBe(3);
       expect(course[0]).toBe('Select course');
       expect(course[1]).toBe('TEST001');
@@ -60,7 +59,8 @@ describe('Signup Component', ()=>{
     })); // end beforeEach fakeAsync
 
     it('should be invalid when empty', ()=>{
-      expect(comp.user.valid).toBeFalsy();
+      let form = comp.username.parent;
+      expect(form.valid).toBeFalsy();
     }); // end should be invalid when empty
 
      it('should have no warnings', ()=>{
@@ -71,8 +71,8 @@ describe('Signup Component', ()=>{
       let firstName, lastName;
 
       beforeEach(()=>{
-        firstName = comp.user.controls['firstName'];
-        lastName = comp.user.controls['lastName'];
+        firstName = comp.firstName;
+        lastName = comp.lastName;
       }); // end beforeEach
 
       it('should have invalid first and last names', ()=>{
@@ -132,7 +132,7 @@ describe('Signup Component', ()=>{
       let email;
 
       beforeEach(()=>{
-        email = comp.user.controls['username'];
+        email = comp.username;
       }); // end beforeEach
 
     it('should have invalid email', ()=>{
@@ -181,7 +181,7 @@ describe('Signup Component', ()=>{
     describe('Test course', ()=>{
       let course;
       beforeEach(()=>{
-        course = comp.user.controls['course'];
+        course = comp.course;
       }); // beforeEach
 
       it('should have invalid course', ()=>{
@@ -220,8 +220,8 @@ describe('Signup Component', ()=>{
     let password, confirmPassword;
 
     beforeEach(()=>{
-      password = comp.user.controls['password'];
-      confirmPassword = comp.user.controls['confirmPassword'];
+      password = comp.password;
+      confirmPassword = comp.confirmPassword;
     }); // end beforeEach
 
     it('should have too short of password', ()=>{
@@ -319,12 +319,12 @@ describe('Signup Component', ()=>{
       page.addElements();
       aService = fixture.debugElement.injector.get(AuthenticationService);
       signupSpy = spyOn(aService, 'signup').and.callThrough();
-      firstName = comp.user.controls['firstName'];
-      lastName = comp.user.controls['lastName'];
-      email = comp.user.controls['username'];
-      course = comp.user.controls['course'];
-      password = comp.user.controls['password'];
-      confirmPassword = comp.user.controls['confirmPassword'];
+      firstName = comp.firstName
+      lastName = comp.lastName
+      email = comp.username
+      course = comp.course
+      password = comp.password;
+      confirmPassword = comp.confirmPassword;
     })); // end beforeEach fakeAsync
 
     it('should have disabled button for empty input', ()=>{

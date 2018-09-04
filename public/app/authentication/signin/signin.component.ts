@@ -21,7 +21,7 @@ export class SigninComponent implements OnDestroy {
   /**
    * Login credentials for user including `username` (email) and `password`
    */
-  credentials: FormGroup;
+  private credentials: FormGroup;
   /**
    * Authentication service subscription from when trying to login the user
    */
