@@ -37,7 +37,8 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      './spec-bundle.js': ['coverage', 'webpack', 'sourcemap']
+      //'./spec-bundle.js': ['coverage', 'webpack', 'sourcemap']
+      './spec-bundle.js': ['webpack', 'sourcemap']
     },
     webpack: testWebpackConfig,
 
@@ -45,14 +46,14 @@ module.exports = function (config) {
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress', 'coverage', 'remap-coverage'],
+    //reporters: ['progress'],
 
     coverageReporter: {
       type: 'in-memory'
     },
     remapCoverageReporter: {
       'text-summary': null,
-      html: './coverage/html',
-      'json-summary': './coverage/coverage-summary.json'
+      'json-summary': './coverage/angular-coverage-summary.json'
     },
 
     // web server port

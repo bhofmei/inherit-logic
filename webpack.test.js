@@ -56,8 +56,7 @@ module.exports = {
         loader: 'istanbul-instrumenter-loader',
         include: ROOT('public', 'app'),
         exclude: [/\.(e2e|spec)\.ts$/,
-          /node_modules/, /testing*\.ts/
-        ]
+          /node_modules/, /testing/]
       }
     ]
   },

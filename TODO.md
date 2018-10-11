@@ -10,6 +10,6 @@
   - profile/update-password.component
   - profile/user-profile.component
   - authentication
-  - student-course-scenario.resolver
-  - scenario/location/experiment.service
-    
+  - student/course/scenario.resolver
+      - ActivatedRouteSnapshot
+      - RouterStateSnapshot

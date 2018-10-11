@@ -5,7 +5,8 @@ import { ExperimentPhage, GenotypePhage, Phage } from './phage.interface';
  */
 export interface _experimentInput {
   /**
-   * E. coli bacteria type; either "B" or "K"
+   * - E. coli bacteria type
+   * - either `"B"` or `"K"`
    */
   lawnType: string;
   /**
@@ -13,7 +14,8 @@ export interface _experimentInput {
    */
   specials: Object;
   /**
-   * Room that performing the experient; either "lab" or "plexer"
+   * - Room that performing the experient
+   * - either `"lab"` or `"plexer"`
    */
   location: string;
   /**
@@ -29,15 +31,28 @@ export interface _experimentInput {
  * Information needed to create a new plate
  */
 export interface PlateInput extends _experimentInput {
+  /**
+   * Parent 1 - first phage dragged into the tube
+   */
   phage1: ExperimentPhage;
+  /**
+   * - Parent 2, if two phage in the tube
+   * - Null if only one phage in the tube
+   */
   phage2: ExperimentPhage;
 }
 
 /**
- * @ignore
+ * A phage genotype
  */
 export interface _genotype {
+  /**
+   * List of frameshift mutations where each number is a single frameshift
+   */
   shifts: number[];
+  /**
+   * List of deletion(s) as start and end position
+   */
   deletion: number[];
 }
 /**
@@ -59,9 +74,9 @@ export interface PlateResults {
    */
   largePlaque: number[];
   /**
-   * List of genotypes of the phage of the plate; several individual
-   * phage from "smallPlaque" and "largePlaque" can correspond to the
-   * same genotype
+   * - List of genotypes of the phage of the plate
+   * - several individual phage from `"smallPlaque"` and `"largePlaque"`
+   * can correspond to the same genotype
    */
   genotypes: _genotype[];
   /**

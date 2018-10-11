@@ -31,5 +31,5 @@ function requireAll(requireContext) {
 }
 
 var modules = requireAll(testContext);
-//var modules = [require('./public/app/admin/admin.component.spec2')];
-//var modules = [require('./public/app/scenario/location/experiment.service.spec')];
+//var modules = [require('./public/app/admin/course/course-edit/course-edit.component.spec')];
+//var modules = [require('./public/app/authentication/reset-password/reset-password.component.spec')];

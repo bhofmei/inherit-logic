@@ -160,9 +160,9 @@ export class LabRoomComponent {
   /**
    * Determine if bacteria tube can be dragged
    *
-   * Called for [dragEnabled] of bact tube
+   * Called for `[dragEnabled]` of bact tube
    *
-   * @returns {boolean} - true if tube has phage
+   * @returns {boolean} `true` if tube has phage
    */
   canDragBact(): boolean{
     return this.phage.length > 0;
@@ -171,10 +171,11 @@ export class LabRoomComponent {
   /**
    * Data to be dragged from the bacteria tube
    *
-   * Called for [dragData] of bact tube
+   * Called for `[dragData]` of bact tube
    *
-   * @param {string} src - E. coli source, "B" or "K"
-   * @returns {Object} - data with lawn type, src, and phage list
+   * @param {string} src E. coli source, `"B"` or `"K"`
+   *
+   * @returns {Object} data with lawn type, src, and phage list
    */
   getDataBact(src: string): Object{
     return {
@@ -187,10 +188,10 @@ export class LabRoomComponent {
   /**
    * Determines classes for a bacteria tube
    *
-   * @param {string} src - E. coli source, "B" or "K"
+   * @param {string} src E. coli source, `"B"` or `"K"`
    *
-   * @returns {Object} - applicable classes in the form
-   * {'class': boolean, ...}
+   * @returns {Object} applicable classes in the form
+   * `{'class': boolean, ...}`
    */
     getClassesBact(src: string): Object {
     return {'bact-tube test-tube-outer': true,
@@ -205,10 +206,10 @@ export class LabRoomComponent {
   /**
    * Drop phage from fridge into bacteria tube
    *
-   * Called on (onDropSuccess) of bacteria tubes
+   * Called on `(onDropSuccess)` of bacteria tubes
    *
-   * @param {any} $event - drag event with phage data
-   * @param {string} src - bacteria source phage dragged to
+   * @param {any} $event drag event with phage data
+   * @param {string} src bacteria source phage dragged to
    */
   dropPhageBact($event: any, src: string){
     var incomingPhage = $event.dragData;
@@ -236,11 +237,11 @@ export class LabRoomComponent {
   /**
    * Determine if dilution tube can be dragged
    *
-   * Called for [dragEnabled] of dilution tube (0-3)
+   * Called for `[dragEnabled]` of dilution tube (0-3)
    *
-   * @param {number} src - dilution tube number
+   * @param {number} src dilution tube number
    *
-   * @returns {boolean} - true if tube has contents
+   * @returns {boolean} `true` if tube has contents
    */
   canDragDil(src: number): boolean{
     return (this.contents[src] !== null);
@@ -249,10 +250,10 @@ export class LabRoomComponent {
   /**
    * Determines classes for a dilution tube
    *
-   * @param {number} src - dilution tube number (0-3)
+   * @param {number} src dilution tube number (0-3)
    *
-   * @returns {Object} - applicable classes in the form
-   * {'class': boolean, ...}
+   * @returns {Object} applicable classes in the form
+   * `{'class': boolean, ...}`
    */
   getClassesDil(src: number): Object {
     let tube = this.contents[src];
@@ -265,9 +266,9 @@ export class LabRoomComponent {
   /**
    * Determines classes for a dilution tube label
    *
-   * @param {number} src - dilution tube number (0-3)
+   * @param {number} src dilution tube number (0-3)
    *
-   * @returns {Object} - applicable classes
+   * @returns {Object} applicable classes
    */
   getClassesDilLabel(src: number): Object {
     return {
@@ -279,10 +280,11 @@ export class LabRoomComponent {
   /**
    * Determines if object can be dropped in dilution tube
    *
-   * Called for [allowDrop] of dilution tube
+   * Called for `[allowDrop]` of dilution tube
    *
-   * @param {number} dest - dilution tube number (0-3)
-   * @returns {function} - function which returns true/false if object can be dropped
+   * @param {number} dest dilution tube number (0-3)
+   *
+   * @returns {function} function which returns `true` or `false` if object can be dropped
    */
   canDropDil(dest: number): any {
   return (dragData: any) => {
@@ -303,11 +305,11 @@ export class LabRoomComponent {
   /**
    * Data to be dragged from the dilution tube
    *
-   * Called for [dragData] of dilution tube
+   * Called for `[dragData]` of dilution tube
    *
-   * @param {number} src - dilution tube number (0-3)
+   * @param {number} src dilution tube number (0-3)
    *
-   * @returns {Object} - data with dilution tube contents and src
+   * @returns {Object} data with dilution tube contents and src
    */
   getDataDil(src: number): Object {
     if(this.contents[src] !== null)
@@ -318,10 +320,10 @@ export class LabRoomComponent {
   /**
    * Drop contents from bact tube/dilution tube into dilution tube
    *
-   * Called on (oDropSuccess) of dilution tubes
+   * Called on `(oDropSuccess)` of dilution tubes
    *
-   * @param {any} $event - drag event with content/phage data
-   * @param {string} dest - dest tube number (0-3)
+   * @param {any} $event drag event with content/phage data
+   * @param {string} dest dest tube number (0-3)
    */
   dropContentsDil($event: any, dest: number){
     let incomingDat = JSON.parse(JSON.stringify($event.dragData));
@@ -342,8 +344,8 @@ export class LabRoomComponent {
   /**
    * Determines classes for plate depending if empty, full, has phage
    *
-   * @returns {Object} - applicable classes in the form
-   * {'class': boolean, ...}
+   * @returns {Object} applicable classes in the form
+   * `{'class': boolean, ...}`
    */
   getClassesPlate(){
     return {
@@ -358,13 +360,12 @@ export class LabRoomComponent {
   /**
    * Determines if object can be dropped on plate
    *
-   * Called for [allowDrop] of plate
+   * Called for `[allowDrop]` of plate
    *
-   * @returns {function} - function which returns true/false if object can be dropped
+   * @returns {function} function which returns `true` or `false` if object can be dropped
    */
   canDropPlate():any {
     return (dragData: any) => {
-      //console.log(dragData);
       let invalidSrc = ['B', 'K', 'small', 'large']
     if(dragData === null || dragData === undefined)
       return false;
@@ -378,9 +379,9 @@ export class LabRoomComponent {
   /**
    * Drop tube contents on the plate
    *
-   * Called on (onDropSuccess) of plate
+   * Called on `(onDropSuccess)` of plate
    *
-   * @param {any} $event - drag event with contents
+   * @param {any} $event drag event with contents
    */
   dropOnPlate($event: any){
     let contents = $event.dragData;
@@ -412,9 +413,9 @@ export class LabRoomComponent {
    * Calls the experiment service to perform the cross and saves
    * variables
    *
-   * @param {string} lawnType - bacteria used, "B" or "K"
-   * @param {any} phage1 - first phage in cross
-   * @param {any} phage2 - second phage in cross, or null
+   * @param {string} lawnType bacteria used, `"B"` or `"K"`
+   * @param {any} phage1 first phage in cross
+   * @param {any} phage2 second phage in cross, or null
    */
   _performCross(lawnType: string, phage1: ExperimentPhage, phage2: ExperimentPhage){
     let newPlate: PlateInput = {
@@ -448,11 +449,11 @@ export class LabRoomComponent {
   /**
    * Determine if plaque from plate can be dragged
    *
-   * Called for [dragEnabled] of plaques on plate
+   * Called for `[dragEnabled]` of plaques on plate
    *
-   * @param {string} src - "small" or "large" plaque
+   * @param {string} src `"small"` or `"large"` plaque
    *
-   * @returns {boolean} - true if there are still plaques of that size
+   * @returns {boolean} `true` if there are still plaques of that size
    */
   canDragPlate(src: string): boolean {
     if(src === 'small')
@@ -464,11 +465,11 @@ export class LabRoomComponent {
   /**
    * Pick a plaque from the plate to save to the fridge
    *
-   * Called for [dragData] of plaque on plate
+   * Called for `[dragData]` of plaque on plate
    *
-   * @param {string} src - "small" or "large" plaque
+   * @param {string} src `"small"` or `"large"` plaque
    *
-   * @returns {Object} - phage genotype data
+   * @returns {Object} phage genotype data
    */
   getPhagePlate(src: string): GenotypePhage{
     let tmpList = (src === 'small' ? this.smallPlaqueList : this.largePlaqueList);
@@ -486,9 +487,9 @@ export class LabRoomComponent {
   /**
    * Removes successfully dragged phage from available phage list
    *
-   * Called on (onDragSuccess) of plaque on plate
+   * Called on `(onDragSuccess)` of plaque on plate
    *
-   * @param {any} $event - drag event with phage saved
+   * @param {any} $event drag event with phage saved
    */
   addedToFridge($event) {
     let strain = $event.dragData;
@@ -503,9 +504,9 @@ export class LabRoomComponent {
   /**
    * Removes a phage from the plate without adding it to the fridge
    *
-   * Called on (dblclick) of plaque on the plate
+   * Called on `(dblclick)` of plaque on the plate
    *
-   * @param {string} src - source of plaque clicked; "large" or "small"
+   * @param {string} src source of plaque clicked; `"large"` or `"small"`
    */
   delPhagePlate(src: string){
     if(src === 'small'){

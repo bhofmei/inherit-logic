@@ -18,7 +18,7 @@ node_modules/.bin/jsdoc2md --plugin dmd-compodoc-api-plugin --files app/controll
 node_modules/.bin/jsdoc2md --plugin dmd-compodoc-api-plugin --files app/controllers/fridge.server.controller.js > add-doc/controllers/fridge.md
 node_modules/.bin/jsdoc2md --plugin dmd-compodoc-api-plugin --files app/controllers/genetics.server.controller.js > add-doc/controllers/genetics.md
 node_modules/.bin/jsdoc2md --plugin dmd-compodoc-api-plugin --files app/controllers/scenario.server.controller.js > add-doc/controllers/scenario.md
-node_modules/.bin/jsdoc2md --plugin dmd-compodoc-api-plugin --files app/controllers/user.server.controller.js > add-doc/controllers/user.md
+node_modules/.bin/jsdoc2md --plugin dmd-compodoc-api-plugin --files app/controllers/user.server.controller.js | sed -E -e 's/^[\s]+//' > add-doc/controllers/user.md
 
 ##  MODELS
 node_modules/.bin/jsdoc2md --plugin dmd-compodoc-api-plugin --module-index-format grouped --files app/models/user.server.model.js | sed -e 's/Array\./Array/g' -e 's/Object\./Object/g' | sed -e 's/<code>&quot;/<code>/g' -e 's/&quot;<\/code>/<\/code>/g' -e 's/\\\&quot;/\&quot;/g'> add-doc/models/user-model.md

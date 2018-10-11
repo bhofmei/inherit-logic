@@ -1,6 +1,11 @@
 # CHANGELOG
 
 ## [unreleased]
+- UPDATED sign-in and sign-up forms to provide feedback to users as they fill in the forms
+  - inputs are color coded as valid or invalid once touched
+  - error messages for invalid inputs
+  - form is disabled until all inputs are valid
+- UPDATED genetics plate response to obscure genotype information and scenario details
 
 ## [v1.0.10]
 - UPDATED responses on error in app controllers
