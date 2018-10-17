@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Subject } from 'rxjs';
 
-
 import { ScenarioGlobals } from '../../scenario.globals';
 import { ExperimentService } from '../experiment.service';
 import { ScenarioService } from '../../scenario.service';
@@ -23,6 +22,8 @@ import { readErrorMessage } from '../../../shared/read-error';
   styleUrls: ['./lab-room.style.css']
 })
 export class LabRoomComponent {
+
+  protected selectedObject: string = null;
 
   private isDestroyed$: Subject<boolean>;
   // bacteria tubes

@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
  */
 @Component({
   selector: 'scenario',
-  templateUrl: './scenario.template.html'
+  template: '<mc-breadcrumbs></mc-breadcrumbs><router-outlet></router-outlet>'
 })
 
 export class ScenarioComponent {
