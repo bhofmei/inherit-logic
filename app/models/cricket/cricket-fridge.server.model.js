@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 /**
  * Database schema for fridge
- * @module fridge.server.model
- * @name Fridge Model
+ * @module cricket/fridge.server.model
+ * @name Cricket Fridge Model
  * @type Model
  */
 
@@ -21,7 +21,7 @@ const Schema = mongoose.Schema;
  * @see {@link phage-model.html}
  */
 
-const FridgeSchema = new Schema({
+const CricketFridgeSchema = new Schema({
   /**
    * @member {external:USER} owner - user who owns the fridge
    */
@@ -34,7 +34,7 @@ const FridgeSchema = new Schema({
    */
   scenario: {
     type: Schema.ObjectId,
-    ref: 'Scenario'
+    ref: 'CricketScenario'
   },
   /**
    * @member {boolean} accessGranted - has access been granted by instructor
@@ -52,7 +52,7 @@ const FridgeSchema = new Schema({
    */
   strains: [{
     type: Schema.ObjectId,
-    ref: 'Phage'
+    ref: 'CricketPhage'
   }],
   /**
    * @member {String} scenarioDetails
@@ -78,6 +78,6 @@ const FridgeSchema = new Schema({
   guesses: String
 });
 
-FridgeSchema.set('toJSON',{getters: true});
+CricketFridgeSchema.set('toJSON',{getters: true});
 
-mongoose.model('Fridge', FridgeSchema);
+mongoose.model('CricketFridge', CricketFridgeSchema);

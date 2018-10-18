@@ -46,7 +46,7 @@
         <confirm-password-error [confirmPassword]="confirmPassword"></confirm-password-error>
       </div>
     </div> <!-- end rowPassword -->
-    <div *ngIf="errorMessage !== ''" class="alert alert-danger">{{errorMessage}}</div>
+    <div *ngIf="errorMessage !== ''" class="text-danger font-weight-bold">{{errorMessage}}</div>
     <button class="btn btn-primary mt-2" type="submit" [disabled]="!user.valid">Sign up</button>
   </form>
 </div>

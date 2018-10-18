@@ -1,13 +1,13 @@
-const util = require('./utility');
 const clone = require('clone');
-const randGen = require('./random.generator');
+const util = require('../utility');
+const randGen = require('../random.generator');
 const randEngine = randGen.getEngine();
-const scenConfig = require('../../config/scenario.config');
+const scenConfig = require('../../../config/cricket/scenario.config');
 const phageEnum = require('./phage.enum');
 const phageExper = require('./phage.experiment');
 const phageLogic = require('./phage.logic');
 const plateEnum = require('./plate.enum');
-const bacteria = require('../models/bacteria.server.model');
+const bacteria = require('../../models/cricket/bacteria.server.model');
 
 const debug = require('debug')('genetics'),
   debugExt = require('debug')('genetics:ext'),
@@ -15,7 +15,7 @@ const debug = require('debug')('genetics'),
 
 /**
  * Functions which handle creating plates of phage crosses
- * @module genetics.plate.experiment
+ * @module cricket/genetics.plate.experiment
  * @name Plate Exeriment
  * @type Genetics
  */

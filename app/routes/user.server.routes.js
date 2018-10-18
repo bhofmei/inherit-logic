@@ -1,5 +1,4 @@
 const user = require('../controllers/user.server.controller');
-const scenarios = require('../controllers/scenario.server.controller');
 const passport = require('passport');
 //const limiter = require('../../config/config').limiter;
 

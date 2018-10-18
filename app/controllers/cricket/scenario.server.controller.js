@@ -1,18 +1,18 @@
 /**
- * The Scenario-related controller functions
- * @module scenario.server.controller
- * @name Scenario Controller
+ * The Cricket Scenario-related controller functions
+ * @module cricket/scenario.server.controller
+ * @name Cricket Scenario Controller
  * @type Controller
  */
 const mongoose = require('mongoose');
-const Scenario = mongoose.model('Scenario');
+const Scenario = mongoose.model('CricketScenario');
 
 /**
  * @external SCENARIO
  * @see {@link ../models/scenario-model.html}
  */
 
-const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
+const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 
 /**
  * List all of the sceanrios in order of degree of difficulty

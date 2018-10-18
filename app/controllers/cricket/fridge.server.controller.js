@@ -1,19 +1,19 @@
 /**
- * The Fridge-related controller functions
- * @module fidge.server.controller
- * @name Fridge Controller
+ * The Cricket Fridge-related controller functions
+ * @module cricket/fridge.server.controller
+ * @name Cricket Fridge Controller
  * @type Controller
  */
 
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
-const Fridge = mongoose.model('Fridge');
-const Phage = mongoose.model('Phage');
-const phageScen = require('../genetics/phage.scenario');
-const phageEnum = require('../genetics/phage.enum');
-const scenDefaults = require('../../config/scenario.config.js');
-const cryptr = require('../../config/client.cryptr');
-const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
+const Fridge = mongoose.model('CricketFridge');
+const Phage = mongoose.model('CricketPhage');
+const phageScen = require('../../genetics/cricket/phage.scenario');
+const phageEnum = require('../../genetics/cricket/phage.enum');
+const scenDefaults = require('../../../config/cricket/scenario.config');
+const cryptr = require('../../../config/client.cryptr');
+const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 /**
  * @external FRIDGE
  * @see {@link ../models/fridge-model.html}

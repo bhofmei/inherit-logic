@@ -1,4 +1,4 @@
-const pEnum = require('./phage.enum');
+const pEnum = require('./cricket/phage.enum');
 const randGen = require('./random.generator');
 const debug = require('debug')('genetics:util');
 

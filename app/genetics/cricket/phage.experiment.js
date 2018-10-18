@@ -1,15 +1,15 @@
-const util = require('./utility');
 const clone = require('clone');
-const randGen = require('./random.generator');
+const util = require('../utility');
+const randGen = require('../random.generator');
 const randEngine = randGen.getEngine();
-const scenConfig = require('../../config/scenario.config');
+const scenConfig = require('../../../config/cricket/scenario.config');
 const pEnum = require('./phage.enum');
 const debug = require('debug')('genetics:phage'),
   debugExt = require('debug', 'genetics:ext');
 
 /**
  * Functions which perform experiments on the phage strains
- * @module genetics.phage.experiment
+ * @module cricket/genetics.phage.experiment
  * @name Phage Experiments
  * @type Genetics
  */

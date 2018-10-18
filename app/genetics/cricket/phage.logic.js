@@ -1,12 +1,12 @@
-const util = require('./utility');
 const clone = require('clone');
-const randGen = require('./random.generator');
-const scenConfig = require('../../config/scenario.config');
+const util = require('../utility');
+const randGen = require('../random.generator');
+const scenConfig = require('../../../config/cricket/scenario.config');
 const pEnum = require('./phage.enum');
 
 /**
  * Functions which compute frameshift/phenotype type
- * @module genetics.phage.logic
+ * @module cricket/genetics.phage.logic
  * @name Phage Logic
  * @type Genetics
  */

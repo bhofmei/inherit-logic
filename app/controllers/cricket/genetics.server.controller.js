@@ -1,17 +1,17 @@
 /**
  * The controller which performs genetic crosses/manipulations in
  * the lab and plexer rooms
- * @module genetics.server.controller
- * @name Genetics Controller
+ * @module cricket/genetics.server.controller
+ * @name Cricket Genetics Controller
  * @type Controller
 */
 const mongoose = require('mongoose');
 const clone = require('clone');
-const Phage = mongoose.model('Phage');
-const plate = require('../genetics/plate.experiment');
-const plexer = require('../genetics/plexer.experiment');
-const cryptr = require('../../config/client.cryptr');
-const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
+const Phage = mongoose.model('CricketPhage');
+const plate = require('../../genetics/cricket/plate.experiment');
+const plexer = require('../../genetics/cricket/plexer.experiment');
+const cryptr = require('../../../config/client.cryptr');
+const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 
 /**
  * Creates a plate for the lab room

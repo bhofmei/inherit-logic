@@ -1,15 +1,15 @@
-const util = require('./utility');
 const clone = require('clone');
-const randGen = require('./random.generator');
+const util = require('../utility');
+const randGen = require('../random.generator');
 const randEngine = randGen.getEngine();
-const scenConfig = require('../../config/scenario.config');
+const scenConfig = require('../../../config/cricket/scenario.config');
 const pEnum = require('./phage.enum');
 const phageLogic = require('./phage.logic');
 const debug = require('debug')('genetics');
 
 /**
  * Functions which handle creating  phage for different scenarios
- * @module genetics.phage.scenario
+ * @module cricket/genetics.phage.scenario
  * @name Phage Scenario
  * @type Genetics
  */

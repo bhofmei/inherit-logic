@@ -1,4 +1,4 @@
-/* scenario default data */
+/* Cricket scenario default data */
 module.exports = {
   geneLength: 350,
   /*deleteSizes: [50, 50, 50, 95, 95, 95, 140, 155],

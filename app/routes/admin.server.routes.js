@@ -1,7 +1,7 @@
 const user = require('../controllers/user.server.controller');
 const admin = require('../controllers/admin.server.controller');
-const scenario = require('../controllers/scenario.server.controller');
-const fridge = require('../controllers/fridge.server.controller');
+const cricketScenario = require('../controllers/cricket/scenario.server.controller');
+const cricketFridge = require('../controllers/cricket/fridge.server.controller');
 
 module.exports = function (app) {
 
@@ -15,12 +15,12 @@ module.exports = function (app) {
     .post(admin.isAdmin, admin.setRole)
     .delete(admin.isAdmin, admin.deleteUser);
 
-  /* admin user scenario routes */
+  /* admin user Cricket scenario routes */
   app.route('/api/admin/:userId/students/:studentId/:scenarioId')
-    .get(admin.hasAuthorization, fridge.getStudentFridge)
-    .post(admin.hasAuthorization, fridge.deleteStudentFridge, user.grantAccess);
+    .get(admin.hasAuthorization, cricketFridge.getStudentFridge)
+    .post(admin.hasAuthorization, cricketFridge.deleteStudentFridge, user.grantAccess);
 
   app.param('userId', user.userById);
   app.param('studentId', user.userById);
-  app.param('scenarioId', scenario.scenarioByCode);
+  app.param('scenarioId', cricketScenario.scenarioByCode);
 };

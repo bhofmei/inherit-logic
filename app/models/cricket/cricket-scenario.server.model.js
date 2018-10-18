@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const scenDefaults = require('../../config/scenario.config');
+const scenDefaults = require('../../../config/cricket/scenario.config');
 
 /**
- * Database schema for scenarios (scenarios are created when the application runs the first time)
- * @module scenario.server.model
- * @name Scenario Model
+ * Database schema for Cricket scenarios (scenarios are created when the application runs the first time)
+ * @module cricket/scenario.server.model
+ * @name Cricket Scenario Model
  * @type Model
  */
 
-const ScenarioSchema = new Schema({
+const CricketScenarioSchema = new Schema({
   /**
    * @member {string} label - human-readable label describing the scenario
    */
@@ -110,4 +110,4 @@ const ScenarioSchema = new Schema({
   otherPhage: [String]
 });
 
-mongoose.model('Scenario', ScenarioSchema);
+mongoose.model('CricketScenario', CricketScenarioSchema);

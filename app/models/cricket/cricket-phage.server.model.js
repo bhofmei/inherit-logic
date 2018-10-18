@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 /**
  * Database schema for phage strains
- * @module phage.server.model
- * @name Phage Model
+ * @module cricket/phage.server.model
+ * @name Cricket Phage Model
  * @type Model
  */
 
@@ -13,14 +13,14 @@ const Schema = mongoose.Schema;
  */
 /**
  * @external SCENARIO
- * @see {@link scenario-model.html}
+ * @see {@link cricket-scenario-model.html}
  */
 /**
  * @external PHAGE
- * @see {@link phage-model.html}
+ * @see {@link cricket-phage-model.html}
  */
 
-const PhageSchema = new Schema({
+const CricketPhageSchema = new Schema({
   /**
    * @member {number} strainNum - location of the phage in the fridge; note this is 0-based but fridge interface is 1-based
    * @required
@@ -42,7 +42,7 @@ const PhageSchema = new Schema({
    */
   scenarioOrigin: {
     type: Schema.ObjectId,
-    ref: 'Scenario'
+    ref: 'CricketScenario'
   },
   /**
    * @member {String} phageType - description of who created phage; must be one of `reference`, `unknown` or `user`
@@ -100,7 +100,7 @@ const PhageSchema = new Schema({
    */
   parents: [{
     type: Schema.ObjectId,
-    ref: 'Phage'
+    ref: 'CricketPhage'
   }],
   /**
    * @member {number} numParents - when phage created in lab room on the lab, number of parents used during the experiment
@@ -113,6 +113,6 @@ const PhageSchema = new Schema({
   }
 });
 
-PhageSchema.set('toJSON',{getters: true});
+CricketPhageSchema.set('toJSON',{getters: true});
 
-mongoose.model('Phage', PhageSchema);
+mongoose.model('CricketPhage', CricketPhageSchema);

@@ -11,7 +11,7 @@ const passport = require('passport');
 const transporter = require('../../config/email.transporter')();
 const fromEmail = require('../../config/config')['email']['auth']['user'];
 const emailConfig = require('../../config/config')['email'];
-const scenData = require('../../config/scenario.data');
+const scenData = require('../../config/cricket/scenario.data');
 const async = require('async');
 const crypto = require('crypto');
 const debug = require('debug')('user'),
@@ -25,7 +25,7 @@ const roles = ['student', 'instr', 'admin']
  */
 /**
  * @external SCENARIO
- * @see {@link ../models/scenario-model.html}
+ * @see {@link ../models/cricket/scenario-model.html}
  */
 
 const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
