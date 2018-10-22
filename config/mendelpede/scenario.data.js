@@ -69,8 +69,8 @@ module.exports = [
   },
   {
     label: 'Multiple Alleles',
-    shortCode: 'MultAllele',
-    inheritType: 'multAllele',
+    shortCode: 'MultAlleles',
+    inheritType: 'multAlleles',
     scenType: 'scenario'
   },
   {

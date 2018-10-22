@@ -11,6 +11,17 @@ exports.howManyToMake = function(engine, inList){
   }
 }
 
+
+exports.toTernary = function(inAr){
+  if(inAr === undefined || inAr.length === 0){
+    return null;
+  } else if (inAr.length !== 2){
+    return false;
+  } else {
+    return 2*inAr[0]+ 1
+  }
+}
+
 exports.inArray = function(searchVal, inAr){
   return inAr.indexOf(searchVal) != -1;
 }

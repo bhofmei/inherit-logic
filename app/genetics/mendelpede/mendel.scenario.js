@@ -4,8 +4,8 @@ const randGen = require('../random.generator');
 const randEngine = randGen.getEngine();
 const mConfig = require('../../../config/mendelpede/mendelpede.config');
 const tEnum = require('./traits.enum');
+const pedeLogic = require('./pede.logic');
 const debug = require('debug')('genetics:mendel');
-
 exports.resetEngine = function(){
   randGen.reset(randEngine);
 }
@@ -23,6 +23,7 @@ exports.setScenario = function(scenario){
   var pedeList = createGenotypes(scenario, genoFacts);
   return pedeList;
 }
+
 exports.getInheritance = function(scenario, toDouble) {
   // scenario: scenType, inheritType
 
@@ -78,7 +79,7 @@ exports.getInheritance = function(scenario, toDouble) {
   } // end switch
 
   // secondary options by inherit type
-  var secOpts;
+  /*var secOpts;
   switch(scenario.inheritType) {
     case tEnum.INHERIT.INCDOM:
     case tEnum.INHERIT.AUTOLINK:
@@ -115,7 +116,7 @@ exports.getInheritance = function(scenario, toDouble) {
       var randType = randGen.randPick(secOpts, randEngine);
       genoFacts[2] = {inherit: randType}
     }
-  }
+  }*/
   // return if successful
   return genoFacts;
 };
@@ -154,15 +155,22 @@ exports.setTraits = function(genoFacts){
           traitRem.splice(traitRem.indexOf('SegColor'), 1);
           break; // endnd Epi
         case tEnum.INHERIT.MULTGENES:
-          handled[0] = true;
+          //handled[0] = true;
           handled[1] = true;
-          var tmpGeno = {inherit: tEnum.INHERIT.MULTGENES, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
-          traitRem.splice( traitRem.indexOf('NumSegments'), 1 );
-          break; // end multgenes
+          //var tmpGeno = {inherit: tEnum.INHERIT.MULTGENES, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
+          /*traitRem.splice( traitRem.indexOf('NumSegments'), 1 );
+          genoFacts[0] = clone(tmpGeno);
+          genoFacts[1] = clone(tmpGeno);
+          genoFacts[2] = clone(tmpGeno);
+          break; // end multgenes*/
         case tEnum.INHERIT.MULTALLELES:
           handled[0] = true;
-          var tmpGeno = {inherit: tEnum.INHERIT.MULTALLELES, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
-          traitRem.splice( traitRem.indexOf('NumSegments'), 1 );
+          //var tmpGeno = {inherit: tEnum.INHERIT.MULTALLELES, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
+          if(traitRem.indexOf('NumSegments') !== -1)
+            traitRem.splice( traitRem.indexOf('NumSegments'), 1 );
+          genoFacts[0] = {inherit: genoFacts[0]['inherit'], trait: 'NumSegments', rec: 0, dom: 1, interm: null};
+          genoFacts[1] = {inherit: genoFacts[1]['inherit'], trait: 'NumSegments', rec: 0, dom: 1, interm: null};
+          genoFacts[2] = {inherit: genoFacts[2]['inherit'], trait: 'NumSegments', rec: 0, dom: 1, interm: null};
       } // end switch
     } // if not handled
     // check if it was handled by switch above
@@ -179,6 +187,7 @@ exports.setTraits = function(genoFacts){
     //debug(i, genoFacts[i], bodyColRem);
   } // end for i
   debug(genoFacts);
+
   return genoFacts;
 };
 
@@ -217,6 +226,7 @@ exports.createGenotypes = function(scenario, genoFacts){
     } else if (traitInherit === tEnum.INHERIT.MITO){
       geneGenos[j].push([1,1]);
       for(var k=2; k < numBugs; k++){
+        // always homozygous
         geneGenos[j].push(randGen.randBool(randEngine) ? [1,1] : [0,0]);
       }
       isFemale = [true, true, false];
@@ -312,7 +322,7 @@ exports.createGenotypes = function(scenario, genoFacts){
     } // end if quiz
 
     // determine genotype
-    nextPede['phenotype'] = determinePhenotype(genoFacts, nextPede);
+    nextPede['phenotype'] = pedeLogic.determinePhenotype(genoFacts, nextPede);
     tmpList.push(nextPede);
   } // end for j
 
@@ -322,11 +332,11 @@ exports.createGenotypes = function(scenario, genoFacts){
     // set first 2 bugs guaranteed to live
     tmpList[0]['genotype'][0] = [0,0];
     tmpList[0]['genotype'][1] = [1,1];
-    tmpList[0]['phenotype'] = determinePhenotype(genoFacts, tmpList[0]);
+    tmpList[0]['phenotype'] = pedeLogic.determinePhenotype(genoFacts, tmpList[0]);
 
     tmpList[1]['genotype'][0] = [1,1];
     tmpList[1]['genotype'][1] = [0,0];
-    tmpList[1]['phenotype'] = determinePhenotype(genoFacts, tmpList[1]);
+    tmpList[1]['phenotype'] = pedeLogic.determinePhenotype(genoFacts, tmpList[1]);
     // check the others
     for(var j=2; j < numBugs; j++){
       if(tmpList[j]['genotype'][0] === [0,0] && tmpList[j]['genotype'][1] === [0,0]){
@@ -349,7 +359,7 @@ exports.createGenotypes = function(scenario, genoFacts){
           case 4:
             tmpList[x]['genotype'][1] = [1,0];
         } // end switch
-        tmpList[x]['phenotype'] = determinePhenotype(genoFacts, tmpList[x]);
+        tmpList[x]['phenotype'] = pedeLogic.determinePhenotype(genoFacts, tmpList[x]);
       })
     } // end deadbugs
   } // end synthleth
@@ -362,81 +372,6 @@ exports.createGenotypes = function(scenario, genoFacts){
   return tmpList;
 
 }; // end createGenotypes
-
-const determinePhenotype = function(genoFacts, inPede){
-  var rawPheno = {};
-  for(var i = 0; i < genoFacts.length; i++){
-    var curTrait = genoFacts[i]['trait'];
-    var inheritType = genoFacts[i]['inherit'];
-    if( i < 3) { // traits in play
-      // second trait for 2-gene traits, continue
-      if(i === 1 && (inheritType === tEnum.INHERIT.MULTGENES || inheritType.startsWith('epi')))
-        continue;
-      var geno = inPede.genotype[i];
-      var genoSum;
-      switch(inheritType){
-        case tEnum.INHERIT.PENETRANCE:
-          genoSum = inPede.penetrant ? geno[0] + geno[1] : 0;
-          break;
-        case tEnum.INHERIT.MATEFFECT:
-          genoSum = inPede.motherGeno[0] + inPede.motherGeno[1];
-          break;
-        case tEnum.INHERIT.XLINK:
-          genoSum = inPede.isFemale ? geno[0] + geno[1] : geno[0]*2;
-          break;
-        case tEnum.INHERIT.MULTGENES:
-          var firstLocus = inPede.genotype[0];
-          var secondLocus = inPede.genotype[1];
-          genoSum = 1 + firstLocus[0] + firstLocus[1] + secondLocus[0] + secondLocus[1];
-          break;
-        default:
-          genoSum = geno[0] + geno[1];
-      } // end switch
-      if(genoSum === 1 && inheritType === tEnum.INHERIT.INCDOM){
-        rawPheno[curTrait] = genoFacts[i]['interm']
-      } else if(i === 0 && inheritType === tEnum.INHERIT.MULTGENES){
-        rawPheno[curTrait] = genoSum;
-      } else if(i===0 && inheritType.startsWith('epi')){
-        var locus1 = inPede.genotype[0][0] + inPede.genotype[0][1];
-        var locus2 = inPede.genotype[1][0] + inPede.genotype[1][1];
-        switch(inheritType){
-          case tEnum.INHERIT.EPIDUP:
-            // both rec -> 'dom', both dom -> 'rec'
-            rawPheno['SegColor'] = ((locus1 > 0 || locus2 > 0) ? genoFacts[0]['dom'] : genoFacts[0]['rec']);
-            break;
-          case tEnum.INHERIT.EPICOMP:
-            // both dom -> 'dom', both dom -> 'rec'
-            rawPheno['SegColor'] = ((locus1 > 0 && locus2 > 0) ? genoFacts[0]['dom'] : genoFacts[0]['rec']);
-            break;
-          case tEnum.INHERIT.EPIREC:
-            rawPheno['SegColor'] = (locus1 === 0 ? genoFacts[0]['rec'] : (locus2 === 0 ? genoFacts[0]['interm'] : genoFacts[0]['dom']));
-            break;
-          case tEnum.INHERIT.EPIDOM:
-            rawPheno['SegColor'] = (locus1 > 0 ? genoFacts[0]['rec'] : (locus2 === 0 ? genoFacts[0]['interm'] : genoFacts[0]['dom']));
-            break;
-        }
-      } else {
-        rawPheno[curTrait] = genoSum > 0 ? genoFacts[i]['dom'] : genoFacts[i]['rec'];
-      } // end if-else
-    } // end i < 3
-    else {
-      // cosmetic trait
-      rawPheno[curTrait] = genoFacts[i]['dom'];
-    }
-  } // end for i
-  if(genoFacts[0]['inherit'] === tEnum.INHERIT.MULTGENES || genoFacts[0]['inherit'] === tEnum.INHERIT.MULTALLELES){
-    rawPheno['EyeColor'] = 'Red';
-    rawPheno['SegColor'] = 'LightGray';
-    rawPheno['DotColor'] = 'Black';
-    rawPheno['NumLegs'] = 1;
-  } else if(genoFacts[0]['inherit'].startsWith('epi')){
-    rawPheno['EyeColor'] =  'Red';
-    rawPheno['NumSegments'] = 4;
-    rawPheno['DotColor'] = 'Pink';
-    rawPheno['NumLegs'] = 1;
-  }
-  return rawPheno;
-};
 
 const _pickIncDom = function(traitsLeft, bodyColRem, dotCol){
   var trait = randGen.randPick(traitsLeft, randEngine);

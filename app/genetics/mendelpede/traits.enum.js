@@ -26,8 +26,7 @@ exports.INHERIT = {
   QUIZ: 'quiz'
 };
 
-exports.TRAITS = ["NumSegments","NumLegs","EyeColor","SegColor","DotColor"];
-
+exports.TRAITS = ["DotColor","EyeColor","SegColor","NumLegs","NumSegments"];
 
 exports.DOUBLESETS = ['mendel', 'autoLink', 'homoDomLeth', 'xLink', 'segDistort', 'synthLeth', 'double1', 'double2'];
 

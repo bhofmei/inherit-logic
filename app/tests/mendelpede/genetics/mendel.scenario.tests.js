@@ -41,7 +41,7 @@ describe('Scenario mendel creator unit tests: ', ()=>{
       genoFacts[0].should.have.property('inherit', 'autoLink');
       genoFacts[0].should.have.property('howBad');
       genoFacts[4].should.have.property('inherit', 'mendel');
-    }); // end should create mito
+    }); // end should create autolink
 
     it('should create synthleth', ()=>{
       var genoFacts = mendelScen.getInheritance(scenarios[6]);
@@ -49,8 +49,25 @@ describe('Scenario mendel creator unit tests: ', ()=>{
       genoFacts[0].should.have.property('inherit', 'synthLeth');
       genoFacts[1].should.have.property('inherit', 'synthLeth');
       genoFacts[4].should.have.property('inherit', 'mendel');
-    }); // end should create mito
+    }); // end should create synthleth
 
+    it('should create multgenes', ()=>{
+      var genoFacts = mendelScen.getInheritance(scenarios[10]);
+      console.log(genoFacts);
+      genoFacts.should.have.lengthOf(5);
+      //genoFacts[0].should.have.property('inherit', 'synthLeth');
+      //genoFacts[1].should.have.property('inherit', 'synthLeth');
+      genoFacts[4].should.have.property('inherit', 'mendel');
+    }); // end should create multgenes
+
+    it('should create multalleles', ()=>{
+      var genoFacts = mendelScen.getInheritance(scenarios[11]);
+      genoFacts.should.have.lengthOf(5);
+      console.log(genoFacts);
+      //genoFacts[0].should.have.property('inherit', 'synthLeth');
+      //genoFacts[1].should.have.property('inherit', 'synthLeth');
+      genoFacts[4].should.have.property('inherit', 'mendel');
+    }); // end should create multalleles
 
   }); // end Test create inheritance models
 
@@ -66,11 +83,22 @@ describe('Scenario mendel creator unit tests: ', ()=>{
       var genoFacts = mendelScen.getInheritance(scenarios[3]);
       var genoFacts = mendelScen.setTraits(genoFacts)
       genoFacts.should.have.lengthOf(5);
+    }); // end should give traits for autolink
 
-    }); // end should give traits for mendel
+    it('should give traits for multGenes', ()=>{
+      var genoFacts = mendelScen.getInheritance(scenarios[10]);
+      var genoFacts = mendelScen.setTraits(genoFacts)
+      genoFacts.should.have.lengthOf(5);
+    }); // end should give traits for multgenes
+
+    it('should give traits for multAlleles', ()=>{
+      var genoFacts = mendelScen.getInheritance(scenarios[11]);
+      var genoFacts = mendelScen.setTraits(genoFacts)
+      genoFacts.should.have.lengthOf(5);
+    }); // end should give traits for multAlleles
   }); // end Test set traits
 
-  describe('Test get starting bugs', ()=>{
+  /*describe('Test get starting bugs', ()=>{
     it('should produce bugs', ()=>{
       var scenario = scenarios[0];
 
@@ -80,6 +108,6 @@ describe('Scenario mendel creator unit tests: ', ()=>{
       bugs.should.have.lengthOf(6);
       debug(bugs);
     });
-  }); // end Test get starting bugs
+  }); // end Test get starting bugs*/
 
 }); // end Scenario mendel creator unit tests

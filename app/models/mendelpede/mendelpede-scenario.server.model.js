@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const MendelPedeScenarioSchema = new Schema({
+const MendelScenarioSchema = new Schema({
   label: string,
   shortCode: {
     type: string,
@@ -11,4 +11,4 @@ const MendelPedeScenarioSchema = new Schema({
   scenType: string
 });
 
-mongoose.model('MendelPedeScenario', MendelPedeScenarioSchema);
+mongoose.model('MendelScenario', MendelScenarioSchema);

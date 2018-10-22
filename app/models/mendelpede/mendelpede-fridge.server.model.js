@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const MendelPedeFridgeSchema = new Schema({
+const MendelFridgeSchema = new Schema({
   owner: {
     type: Schema.ObjectID,
     ref: 'User'
   },
   scenario: {
     type: Schema.ObjectID,
-    ref: 'MendelPedeScenario'
+    ref: 'MendelScenario'
   },
   accessGranted: {
     type: Boolean,
@@ -18,8 +18,8 @@ const MendelPedeFridgeSchema = new Schema({
     type: Schema.ObjectID,
     ref: 'MendelPede'
   }],
-  GenoFacts: string
+  genoFacts: string
 });
 
-MendelPedeFridgeSchema.set('toJSON', {getters: true});
-mongoose.model('MendelPedeFridge', MendelPedeFridgeSchema);
+MendelFridgeSchema.set('toJSON', {getters: true});
+mongoose.model('MendelFridge', MendelFridgeSchema);
