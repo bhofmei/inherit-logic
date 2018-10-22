@@ -18,8 +18,13 @@ exports.toTernary = function(inAr){
   } else if (inAr.length !== 2){
     return false;
   } else {
-    return 2*inAr[0]+ 1
+    return 3*inAr[0]+ inAr[1];
   }
+}
+
+exports.fromTernary = function(inNum){
+  var tNums = [[0,0], [0,1], [0,2], [1,0], [1,1], [1,2], [2,0], [2,1], [2,2]];
+  return inNum < 9 ? tNums[inNum] : -1;
 }
 
 exports.inArray = function(searchVal, inAr){
