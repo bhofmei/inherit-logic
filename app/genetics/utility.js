@@ -1,6 +1,7 @@
 const pEnum = require('./cricket/phage.enum');
 const randGen = require('./random.generator');
 const debug = require('debug')('genetics:util');
+const clone = require('clone');
 
 exports.howManyToMake = function(engine, inList){
   if(inList.length === 1){
@@ -10,6 +11,10 @@ exports.howManyToMake = function(engine, inList){
   }
 }
 
+exports.inArray = function(searchVal, inAr){
+  return inAr.indexOf(searchVal) != -1;
+}
+
 exports.holyRoller = function(engine, numSides, numTimes){
   var diceAr = randGen.randDice(numSides, numTimes, engine);
   var sumDice = 0;
@@ -17,6 +22,31 @@ exports.holyRoller = function(engine, numSides, numTimes){
     sumDice = sumDice + n;
   });
   return sumDice;
+}
+
+exports.removeFromArray = function(inAr, removeElm){
+  if(inAr.length === 0 || removeElm.length === 0){
+    return inAr;
+  }
+  for(var i=0; i < removeElm.length; i++){
+    var j = inAr.indexOf(removeElm[i]);
+    if(j!== -1){
+      inAr.splice(j, 1);
+    }
+  }
+  return inAr;
+}
+
+exports.makeLongEnoughArray = function(engine, inAr, numNeeded){
+  var outArray = clone(inAr);
+  if (outArray.length > 0){
+    var groupsNeeds = Math.ceil(numNeeded / inAr.length);
+    for(var i=2; i <= groupsNeeds; i++){
+      outArray = outArray.concat(inAr);
+    }
+    outArray = randGen.randShuffle(outArray, engine);
+  }
+  return outArray;
 }
 
 exports.absSort = function(a, b){
