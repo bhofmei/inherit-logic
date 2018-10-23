@@ -25,15 +25,14 @@ exports.holyRoller = function(engine, numSides, numTimes){
 }
 
 exports.removeFromArray = function(inAr, removeElm){
-  if(inAr.length === 0 || removeElm.length === 0){
+  if(inAr.length === 0){
     return inAr;
   }
-  for(var i=0; i < removeElm.length; i++){
-    var j = inAr.indexOf(removeElm[i]);
+
+    var j = inAr.indexOf(removeElm);
     if(j!== -1){
       inAr.splice(j, 1);
     }
-  }
   return inAr;
 }
 

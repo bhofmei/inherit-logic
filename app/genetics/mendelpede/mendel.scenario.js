@@ -20,7 +20,7 @@ exports.buildScenario = function(scenario){
   // determine traits
   genoFacts = setTraits(genoFacts);
   // get list of starting bugs
-  var pedeList = createGenotypes(scenario, genoFacts);
+  var pedeList = createPedes(scenario, genoFacts);
   // return genoFacts and pedeList
   return {genoFacts: genoFacts, pedes: pedeList};
 };
@@ -91,7 +91,7 @@ exports.setTraits = function(genoFacts){
       continue;
     }
     // handle traits by inherit type
-    switch(inhertType){
+    switch(inheritType){
       case tEnum.INHERIT.EPIDOM:
       case tEnum.INHERIT.EPICOM:
       case tEnum.INHERIT.EPIREC:
@@ -101,12 +101,14 @@ exports.setTraits = function(genoFacts){
         genoFacts[1] = clone(res.geno);
         bodyColRem = res.colRem;
         traitRem = util.removeFromArray(traitRem, 'SegColor');
+        traitRem = util.removeFromArray(traitRem, 'NumLegs'); // never set numLegs
         break;
+      case tEnum.INHERIT.MULTGENES:
+        traitRem = util.removeFromArray(traitRem, 'NumLegs'); // never set numLegs
+        genoFacts[1] = {inherit: inheritType, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
       case tEnum.INHERIT.MULTALLELES:
         traitRem = util.removeFromArray(traitRem, 'NumSegments');
         genoFacts[0] = {inherit: inheritType, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
-      case tEnum.INHERIT.MULTGENES:
-        genoFacts[1] = {inherit: inheritType, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
         break;
       case tEnum.INHERIT.INCDOM:
         var res = _pickIncDom(traitRem, bodyColRem, dotColRem);
@@ -115,8 +117,8 @@ exports.setTraits = function(genoFacts){
         bodyColRem = res.colRem;
         break;
       default:
-        var newTrait = randGen.pick(traitRem, randEngine);
-        util.removeFromArray(traitRem, newTrait);
+        var newTrait = randGen.randPick(traitRem, randEngine);
+        traitRem = util.removeFromArray(traitRem, newTrait);
         var tmpGeno = _pickTrait(i, newTrait, bodyColRem, dotColRem);
         genoFacts[i]['trait'] = newTrait;
         genoFacts[i]['dom'] = tmpGeno.dom;
@@ -152,7 +154,7 @@ exports.createPedes = function( scenario, genoFacts ){
       }
     } // end for j
     // if quiz, randomly rearrange
-    if(isQuiz and randGen.randBool(randEngine)){
+    if(isQuiz && randGen.randBool(randEngine)){
       var holdGeno = nextPede.genotype[0];
       nextPede.genotype[0] = nextPede.genotype[1];
       nextPede.genotype[1] = holdGeno;

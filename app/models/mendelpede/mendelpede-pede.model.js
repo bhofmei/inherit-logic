@@ -21,10 +21,10 @@ const Schema = mongoose.Schema;
      type: Schema.ObjectId,
      ref: 'MendelPedeScenario'
    },
-   // encoded with binary for each trait, traits ordered
-   // DotColor, EyeColor, SegColor, NumLegs, NumSegments
+   // encoded with ternary for each trait that's part of scenario
    genotype: [Number],
-   phenotype: string;
+   // ordered dotcolor, eyeColor, segColor, numLegs, numSegs
+   phenotype: [string];
  });
 
  MendelPedeSchema.set('toJSON',{getters: true});
