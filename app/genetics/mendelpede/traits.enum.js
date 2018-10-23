@@ -18,7 +18,6 @@ exports.INHERIT = {
   PENETRANCE: 'penetrance',
   MULTGENES: 'multGenes',
   MULTALLELES: 'multAlleles',
-  MARTIAN: 'martian',
   EPIDUP: 'epiDup',
   EPICOM: 'epiCom',
   EPIREC: 'epiRec',
@@ -27,9 +26,6 @@ exports.INHERIT = {
 };
 
 exports.TRAITS = ["DotColor","EyeColor","SegColor","NumLegs","NumSegments"];
-
-exports.DOUBLESETS = ['mendel', 'autoLink', 'homoDomLeth', 'xLink', 'segDistort', 'synthLeth', 'double1', 'double2'];
-
 
 exports.PHENO = {
   numLegs: [0, 1, 2],

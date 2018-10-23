@@ -104,12 +104,6 @@ module.exports = [
     scenType: 'discovery'
   },
   {
-    label: 'Discovery6',
-    shortCode: 'Disc6',
-    inheritType: 'martian',
-    scenType: 'discovery'
-  },
-  {
     label: 'Pathway1',
     shortCode: 'Path1',
     inheritType: 'epiDup',

@@ -26,10 +26,6 @@ exports.INHERIT = {
 
 exports.TRAITS = ["NumSegments","NumLegs","EyeColor","SegColor","DotColor"];
 
-
-exports.DOUBLESETS = ['mendel', 'autoLink', 'homoDomLeth', 'xLink', 'segDistort', 'synthLeth', 'double1', 'double2'];
-
-
 exports.PHENO = {
   numLegs: [0, 1, 2],
   numSegments: [1, 2, 3, 4, 5],

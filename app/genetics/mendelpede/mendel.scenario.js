@@ -2,10 +2,10 @@ const clone = require('clone');
 const util = require('../utility');
 const randGen = require('../random.generator');
 const randEngine = randGen.getEngine();
-const mConfig = require('../../../config/mendelpede/mendelpede.config');
 const tEnum = require('./traits.enum');
 const pedeLogic = require('./pede.logic');
 const debug = require('debug')('genetics:mendel');
+
 exports.resetEngine = function(){
   randGen.reset(randEngine);
 }
@@ -14,17 +14,18 @@ exports.seedEngine = function(num){
   randGen.setSeed(randEngine, num)
 }
 
-exports.setScenario = function(scenario){
+exports.buildScenario = function(scenario){
   // build inheritance model
-  var genoFacts = getInheritance(scenario, false);
+  var genoFacts = getInheritance(scenario);
   // determine traits
   genoFacts = setTraits(genoFacts);
   // get list of starting bugs
   var pedeList = createGenotypes(scenario, genoFacts);
-  return pedeList;
-}
+  // return genoFacts and pedeList
+  return {genoFacts: genoFacts, pedes: pedeList};
+};
 
-exports.getInheritance = function(scenario, toDouble) {
+exports.getInheritance = function(scenario) {
   // scenario: scenType, inheritType
 
   // genoFacts is type of inheritance for each trait - set all to mendel then replace later
@@ -33,12 +34,9 @@ exports.getInheritance = function(scenario, toDouble) {
   });
   // fill genoFacts based on scenario
   switch(scenario.inheritType){
-    // 3 mendel traits
+    // 3 mendel traits - inherit mode is already set
     case tEnum.INHERIT.MENDEL:
     case tEnum.INHERIT.QUIZ:
-      genoFacts[0] = {inherit: tEnum.INHERIT.MENDEL};
-      genoFacts[1] = {inherit: tEnum.INHERIT.MENDEL};
-      genoFacts[2] = {inherit: tEnum.INHERIT.MENDEL};
       break;
     // random value with it
     case tEnum.INHERIT.AUTOLINK:
@@ -77,301 +75,148 @@ exports.getInheritance = function(scenario, toDouble) {
       genoFacts = false;
       throw Error('unknown scenario');
   } // end switch
-
-  // secondary options by inherit type
-  /*var secOpts;
-  switch(scenario.inheritType) {
-    case tEnum.INHERIT.INCDOM:
-    case tEnum.INHERIT.AUTOLINK:
-    case tEnum.INHERIT.XLINK:
-    case tEnum.INHERIT.SYNTHLETH:
-      secOpts = [tEnum.INHERIT.HOMODOMLETH, tEnum.INHERIT.MITO, tEnum.INHERIT.SEGDISTORT, tEnum.INHERIT.PENETRANCE];
-      break;
-    case tEnum.INHERIT.MITO:
-      secOpts = [tEnum.INHERIT.HOMODOMLETH, tEnum.INHERIT.XLINK, tEnum.INHERIT.SEGDISTORT, tEnum.INHERIT.PENETRANCE];
-      break;
-    case tEnum.INHERIT.SEGDISTORT:
-      secOpts = [tEnum.INHERIT.HOMODOMLETH, tEnum.INHERIT.MITO, tEnum.INHERIT.XLINK, tEnum.INHERIT.PENETRANCE];
-      break;
-    case tEnum.INHERIT.HOMODOMLETH:
-      secOpts = [tEnum.INHERIT.MITO, tEnum.INHERIT.SEGDISTORT, tEnum.INHERIT.PENETRANCE];
-      break;
-    case tEnum.INHERIT.PENETRANCE:
-      secOpts = [tEnum.INHERIT.MENDEL];
-      break;
-    case tEnum.INHERIT.MULTALLELES:
-    case tEnum.INHERIT.MULTGENES:
-    case tEnum.INHERIT.EPIDUP:
-    case tEnum.INHERIT.EPIREC:
-    case tEnum.INHERIT.EPICOM:
-    case tEnum.INHERIT.EPIDOM:
-    case tEnum.INHERIT.MATEFFECT:
-      secOpts = [];
-  }; // end switch
-
-  if(toDouble){
-    if(randGen.randBool(randEngine)){
-      genoFacts[2] = {inherit: tEnum.INHERIT.MENDEL}
-    } else {
-      var randType = randGen.randPick(secOpts, randEngine);
-      genoFacts[2] = {inherit: randType}
-    }
-  }*/
   // return if successful
   return genoFacts;
 };
 
 exports.setTraits = function(genoFacts){
-  // genoFacts has 'inherit' and optional 'howBad'
-  var handled = tEnum.TRAITS.map((x)=>{return false});
   var traitRem = clone(tEnum.TRAITS);
   var bodyColRem = clone(tEnum.PHENO.bodyEyeColors);
   var dotColRem = clone(tEnum.PHENO.dotColors);
 
-  for(var i=0; i<handled.length; i++){
+  for(var i = 0; i < genoFacts.length; i++){
     var inheritType = genoFacts[i]['inherit'];
-    if(!handled[i]){
-      // handle it
-      switch(inheritType){
-        case tEnum.INHERIT.INCDOM:
-          handled[0] = true;
-          var res = _pickIncDom(traitRem, bodyColRem, dotColRem);
-          genoFacts[0] = res.geno;
-          traitRem = res.traits;
-          bodyColRem = res.colRem;
-          break; // end incdom
-        case tEnum.INHERIT.EPICOM:
-        case tEnum.INHERIT.EPIDOM:
-        case tEnum.INHERIT.EPIDUP:
-        case tEnum.INHERIT.EPIREC:
-          handled[0] = true;
-          handled[1] = true;
-          var useCol = util.makeLongEnoughArray(randEngine, bodyColRem, 2);
-          genoFacts[i]['dom'] = useCol[0];
-          var tmpGeno = {inherit: inheritType, trait: 'SegColor', rec: useCol[0], dom: useCol[1], interm: useCol[2]};
-          genoFacts[0] = clone(tmpGeno);
-          genoFacts[1] = clone(tmpGeno);
-          bodyColRem = util.removeFromArray(bodyColRem, useCol);
-          traitRem.splice(traitRem.indexOf('SegColor'), 1);
-          break; // endnd Epi
-        case tEnum.INHERIT.MULTGENES:
-          //handled[0] = true;
-          handled[1] = true;
-          //var tmpGeno = {inherit: tEnum.INHERIT.MULTGENES, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
-          /*traitRem.splice( traitRem.indexOf('NumSegments'), 1 );
-          genoFacts[0] = clone(tmpGeno);
-          genoFacts[1] = clone(tmpGeno);
-          genoFacts[2] = clone(tmpGeno);
-          break; // end multgenes*/
-        case tEnum.INHERIT.MULTALLELES:
-          handled[0] = true;
-          //var tmpGeno = {inherit: tEnum.INHERIT.MULTALLELES, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
-          if(traitRem.indexOf('NumSegments') !== -1)
-            traitRem.splice( traitRem.indexOf('NumSegments'), 1 );
-          genoFacts[0] = {inherit: genoFacts[0]['inherit'], trait: 'NumSegments', rec: 0, dom: 1, interm: null};
-          genoFacts[1] = {inherit: genoFacts[1]['inherit'], trait: 'NumSegments', rec: 0, dom: 1, interm: null};
-          genoFacts[2] = {inherit: genoFacts[2]['inherit'], trait: 'NumSegments', rec: 0, dom: 1, interm: null};
-      } // end switch
-    } // if not handled
-    // check if it was handled by switch above
-    if(handled[i])  continue; // go to next trait
-    // otherwise, pick one of the remaining traits
-    var newTrait = randGen.randPick(traitRem, randEngine);
-    traitRem.splice( traitRem.indexOf(newTrait), 1 );
-    var tmpGeno = _pickTrait(i, newTrait, bodyColRem, dotColRem);
-    genoFacts[i]['trait'] = tmpGeno.trait;
-    genoFacts[i]['dom'] = tmpGeno.dom;
-    genoFacts[i]['interm'] = tmpGeno.interm;
-    genoFacts[i]['rec'] = tmpGeno.rec;
-    bodyColRem = tmpGeno.colRem;
-    //debug(i, genoFacts[i], bodyColRem);
+    //  if 2-gene trait and second gene, continue
+    if(i === 1 && (inheritType === tEnum.INHERIT.MULTGENES || inheritType.startsWith('epi'))){
+      continue;
+    }
+    // handle traits by inherit type
+    switch(inhertType){
+      case tEnum.INHERIT.EPIDOM:
+      case tEnum.INHERIT.EPICOM:
+      case tEnum.INHERIT.EPIREC:
+      case tEnum.INHERIT.EPIDUP:
+        var res = _pickEpiTraits(inheritType, bodyColRem);
+        genoFacts[0] = clone(res.geno);
+        genoFacts[1] = clone(res.geno);
+        bodyColRem = res.colRem;
+        traitRem = util.removeFromArray(traitRem, 'SegColor');
+        break;
+      case tEnum.INHERIT.MULTALLELES:
+        traitRem = util.removeFromArray(traitRem, 'NumSegments');
+        genoFacts[0] = {inherit: inheritType, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
+      case tEnum.INHERIT.MULTGENES:
+        genoFacts[1] = {inherit: inheritType, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
+        break;
+      case tEnum.INHERIT.INCDOM:
+        var res = _pickIncDom(traitRem, bodyColRem, dotColRem);
+        genoFacts[0] = res.geno;
+        traitRem = res.traits;
+        bodyColRem = res.colRem;
+        break;
+      default:
+        var newTrait = randGen.pick(traitRem, randEngine);
+        util.removeFromArray(traitRem, newTrait);
+        var tmpGeno = _pickTrait(i, newTrait, bodyColRem, dotColRem);
+        genoFacts[i]['trait'] = newTrait;
+        genoFacts[i]['dom'] = tmpGeno.dom;
+        genoFacts[i]['interm'] = tmpGeno.interm;
+        genoFacts[i]['rec'] = tmpGeno.rec;
+        bodyColRem = tmpGeno.colRem;
+    }; // end switch
   } // end for i
-  debug(genoFacts);
-
   return genoFacts;
-};
+}; // end setTraits
 
-exports.createGenotypes = function(scenario, genoFacts){
-  // scenario has 'inherit' and 'scenType'
-  var numBugs;
+exports.createPedes = function( scenario, genoFacts ){
+  var isQuiz = scenario.inheritType === tEnum.SCENTYPE.QUIZ;
+  var genotypes = createGenotypes(genoFacts, isQuiz);
+  var genes = genotypes.genos;
+  var females = genotypes.female;
+  var pedeList = [];
+  // generate the pedes
+  for(var i = 0; i < females.length; i++){
+    var nextPede = {genotype: [], isFemale: females[i]};
+    // loop through genes
+    for(var j = 0; j < 3; j++){
+      var traitInherit = genoFacts[j]['inherit'];
+      nextPede.genotype.push(genes[j][i]);
+      // handle special genotype info
+      if(traitInherit === tEnum.INHERIT.MATEFFECT){
+        var opts = [0, 4, 3, 3]; // 00, 11, 10, 10
+        var randDraw = randGen.randInt(0, 3, randEngine);
+        nextPede['motherGeno'] = opts[randDraw];
+      } else if(traitInherit === tEnum.INHERIT.PENETRANCE){
+        var randDraw = randGen.randDie(100, randEngine);
+        nextPede['penetrant'] = randDraw < genoFacts[j]['howBad'];
+      }
+    } // end for j
+    // if quiz, randomly rearrange
+    if(isQuiz and randGen.randBool(randEngine)){
+      var holdGeno = nextPede.genotype[0];
+      nextPede.genotype[0] = nextPede.genotype[1];
+      nextPede.genotype[1] = holdGeno;
+    }
+    nextPede['phenotype'] = pedeLogic.determinePhenotype(genoFacts, nextPede);
+    pedeList.push(nextPede);
+  } // end for i
+  // shuffle the list and assign id
+  randGen.randShuffle(pedeList, randEngine);
+  pedeList.forEach((elt, i)=>{
+    pedeList[i]['bugId'] = i;
+  });
+  return pedeList;
+}; // end createPedes
+
+const createGenotypes = function(genoFacts, isQuiz){
+  var numBugs = isQuiz ? 8 : 6;
   var isFemale = [true, false];
-  var geneGenos = {0:[[0,0]], 1:[[0,0]], 2:[[0,0]]};
-  var i;
-  // quiz type
-  if(scenario.inheritType === tEnum.INHERIT.QUIZ){
-    numBugs = 8;
-    geneGenos[0].push([1,0]);
-    for(i=0; i < 4; i++){
-      geneGenos[0].push([1,1]);
-    }
-    for(i=0; i < 2; i++){
-      geneGenos[0].push(randGen.randBool(randEngine) ? [1,1] : [0,0]);
-    }
-  } else {
-    numBugs = 6;
-  }
+  var genes = [[0], [0], [0]]; // genotypes are ternary-encoded
 
-  // fill other traits
-  for (var j = 0; j < 3; j++){
-    var traitInherit = genoFacts[j]['inherit'];
-    // trait inc_dom
-    if( traitInherit === tEnum.INHERIT.INCDOM){
-      geneGenos[j].push([1,1]);
-      geneGenos[j].push([0,1]);
-      /// CHECK THIS LOGIC IT SEEMS WRONG
-      var nFilled = geneGenos.length;
-      for(nFilled; nFilled < numBugs; nFilled++){
-        geneGenos[0].push(randGen.randBool(randEngine) ? [1,1] : [0,0]);
-      }
-    } else if (traitInherit === tEnum.INHERIT.MITO){
-      geneGenos[j].push([1,1]);
-      for(var k=2; k < numBugs; k++){
-        // always homozygous
-        geneGenos[j].push(randGen.randBool(randEngine) ? [1,1] : [0,0]);
-      }
+  for(var i = 0; i < 3; i++){
+    var inheritType = genoFacts[i]['inherit'];
+    // if 0 and QUIZ
+    if(i === 0 && isQuiz){
+      genes[0] = _genoQuiz();
+    } else if( inheritType === tEnum.INHERIT.MULTALLELES){
+      genes[i] = _genoMultAllele(numBugs);
+    } else if( inheritType === tEnum.INHERIT.MITO ){
+      genes[i] = _genoMito(numBugs);
       isFemale = [true, true, false];
+    } else if( inheritType === tEnum.INHERIT.INCDOM){
+      genes[i] = _genoIncDom(numBugs);
+    } else if (inheritType === tEnum.INHERIT.SYNTHLETH){
+      if(i === 1) continue; // genes were set at i=0
+      var res = _genoSynthLeth(numBugs);
+      genes[0] = res[0];
+      genes[1] = res[1];
     } else {
-      // all other traits
-      switch(randGen.randDie(3, randEngine)){
-        case 1:
-          geneGenos[j].push([1,0]);
-          break;
-        case 2:
-          geneGenos[j].push([0,1]);
-          break;
-        case 3:
-          if(traitInherit === tEnum.INHERIT.HOMODOMLETH){
-            geneGenos[j].push(randGen.randBool(randEngine) ? [1,0] : [0,1]);
-          } else {
-            geneGenos[j].push([1,1]);
-          }
-          break;
-      } // end switch
-    } // end else
-    if(traitInherit === tEnum.INHERIT.MULTALLELES && j == 0){
-      geneGenos[0] = [[0,1],[1,2],[0,1],[2,0],[1,0],[2,0]];
+      // add a dominant allele
+      genes[i].push(_genoRandDom(inheritType));
     }
-  } // end for j
-
-  // assign the rest of the sexes
-  for(var k=isFemale.length; k < numBugs; k++){
+    // random genotype to get numBugs
+    for(var k=genes[i].length; k < numBugs; k++){
+      genes[i].push(_genoRandAllele(inheritType));
+    }
+    // shuffle alleles i > 0 except synthLeth
+    // for i == 0, sex might be important
+    if(i > 0 && inheritType !== tEnum.INHERIT.SYNTHLETH){
+      genes[i] = randGen.randShuffle(genes[i], randEngine);
+    }
+  } // end for i
+  // assign sex for rest of pedes
+  for(var k = isFemale.length; k < numBugs; k++){
     isFemale.push(randGen.randBool(randEngine));
   }
+  return {genos: genes, female: isFemale}
+};
 
-  // fill in everything else randomly
-  for(var j=0; j < 3; j++){
-    var traitInherit = genoFacts[j]['inherit'];
-    for(var k=0; k<numBugs; k++){
-      // not defined yet
-      if(geneGenos[j][k] === undefined){
-        var randDraw = randGen.randDie(10, randEngine);
-        if(randDraw < 5) {
-          geneGenos[j].push([0,0]);
-        } else if (randDraw < 7){
-          if(traitInherit === tEnum.INHERIT.HOMODOMLETH){
-            geneGenos[j].push(randGen.randBool(randEngine) ? [1,0] :[0,1]);
-          } else {
-            geneGenos[j].push([1,1]);
-          }
-        }else if (randDraw < 9){
-          if(traitInherit === tEnum.INHERIT.HOMODOMLETH){
-            geneGenos[j].push(randGen.randBool(randEngine) ? [1,0] :[0,1]);
-          } else {
-            geneGenos[j].push([1,0]);
-          }
-        } else {
-          geneGenos[j].push([0,1]);
-        } // end if
-      } // end undefined
-    } // end k
-    // shuffle
-    if(j > 0){
-      geneGenos[j] = util.makeLongEnoughArray(randEngine, geneGenos[j], numBugs);
-    }
-  } // end for j
-
-  var tmpList = [];
-  for(var j=0; j < numBugs; j++){
-    var nextPede = {genotype:[], isFemale: isFemale[j]};
-    for(var k=0; k < 3; k++){
-      var traitInherit = genoFacts[k]['inherit'];
-      nextPede.genotype.push(geneGenos[k][j]);
-      if(traitInherit === tEnum.INHERIT.MATEFFECT){
-        var randDraw = randGen.randDie(4, randEngine);
-        switch(randDraw){
-          case 1:
-            nextPede['motherGeno'] = [0,0];
-            break;
-          case 2:
-            nextPede['motherGeno'] = [1,1];
-            break;
-          default:
-            nextPede['motherGeno'] = [1,0];
-        }
-      } else if(traitInherit === tEnum.INHERIT.PENETRANCE){
-        nextPede['penetrant'] = (randGen.randDie(100, randEngine) < genoFacts[k]['howBad']);
-      }
-    } // end for k
-    // if quiz, do something
-    if(scenario.scenType === tEnum.INHERIT.QUIZ){
-      if(randGen.randBool(randEngine)){
-        var holdGeno = nextPede.genotype[0];
-        nextPede.genotype[0] = nextPede.genotype[1];
-        nextPede.genotype[1] = holdGeno;
-      }
-    } // end if quiz
-
-    // determine genotype
-    nextPede['phenotype'] = pedeLogic.determinePhenotype(genoFacts, nextPede);
-    tmpList.push(nextPede);
-  } // end for j
-
-  // prevent dead parents
-  if(genoFacts[0]['inherit'] === tEnum.INHERIT.SYNTHLETH){
-    var deadBugs = [];
-    // set first 2 bugs guaranteed to live
-    tmpList[0]['genotype'][0] = [0,0];
-    tmpList[0]['genotype'][1] = [1,1];
-    tmpList[0]['phenotype'] = pedeLogic.determinePhenotype(genoFacts, tmpList[0]);
-
-    tmpList[1]['genotype'][0] = [1,1];
-    tmpList[1]['genotype'][1] = [0,0];
-    tmpList[1]['phenotype'] = pedeLogic.determinePhenotype(genoFacts, tmpList[1]);
-    // check the others
-    for(var j=2; j < numBugs; j++){
-      if(tmpList[j]['genotype'][0] === [0,0] && tmpList[j]['genotype'][1] === [0,0]){
-        deadBugs.push(j);
-      }
-    }
-    if(deadBugs.length > 0){
-      deadBugs.forEach((x)=>{
-        var randG = randGen.randDie(4, randEngine);
-        switch(randG){
-          case 1:
-            tmpList[x]['genotype'][0] = [0,1];
-            break;
-          case 2:
-            tmpList[x]['genotype'][0] = [1,0];
-            break;
-          case 3:
-            tmpList[x]['genotype'][1] = [0,1];
-            break;
-          case 4:
-            tmpList[x]['genotype'][1] = [1,0];
-        } // end switch
-        tmpList[x]['phenotype'] = pedeLogic.determinePhenotype(genoFacts, tmpList[x]);
-      })
-    } // end deadbugs
-  } // end synthleth
-
-  // shuffle the list
-  randGen.randShuffle(tmpList, randEngine);
-  tmpList.forEach((elt, i)=>{
-    tmpList[i]['bugID'] = i+1;
-  });
-  return tmpList;
-
-}; // end createGenotypes
+const _pickEpiTraits = function(inheritType, bodyCol){
+  var colors = randGen.randShuffle(bodyCol, randEngine);
+  var outGeno = {inherit: inheritType, trait: 'SegColor', rec: colors[0], dom: colors[1], interm: colors[2]};
+  colors.splice(0, 3);
+  return {geno: outGeno, colRem: colors};
+};
 
 const _pickIncDom = function(traitsLeft, bodyColRem, dotCol){
   var trait = randGen.randPick(traitsLeft, randEngine);
@@ -414,15 +259,14 @@ const _pickIncDom = function(traitsLeft, bodyColRem, dotCol){
   } // end switch trait
 
   // remove trait from available traits
-  var i = traitsLeft.indexOf(trait);
-  traitsLeft.splice(i, 1);
+  traitsLeft = util.removeFromArray(traitsLeft, trait);
 
   // return results
   return {'geno': outGeno, 'traits': traitsLeft, 'colRem': bodyColRem};
 }; // end _pickIncDom
 
 const _pickTrait = function(i, inTrait, bodyColRem, dotCol){
-  var outGeno = {trait: inTrait, interm: null};
+  var outGeno = {interm: null};
   // number type trait
   if(inTrait === 'NumSegments' || inTrait === 'NumLegs'){
     var tOpts = inTrait === 'NumSegments' ? tEnum.PHENO.numSegments : tEnum.PHENO.numLegs;
@@ -446,8 +290,97 @@ const _pickTrait = function(i, inTrait, bodyColRem, dotCol){
   return outGeno;
 }; // end _pickTrait
 
-const _getTraitList = function(genoFacts){
-  return genoFacts.map((x)=>{
-    return x.trait;
-  })
+const _genoQuiz = function(){
+  // gneotypes are ternary encoded
+  var outGeno = [0, 3, 4, 4, 4, 4];
+  outGeno.push(randGen.randBool(randEngine) ? 4 : 0);
+  outGeno.push(randGen.randBool(randEngine) ? 4 : 0);
+  return outGeno
 };
+
+const _genoMultAllele = function(numBugs){
+  // must have 01, 12, 02 -> randomly pick other three
+  var outGeno = [1, 5, 2];
+  for(var k = outGeno.length; k < numBugs; k++){
+    outGeno.push(randGen.randInt(0, 8));
+    return outGeno;
+  }
+};
+
+const _genoIncDom = function(numBugs){
+  // must have 00, 11, 01
+  var outGeno = [0, 4, 1];
+  for(var k = outGeno.length; k < numBugs; k++){
+    outGeno.push(randGen.randPick([4, 0],randEngine)); // [1,1] or [0,0]
+  }
+  return outGeno;
+}
+
+const _genoMito = function(numBugs){
+  // always have 00, 11
+  var outGeno = [0, 4];
+  for(var k = outGeno.length; k < numBugs; k++){
+    outGeno.push(randGen.randPick([4, 0],randEngine)); // [1,1] or [0,0]
+  }
+  return outGeno;
+}
+
+const _genoSynthLeth = function(numBugs){
+  // guarantee first 2 bugs live
+  var gList1 = [0, 4]; // 00, 11
+  var gList2 = [4, 0]; // 11, 00
+  for(var k = gList1.length; k < numBugs; k++){
+    // randomly generate 2 alleles
+    var allele1 = _genoRandAllele(tEnum.INHERIT.SYNTHLETH);
+    var allele2 = _genoRandAllele(tEnum.INHERIT.SYNTHLETH);
+    // if lethal, switch one
+    if(allele1 === 0 && al2 === 0){
+      switch(randGen.randDie(4, randEngine)){
+        case 1:
+          allele1 = 1; // 01
+          break;
+        case 2:
+          allele1 = 3; // 10
+          break;
+        case 3:
+          allele2 = 1; // 01;
+          break;
+        default:
+          allele2 = 3; // 10
+      } // end switch
+    } // end if al1 = 0 & al2 = 0
+    gList1.push(allele1);
+    gList2.push(allele2);
+  } // end for k
+  return {0: gList1, 1: gList2};
+}; // end _genoSynthLeth
+
+const _genoRandDom = function(inheritType){
+  var isHDL = (inheritType === tEnum.INHERIT.HOMODOMLETH);
+  switch(randGen.randDie(3, randEngine)){
+    case 1:
+      return 3; // [1,0]
+    case 2:
+      return 1; // [0,1]
+    case 3:
+      if(isHDL)
+        return randGen.randPick([3,1], randEngine); // [1,0] [0,1]
+      return 4; // [1,1]
+  }
+};
+
+const _genoRandAllele = function(inheritType){
+  var isHDL = (inheritType === tEnum.INHERIT.HOMODOMLETH);
+  var randDraw = randGen.randDie(10, randEngine);
+    if(randDraw < 5){
+      return 0; // [0,0]
+    } else if(randDraw < 9 && isHDL){
+      return randGen.randPick([3,1], randEngine); // [1,0] [0,1]
+    } else if(randDraw < 7){
+      return 4; // [1,1]
+    } else if(randDraw < 9){
+      return 3; // [1,0]
+    } else {
+      return 1; // [0,1]
+    }
+  }; // end _genoRandDraw

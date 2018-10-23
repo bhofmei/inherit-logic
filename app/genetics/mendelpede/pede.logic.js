@@ -2,9 +2,29 @@ const clone = require('clone');
 const util = require('../utility');
 const randGen = require('../random.generator');
 const randEngine = randGen.getEngine();
-const mConfig = require('../../../config/mendelpede/mendelpede.config');
 const tEnum = require('./traits.enum');
 const debug = require('debug')('genetics:mendel');
+
+exports.toTernary = function(inAr){
+  if(inAr === undefined || inAr.length === 0){
+    return null;
+  } else if (inAr.length !== 2){
+    return false;
+  } else {
+    return 3*inAr[0]+ inAr[1];
+  }
+}
+
+exports.fromTernary = function(inNum){
+  var tNums = [[0,0], [0,1], [0,2], [1,0], [1,1], [1,2], [2,0], [2,1], [2,2]];
+  return inNum < 9 ? tNums[inNum] : -1;
+}
+
+exports.ternaryGenoSum = function(inNum){
+  // [0,0], [0,1], [0,2], [1,0], [1,1], [1,2], [2,0], [2,1], [2,2]
+  var sums = [0, 1, 2, 1, 2, 3, 2, 3, 4];
+  return inNum < 9 ? tNums[inNum] : -1;
+}
 
 exports.determinePhenotype = function(genoFacts, inPede){
   var rawPheno = {};
