@@ -3,10 +3,10 @@ import { User } from '../../interfaces/user.interface';
 import { AuthenticationService } from '../../authentication/authentication.service';
 
 @Component({
-  selector: 'mendelpede-scenarios',
-  templateUrl: './scenarios.template.html'
+  selector: 'mpede-labroom',
+  templateUrl: './mpede-labroom.template.html'
 })
-export class MendelpedeScenariosComponent implements OnInit{
+export class MendelpedeLabroomComponent implements OnInit{
 
   user: User;
 
