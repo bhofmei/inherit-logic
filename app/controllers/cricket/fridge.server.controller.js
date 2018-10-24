@@ -195,7 +195,7 @@ exports.getFridge = function (req, res) {
       populate: {
         path: 'parents',
         select: 'strainNum',
-        model: 'Phage'
+        model: 'CricketPhage'
       }
     })
     .exec((err, fridge) => {
