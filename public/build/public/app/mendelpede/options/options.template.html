@@ -1,0 +1,17 @@
+<div class="container">
+    <h2 class="display-4">Welcome to Mendelpede {{user.firstName}}!</h2>
+    <h2 class="mt-4 text-dark">What do you want to do?</h2>
+    <div *ngIf="user" class="col-12">
+      <div class="list-group mt-2">
+        <a class="list-group-item list-group-item-action" [routerLink]="['/mendelpede/mendelpede-scenarios']" >Select Scenario</a>
+        <a class="list-group-item list-group-item-action">Take Quiz</a>
+        <a class="list-group-item list-group-item-action">Select Discovery</a>
+        <a class="list-group-item list-group-item-action">Select Pathway</a>
+      </div>
+      <!-- end list-group -->
+    </div>
+    <div *ngIf="!user" class="col-12">
+      <p>
+        <a [routerLink]="['/authentication/signin']">Sign in</a> or <a [routerLink]="['/authentication/signup']">Sign up</a> to see scenarios.</p>
+    </div>
+  </div>
