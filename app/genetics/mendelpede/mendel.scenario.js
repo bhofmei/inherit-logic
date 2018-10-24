@@ -165,7 +165,7 @@ exports.createPedes = function( scenario, genoFacts ){
   // shuffle the list and assign id
   randGen.randShuffle(pedeList, randEngine);
   pedeList.forEach((elt, i)=>{
-    pedeList[i]['bugId'] = i;
+    pedeList[i]['bugID'] = i;
   });
   return pedeList;
 }; // end createPedes
@@ -283,7 +283,7 @@ const _pickTrait = function(i, inTrait, bodyColRem, dotCol){
     var cOpts = inTrait === 'DotColor' ? dotCol : bodyColRem;
     cOpts = randGen.randShuffle(cOpts, randEngine);
     outGeno['dom'] = cOpts[0];
-    outGeno['rec'] = i > 2 ? cOpts[0] : cOpts[1];
+    outGeno['rec'] = i > 2 ? cOpts[0] : cOpts[1]; // i > 2, superficial trait
     var rmNum = i > 2 ? 1 : 2;
     bodyColRem.splice(0,rmNum);
   }

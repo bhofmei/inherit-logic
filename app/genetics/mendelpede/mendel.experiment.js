@@ -2,10 +2,9 @@ const clone = require('clone');
 const util = require('../utility');
 const randGen = require('../random.generator');
 const randEngine = randGen.getEngine();
-const mConfig = require('../../../config/mendelpede/mendelpede.config');
 const tEnum = require('./traits.enum');
 const pedeLogic = require('./pede.logic');
-const debug = require('debug')('genetics:mendel');
+const debug = require('debug')('genetics:mendelexp');
 
 exports.resetEngine = function(){
   randGen.reset(randEngine);
@@ -15,31 +14,29 @@ exports.seedEngine = function(num){
   randGen.setSeed(randEngine, num)
 }
 
-exports.makeChildren = function(father, mother, genoFacts){
+exports.makeChildren = function(mother, father, numChildren,  genoFacts){
   // father and mother have genotype information from database
   // genoFacts include trait type, inheritance, phenotypes, ect
   // assume father and mother sex are correct
-  fatherGeno = father.genotype;
   motherGeno = mother.genotype;
+  fatherGeno = father.genotype;
   var storeZero = [];
-  var kidder = 0;
 
   // generate 56
   var newKids = [];
 
-  for(var k = 0; k < 56; i++){
-    var newKid = {genotype: [], phenotype: {}, isFemale: randGen.randBool(randEngine), bugId: -1};
+  for(var k = 0; k < numChildren; k++){
+    var newKid = {genotype: [], phenotype: [], isFemale: randGen.randBool(randEngine), bugID: -1};
   var liveKid = false;
   while(!liveKid){
     liveKid = true;
     for(var i=0; i < 3; i++){
       var inheritType = genoFacts[i]['inherit'];
-      var mGeno = motherGeno[i];
-      var fGeno = fatherGeno[i];
+      var mGeno = pedeLogic.fromTernary(motherGeno[i]); // convert to alleles
+      var fGeno = pedeLogic.fromTernary(fatherGeno[i]); // convert to alleles
       var mkGeno, fkGeno, mPick, fPick;
       switch(inheritType){
         case tEnum.INHERIT.MITO:
-          //newKid.genotype[i] = [motherGeno[i][0], motherGeno[i][0]];
           mkGeno = mGeno[0];
           fkGeno = mGeno[0];
           break;
@@ -52,25 +49,18 @@ exports.makeChildren = function(father, mother, genoFacts){
             storeZero = i === 0 ? [mPick, fPick] : []; // i==0, store choice
           } else { // i===1 - linked case
             // greater than howBad parameter
-            mPick = randGen.randDie(100);
-            fPick = randGen.randDie(100);
+            mPick = randGen.randDie(100, randEngine);
+            fPick = randGen.randDie(100, randEngine);
             mkGeno = mPick > genoFacts[i]['howBad'] ? mGeno[1-storeZero[0]] : mGeno[storeZero[0]];
             fkGeno = fPick > genoFacts[i]['howBad'] ? fGeno[1-storeZero[1]] : fGeno[storeZero[1]];
           }
           break;
         case tEnum.INHERIT.SEGDISTORT:
           mkGeno = mGeno[randGen.randInt(0, 1, randEngine)];
-          var favorAllele = -1;
-          if(fGeno[0] === 0)
-            favorAllele = 0;
-          else if(fGeno[1] === 0)
-            favorAllele = 1;
-          if(favorAllele > -1){
-            if(randGen.randDie(100, randEngine) <= genoFacts[i]['howBad']){
-              fkGeno = fGeno[favorAllele];
-            } else {
-              fkGeno = fGeno[1-favorAllele];
-            }
+          if(fGeno[0] === 0 || fGeno[1] === 0){
+            var favorAllele = fGeno[0] === 0 ? 0 : 1;
+            var randDraw = randGen.randDie(100, randEngine);
+            fkGeno = randDraw <= genoFacts[i]['howBad'] ? fGeno[favorAllele] : fGeno[1-favorAllele];
           } else {
             fkGeno = fGeno[randGen.randInt(0, 1, randEngine)];
           };
@@ -79,29 +69,34 @@ exports.makeChildren = function(father, mother, genoFacts){
           mkGeno = mGeno[randGen.randInt(0, 1, randEngine)];
           fkGeno = newKid.isFemale ? fGeno[0] : 0;
           break;
+        case tEnum.INHERIT.HOMODOMLETH:
+          // randomly pick alleles until we don't have 11
+          var isValid = false;
+          while(!isValid){
+            mkGeno = mGeno[randGen.randInt(0, 1, randEngine)];
+            fkGeno = fGeno[randGen.randInt(0, 1, randEngine)];
+            if(mkGeno !== 1 || fkGeno !== 1)
+              isValid = true;
+          } // end while
+          break;
         default:
           mkGeno = mGeno[randGen.randInt(0, 1, randEngine)];
           fkGeno = fGeno[randGen.randInt(0, 1, randEngine)];
       } // end switch
-      newKid.genotype[i] = [mkGeno, fkGeno];
+      newKid.genotype[i] = pedeLogic.toTernary([mkGeno, fkGeno]);
       if(inheritType === tEnum.INHERIT.PENETRANCE){
-        newKid['penetrant'] = (randGen.randDie(100) < genoFacts[i]['howBad']);
+        newKid['penetrant'] = (randGen.randDie(100, randEngine) < genoFacts[i]['howBad']);
       } else if(inheritType === tEnum.INHERIT.MATEFFECT){
-        newKid['motherGeno'] = mGeno;
-      } else if( inhertType === tEnum.INHERIT.SYNTHLETH && i === 1){
-        if(newKid.genotype[0][0] === 0 && newKid.genotype[0][1] === 0 && newKid.genotype[1][0] === 0 && newKid.genotype[1][1] === 0){
-          liveKid = false;
-        }
-      } else if(inheritType === tEnum.INHERIT.HOMODOMLETH){
-        if(newKid.genotype[i][0] === 1 && newKid.genotype[i][1] === 1){
+        newKid['motherGeno'] = motherGeno[i];
+      } else if( i === 1 && inheritType === tEnum.INHERIT.SYNTHLETH ){
+        if( newKid.genotype[0] === 0 && newKid.genotype[1] === 0 ){
           liveKid = false;
         }
       }
-    } // end for I
+    } // end for i
   } // end while
-  kidder++;
   newKid.phenotype = pedeLogic.determinePhenotype(genoFacts, newKid);
   newKids.push(newKid);
-} // end for i
+} // end for k
 return newKids;
 }; // end makeChildren
