@@ -9,7 +9,7 @@ const User = require('mongoose')
   .model('User');
 const Course = mongoose.model('Course');
 const ObjectId = mongoose.Types.ObjectId;
-const scenData = require('../../config/scenario.data');
+const scenData = require('../../config/cricket/scenario.data');
 
 const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
 /**

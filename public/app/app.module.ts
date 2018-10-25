@@ -26,6 +26,8 @@ import { NavComponent } from './nav/nav.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HomeComponent } from './home/home.component';
 
+import { MendelpedeModule } from './mendelpede/mendelpede.module'
+ 
 /**
  * The main bootstrapped module
  */
@@ -39,6 +41,7 @@ import { HomeComponent } from './home/home.component';
       ProfileModule,
         AuthenticationModule,
       ScenarioModule,
+      MendelpedeModule,
       RouterModule.forRoot(AppRoutes)
     ],
     declarations: [

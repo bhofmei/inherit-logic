@@ -1,7 +1,7 @@
 const user = require('../controllers/user.server.controller');
 const admin = require('../controllers/admin.server.controller');
 const course = require('../controllers/course.server.controller');
-const scenario = require('../controllers/scenario.server.controller');
+const cricketScenario = require('../controllers/cricket/scenario.server.controller');
 
 module.exports = function (app) {
 
@@ -32,6 +32,6 @@ module.exports = function (app) {
 
   app.param('userId', user.userById);
   app.param('studentId', user.userById);
-  app.param('scenarioId', scenario.scenarioByCode);
+  app.param('scenarioId', cricketScenario.scenarioByCode);
   app.param('courseNum', course.courseByNum);
 }
