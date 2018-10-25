@@ -1,3 +1,10 @@
+.selected-object{
+  box-shadow: 0 0 0 0.2rem rgba(52,58,64,.5)
+}
+.drop-object{
+  border: 1px dashed black;
+}
+
 .test-tube-outer{
   height: 150px;
   margin: 0px auto;
@@ -52,6 +59,11 @@
   padding: 0px;
   margin: 20px auto 0px auto;
   border-width: 2px!important;
+}
+
+.empty-plate{
+  height: 100%;
+  width: 100%;
 }
 
 .inner-plate{

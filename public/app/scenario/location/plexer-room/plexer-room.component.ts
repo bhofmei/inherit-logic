@@ -317,7 +317,7 @@ export class PlexerRoomComponent implements OnInit, OnDestroy {
    * @param {number} spot position to add phage
    */
   addPhage($event: any, dir: string, spot: number){
-    let fphage: FridgePhage = $event.dragData;
+    let fphage: FridgePhage = $event.data;
     let phage: ExperimentPhage = {
       id: fphage.id,
       strainNum: fphage.strainNum,
