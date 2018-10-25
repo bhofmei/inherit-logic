@@ -27,7 +27,7 @@ export class SelectDropComponent {
          this.selectEnabled = !!value;
      }
      @Input("dropDisabled") set undroppable(value:boolean) {
-         this.dropDiabled = !!value;
+         this.dropDisabled = !!value;
      }
 
      @Input() allowDrop: (dropData: any) => boolean;
@@ -114,7 +114,7 @@ export class SelectDropComponent {
     private _isDropAllowed(event: any): boolean {
         if (this._selectDropService.isSelected) {
             // First, if `allowDrop` is set, call it to determine whether the
-            if(this.dropDiabled){
+            if(this.dropDisabled){
             return false
           }
             if (this.allowDrop) {
