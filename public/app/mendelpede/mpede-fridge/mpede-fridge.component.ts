@@ -4,7 +4,8 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 
 @Component({
   selector: 'mendelpede-fridge',
-  templateUrl: './mpede-fridge.template.html'
+  templateUrl: './mpede-fridge.template.html',
+  styleUrls: ['./mpede-fridge.style.css']
 })
 export class MendelpedeFridgeComponent implements OnInit{
 
