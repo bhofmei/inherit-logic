@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const MendelScenarioSchema = new Schema({
-  label: string,
+  label: String,
   shortCode: {
-    type: string,
+    type: String,
     index: true
   },
-  inheritType: string,
-  scenType: string
+  inheritType: String,
+  scenType: String
 });
 
 mongoose.model('MendelScenario', MendelScenarioSchema);

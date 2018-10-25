@@ -3,11 +3,11 @@ const Schema = mongoose.Schema;
 
 const MendelFridgeSchema = new Schema({
   owner: {
-    type: Schema.ObjectID,
+    type: Schema.ObjectId,
     ref: 'User'
   },
   scenario: {
-    type: Schema.ObjectID,
+    type: Schema.ObjectId,
     ref: 'MendelScenario'
   },
   accessGranted: {
@@ -15,10 +15,10 @@ const MendelFridgeSchema = new Schema({
     defaul: false
   },
   pedeList: [{
-    type: Schema.ObjectID,
+    type: Schema.ObjectId,
     ref: 'MendelPede'
   }],
-  genoFacts: string
+  genoFacts: String
 });
 
 MendelFridgeSchema.set('toJSON', {getters: true});
