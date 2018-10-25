@@ -12,6 +12,7 @@ import { PeopleListNamesPipe } from '../pipes/people-list-names.pipe';
 import { PhageParentsPipe } from '../pipes/phage-parents.pipe';
 
 import { FormErrorsModule } from './form-errors/form-errors.module';
+import { SelectDropModule } from './select-drop/select-drop.module';
 //import { CustomValidators } from './custom-validators';
 /**
  * The Shared Module contains modules, pipes, and components
@@ -26,6 +27,7 @@ import { FormErrorsModule } from './form-errors/form-errors.module';
       FormsModule,
       ReactiveFormsModule,
       FormErrorsModule,
+      SelectDropModule.forRoot(),
       NgbModule.forRoot(),
       McBreadcrumbsModule.forRoot()
     ],
@@ -41,6 +43,7 @@ import { FormErrorsModule } from './form-errors/form-errors.module';
       ReactiveFormsModule,
       FormErrorsModule,
       NgbModule,
+      SelectDropModule,
       McBreadcrumbsModule,
       PersonNamePipe,
       PeopleListNamesPipe,

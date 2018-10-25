@@ -39,13 +39,13 @@
       <!-- header -->
       <tr class="data-table-header">
         <td class="text-center"><span [ngClass]="getSpinnerClass()"></span></td>
-        <td *ngFor="let col of cols; let i=index" dnd-droppable (onDropSuccess)="addPhage($event, 'col', i)" class="plexer-td-label">
+        <td *ngFor="let col of cols; let i=index" select-droppable (onDropSuccess)="addPhage($event, 'col', i)" class="plexer-td-label">
           <span *ngIf="col !== null">{{ col.strainNum+1 }}</span>
         </td>
       </tr>
       <!-- rows with data -->
       <tr *ngFor="let row of rows; let i=index" class="data-table-row">
-        <td dnd-droppable (onDropSuccess)="addPhage($event, 'row', i)" class="plexer-td-label">
+        <td select-droppable (onDropSuccess)="addPhage($event, 'row', i)" class="plexer-td-label">
           <span *ngIf="row !== null">{{ row.strainNum+1 }}</span>
         </td>
         <td *ngFor="let col of cols; let j=index" class="plexer-td">

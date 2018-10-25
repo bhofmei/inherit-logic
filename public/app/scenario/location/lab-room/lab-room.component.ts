@@ -213,7 +213,7 @@ export class LabRoomComponent {
    * @param {string} src bacteria source phage dragged to
    */
   dropPhageBact($event: any, src: string){
-    var incomingPhage = $event.dragData;
+    var incomingPhage = $event.data;
     if(incomingPhage.hasOwnProperty('id') == false){
       this.errorMessage = 'Only add phage from the fridge';
     } else if(this.phage.length >= 2) {
@@ -327,7 +327,7 @@ export class LabRoomComponent {
    * @param {string} dest dest tube number (0-3)
    */
   dropContentsDil($event: any, dest: number){
-    let incomingDat = JSON.parse(JSON.stringify($event.dragData));
+    let incomingDat = JSON.parse(JSON.stringify($event.data));
     if(incomingDat.hasOwnProperty('lawnType') && incomingDat.hasOwnProperty('phage')){
       // dilute
       for(let i = 0; i < incomingDat.phage.length; i++){
@@ -385,7 +385,7 @@ export class LabRoomComponent {
    * @param {any} $event drag event with contents
    */
   dropOnPlate($event: any){
-    let contents = $event.dragData;
+    let contents = $event.data;
     // check we have everything we need
     if (contents.hasOwnProperty('lawnType') === false){
       this.errorMessage = 'There is no bacteria in the tube for phage to grow on.'
@@ -493,7 +493,7 @@ export class LabRoomComponent {
    * @param {any} $event drag event with phage saved
    */
   addedToFridge($event) {
-    let strain = $event.dragData;
+    let strain = $event.data;
     let src = strain.src;
     if(src === 'small'){
       this.smallPlaqueList.shift();

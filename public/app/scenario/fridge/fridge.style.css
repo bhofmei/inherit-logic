@@ -1,3 +1,9 @@
+.selected-object{
+  box-shadow: 0 0 0 0.2rem rgba(52,58,64,.5);
+}
+.drop-object{
+  border: 1px dashed black;
+}
 .strain{
   border: 1px solid black;
   width: 100%;
@@ -48,6 +54,9 @@
 .strain-image-reference{
 /*  background-image: url(../../../img/dna-teal.svg)*/
   background-image: url(/img/dna-teal.svg)
+}
+.strain-empty{
+  width: 100%;
 }
 
 .phage-dialog div.modal-dialog{

@@ -17,16 +17,28 @@ export class SelectDropService {
   data: any;
   onSuccessCallback: EventEmitter<SelectDropData>;
   isSelected: boolean;
+  elem: HTMLElement;
 
   deselect(){
     this.curSource = null;
     this.data = null;
     this.isSelected = false;
+    this.onSuccessCallback = null;
+    this.removeElemClass();
+    this.elem=null;
   }
 
-  select(sourceName: string, data: any){
+  select(sourceName: string, data: any, htmlelement: HTMLElement){
     this.curSource = sourceName;
     this.data = data;
     this.isSelected = true;
+    this.elem = htmlelement;
+    if(this.elem)
+      this.elem.classList.add('selected-object');
+  }
+
+  removeElemClass(): void{
+    if(this.elem)
+      this.elem.classList.remove('selected-object');
   }
 }

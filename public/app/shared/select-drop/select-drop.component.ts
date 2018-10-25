@@ -1,20 +1,13 @@
-// Copyright (C) 2016-2018 Sergey Akopkokhyants
-// This project is licensed under the terms of the MIT license.
-// https://github.com/akserg/ng2-dnd
-
-import {Injectable, ChangeDetectorRef, ViewRef} from '@angular/core';
+import {Directive, Input, Output, EventEmitter, ChangeDetectorRef, ViewRef} from '@angular/core';
 import {ElementRef} from '@angular/core';
 
-import { SelectDropService } from './select-drop.service';
+import { SelectDropService, SelectDropData } from './select-drop.service';
 
-@Injectable()
-export abstract class AbstractComponent {
+@Directive({selector: '[select-droppable]'})
+export class SelectDropComponent {
     _elem: HTMLElement;
     _defaultCursor: string;
 
-    /**
-     * Whether the object is draggable. Default is true.
-     */
     private _selectEnabled: boolean = false;
     set selectEnabled(enabled: boolean) {
         this._selectEnabled = !!enabled;
@@ -22,42 +15,43 @@ export abstract class AbstractComponent {
     get selectEnabled(): boolean {
         return this._selectEnabled;
     }
+    private _dropDisabled: boolean = false;
+    set dropDisabled(disable: boolean){
+      this._dropDisabled = !!disable;
+    }
+    get dropDisabled(): boolean{
+      return this._dropDisabled;
+    }
 
-    /**
-     * Allows drop on this element
-     */
-    dropEnabled: boolean = false;
+     @Input("selectEnabled") set selectable(value:boolean) {
+         this.selectEnabled = !!value;
+     }
+     @Input("dropDisabled") set undroppable(value:boolean) {
+         this.dropDiabled = !!value;
+     }
 
-    /**
-     * Restrict places where a draggable element can be dropped.
-     *
-     * - allowDrop: a boolean function for droppable components, that is checked
-     *   when an item is dragged. The function is passed the dragData of this
-     *   item.
-     *   - if it returns true, the item can be dropped in this component
-     *   - if it returns false, the item cannot be dropped here
-     */
-    allowDrop: (dropData: any) => boolean;
+     @Input() allowDrop: (dropData: any) => boolean;
+     @Input("selectData") data: any;
+     @Input() sourceName: string;
 
+     @Output() onDropSuccess: EventEmitter<SelectDropData> = new EventEmitter<SelectDropData>();
+@Output("onSuccess") onSuccessCallback: EventEmitter<SelectDropData> = new EventEmitter<SelectDropData>();
+@Output() onError: EventEmitter<string> = new EventEmitter<string>();
     constructor(elemRef: ElementRef, public _selectDropService: SelectDropService,
         private _cdr: ChangeDetectorRef) {
 
         // Assign default cursor unless overridden
         this._defaultCursor = 'pointer';
         this._elem = elemRef.nativeElement;
-        this._elem.style.cursor = this._defaultCursor;  // set default cursor on our element
-        //
-        // DROP events
-        //
-        /*this._elem.ondragenter = (event: Event) => {
-            this._onDragEnter(event);
-        };*/
-        this._elem.onmouseover = (event: MouseEvent) => {
-            this._onMouseOver(event);
+        if(!this.dropDisabled && !this.selectEnabled)
+          this._elem.style.cursor = this._defaultCursor;  // set default cursor on our element
 
-            return false;
-        };
-        //
+        this._elem.onmouseenter = (event: MouseEvent) => {
+            this._onMouseEnter(event);
+        }
+        this._elem.onmouseout = (event: MouseEvent) => {
+          this._onMouseOut(event);
+        }
         // Click events - both select and drop
       this._elem.onclick = (event: MouseEvent) =>{
         this._onClick(event);
@@ -65,7 +59,48 @@ export abstract class AbstractComponent {
         //
     }
 
-    /******* Change detection ******/
+    private _onClick(event: MouseEvent): void {
+      if (event.preventDefault) {
+          // Necessary. Allows us to drop.
+          event.preventDefault();
+      }
+      // if nothing selected and selectEnabled -> select
+      if(this._selectDropService.isSelected === false && this.selectEnabled){
+        //this._elem.classList.add('selected-object');
+        this._onSelectCallback(event);
+    } // if we re-clicked the object -> deselect
+    else if(this._selectDropService.isSelected && this.sourceName === this._selectDropService.curSource){
+        //this._elem.classList.remove('selected-object');
+        this._onDeselectCallback(event);
+    } // if we can drop, then drop
+    else if(this._isDropAllowed(event)){
+      //this._elem.classList.remove('selected-object');
+      this._onDropCallback(event);
+    } // if something selected, select this instead
+    else if(this._selectDropService.isSelected && this.selectEnabled){
+      //this._elem.classList.add('selected-object');
+      // update to remove selected-class on previously selected elem
+      this._selectDropService.removeElemClass();
+      this._onSelectCallback(event);
+    } else {
+      this._onErrorCallback(event);
+    }
+    }
+
+    private _onMouseEnter(event: Event) {
+            // // console.log('ondragover._isDropAllowed', this._isDropAllowed);
+            if (this._isDropAllowed(event)) {
+              this._elem.classList.add('drop-object');
+                // The element is over the same source element - do nothing
+                if (event.preventDefault) {
+                    // Necessary. Allows us to drop.
+                    event.preventDefault();
+                }
+            }
+        }
+    private _onMouseOut(event: Event){
+      this._elem.classList.remove('drop-object');
+    }
 
     detectChanges () {
         // Programmatically run change detection to fix issue in Safari
@@ -76,40 +111,16 @@ export abstract class AbstractComponent {
         }, 250);
     }
 
-    //****** Droppable *******//
-
-    private _onMouseOver(event: Event) {
-        // // console.log('ondragover._isDropAllowed', this._isDropAllowed);
-        if (this._isDropAllowed(event)) {
-            // The element is over the same source element - do nothing
-            if (event.preventDefault) {
-                // Necessary. Allows us to drop.
-                event.preventDefault();
-            }
-
-            this._onMouseOverCallback(event);
-        }
-    }
-
-    /*private _onDrop(event: Event): void {
-        // console.log('ondrop._isDropAllowed', this._isDropAllowed);
-        if (this._isDropAllowed(event)) {
-            // Necessary. Allows us to drop.
-            this._preventAndStop(event);
-
-            this._onDropCallback(event);
-
-            this.detectChanges();
-        }
-    }*/
-
     private _isDropAllowed(event: any): boolean {
-        if (this._selectDropService.isSelected && this.dropEnabled) {
+        if (this._selectDropService.isSelected) {
             // First, if `allowDrop` is set, call it to determine whether the
-            // dragged element can be dropped here.
+            if(this.dropDiabled){
+            return false
+          }
             if (this.allowDrop) {
                 return this.allowDrop(this._selectDropService.data);
             }
+            return true;
         }
         return false;
     }
@@ -123,28 +134,36 @@ export abstract class AbstractComponent {
         }
     }
 
-    //*********** Draggable **********//
-  private _onClick(event: Event){}
-    /*private _onDragStart(event: Event): void {
-        //console.log('ondragstart.dragEnabled', this._dragEnabled);
-        if (this._dragEnabled) {
-            this._dragDropService.allowedDropZones = this.dropZones;
-            // console.log('ondragstart.allowedDropZones', this._dragDropService.allowedDropZones);
-            this._onDragStartCallback(event);
+
+  _onErrorCallback(event: Event): void {
+    this.onError.emit('There was an error');
+    this._selectDropService.deselect();
+  }
+
+    _onDropCallback( event: MouseEvent ){
+      let dataTransfer = (event as any).dataTransfer;
+      if(this._selectDropService.isSelected){
+        this.onDropSuccess.emit({data: this._selectDropService.data, mouseEvent: event});
+        if(this._selectDropService.onSuccessCallback){
+          this._selectDropService.onSuccessCallback.emit({data: this._selectDropService.data, mouseEvent: event});
         }
+        this._selectDropService.deselect();
+
+      }
     }
 
-    private _onDragEnd(event: Event): void {
-        this._dragDropService.allowedDropZones = [];
-        // console.log('ondragend.allowedDropZones', this._dragDropService.allowedDropZones);
-        this._onDragEndCallback(event);
-    }*/
+    _onDeselectCallback(event: MouseEvent){
+      this._selectDropService.deselect();
+    }
 
-    //**** Drop Callbacks ****//
-    _onMouseOverCallback(event: Event) { }
-    _onDropCallback(event: Event) { }
-
-    //**** Drag Callbacks ****//
-    _onSelectCallback(event: Event) { }
-    //_onDragEndCallback(event: Event) { }
+    _onSelectCallback(event: MouseEvent) {
+        if(!this.sourceName && (this.data.source || this.data.src)){
+          this.sourceName = this.data.source ? this.data.source : this.data.src;
+        } else if(!this.sourceName){
+          this.sourceName = ''
+        }
+        //this._selectDropService.elem = this._elem;
+        this._selectDropService.select(this.sourceName, this.data, this._elem);
+        this._selectDropService.onSuccessCallback = this.onSuccessCallback;
+    }
 }

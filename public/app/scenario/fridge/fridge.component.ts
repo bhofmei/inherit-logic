@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 
 import { ScenarioService } from '../scenario.service';
@@ -69,8 +69,6 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * Observes the scenCode of the URL
    */
   private paramObserver: any;
-
-  protected selectedObject: string = null;
 
   private nextSpot: number;
 
@@ -194,7 +192,6 @@ export class FridgeComponent implements OnInit, OnDestroy{
     let phage = this.strains[src];
     return {
       'col-7 col-xl-8 p-0 strain-image': true,
-      'xpSelected': 'phage'+src === this.selectedObject,
       'strain-image-reference': phage.phageType === 'reference',
       'strain-image-unknown': phage.phageType === 'unknown',
       'strain-image-submitted': phage.submitted
@@ -268,7 +265,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * @param {number} spot - slot to drop new strain
    */
   dropStrain($event: any, spot: number){
-    let strain: GenotypePhage = $event.dragData;
+    let strain: GenotypePhage = $event.data;
     // need strainNum, mutationList, deletion
     let newStrain = {
       strainNum: spot,
