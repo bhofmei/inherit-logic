@@ -1,8 +1,7 @@
 import { Routes } from '@angular/router';
-import { OptionsComponent } from './options/options.component'
+import { OptionsComponent } from './options/options.component';
 import { MendelpedeComponent } from './mendelpede.component';
-import { MendelpedeFridgeComponent } from './mpede-fridge/mpede-fridge.component'
-import { MendelpedeLabroomComponent } from './mpede-labroom/mpede-labroom.component'
+import { MendelpedeScenariosComponent } from './scenarios/scenarios.component';
 
 export const MendelpedeRoutes: Routes = [
   {
@@ -14,12 +13,12 @@ export const MendelpedeRoutes: Routes = [
 
     children:[
       {
-        path : 'options', 
+        path : '', 
         component : OptionsComponent
       },
       {
-        path : 'mpede-labroom', 
-        component : MendelpedeLabroomComponent,
+        path : 'mpede-scenarios', 
+        component : MendelpedeScenariosComponent,
         data: {
           breadcrumbs: 'labroom'
         }
