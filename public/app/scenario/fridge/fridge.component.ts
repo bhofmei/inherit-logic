@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 
 import { ScenarioService } from '../scenario.service';
@@ -31,7 +31,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
   /**
    * The logged in user
    */
-  user: User;
+  private user: User;
   /**
    * The fridge object
    */
@@ -69,6 +69,8 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * Observes the scenCode of the URL
    */
   private paramObserver: any;
+
+  private nextSpot: number;
 
   constructor(private _router: Router,
                private _route: ActivatedRoute,
@@ -160,10 +162,12 @@ export class FridgeComponent implements OnInit, OnDestroy{
     for(let i = 0; i < this.maxShelf*this.spots; i++){
       out.push({strainNum: i, phageType: 'empty', comment: '', id: ''});
     }
+    this.nextSpot = fridgeStrains[0].strainNum + 1;
     // add original strains
     for(let i=0; i < fridgeStrains.length; i++){
       let n = fridgeStrains[i].strainNum;
       out[n] = fridgeStrains[i];
+      this.nextSpot = (n === this.nextSpot ? n+1 : this.nextSpot);
     }
     return out;
   }
@@ -261,7 +265,7 @@ export class FridgeComponent implements OnInit, OnDestroy{
    * @param {number} spot - slot to drop new strain
    */
   dropStrain($event: any, spot: number){
-    let strain: GenotypePhage = $event.dragData;
+    let strain: GenotypePhage = $event.data;
     // need strainNum, mutationList, deletion
     let newStrain = {
       strainNum: spot,

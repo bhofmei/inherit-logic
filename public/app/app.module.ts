@@ -12,6 +12,7 @@ import { LoggedInGuard } from './authentication/logged-in.guard.service';
 import { ScenarioService } from './scenario/scenario.service';
 import { CourseService } from './admin/course/course.service';
 import { ScenarioResolver } from './scenario/scenario.resolver';
+//import { SelectService } from './shared/select.service';
 
 import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
@@ -54,7 +55,8 @@ import { MendelpedeModule } from './mendelpede/mendelpede.module'
       LoggedInGuard,
       ScenarioService,
       CourseService,
-      ScenarioResolver
+      ScenarioResolver,
+      //SelectService
     ],
     bootstrap: [AppComponent]
 })

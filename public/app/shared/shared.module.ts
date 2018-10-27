@@ -2,11 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DndModule } from 'ng2-dnd';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { McBreadcrumbsModule } from 'ngx-breadcrumbs';
-import { SkyhookDndModule } from 'angular-skyhook';
-import { default as TouchBackend } from 'react-dnd-touch-backend';
 
 import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog.component';
 
@@ -15,6 +12,7 @@ import { PeopleListNamesPipe } from '../pipes/people-list-names.pipe';
 import { PhageParentsPipe } from '../pipes/phage-parents.pipe';
 
 import { FormErrorsModule } from './form-errors/form-errors.module';
+import { SelectDropModule } from './select-drop/select-drop.module';
 //import { CustomValidators } from './custom-validators';
 /**
  * The Shared Module contains modules, pipes, and components
@@ -29,10 +27,9 @@ import { FormErrorsModule } from './form-errors/form-errors.module';
       FormsModule,
       ReactiveFormsModule,
       FormErrorsModule,
-      DndModule.forRoot(),
+      SelectDropModule.forRoot(),
       NgbModule.forRoot(),
-      McBreadcrumbsModule.forRoot(),
-      SkyhookDndModule.forRoot({ backend: TouchBackend })
+      McBreadcrumbsModule.forRoot()
     ],
   declarations: [
     PersonNamePipe,
@@ -45,13 +42,12 @@ import { FormErrorsModule } from './form-errors/form-errors.module';
       FormsModule,
       ReactiveFormsModule,
       FormErrorsModule,
-      DndModule,
       NgbModule,
+      SelectDropModule,
       McBreadcrumbsModule,
       PersonNamePipe,
       PeopleListNamesPipe,
       PhageParentsPipe,
-      SkyhookDndModule,
       ConfirmDeleteDialogComponent
     ],
 })

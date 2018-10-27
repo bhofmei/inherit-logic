@@ -3,8 +3,8 @@
     <div id="bact-tubes-section" class="col-8 col-md-3">
       <label class="tb-lab-label font-italic" for="bact-tubes" title="Bacteria to grow phage in">E. coli</label>
       <div class="row h-100" id="bact-tubes">
-        <div id="bact-tube-B" [ngClass]="getClassesBact('B')" title="On E. coli B, rIIb mutants make Big plaques and rIIb wild type phage make small plaques." dnd-droppable (onDropSuccess)="dropPhageBact($event, 'B')">
-          <div class="test-tube-inner" dnd-draggable [dragEnabled]="canDragBact()" [dragData]="getDataBact('B')">
+        <div id="bact-tube-B" [ngClass]="getClassesBact('B')" title="On E. coli B, rIIb mutants make Big plaques and rIIb wild type phage make small plaques.">
+          <div class="test-tube-inner" select-droppable [selectEnabled]="canDragBact()" [selectData]="getDataBact('B')" (onDropSuccess)="dropPhageBact($event, 'B')">
             <span class="coli">B</span><br>
             <div *ngIf="this.phage.length>0" class="phage-label-1 text-dark">{{phage[0].strainNum+1}}</div>
             <div *ngIf="this.phage.length>1" class="phage-label-2 text-dark">{{phage[1].strainNum+1}}</div>
@@ -12,8 +12,8 @@
           <!-- end bact-tube-inner -->
         </div>
         <!-- end bact-tube-b -->
-        <div id="bact-tube-K" [ngClass]="getClassesBact('K')" title="On E. coli K, rIIb mutants make no plaques and rIIb wild type phage make small plaques." dnd-droppable (onDropSuccess)="dropPhageBact($event, 'K')">
-          <div class="test-tube-inner" dnd-draggable [dragEnabled]="canDragBact()" [dragData]="getDataBact('K')">
+        <div id="bact-tube-K" [ngClass]="getClassesBact('K')" title="On E. coli K, rIIb mutants make no plaques and rIIb wild type phage make small plaques.">
+          <div class="test-tube-inner" select-droppable [selectEnabled]="canDragBact()" [selectData]="getDataBact('K')" (onDropSuccess)="dropPhageBact($event, 'K')">
             <span class="coli">K</span><br>
             <div *ngIf="this.phage.length>0" class="phage-label-1 text-dark">{{phage[0].strainNum+1}}</div>
             <div *ngIf="this.phage.length>1" class="phage-label-2 text-dark">{{phage[1].strainNum+1}}</div>
@@ -35,8 +35,8 @@
     <div id="dilution-tubes" class="col-12 col-md-6">
       <label class="tb-lab-label">Serial Dilution</label>
       <div class="row">
-        <div *ngFor="let item of contents; let i=index" [ngClass]="getClassesDil(i)" dnd-draggable [dragEnabled]="canDragDil(i)" [dragData]="getDataDil(i)">
-          <div class="test-tube-inner" dnd-droppable [allowDrop]="canDropDil(i)" (onDropSuccess)="dropContentsDil($event, i)">
+        <div *ngFor="let item of contents; let i=index" [ngClass]="getClassesDil(i)">
+          <div class="test-tube-inner" select-droppable [allowDrop]="canDropDil(i)" (onDropSuccess)="dropContentsDil($event, i)" [selectEnabled]="canDragDil(i)" [selectData]="getDataDil(i)">
             <div [ngClass]="getClassesDilLabel(i)">
               <span>1 :</span><br>
               <span>{{dilutionValue}}<sup>{{i+1}}</sup></span>
@@ -57,7 +57,9 @@
       {{ errorMessage }}
     </div>
     <!-- end lab-error -->
-    <div id="lab-plate" [ngClass]="getClassesPlate()" dnd-droppable [allowDrop]="canDropPlate()" (onDropSuccess)="dropOnPlate($event)">
+    <div id="lab-plate" [ngClass]="getClassesPlate()">
+      <div *ngIf="isEmpty" class="empty-plate" select-droppable [allowDrop]="canDropPlate()" (onDropSuccess)="dropOnPlate($event)">
+      </div>
       <div *ngIf="isFull" class="inner-plate">
         PLATE IS OVER CAPACITY.
       </div>
@@ -66,7 +68,9 @@
           Small plaques:
           <div class="plaque text-dark border border-secondary"
                title="Drag to fridge to save"
-               dnd-draggable [dragEnabled]="canDragPlate('small')" [dragData]="getPhagePlate('small')" (onDragSuccess)="addedToFridge($event)"(dblclick)="delPhagePlate('small')">
+               select-droppable [selectEnabled]="canDragPlate('small')"
+               [selectData]="getPhagePlate('small')" (onSuccess)="addedToFridge($event)"
+               (dblclick)="delPhagePlate('small')" [sourceName]="small">
             {{ smallPlaqueList.length }}
           </div>
         </div>
@@ -75,9 +79,9 @@
           Large plaques:
           <div class="plaque text-dark border border-secondary"
                title="Drag to fridge to save"
-               dnd-draggable [dragEnabled]="canDragPlate('large')"
-               [dragData]="getPhagePlate('large')"
-               (onDragSuccess)="addedToFridge($event)"
+               select-droppable [selectEnabled]="canDragPlate('large')"
+               [selectData]="getPhagePlate('large')"
+               (onSuccess)="addedToFridge($event)" [sourceName]="large"
                (dblclick)="delPhagePlate('large')">
             {{ largePlaqueList.length }}
           </div>

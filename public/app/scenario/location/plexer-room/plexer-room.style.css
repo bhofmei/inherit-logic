@@ -21,7 +21,7 @@
   font-weight: bold;
 }
 
-.plexer-td-label.dnd-drag-enter {
+.plexer-td-label.drop-object {
   background-color: #dddddd;
 }
 
