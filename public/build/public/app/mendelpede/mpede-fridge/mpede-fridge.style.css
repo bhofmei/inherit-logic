@@ -1,0 +1,9 @@
+.mpede-basic{
+    /*  background-image: url(../../../img/dna-purple.svg)*/
+      background-image: url(/img/pede-5-2-black.jpg);
+      height: 100px;
+    }
+.some-class{
+  width: 64px;
+  height: 128x;
+}

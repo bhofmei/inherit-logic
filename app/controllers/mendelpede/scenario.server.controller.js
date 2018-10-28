@@ -41,6 +41,7 @@ exports.list = function (req, res) {
           });
       } else {
         // Send a JSON representation
+        console.log(scenarios);
         res.json(scenarios);
       }
     });

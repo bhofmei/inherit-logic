@@ -20,7 +20,9 @@ export class OptionsComponent implements OnInit{
   errorMessage: string;
   private sSubscription: Subscription;
 
-  constructor(private _authenticationService: AuthenticationService, private _scenarioService: MendelpedeScenarioService) {
+  constructor(
+    private _authenticationService: AuthenticationService,
+    private _scenarioService: MendelpedeScenarioService) {
 
   }
 
@@ -31,9 +33,13 @@ export class OptionsComponent implements OnInit{
         .subscribe((scenarios) => {
         this.scenarios = scenarios;
         console.log('scenarios: '+scenarios);
-    });
+    },
+  (err)=>{
+    console.log(err);
+    this.errorMessage = err;
+  });
   }
-  
+
   /**
    * When destroying component, unsubscribe from service if necessary
    * to prevent memory leaks
