@@ -1,6 +1,6 @@
 import { Component, OnInit} from '@angular/core';
-import { User } from '../../interfaces/user.interface';
-import { AuthenticationService } from '../../authentication/authentication.service';
+import { User } from '../../../interfaces/user.interface';
+import { AuthenticationService } from '../../../authentication/authentication.service';
 
 @Component({
   selector: 'mendelpede-fridge',

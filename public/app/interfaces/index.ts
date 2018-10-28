@@ -5,3 +5,4 @@ export * from './scenario.interface';
 export * from './student.interface';
 export * from './user.interface';
 export * from './experiment.interface';
+export * from './mendelpede-scenarios.interface';

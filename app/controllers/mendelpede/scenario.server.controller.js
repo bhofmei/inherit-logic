@@ -29,8 +29,10 @@ const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
  * each scenario has properties `label`, `scenCode`, `purpose`, `startingPoint`, `relevance`, and `degOfDifficulty`
  */
 exports.list = function (req, res) {
-  Scenario.find({}, 'label shortCode inheritType scenType')
+  console.log('before find in controller');
+  Scenario.find({}, 'label shortCode scenType')
     .exec((err, scenarios) => {
+      console.log('before find in controller');
       if (err) {
         // If an error occurs send the error message
         return res.status(500)
@@ -61,7 +63,6 @@ exports.read = function (req, res) {
   let out = {
     label: s.label,
     shortCode: s.shortCode,
-    inheritType: s.inheritType,
     scenType: s.scenType
   }
   res.json(out);
@@ -85,7 +86,7 @@ exports.read = function (req, res) {
  */
 exports.scenarioByCode = function (req, res, next, id) {
   Scenario.findOne({
-    scenCode: id
+    shortCode: id
   }, (err, scenario) => {
     if (err) return next(err);
     if (!scenario) return next('Failed to load scenario ' + id);
