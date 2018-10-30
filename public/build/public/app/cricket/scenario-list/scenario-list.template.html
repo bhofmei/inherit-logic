@@ -1,0 +1,14 @@
+<div class="container">
+  <h2 class="mt-4 text-dark">Cricket Available Scenarios</h2>
+    <div class="list-group mt-2">
+      <p class="mb-2 text-secondary col-12 font-italic">Relive the logic of Crick and collegues as they discover the "words" of the genetic code.</p>
+      <div *ngIf="user" class="col-12">
+      <a *ngFor="let scenario of scenarios" [routerLink]="[scenario.scenCode, 'info']" class="list-group-item list-group-item-action">{{scenario.label}}</a>
+    </div>
+    <!-- end list-group -->
+  </div>
+  <div *ngIf="!user" class="col-12">
+    <p>
+      <a [routerLink]="['/authentication/signin']">Sign in</a> or <a [routerLink]="['/authentication/signup']">Sign up</a> to see scenarios.</p>
+  </div>
+</div>

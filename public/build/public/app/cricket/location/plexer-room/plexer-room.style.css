@@ -1,0 +1,62 @@
+.tb-label {
+  display: block;
+  text-align: center;
+}
+
+#submit-plexer-btn {
+  position: absolute;
+  bottom: 0px;
+}
+
+.plexer-td {
+  border: 1px solid darkgray;
+  height: 25px;
+  width: 11%;
+}
+
+.plexer-td-label {
+  border: 1.5px solid black;
+  height: 25px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.plexer-td-label.drop-object {
+  background-color: #dddddd;
+}
+
+.plexer-td-results {
+  font-size: smaller;
+}
+
+.plexer-td-over {
+  font-size: smaller;
+  font-style: italic;
+}
+
+.hiding {
+  display: none;
+}
+
+.spinning {
+  -animation: spin .7s infinite linear;
+  -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}

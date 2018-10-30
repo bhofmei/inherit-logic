@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 
 
 import { CourseService } from '../course.service';
-import { ScenarioService } from '../../../scenario/scenario.service';
+import { CricketService } from '../../../cricket/cricket.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { readErrorMessage } from '../../../shared/read-error';
 
@@ -52,7 +52,7 @@ export class CourseIndivComponent implements OnInit, OnDestroy{
     private _route: ActivatedRoute,
     private _courseService: CourseService,
     private _authService: AuthenticationService,
-    private _scenarioService: ScenarioService){
+    private _scenarioService: CricketService){
     this.isDestroyed$ = new Subject<boolean>();
   }
 

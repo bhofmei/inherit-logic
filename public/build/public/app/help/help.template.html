@@ -1,5 +1,30 @@
 <mc-breadcrumbs></mc-breadcrumbs>
 <div class="container" id="help-page">
   <h2 class="mt-4 text-dark">Help</h2>
-Information coming soon
-</div>
+  <div class="row">
+    <div class="col-9 col-md-12 container-fluid">
+      <div class="card">
+        <div class="card-header">
+          <ul class="nav nav-pills nav-justified card-header-pills">
+            <li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" data-toggle="pill" [routerLink]="['cricket']" aria-selected="true">
+            Cricket
+            </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLinkActive]="['active']" data-toggle="pill" [routerLink]="['mendelpede']" aria-selected="false">
+            MendelPede
+          </a>
+            </li>
+          </ul>
+        </div>
+        <!-- end card header -->
+        <div class="card-body">
+          <router-outlet></router-outlet>
+        </div>
+        <!-- end card-body -->
+      </div>
+      <!-- end card -->
+    </div>
+  </div>
+  <!-- end row -->
+</div> <!-- end container -->

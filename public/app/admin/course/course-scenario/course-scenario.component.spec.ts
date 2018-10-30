@@ -9,12 +9,12 @@ import { SharedModule } from '../../../shared/shared.module';
 import { CourseScenarioComponent } from './course-scenario.component';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { CourseService } from '../course.service';
-import { ScenarioService } from '../../../scenario/scenario.service';
+import { CricketService } from '../../../cricket/cricket.service';
 import { StudentService } from '../../student/student.service';
 
 import { User, Course, _User, Scenario } from '../../../interfaces';
 import { userAdmin, sampleCourse, listOfScenarios, listOfCourses } from '../../../testing/sample-data';
-import { CourseServiceStub, AuthServiceStub, StudentServiceStub, ScenarioServiceStub } from '../../../testing/service-stubs';
+import { CourseServiceStub, AuthServiceStub, StudentServiceStub, CricketServiceStub } from '../../../testing/service-stubs';
 
 // Testing variables
 let activatedRoute: ActivatedRouteStub;
@@ -42,7 +42,7 @@ describe('Course Scenario Component', ()=>{
         {provide: CourseService, useClass: CourseServiceStub},
         {provide: AuthenticationService, useClass: AuthServiceStub},
         {provide: StudentService, useClass: StudentServiceStub},
-        {provide: ScenarioService, useClass: ScenarioServiceStub},
+        {provide: CricketService, useClass: CricketServiceStub},
         {provide: Router, useValue: route}
       ]
     })

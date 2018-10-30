@@ -8,11 +8,11 @@ import { SharedModule } from '../../../shared/shared.module';
 import { CourseIndivComponent } from './course-indiv.component';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { CourseService } from '../course.service';
-import { ScenarioService } from '../../../scenario/scenario.service';
+import { CricketService } from '../../../cricket/cricket.service';
 
 import { User, Course, _User, Scenario } from '../../../interfaces';
 import { userAdmin, sampleCourse, sampleScenario, listOfCourses } from '../../../testing/sample-data';
-import { CourseServiceStub } from '../../../testing/service-stubs/fake.course.service';
+import { CourseServiceStub } from '../../../testing/service-stubs';
 
 // Testing variables
 let activatedRoute: ActivatedRouteStub;
@@ -31,7 +31,7 @@ describe('Course Indiv Component', ()=>{
         {provide: ActivatedRoute, useValue: activatedRoute},
         {provide: CourseService, useClass: CourseServiceStub},
         {provide: AuthenticationService, useClass: AuthServiceStub},
-        {provide: ScenarioService, useClass: ScenarioServiceStub},
+        {provide: CricketService, useClass: CricketServiceStub},
         {provide: Router, useClass: RouterStub}
       ]
     }).compileComponents();
@@ -120,7 +120,7 @@ class AuthServiceStub {
   }
 }
 
-class ScenarioServiceStub {
+class CricketServiceStub {
   listScenarios(): Observable<Scenario[]>{
     return Observable.of([sampleScenario]);
   }

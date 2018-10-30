@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { CourseResolver } from './course.resolver';
-import { ScenarioResolver } from '../../scenario/scenario.resolver';
+import { ScenarioResolver } from '../../cricket/scenario.resolver';
 
 import { CourseCreateComponent } from './course-create/course-create.component';
 import { CourseIndivComponent } from './course-indiv/course-indiv.component';

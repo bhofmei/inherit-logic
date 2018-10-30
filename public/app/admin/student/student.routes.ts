@@ -4,7 +4,7 @@ import { StudentListComponent } from './student-list/student-list.component';
 import { StudentIndivComponent } from './student-indiv/student-indiv.component';
 import { StudentFridgeComponent } from './student-fridge/student-fridge.component';
 
-import { ScenarioResolver } from '../../scenario/scenario.resolver';
+import { ScenarioResolver } from '../../cricket/scenario.resolver';
 import { StudentResolver } from './student.resolver';
 
 export const StudentRoutes: Routes = [
@@ -33,4 +33,3 @@ export const StudentRoutes: Routes = [
    ]
   }
 ];
-

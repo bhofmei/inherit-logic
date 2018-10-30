@@ -8,7 +8,7 @@ import { Subscription ,  Subject } from 'rxjs';
 
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { StudentService } from '../student.service';
-import { ScenarioService } from '../../../scenario/scenario.service';
+import { CricketService } from '../../../cricket/cricket.service';
 import { StudentRolesArray } from '../student.roles';
 import { ConfirmDeleteDialogComponent } from '../../../shared/confirm-delete-dialog.component';
 
@@ -69,7 +69,7 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
         private _route: ActivatedRoute,
         private _authService: AuthenticationService,
         private _studentService: StudentService,
-        private _scenarioService: ScenarioService,
+        private _scenarioService: CricketService,
         private _modalService: NgbModal) {
         this.isDestroyed$ = new Subject<boolean>();
     }
