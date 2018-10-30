@@ -8,7 +8,8 @@ const MendelScenarioSchema = new Schema({
     index: true
   },
   inheritType: String,
-  scenType: String
+  scenType: String,
+  ordOfScen: Number
 });
 
 mongoose.model('MendelScenario', MendelScenarioSchema);

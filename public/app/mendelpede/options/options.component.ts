@@ -16,7 +16,17 @@ export class OptionsComponent implements OnInit{
   /**
   * list of available scenarios
   */
-  scenarios: MendelpedeScenario[];
+  options: MendelpedeScenario[];
+  scenarios: MendelpedeScenario[] = Array();
+  quizes: MendelpedeScenario[] = Array();
+  discoveries: MendelpedeScenario[] = Array();
+  pathways: MendelpedeScenario[] = Array();
+
+  s: number;
+  q: number;
+  d: number;
+  p: number;
+
   errorMessage: string;
   private sSubscription: Subscription;
 
@@ -28,16 +38,69 @@ export class OptionsComponent implements OnInit{
 
   ngOnInit() {
     this.user = this._authenticationService.getUser();
-    console.log('before listing scenarios');
     this.sSubscription = this._scenarioService.listScenarios()
-        .subscribe((scenarios) => {
-        this.scenarios = scenarios;
-        console.log('scenarios: '+scenarios);
+        .subscribe((options) => {
+          this.s = 0;
+          this.q = 0;
+          this.p = 0;
+          this.d = 0;
+          this.options = options;
+          this.options.forEach((option) => {
+            if (option.scenType === 'scenario') {
+              this.scenarios[this.s] = option;
+              this.s++;
+            } else if(option.scenType === 'quiz'){
+              this.quizes[this.q] = option;
+              this.q++;
+            } else if(option.scenType === 'discovery'){
+              this.discoveries[this.d] = option;
+              this.d++;
+            }else if(option.scenType === 'pathway'){
+              this.pathways[this.p] = option;
+              this.p++;
+            }
+          });
+          this.scenarios = this.scenarios.sort((o1, o2) => {
+            if (o1.ordOfScen < o2.ordOfScen){
+              return -1;
+            } else if (o1.ordOfScen > o2.ordOfScen){
+              return 1;
+            } else{
+              return 0;
+            }
+          })
+          this.quizes = this.quizes.sort((o1, o2) => {
+            if (o1.ordOfScen < o2.ordOfScen){
+              return -1;
+            } else if (o1.ordOfScen > o2.ordOfScen){
+              return 1;
+            } else{
+              return 0;
+            }
+          })
+          this.discoveries = this.discoveries.sort((o1, o2) => {
+            if (o1.ordOfScen < o2.ordOfScen){
+              return -1;
+            } else if (o1.ordOfScen > o2.ordOfScen){
+              return 1;
+            } else{
+              return 0;
+            }
+          })
+          this.pathways = this.pathways.sort((o1, o2) => {
+            if (o1.ordOfScen < o2.ordOfScen){
+              return -1;
+            } else if (o1.ordOfScen > o2.ordOfScen){
+              return 1;
+            } else{
+              return 0;
+            }
+          })
     },
-  (err)=>{
-    console.log(err);
-    this.errorMessage = err;
-  });
+    (err)=>{
+      console.log(err);
+      this.errorMessage = err;
+    });
   }
 
   /**

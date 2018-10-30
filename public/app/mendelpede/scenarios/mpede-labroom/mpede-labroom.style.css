@@ -1,0 +1,36 @@
+.mpede-basic-top-left{
+    background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
+    height: 128px;
+    width: 68px;
+    background-position: 0% 0%; 
+  }
+
+.mpede-basic-center{
+    background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
+    height: 128px;
+    width: 68px;
+    background-position: 50% 50%; 
+  }
+
+.mpede-basic-top-right{
+    background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
+    height: 128px;
+    width: 68px;
+    background-position: 100% 0%; 
+  }
+
+.mpede-basic-bottom-left{
+    background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
+    height: 128px;
+    width: 68px;
+    background-position: 0% 100%; 
+  }
+
+.mpede-basic-bottom-right{
+    background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
+    height: 128px;
+    width: 68px;
+    background-position: 100% 100%; 
+  }
+
+

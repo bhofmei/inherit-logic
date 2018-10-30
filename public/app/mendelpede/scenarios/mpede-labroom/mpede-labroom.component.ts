@@ -4,7 +4,8 @@ import { AuthenticationService } from '../../../authentication/authentication.se
 
 @Component({
   selector: 'mpede-labroom',
-  templateUrl: './mpede-labroom.template.html'
+  templateUrl: './mpede-labroom.template.html',
+  styleUrls: ['./mpede-labroom.style.css']
 })
 export class MendelpedeLabroomComponent implements OnInit{
 
@@ -17,6 +18,27 @@ export class MendelpedeLabroomComponent implements OnInit{
 
   constructor(private _authenticationService: AuthenticationService) {
 
+  }
+  /**
+   * Gets CSS classes 
+   *
+   * @returns {Object} classes wh
+   */
+
+  getMendelpede(): Object{
+    return {
+      'mpede-basic-top-right': true,
+    }
+  }
+  getMendelpedetopleft(): Object{
+    return {
+      'mpede-basic-top-left': true,
+    }
+  }
+  getMendelpedebottomleft(): Object{
+    return {
+      'mpede-basic-bottom-left': true,
+    }
   }
   
 }

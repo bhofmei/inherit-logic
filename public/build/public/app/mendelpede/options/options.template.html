@@ -11,7 +11,18 @@
       <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
         <div class="card-body">
             <div class="list-group mt-2">
-                <a *ngFor="let scenario of scenarios" [routerLink]="['/mendelpede/mpede-scenarios']" class="list-group-item list-group-item-action">{{scenario.label}}</a>
+                <a [routerLink]="['/mendelpede/mpede-labroom']" class="list-group-item list-group-item-action">All Mendel</a>
+                <a class="list-group-item list-group-item-action">Incomplete Dominance</a>
+                <a class="list-group-item list-group-item-action">Mitochondrial Inheritance</a>
+                <a class="list-group-item list-group-item-action">Autosomal Linkage</a>
+                <a class="list-group-item list-group-item-action">X-Linkage</a>
+                <a class="list-group-item list-group-item-action">Homozygous Dominant Lethality</a>
+                <a class="list-group-item list-group-item-action">Synthatic Lethality</a>
+                <a class="list-group-item list-group-item-action">Segregation Distortion</a>
+                <a class="list-group-item list-group-item-action">Maternal Effect</a>
+                <a class="list-group-item list-group-item-action">Penetrance</a>
+                <a class="list-group-item list-group-item-action">Multiple Genes</a>
+                <a class="list-group-item list-group-item-action">Multiple Alleles</a>
               </div>
         </div>
       </div>
