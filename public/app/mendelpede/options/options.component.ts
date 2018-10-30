@@ -96,6 +96,10 @@ export class OptionsComponent implements OnInit{
               return 0;
             }
           })
+    },
+    (err)=>{
+      console.log(err);
+      this.errorMessage = err;
     });
   }
 
