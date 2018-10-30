@@ -87,6 +87,7 @@ exports.read = function (req, res) {
  * @yields {next()} - if successful, set request `scenario` and go to next middleware
  */
 exports.scenarioByCode = function (req, res, next, id) {
+  console.log('mendel id', id);
   Scenario.findOne({
     shortCode: id
   }, (err, scenario) => {
