@@ -1,7 +1,7 @@
 const user = require('../controllers/user.server.controller');
 const admin = require('../controllers/admin.server.controller');
 const course = require('../controllers/course.server.controller');
-const cricketScenario = require('../controllers/cricket/scenario.server.controller');
+const cricketScenario = require('../controllers/cricket/cricket-scenario.server.controller');
 
 module.exports = function (app) {
 
@@ -27,11 +27,11 @@ module.exports = function (app) {
   app.route('/api/admin/:userId/courses/:courseNum/instructors/:studentId')
     .post(admin.hasAuthorization, course.isInstructor, course.setInstructor)
 
-  app.route('/api/admin/:userId/courses/:courseNum/:scenarioId')
+  app.route('/api/admin/:userId/courses/:courseNum/:scenCode')
     .get(admin.hasAuthorization, course.isInstructor, course.getScenarioStatus);
 
   app.param('userId', user.userById);
   app.param('studentId', user.userById);
-  app.param('scenarioId', cricketScenario.scenarioByCode);
+  app.param('scenCode', cricketScenario.scenByCode);
   app.param('courseNum', course.courseByNum);
 }

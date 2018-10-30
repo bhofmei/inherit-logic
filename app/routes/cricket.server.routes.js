@@ -1,41 +1,41 @@
-const scenarios = require('../controllers/cricket/scenario.server.controller');
+const cricketScenario = require('../controllers/cricket/cricket-scenario.server.controller');
 const user = require('../controllers/user.server.controller');
-const fridge = require('../controllers/cricket/fridge.server.controller');
-const genetics = require('../controllers/cricket/genetics.server.controller');
+const cricketFridge = require('../controllers/cricket/cricket-fridge.server.controller');
+const cricketGenetics = require('../controllers/cricket/cricket-genetics.server.controller');
 
 module.exports = function (app) {
   /* Scenarios */
   app.route('/api/cricket')
-    .get(scenarios.list);
+    .get(cricketScenario.listScen);
 
-  app.route('/api/cricket/:scenarioId')
-    .get(scenarios.read);
+  app.route('/api/cricket/:scenCode')
+    .get(cricketScenario.readScen);
 
   /* Fridge */
-  app.route('/api/cricket/:userId/:scenarioId')
-    .get(fridge.getFridge)
+  app.route('/api/cricket/:userId/:scenCode')
+    .get(cricketFridge.getFridge)
 
-  app.route('/api/cricket/:userId/:scenarioId/new-fridge')
-    .get(fridge.stockFridge);
+  app.route('/api/cricket/:userId/:scenCode/new-fridge')
+    .get(cricketFridge.stockFridge);
 
-  app.route('/api/cricket/:userId/:scenarioId/deletions')
-  .post(fridge.findFridgeByScenOwner, fridge.saveDeletions);
+  app.route('/api/cricket/:userId/:scenCode/deletions')
+  .post(cricketFridge.findFridgeByScenOwner, cricketFridge.saveDeletions);
 
-  app.route('/api/cricket/:userId/:scenarioId/fridge-phage')
-  .post(fridge.findFridgeByScenOwner, fridge.addPhageToFridge);
+  app.route('/api/cricket/:userId/:scenCode/fridge-phage')
+  .post(cricketFridge.findFridgeByScenOwner, cricketFridge.addPhageToFridge);
 
-  app.route('/api/cricket/:userId/:scenarioId/:phageId')
-  .post(fridge.hasPhageAuthorization, fridge.updatePhage)
-  .delete(fridge.findFridgeByScenOwner, fridge.deletePhage);
+  app.route('/api/cricket/:userId/:scenCode/:phageId')
+  .post(cricketFridge.hasPhageAuthorization, cricketFridge.updatePhage)
+  .delete(cricketFridge.findFridgeByScenOwner, cricketFridge.deletePhage);
 
   /* Genetics */
   app.route('/api/cricket/plate')
-    .post(genetics.createPlate);
+    .post(cricketGenetics.createPlate);
 
   app.route('/api/cricket/plexer')
-    .post(genetics.handlePlexer);
+    .post(cricketGenetics.handlePlexer);
 
   app.param('userId', user.userById);
-  app.param('scenarioId', scenarios.scenarioByCode);
-  app.param('phageId', fridge.phageById);
+  app.param('scenCode', cricketScenario.scenByCode);
+  app.param('phageId', cricketFridge.phageById);
 };

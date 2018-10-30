@@ -28,7 +28,7 @@ const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
  * @yields {200_OK} Return list of scenarios
  * each scenario has properties `label`, `scenCode`, `purpose`, `startingPoint`, `relevance`, and `degOfDifficulty`
  */
-exports.list = function (req, res) {
+exports.listScen = function (req, res) {
   Scenario.find({}, 'label scenCode purpose startingPoint relevance degOfDiff')
     .sort('degOfDiff')
     .exec((err, scenarios) => {
@@ -57,7 +57,7 @@ exports.list = function (req, res) {
  *
  * @returns {Object} returns json object of scenario to response with properties `label`, `scenCode`, `purpose`, `startingPoint`, `relevance`, and `degOfDiff`
  */
-exports.read = function (req, res) {
+exports.readScen = function (req, res) {
   let s = req.scenario;
   let out = {
     label: s.label,
@@ -86,10 +86,10 @@ exports.read = function (req, res) {
  * @yields {next('Failed to load scenario id')} - If scenario doesn't exist, pass message to next middleware
  * @yields {next()} - if successful, set request `scenario` and go to next middleware
  */
-exports.scenarioByCode = function (req, res, next, id) {
+exports.scenByCode = function (req, res, next, id) {
   Scenario.findOne({
     scenCode: id
-  }, (err, scenario) => {
+  }).exec( (err, scenario) => {
     if (err) return next(err);
     if (!scenario) return next('Failed to load scenario ' + id);
 
