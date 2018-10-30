@@ -1,23 +1,18 @@
-<div class="container">
-    <div *ngIf="user" class="col-12">
-      <div class="list-group mt-2">
-        <a class="list-group-item list-group-item-action" [routerLink]= "['/mendelpede/mpede-fridge']">All Mendel</a>
-        <a class="list-group-item list-group-item-action">Incomplete Dominance</a>
-        <a class="list-group-item list-group-item-action">Mitochondrial Inheritance</a>
-        <a class="list-group-item list-group-item-action">Autosomal Linkage</a>
-        <a class="list-group-item list-group-item-action">X-Linkage</a>
-        <a class="list-group-item list-group-item-action">Homozygous Dominant Lethality</a>
-        <a class="list-group-item list-group-item-action">Synthatic Lethality</a>
-        <a class="list-group-item list-group-item-action">Segregation Distortion</a>
-        <a class="list-group-item list-group-item-action">Maternal Effect</a>
-        <a class="list-group-item list-group-item-action">Penetrance</a>
-        <a class="list-group-item list-group-item-action">Multiple Genes</a>
-        <a class="list-group-item list-group-item-action">Multiple Alleles</a>
-      </div>
-      <!-- end list-group -->
+<div class="row">
+    <div class="col-sm-4">
+        <mendelpede-fridge></mendelpede-fridge>
     </div>
-    <div *ngIf="!user" class="col-12">
-      <p>
-        <a [routerLink]="['/authentication/signin']">Sign in</a> or <a [routerLink]="['/authentication/signup']">Sign up</a> to see scenarios.</p>
+    <div class="col-sm-2">
+            <div class="card bg-light border-dark" style="margin: auto">
+                    <div class="card-header row m-0">
+                            <h6 class="card-title ">Mendelpede Information</h6>
+                            </div>
+                    <div class="card-body">
+                            <p class="card-text">This is the information regarding mendelpede scenarios </p>
+                          </div>
+            </div>
+        </div>
+    <div class="col-sm-4">
+        <mpede-labroom></mpede-labroom>
     </div>
-  </div>
+</div>

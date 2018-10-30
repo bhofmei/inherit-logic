@@ -6,7 +6,6 @@ import { Subject } from 'rxjs';
 
 import { StudentService } from '../student.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
-import { ScenarioService } from '../../../scenario/scenario.service';
 
 import { Course, AdminStudent, Scenario, StudentPhage, StudentFridge } from '../../../interfaces';
 

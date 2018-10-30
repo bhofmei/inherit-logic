@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 
 
 import { CourseService } from '../course.service';
-import { ScenarioService } from '../../../scenario/scenario.service';
+import { CricketService } from '../../../cricket/cricket.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { StudentService } from '../../student/student.service';
 
@@ -60,7 +60,7 @@ export class CourseScenarioComponent implements OnInit, OnDestroy {
     private _authService: AuthenticationService,
     private _courseService: CourseService,
     private _studentService: StudentService,
-    private _scenarioService: ScenarioService
+    private _scenarioService: CricketService
               ){
     this.isDestroyed$ = new Subject<boolean>();
   }
@@ -115,8 +115,8 @@ export class CourseScenarioComponent implements OnInit, OnDestroy {
    * Calls service to grant the student access to the scenario
    *
    * Called on `(click)` of "Grant access" button for a student
-   * 
-   * @param {number} studentIndex - positional index of student in the list of students; 
+   *
+   * @param {number} studentIndex - positional index of student in the list of students;
    * This is **NOT** the student's userId
    */
   grantAccess(studentIndex: number){

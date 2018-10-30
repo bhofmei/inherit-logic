@@ -8,11 +8,11 @@ import { SharedModule } from '../../../shared/shared.module';
 import { StudentIndivComponent } from './student-indiv.component';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { StudentService } from '../student.service';
-import { ScenarioService } from '../../../scenario/scenario.service';
+import { CricketService } from '../../../cricket/cricket.service';
 
 import { User, AdminStudent, _User, Scenario } from '../../../interfaces';
 import { userAdmin, userInstr, sampleCourse, listOfCourses, listOfScenarios, listOfStudents, listOfUsers } from '../../../testing/sample-data';
-import { StudentServiceStub, AuthServiceStub, ScenarioServiceStub } from '../../../testing/service-stubs';
+import { StudentServiceStub, AuthServiceStub, CricketServiceStub } from '../../../testing/service-stubs';
 
 class StudentIndivTestComponent extends StudentIndivComponent {
   checkDelete(){
@@ -42,7 +42,7 @@ describe('Student Indiv Component', ()=>{
         {provide: ActivatedRoute, useValue: activatedRoute},
         {provide: StudentService, useClass: StudentServiceStub},
         {provide: AuthenticationService, useClass: AuthServiceStub},
-        {provide: ScenarioService, useClass: ScenarioServiceStub},
+        {provide: CricketService, useClass: CricketServiceStub},
         {provide: Router, useValue: route}
       ]
     }).compileComponents();

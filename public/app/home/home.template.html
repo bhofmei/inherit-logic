@@ -1,9 +1,9 @@
 <div class="container-fluid pl-0 pr-0">
   <div class="jumbotron" id="home-jumbotron">
     <div id="jumbotron-contents" class="text-center">
-    <h2 class="display-4">Welcome to Crick <i>et al.</i></h2>
+    <h2 class="display-4">Welcome to IOTA</h2>
 
-    <p class="lead">Relive the logic of Crick and collegues as they discover the "words" of the genetic code.</p>
+    <p class="lead">Learn about genetics!</p>
     <hr class="my-4">
     <div *ngIf="user" class="row">
       <div class="col-12 col-md-6 text-md-left">
@@ -30,7 +30,7 @@
   <!-- end jumbotron -->
 </div>
 <div *ngIf="user" class="text-center">
-  <a class="btn btn-primary btn-lg" [routerLink]="['/scenarios']">Cricket</a>
+  <a class="btn btn-primary btn-lg" [routerLink]="['/cricket']">Cricket</a>
   <hr>
   <a class="btn btn-primary btn-lg" [routerLink]="['/mendelpede']">Mendelpede</a>
 </div>

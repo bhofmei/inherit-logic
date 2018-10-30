@@ -1,11 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { ScenarioGlobals } from '../scenario/scenario.globals';
+import { CricketGlobals } from '../cricket/cricket.globals';
 
 /**
  * Format the textual presentation of the deletion guessses for
  * a user's phage strain; uses a [scenario global]{@link
- * ScenarioGlobals} variable `deletionGuessLength` to determine
+ * CricketGlobals} variable `deletionGuessLength` to determine
  * the ranges
  *
  * **Usage:** `{{ guessList | phageGuesses }}`
@@ -20,7 +20,7 @@ import { ScenarioGlobals } from '../scenario/scenario.globals';
 export class PhageGuessesPipe implements PipeTransform {
 
   transform(guesses: boolean[]): string {
-    let stepSize = ScenarioGlobals.deletionGuessLength;
+    let stepSize = CricketGlobals.deletionGuessLength;
     let out = '';
     let x=-1;
     for(let i in guesses){
@@ -39,7 +39,7 @@ export class PhageGuessesPipe implements PipeTransform {
     // check for the last possible deletion
     if(x != -1){
       out += (out === '' ? '' : ', ');
-      out += x + ' - ' + ScenarioGlobals.geneLength;
+      out += x + ' - ' + CricketGlobals.geneLength;
     }
     if(out === ''){
       return 'None';
