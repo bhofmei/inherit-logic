@@ -18,7 +18,7 @@ export class MendelpedeScenarioService {
      * @param {HttpClient} _http Anguar mechanism to make calls to backend server
      */
     constructor(private _http: HttpClient) {}
-    
+
     /**
     * List available scenarios
     *
@@ -50,7 +50,7 @@ export class MendelpedeScenarioService {
     // private _scenarioCode = new BehaviorSubject<string>('');
     // getScenarioCode = this._scenarioCode.asObservable();
 
-    
+
 
   /**
    * Reset the save scenario stuff:
@@ -79,7 +79,7 @@ export class MendelpedeScenarioService {
               .next(JSON.parse(scenarioGuesses));
     }*/
 
-  
+
   /**
    * Get information about a specific scenario
    *
@@ -129,7 +129,7 @@ export class MendelpedeScenarioService {
    /* createFridge(userId: number, scenId: string): Observable<Fridge> {
         return this._http.get<Fridge>(`${this._baseURL}/${userId}/${scenId}/new-fridge`);
     }*/
-  
+
   /**
    * Get an existing fridge for user/scenario
    *
