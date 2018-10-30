@@ -24,7 +24,7 @@ const Schema = mongoose.Schema;
    isFemle: Boolean,
    // encoded with ternary for each trait that's part of scenario
    genotype: [Number],
-   // ordered dotcolor, eyeColor, segColor, numLegs, numSegs
+   // ordered dotcolor, eyeColor-x, segColor-y, numLegs, numSegs
    phenotype: [String]
  });
 

@@ -15,4 +15,8 @@ export interface MendelpedeScenario{
    * Description of phage strains to begin the scenario
    */
   scenType: string;
+  /**
+   * Order of Scenario
+   */
+  ordOfScen: number;
 }

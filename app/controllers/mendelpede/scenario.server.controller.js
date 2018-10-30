@@ -30,7 +30,7 @@ const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
  */
 exports.list = function (req, res) {
   console.log('before find in controller');
-  Scenario.find({}, 'label shortCode scenType')
+  Scenario.find({}, 'label shortCode scenType ordOfScen')
     .exec((err, scenarios) => {
       console.log('before find in controller');
       if (err) {
@@ -63,7 +63,8 @@ exports.read = function (req, res) {
   let out = {
     label: s.label,
     shortCode: s.shortCode,
-    scenType: s.scenType
+    scenType: s.scenType,
+    orderOfScen: s.orderOfScen
   }
   res.json(out);
 };
