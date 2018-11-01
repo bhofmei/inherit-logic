@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../../authentication/authentication.service';
-import { MendelpedeScenarioService } from '../scenarios/scenarios.service';
+import { MendelpedeScenarioService } from '../scenarios/mendelpede-scenarios.service';
 
 import { User } from '../../interfaces/user.interface';
 import { MendelpedeScenario } from '../../interfaces/mendelpede-scenarios.interface';

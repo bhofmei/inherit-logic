@@ -6,3 +6,5 @@ export * from './student.interface';
 export * from './user.interface';
 export * from './experiment.interface';
 export * from './mendelpede-scenarios.interface';
+export * from './mendelpede-pede.interface';
+export * from './mendelpede-fridge.interface';

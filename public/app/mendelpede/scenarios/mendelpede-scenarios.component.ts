@@ -4,7 +4,7 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 
 @Component({
   selector: 'mendelpede-scenarios',
-  templateUrl: './scenarios.template.html'
+  templateUrl: './mendelpede-scenarios.template.html'
 })
 export class MendelpedeScenariosComponent implements OnInit{
 

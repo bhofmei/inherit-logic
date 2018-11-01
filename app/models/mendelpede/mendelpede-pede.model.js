@@ -21,10 +21,10 @@ const Schema = mongoose.Schema;
      type: Schema.ObjectId,
      ref: 'MendelPedeScenario'
    },
-   isFemle: Boolean,
+   isFemale: Boolean,
    // encoded with ternary for each trait that's part of scenario
    genotype: [Number],
-   // ordered dotcolor, eyeColor-x, segColor-y, numLegs, numSegs
+   // ordered dotcolor, eyeColor-x, segColor-y, numLegs, numSegs-- image: dotcolor, numseg, numleg, 
    phenotype: [String]
  });
 
