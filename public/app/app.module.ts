@@ -12,6 +12,7 @@ import { LoggedInGuard } from './authentication/logged-in.guard.service';
 import { CricketService } from './cricket/cricket.service';
 import { CourseService } from './admin/course/course.service';
 import { ScenarioResolver } from './cricket/scenario.resolver';
+import { MendelpedeScenarioResolver } from './mendelpede/mendelpede-scenario.resolver'
 //import { SelectService } from './shared/select.service';
 
 import { SharedModule } from './shared/shared.module';
@@ -56,6 +57,7 @@ import { MendelpedeModule } from './mendelpede/mendelpede.module'
       CricketService,
       CourseService,
       ScenarioResolver,
+      MendelpedeScenarioResolver,
       //SelectService
     ],
     bootstrap: [AppComponent]

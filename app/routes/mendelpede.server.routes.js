@@ -8,7 +8,7 @@ module.exports = function (app) {
   app.route('/api/mendelpede')
     .get(scenarios.list);
 
-  app.route('/api/mendelpede/:scenarioId')
+  app.route('/api/mendelpede/:scenShortCode')
     .get(scenarios.read);
 
   /* Fridge 
@@ -36,7 +36,7 @@ module.exports = function (app) {
     .post(genetics.handlePlexer);
 */
   app.param('userId', user.userById);
-  app.param('scenarioId', scenarios.scenarioByCode);
+  app.param('scenShortCode', scenarios.scenarioByCode);
   //app.param('phageId', fridge.phageById); 
 
 };

@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
 import { OptionsComponent } from './options/options.component';
 import { MendelpedeComponent } from './mendelpede.component';
-import { MendelpedeScenariosComponent } from './scenarios/scenarios.component';
-
+import { MendelpedeScenariosComponent } from './scenarios/mendelpede-scenarios.component';
+import { MendelpedeScenarioResolver } from './mendelpede-scenario.resolver';
+ 
 export const MendelpedeRoutes: Routes = [
   {
     path : 'mendelpede',
@@ -17,10 +18,13 @@ export const MendelpedeRoutes: Routes = [
         component : OptionsComponent
       },
       {
-        path : 'mpede-scenarios', 
+        path : ':scenShortCode',
+        resolve: {
+          mendelpedeScenario: MendelpedeScenarioResolver
+        },
         component : MendelpedeScenariosComponent,
         data: {
-          breadcrumbs: 'labroom'
+          breadcrumbs: '{{ mendelpedeScenario.label }}'
         }
       }
     ]

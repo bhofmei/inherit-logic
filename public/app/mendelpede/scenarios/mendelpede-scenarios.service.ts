@@ -81,6 +81,14 @@ export class MendelpedeScenarioService {
 
 
   /**
+   * The current scenario code
+   *
+   * Used by components
+   * to get the code without the route
+   */
+  private _scenarioCode = new BehaviorSubject<string>('');
+  getScenarioCode = this._scenarioCode.asObservable();
+  /**
    * Get information about a specific scenario
    *
    * @param {string} scenId scenario identifier
@@ -90,11 +98,11 @@ export class MendelpedeScenarioService {
    * - or error "Failed to load scenario <scenId>" if scenario doesn't exist
    * - or other server/database error
    */
-   /* getScenario(scenId: string): Observable<Scenario> {
-        this._scenarioCode.next(scenId);
+    getScenario(scenShortCode: string): Observable<MendelpedeScenario> {
+        this._scenarioCode.next(scenShortCode);
         return this._http
-            .get<Scenario>(`${this._baseURL}/${scenId}`);
-    } */
+            .get<MendelpedeScenario>(`${this._baseURL}/${scenShortCode}`);
+    } 
 
   /**
    * Send updated guesses for the scenario to be saved in database
