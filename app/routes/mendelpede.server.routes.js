@@ -1,6 +1,6 @@
 const scenarios = require('../controllers/mendelpede/scenario.server.controller');
 const user = require('../controllers/user.server.controller');
-const fridge = require('../controllers/mendelpede/fridge.server.controller');
+const mendelFridge = require('../controllers/mendelpede/fridge.server.controller');
 const genetics = require('../controllers/mendelpede/genetics.server.controller');
 
 module.exports = function (app) {
@@ -10,14 +10,13 @@ module.exports = function (app) {
 
   app.route('/api/mendelpede/:scenShortCode')
     .get(scenarios.read);
-
-  /* Fridge 
-  app.route('/api/cricket/:userId/:scenarioId')
-    .get(fridge.getFridge)
-
-  app.route('/api/cricket/:userId/:scenarioId/new-fridge')
-    .get(fridge.stockFridge);
-
+ 
+  app.route('/api/mendelpede/:userId/:scenShortCode')
+    .get(mendelFridge.getMendelFridge)
+ 
+  app.route('/api/mendelpede/:userId/:scenShortCode/new-fridge')
+    .get(mendelFridge.stockMendelFridge);
+  /* 
   app.route('/api/cricket/:userId/:scenarioId/deletions')
   .post(fridge.findFridgeByScenOwner, fridge.saveDeletions);
 

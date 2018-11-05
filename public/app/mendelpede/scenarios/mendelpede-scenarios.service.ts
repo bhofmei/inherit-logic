@@ -3,7 +3,7 @@ import { Observable ,  BehaviorSubject ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { MendelpedeScenario } from '../../interfaces';
+import { MendelpedeScenario, MendelpedeFridge } from '../../interfaces';
 
 /**
  * Scenario/fridge related functions that get/send data to the backend server
@@ -88,21 +88,55 @@ export class MendelpedeScenarioService {
    */
   private _scenarioCode = new BehaviorSubject<string>('');
   getScenarioCode = this._scenarioCode.asObservable();
+/**
+ * Get information about a specific scenario
+ *
+ * @param {string} scenId scenario identifier
+ *
+ * @returns {Scenario}
+ * - scenario information
+ * - or error "Failed to load scenario <scenId>" if scenario doesn't exist
+ * - or other server/database error
+ */
+  getScenario(scenShortCode: string): Observable<MendelpedeScenario> {
+      this._scenarioCode.next(scenShortCode);
+      return this._http
+          .get<MendelpedeScenario>(`${this._baseURL}/${scenShortCode}`);
+  }
+  
   /**
-   * Get information about a specific scenario
+   * Create a new fridge for the user/scenario
    *
-   * @param {string} scenId scenario identifier
+   * @param {number} userId userId of logged in user
+   * @param {string} scenId scenario code of current scenario
    *
-   * @returns {Scenario}
-   * - scenario information
-   * - or error "Failed to load scenario <scenId>" if scenario doesn't exist
+   * @returns {Observable<Fridge>}
+   * - newly created fridge
+   * - or error "Unable to create new phage for scenario" if issue create phage
+   * - or error "Unable to save new fridge" if couldn't create
    * - or other server/database error
    */
-    getScenario(scenShortCode: string): Observable<MendelpedeScenario> {
-        this._scenarioCode.next(scenShortCode);
-        return this._http
-            .get<MendelpedeScenario>(`${this._baseURL}/${scenShortCode}`);
-    } 
+  createMendelFridge(userId: number, scenShortCode: string): Observable<MendelpedeFridge> {
+    console.log('userid...'+userId+' scenario short code:..'+scenShortCode);
+    return this._http.get<MendelpedeFridge>(`${this._baseURL}/${userId}/${scenShortCode}/new-fridge`);
+  }
+
+    /**
+   * Get an existing fridge for user/scenario
+   *
+   * @param {number} userId userId of logged in user
+   * @param {string} scenId scenario code of current scenario
+   *
+   * @returns {Observable<Fridge>}
+   * - existing fridge
+   * - or error "No fridge for scenario/user" if fridge does not exist
+   * - or other server/database error
+   */
+  getMendelFridge(userId: number, scenShortCode: string): Observable<MendelpedeFridge> {
+    console.log('userId--'+userId+' Scen short code: '+scenShortCode);
+    return this._http.get<MendelpedeFridge>(`${this._baseURL}/${userId}/${scenShortCode}`);
+    
+  }
 
   /**
    * Send updated guesses for the scenario to be saved in database

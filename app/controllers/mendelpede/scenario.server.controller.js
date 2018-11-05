@@ -29,10 +29,10 @@ const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
  * each scenario has properties `label`, `scenCode`, `purpose`, `startingPoint`, `relevance`, and `degOfDifficulty`
  */
 exports.list = function (req, res) {
-  console.log('before find in controller');
+  //console.log('before find in controller');
   Scenario.find({}, 'label shortCode scenType ordOfScen')
     .exec((err, scenarios) => {
-      console.log('before find in controller');
+      //console.log('before find in controller');
       if (err) {
         // If an error occurs send the error message
         return res.status(500)
@@ -41,7 +41,7 @@ exports.list = function (req, res) {
           });
       } else {
         // Send a JSON representation
-        console.log(scenarios);
+        //console.log(scenarios);
         res.json(scenarios);
       }
     });
@@ -87,7 +87,7 @@ exports.read = function (req, res) {
  * @yields {next()} - if successful, set request `scenario` and go to next middleware
  */
 exports.scenarioByCode = function (req, res, next, id) {
-  console.log('mendel id', id);
+  //console.log('mendel id', id);
   Scenario.findOne({
     shortCode: id
   }, (err, scenario) => {
