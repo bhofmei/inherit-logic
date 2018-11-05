@@ -12,7 +12,7 @@ module.exports = function (app) {
     .get(scenarios.read);
  
   app.route('/api/mendelpede/:userId/:scenShortCode')
-    .get(mendelFridge.getMendelFridge)
+    .get(mendelFridge.getMendelFridge);
  
   app.route('/api/mendelpede/:userId/:scenShortCode/new-fridge')
     .get(mendelFridge.stockMendelFridge);

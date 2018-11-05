@@ -23,12 +23,11 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   constructor(private _router: Router,
     private _route: ActivatedRoute,
     private _authenticationService: AuthenticationService,
-    private _scenarioService: MendelpedeScenarioService/*,
-    private _modalService: NgbModal*/) {/*
-    this.maxShelf = CricketGlobals.nFridgeShelf;
-    this.spots = CricketGlobals.nFridgeSpots;
+    private _scenarioService: MendelpedeScenarioService,
+    private _modalService: NgbModal) {
+    this.maxShelf = 32;
+    this.spots = 16;
     this.isDestroyed$ = new Subject<boolean>();
-    */
     }
   /**
    * Gets CSS classes 
@@ -36,12 +35,12 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    * @returns {Object} classes wh
    */
 
-  getMendelpede(): Object{
+  getMendelpede(phenotype: string[]): Object{
     return {
       'mpede-basic-top-right': true,
     }
   }
-  getMendelpedetopleft(): Object{
+  getMendelpedetopleft(phenotype: string[]): Object{
     return {
       'mpede-basic-top-left': true,
     }
@@ -63,6 +62,11 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   pedeList: MendelpedePede[];
 
   /**
+   * currently visible strains based on shelf number
+   */
+  currPedes: MendelpedePede[];
+
+  /**
    * maximum number of shelves in fridge
    */
   maxShelf: number;
@@ -70,6 +74,11 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    * number of slots per shelf
    */
   spots: number;
+
+  /**
+   * current shelf
+   */
+  shelf: number = 0;
   
   /**
    * potential backend error message
@@ -84,6 +93,8 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    * Observes the scenCode of the URL
    */
   private paramObserver: any;
+
+  private nextSpot: number;
    /**
    * Initailize the fridge when creating component
    * 1. Get logged in user and current scenario
@@ -101,7 +112,9 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
       this._scenarioService.getMendelFridge(userId, scenShortCode)
         .takeUntil(this.isDestroyed$)
         .subscribe(
-          (fridge) => {/*this._initFridge(fridge)*/console.log('we got the fridge: ' + fridge)},
+          (fridge) => {this._initFridge(fridge);
+            console.log('we got the fridge: ')
+          console.log(fridge);},
           (err) => {
             if(err.status === 307){
             console.log('creating a new fridge');
@@ -126,11 +139,21 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     this._scenarioService.createMendelFridge(userId, scenShortCode)
     .takeUntil(this.isDestroyed$)
       .subscribe((fridge)=>{
-        console.log('we got the fridge: ' + fridge);
-      /*this._initFridge(fridge);*/
+        console.log('we got the new fridge: ');
+        console.log(fridge);
+      this._initFridge(fridge);
     }, (err)=>{
       this.errorMessage = readErrorMessage(err);
     });
+  }
+
+  /**
+   * Sets pedes for visible shelf
+   */
+  _currPedes(){
+    let start = this.shelf*this.spots;
+    let end = start+this.spots;
+    this.currPedes = this.pedeList.slice(start,end);
   }
 
   /**
@@ -138,12 +161,13 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    * visible based on the current shelf
    *
    * @param {Fridge} newFridge - fridge object to be initalized
-   
+   */
   _initFridge(newFridge: MendelpedeFridge){
     this.fridge = newFridge;
     this.pedeList = this._fillPedes(newFridge.pedes);
-    this._currStrains();
-    this._scenarioService.setScenario(newFridge.scenarioDetails, newFridge.guesses);
+    this._currPedes();
+    console.log(this.currPedes);
+    this._scenarioService.setScenario(newFridge.genoFacts);
   }
 
   /**
@@ -152,23 +176,21 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    * @param {FridgePhage[]} fridgeStrains - array of strains actually in the fridge
    *
    * @returns {FridgePhage[]} array of all slots in fridge, including empty
-   
+   */
   _fillPedes(fridgePedes: MendelpedePede[]): MendelpedePede[]{
     var out: MendelpedePede[] = [];
     for(let i = 0; i < this.maxShelf*this.spots; i++){
-      bugID isFemale genotype phenotype id
-      out.push({bugId: i, genotype: null, phenotype: null, id: ''});
+      out.push({bugId: i, genotype: null, phenotype: null, userId: null, isFemale: null});
     }
-    this.nextSpot = fridgeStrains[0].strainNum + 1;
+    this.nextSpot = fridgePedes[0].bugId + 1;
     // add original strains
-    for(let i=0; i < fridgeStrains.length; i++){
-      let n = fridgeStrains[i].strainNum;
-      out[n] = fridgeStrains[i];
+    for(let i=0; i < fridgePedes.length; i++){
+      let n = fridgePedes[i].bugId;
+      out[n] = fridgePedes[i];
       this.nextSpot = (n === this.nextSpot ? n+1 : this.nextSpot);
     }
     return out;
-  }
-  */  
+  } 
  /**
    * When destroying the component, unsubscribe from services
    * to prevent memory leak

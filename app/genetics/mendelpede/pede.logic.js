@@ -15,7 +15,7 @@ exports.toTernary = function(inAr){
   }
 }
 
-exports.fromTernary = function(inNum){
+const fromTernary = function(inNum){
   var tNums = [[0,0], [0,1], [0,2], [1,0], [1,1], [1,2], [2,0], [2,1], [2,2]];
   return inNum < 9 ? tNums[inNum] : -1;
 }
