@@ -25,7 +25,6 @@ export class MendelpedeScenarioService {
     * @returns {Observable<Scenario[]>} list of scenarios
     */
     listScenarios(): Observable<MendelpedeScenario[]> {
-      console.log('Goin to get list');
       return this._http
           .get<MendelpedeScenario[]>(this._baseURL)
     }
@@ -39,8 +38,8 @@ export class MendelpedeScenarioService {
   /**
    * The current scenario guesses
    */
-   // private _scenarioGuesses = new BehaviorSubject<any>({});
-   // getGuesses = this._scenarioGuesses.asObservable();
+   private _scenarioGenoFacts = new BehaviorSubject<any>({});
+   getGuesses = this._scenarioGenoFacts.asObservable();
   /**
    * The current scenario code
    *
@@ -71,13 +70,11 @@ export class MendelpedeScenarioService {
   * - necessary for performing experiments
   * @param {string} scenarioGuesses current scenario guesses
   */
-  /*setScenario(scenarioDetails: string, scenarioGuesses: string) {
-        if (scenarioDetails !== null)
-            this._scenarioDetails.next(scenarioDetails);
-        if (scenarioDetails !== null)
-            this._scenarioGuesses
-              .next(JSON.parse(scenarioGuesses));
-    }*/
+  setScenario(scenarioGenoFacts: string) {
+        if (scenarioGenoFacts !== null)
+            this._scenarioGenoFacts
+              .next(JSON.parse(scenarioGenoFacts));
+    }
 
 
   /**

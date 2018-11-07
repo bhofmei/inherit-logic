@@ -27,7 +27,7 @@ const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 
 const getPedeInfo = function(pede){
   return {
-      bugID: pede.bugID,
+      bugId: pede.bugID,
       isFemale: pede.isFemale,
       genotype: pede.genotype,
       phenotype: pede.phenotype,
@@ -45,13 +45,14 @@ const getPedeInfo = function(pede){
  * - Each strain of `strains` has `comment`, `id`, `parents`, `strainNum`, `phageType`, `submitted`, and `numParents`
  */
 const getMendelFridgeInfo = function (mendelFridge) {
-  let pedeList = fridge.pedeList.map((pede) => {
+  let pedeList = mendelFridge.pedeList.map((pede) => {
     return getPedeInfo(pede);
   });
   return {
     genoFacts: mendelFridge.genoFacts,
     accessGranted: mendelFridge.accessGranted,
     userId: mendelFridge.owner.userId,
+    pedes: pedeList,
     shortCode: mendelFridge.scenario.shortCode
   }
 }
@@ -73,6 +74,7 @@ const getMendelFridgeInfo = function (mendelFridge) {
  * @yields {200_OK} Newly created fridge cleaned by [getFridgeInfo]{@link #getFridgeInfo}
  */
 exports.stockMendelFridge = function (req, res) {
+  console.log('Create fridge method called.....')
   var user = req.curUser;
   var scen = req.scenario;
   // determine if access granted -> default true bc of testing
@@ -134,7 +136,7 @@ exports.stockMendelFridge = function (req, res) {
     accessGranted: access,
     owner: user,
     pedeList: pedeIdList,
-    genoFacts: stock.genoFacts
+    genoFacts: JSON.stringify(stock.genoFacts)
   };
   // save fridge
   MendelFridge.create(newFridge, (err, fridge) => {

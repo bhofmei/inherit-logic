@@ -11,7 +11,7 @@ export interface MendelpedePede {
   /**
    * Scenario id this fridge belongs to
    */
-  scenCode: string;
+  scenCode?: string;
 
   bugId: number;
 

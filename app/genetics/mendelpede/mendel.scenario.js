@@ -25,7 +25,7 @@ exports.buildScenario = function(scenario){
   return {genoFacts: genoFacts, pedes: pedeList};
 };
 
-exports.getInheritance = function(scenario) {
+const getInheritance = function(scenario) {
   // scenario: scenType, inheritType
 
   // genoFacts is type of inheritance for each trait - set all to mendel then replace later
@@ -79,7 +79,7 @@ exports.getInheritance = function(scenario) {
   return genoFacts;
 };
 
-exports.setTraits = function(genoFacts){
+const setTraits = function(genoFacts){
   var traitRem = clone(tEnum.TRAITS);
   var bodyColRem = clone(tEnum.PHENO.bodyEyeColors);
   var dotColRem = clone(tEnum.PHENO.dotColors);
@@ -130,7 +130,7 @@ exports.setTraits = function(genoFacts){
   return genoFacts;
 }; // end setTraits
 
-exports.createPedes = function( scenario, genoFacts ){
+const createPedes = function( scenario, genoFacts ){
   var isQuiz = scenario.inheritType === tEnum.SCENTYPE.QUIZ;
   var genotypes = createGenotypes(genoFacts, isQuiz);
   var genes = genotypes.genos;
