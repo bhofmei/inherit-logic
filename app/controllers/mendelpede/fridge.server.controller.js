@@ -27,7 +27,7 @@ const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 
 const getPedeInfo = function(pede){
   return {
-      bugID: pede.bugID,
+      bugId: pede.bugID,
       isFemale: pede.isFemale,
       genotype: pede.genotype,
       phenotype: pede.phenotype,

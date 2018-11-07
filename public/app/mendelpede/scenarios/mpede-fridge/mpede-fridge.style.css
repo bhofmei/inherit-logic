@@ -5,46 +5,6 @@
       background-position: 68px 0px; 
     }
 
-.mpede-width-1-step{
-  width: 68px;
-}
-
-.mpede-width-2-step{
-  width: 68px;
-}
-
-.mpede-width-3-step{
-  width: 68px;
-}
-
-.mpede-width-4-step{
-  width: 68px;
-}
-
-.mpede-width-5-step{
-  width: 68px;
-}
-
-.mpede-width-6-step{
-  width: 68px;
-}
-
-.mpede-width-7-step{
-  width: 68px;
-}
-
-.mpede-width-8-step{
-  width: 68px;
-}
-
-.mpede-width-9-step{
-  width: 68px;
-}
-
-.mpede-width-10-step{
-  width: 68px;
-}
-
 .mpede-basic-center{
       background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
       height: 128px;
@@ -54,10 +14,14 @@
 
 .mpede-basic-top-right{
       background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
-      height: 128px;
-      width: 68px;
-      background-position: 100% 0%; 
     }
+.testbp{
+  background-position: right 680px bottom 1280px; 
+}
+.sizeI{
+  height: 128px;
+  width: 68px;
+}
 
 .mpede-basic-bottom-left{
       background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
@@ -72,5 +36,622 @@
       width: 68px;
       background-position: 100% 100%; 
     }
+
+.mpede-loc-68-128{
+background-position: right 68px bottom 128px;
+}
+.mpede-loc-68-256{
+background-position: right 68px bottom 256px;
+}
+.mpede-loc-68-384{
+background-position: right 68px bottom 384px;
+}
+.mpede-loc-68-512{
+background-position: right 68px bottom 512px;
+}
+.mpede-loc-68-640{
+background-position: right 68px bottom 640px;
+}
+.mpede-loc-68-768{
+background-position: right 68px bottom 768px;
+}
+.mpede-loc-68-896{
+background-position: right 68px bottom 896px;
+}
+.mpede-loc-68-1024{
+background-position: right 68px bottom 1024px;
+}
+.mpede-loc-68-1152{
+background-position: right 68px bottom 1152px;
+}
+.mpede-loc-68-1280{
+background-position: right 68px bottom 1280px;
+}
+.mpede-loc-136-128{
+background-position: right 136px bottom 128px;
+}
+.mpede-loc-136-256{
+background-position: right 136px bottom 256px;
+}
+.mpede-loc-136-384{
+background-position: right 136px bottom 384px;
+}
+.mpede-loc-136-512{
+background-position: right 136px bottom 512px;
+}
+.mpede-loc-136-640{
+background-position: right 136px bottom 640px;
+}
+.mpede-loc-136-768{
+background-position: right 136px bottom 768px;
+}
+.mpede-loc-136-896{
+background-position: right 136px bottom 896px;
+}
+.mpede-loc-136-1024{
+background-position: right 136px bottom 1024px;
+}
+.mpede-loc-136-1152{
+background-position: right 136px bottom 1152px;
+}
+.mpede-loc-136-1280{
+background-position: right 136px bottom 1280px;
+}
+.mpede-loc-204-128{
+background-position: right 204px bottom 128px;
+}
+.mpede-loc-204-256{
+background-position: right 204px bottom 256px;
+}
+.mpede-loc-204-384{
+background-position: right 204px bottom 384px;
+}
+.mpede-loc-204-512{
+background-position: right 204px bottom 512px;
+}
+.mpede-loc-204-640{
+background-position: right 204px bottom 640px;
+}
+.mpede-loc-204-768{
+background-position: right 204px bottom 768px;
+}
+.mpede-loc-204-896{
+background-position: right 204px bottom 896px;
+}
+.mpede-loc-204-1024{
+background-position: right 204px bottom 1024px;
+}
+.mpede-loc-204-1152{
+background-position: right 204px bottom 1152px;
+}
+.mpede-loc-204-1280{
+background-position: right 204px bottom 1280px;
+}
+.mpede-loc-272-128{
+background-position: right 272px bottom 128px;
+}
+.mpede-loc-272-256{
+background-position: right 272px bottom 256px;
+}
+.mpede-loc-272-384{
+background-position: right 272px bottom 384px;
+}
+.mpede-loc-272-512{
+background-position: right 272px bottom 512px;
+}
+.mpede-loc-272-640{
+background-position: right 272px bottom 640px;
+}
+.mpede-loc-272-768{
+background-position: right 272px bottom 768px;
+}
+.mpede-loc-272-896{
+background-position: right 272px bottom 896px;
+}
+.mpede-loc-272-1024{
+background-position: right 272px bottom 1024px;
+}
+.mpede-loc-272-1152{
+background-position: right 272px bottom 1152px;
+}
+.mpede-loc-272-1280{
+background-position: right 272px bottom 1280px;
+}
+.mpede-loc-340-128{
+background-position: right 340px bottom 128px;
+}
+.mpede-loc-340-256{
+background-position: right 340px bottom 256px;
+}
+.mpede-loc-340-384{
+background-position: right 340px bottom 384px;
+}
+.mpede-loc-340-512{
+background-position: right 340px bottom 512px;
+}
+.mpede-loc-340-640{
+background-position: right 340px bottom 640px;
+}
+.mpede-loc-340-768{
+background-position: right 340px bottom 768px;
+}
+.mpede-loc-340-896{
+background-position: right 340px bottom 896px;
+}
+.mpede-loc-340-1024{
+background-position: right 340px bottom 1024px;
+}
+.mpede-loc-340-1152{
+background-position: right 340px bottom 1152px;
+}
+.mpede-loc-340-1280{
+background-position: right 340px bottom 1280px;
+}
+.mpede-loc-408-128{
+background-position: right 408px bottom 128px;
+}
+.mpede-loc-408-256{
+background-position: right 408px bottom 256px;
+}
+.mpede-loc-408-384{
+background-position: right 408px bottom 384px;
+}
+.mpede-loc-408-512{
+background-position: right 408px bottom 512px;
+}
+.mpede-loc-408-640{
+background-position: right 408px bottom 640px;
+}
+.mpede-loc-408-768{
+background-position: right 408px bottom 768px;
+}
+.mpede-loc-408-896{
+background-position: right 408px bottom 896px;
+}
+.mpede-loc-408-1024{
+background-position: right 408px bottom 1024px;
+}
+.mpede-loc-408-1152{
+background-position: right 408px bottom 1152px;
+}
+.mpede-loc-408-1280{
+background-position: right 408px bottom 1280px;
+}
+.mpede-loc-476-128{
+background-position: right 476px bottom 128px;
+}
+.mpede-loc-476-256{
+background-position: right 476px bottom 256px;
+}
+.mpede-loc-476-384{
+background-position: right 476px bottom 384px;
+}
+.mpede-loc-476-512{
+background-position: right 476px bottom 512px;
+}
+.mpede-loc-476-640{
+background-position: right 476px bottom 640px;
+}
+.mpede-loc-476-768{
+background-position: right 476px bottom 768px;
+}
+.mpede-loc-476-896{
+background-position: right 476px bottom 896px;
+}
+.mpede-loc-476-1024{
+background-position: right 476px bottom 1024px;
+}
+.mpede-loc-476-1152{
+background-position: right 476px bottom 1152px;
+}
+.mpede-loc-476-1280{
+background-position: right 476px bottom 1280px;
+}
+.mpede-loc-544-128{
+background-position: right 544px bottom 128px;
+}
+.mpede-loc-544-256{
+background-position: right 544px bottom 256px;
+}
+.mpede-loc-544-384{
+background-position: right 544px bottom 384px;
+}
+.mpede-loc-544-512{
+background-position: right 544px bottom 512px;
+}
+.mpede-loc-544-640{
+background-position: right 544px bottom 640px;
+}
+.mpede-loc-544-768{
+background-position: right 544px bottom 768px;
+}
+.mpede-loc-544-896{
+background-position: right 544px bottom 896px;
+}
+.mpede-loc-544-1024{
+background-position: right 544px bottom 1024px;
+}
+.mpede-loc-544-1152{
+background-position: right 544px bottom 1152px;
+}
+.mpede-loc-544-1280{
+background-position: right 544px bottom 1280px;
+}
+.mpede-loc-612-128{
+background-position: right 612px bottom 128px;
+}
+.mpede-loc-612-256{
+background-position: right 612px bottom 256px;
+}
+.mpede-loc-612-384{
+background-position: right 612px bottom 384px;
+}
+.mpede-loc-612-512{
+background-position: right 612px bottom 512px;
+}
+.mpede-loc-612-640{
+background-position: right 612px bottom 640px;
+}
+.mpede-loc-612-768{
+background-position: right 612px bottom 768px;
+}
+.mpede-loc-612-896{
+background-position: right 612px bottom 896px;
+}
+.mpede-loc-612-1024{
+background-position: right 612px bottom 1024px;
+}
+.mpede-loc-612-1152{
+background-position: right 612px bottom 1152px;
+}
+.mpede-loc-612-1280{
+background-position: right 612px bottom 1280px;
+}
+.mpede-loc-680-128{
+background-position: right 680px bottom 128px;
+}
+.mpede-loc-680-256{
+background-position: right 680px bottom 256px;
+}
+.mpede-loc-680-384{
+background-position: right 680px bottom 384px;
+}
+.mpede-loc-680-512{
+background-position: right 680px bottom 512px;
+}
+.mpede-loc-680-640{
+background-position: right 680px bottom 640px;
+}
+.mpede-loc-680-768{
+background-position: right 680px bottom 768px;
+}
+.mpede-loc-680-896{
+background-position: right 680px bottom 896px;
+}
+.mpede-loc-680-1024{
+background-position: right 680px bottom 1024px;
+}
+.mpede-loc-680-1152{
+background-position: right 680px bottom 1152px;
+}
+.mpede-loc-680-1280{
+background-position: right 680px bottom 1280px;
+}
+
+.mpede-pede-black-seg1-leg0-min{
+background-image: url(/img/pedes/pede-black-seg1-leg0-min.png);
+}
+.mpede-pede-black-seg1-leg1-min{
+background-image: url(/img/pedes/pede-black-seg1-leg1-min.png);
+}
+.mpede-pede-black-seg1-leg2-min{
+background-image: url(/img/pedes/pede-black-seg1-leg2-min.png);
+}
+.mpede-pede-black-seg2-leg0-min{
+background-image: url(/img/pedes/pede-black-seg2-leg0-min.png);
+}
+.mpede-pede-black-seg2-leg1-min{
+background-image: url(/img/pedes/pede-black-seg2-leg1-min.png);
+}
+.mpede-pede-black-seg2-leg2-min{
+background-image: url(/img/pedes/pede-black-seg2-leg2-min.png);
+}
+.mpede-pede-black-seg3-leg0-min{
+background-image: url(/img/pedes/pede-black-seg3-leg0-min.png);
+}
+.mpede-pede-black-seg3-leg1-min{
+background-image: url(/img/pedes/pede-black-seg3-leg1-min.png);
+}
+.mpede-pede-black-seg3-leg2-min{
+background-image: url(/img/pedes/pede-black-seg3-leg2-min.png);
+}
+.mpede-pede-black-seg4-leg0-min{
+background-image: url(/img/pedes/pede-black-seg4-leg0-min.png);
+}
+.mpede-pede-black-seg4-leg1-min{
+background-image: url(/img/pedes/pede-black-seg4-leg1-min.png);
+}
+.mpede-pede-black-seg4-leg2-min{
+background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
+}
+.mpede-pede-black-seg5-leg0-min{
+background-image: url(/img/pedes/pede-black-seg5-leg0-min.png);
+}
+.mpede-pede-black-seg5-leg1-min{
+background-image: url(/img/pedes/pede-black-seg5-leg1-min.png);
+}
+.mpede-pede-black-seg5-leg2-min{
+background-image: url(/img/pedes/pede-black-seg5-leg2-min.png);
+}
+.mpede-pede-blue-seg1-leg0-min{
+background-image: url(/img/pedes/pede-blue-seg1-leg0-min.png);
+}
+.mpede-pede-blue-seg1-leg1-min{
+background-image: url(/img/pedes/pede-blue-seg1-leg1-min.png);
+}
+.mpede-pede-blue-seg1-leg2-min{
+background-image: url(/img/pedes/pede-blue-seg1-leg2-min.png);
+}
+.mpede-pede-blue-seg2-leg0-min{
+background-image: url(/img/pedes/pede-blue-seg2-leg0-min.png);
+}
+.mpede-pede-blue-seg2-leg1-min{
+background-image: url(/img/pedes/pede-blue-seg2-leg1-min.png);
+}
+.mpede-pede-blue-seg2-leg2-min{
+background-image: url(/img/pedes/pede-blue-seg2-leg2-min.png);
+}
+.mpede-pede-blue-seg3-leg0-min{
+background-image: url(/img/pedes/pede-blue-seg3-leg0-min.png);
+}
+.mpede-pede-blue-seg3-leg1-min{
+background-image: url(/img/pedes/pede-blue-seg3-leg1-min.png);
+}
+.mpede-pede-blue-seg3-leg2-min{
+background-image: url(/img/pedes/pede-blue-seg3-leg2-min.png);
+}
+.mpede-pede-blue-seg4-leg0-min{
+background-image: url(/img/pedes/pede-blue-seg4-leg0-min.png);
+}
+.mpede-pede-blue-seg4-leg1-min{
+background-image: url(/img/pedes/pede-blue-seg4-leg1-min.png);
+}
+.mpede-pede-blue-seg4-leg2-min{
+background-image: url(/img/pedes/pede-blue-seg4-leg2-min.png);
+}
+.mpede-pede-blue-seg5-leg0-min{
+background-image: url(/img/pedes/pede-blue-seg5-leg0-min.png);
+}
+.mpede-pede-blue-seg5-leg1-min{
+background-image: url(/img/pedes/pede-blue-seg5-leg1-min.png);
+}
+.mpede-pede-blue-seg5-leg2-min{
+background-image: url(/img/pedes/pede-blue-seg5-leg2-min.png);
+}
+.mpede-pede-gray-seg1-leg0-min{
+background-image: url(/img/pedes/pede-gray-seg1-leg0-min.png);
+}
+.mpede-pede-gray-seg1-leg1-min{
+background-image: url(/img/pedes/pede-gray-seg1-leg1-min.png);
+}
+.mpede-pede-gray-seg1-leg2-min{
+background-image: url(/img/pedes/pede-gray-seg1-leg2-min.png);
+}
+.mpede-pede-gray-seg2-leg0-min{
+background-image: url(/img/pedes/pede-gray-seg2-leg0-min.png);
+}
+.mpede-pede-gray-seg2-leg1-min{
+background-image: url(/img/pedes/pede-gray-seg2-leg1-min.png);
+}
+.mpede-pede-gray-seg2-leg2-min{
+background-image: url(/img/pedes/pede-gray-seg2-leg2-min.png);
+}
+.mpede-pede-gray-seg3-leg0-min{
+background-image: url(/img/pedes/pede-gray-seg3-leg0-min.png);
+}
+.mpede-pede-gray-seg3-leg1-min{
+background-image: url(/img/pedes/pede-gray-seg3-leg1-min.png);
+}
+.mpede-pede-gray-seg3-leg2-min{
+background-image: url(/img/pedes/pede-gray-seg3-leg2-min.png);
+}
+.mpede-pede-gray-seg4-leg0-min{
+background-image: url(/img/pedes/pede-gray-seg4-leg0-min.png);
+}
+.mpede-pede-gray-seg4-leg1-min{
+background-image: url(/img/pedes/pede-gray-seg4-leg1-min.png);
+}
+.mpede-pede-gray-seg4-leg2-min{
+background-image: url(/img/pedes/pede-gray-seg4-leg2-min.png);
+}
+.mpede-pede-gray-seg5-leg0-min{
+background-image: url(/img/pedes/pede-gray-seg5-leg0-min.png);
+}
+.mpede-pede-gray-seg5-leg1-min{
+background-image: url(/img/pedes/pede-gray-seg5-leg1-min.png);
+}
+.mpede-pede-gray-seg5-leg2-min{
+background-image: url(/img/pedes/pede-gray-seg5-leg2-min.png);
+}
+.mpede-pede-green-seg1-leg0-min{
+background-image: url(/img/pedes/pede-green-seg1-leg0-min.png);
+}
+.mpede-pede-green-seg1-leg1-min{
+background-image: url(/img/pedes/pede-green-seg1-leg1-min.png);
+}
+.mpede-pede-green-seg1-leg2-min{
+background-image: url(/img/pedes/pede-green-seg1-leg2-min.png);
+}
+.mpede-pede-green-seg2-leg0-min{
+background-image: url(/img/pedes/pede-green-seg2-leg0-min.png);
+}
+.mpede-pede-green-seg2-leg1-min{
+background-image: url(/img/pedes/pede-green-seg2-leg1-min.png);
+}
+.mpede-pede-green-seg2-leg2-min{
+background-image: url(/img/pedes/pede-green-seg2-leg2-min.png);
+}
+.mpede-pede-green-seg3-leg0-min{
+background-image: url(/img/pedes/pede-green-seg3-leg0-min.png);
+}
+.mpede-pede-green-seg3-leg1-min{
+background-image: url(/img/pedes/pede-green-seg3-leg1-min.png);
+}
+.mpede-pede-green-seg3-leg2-min{
+background-image: url(/img/pedes/pede-green-seg3-leg2-min.png);
+}
+.mpede-pede-green-seg4-leg0-min{
+background-image: url(/img/pedes/pede-green-seg4-leg0-min.png);
+}
+.mpede-pede-green-seg4-leg1-min{
+background-image: url(/img/pedes/pede-green-seg4-leg1-min.png);
+}
+.mpede-pede-green-seg4-leg2-min{
+background-image: url(/img/pedes/pede-green-seg4-leg2-min.png);
+}
+.mpede-pede-green-seg5-leg0-min{
+background-image: url(/img/pedes/pede-green-seg5-leg0-min.png);
+}
+.mpede-pede-green-seg5-leg1-min{
+background-image: url(/img/pedes/pede-green-seg5-leg1-min.png);
+}
+.mpede-pede-green-seg5-leg2-min{
+background-image: url(/img/pedes/pede-green-seg5-leg2-min.png);
+}
+.mpede-pede-pink-seg1-leg0-min{
+background-image: url(/img/pedes/pede-pink-seg1-leg0-min.png);
+}
+.mpede-pede-pink-seg1-leg1-min{
+background-image: url(/img/pedes/pede-pink-seg1-leg1-min.png);
+}
+.mpede-pede-pink-seg1-leg2-min{
+background-image: url(/img/pedes/pede-pink-seg1-leg2-min.png);
+}
+.mpede-pede-pink-seg2-leg0-min{
+background-image: url(/img/pedes/pede-pink-seg2-leg0-min.png);
+}
+.mpede-pede-pink-seg2-leg1-min{
+background-image: url(/img/pedes/pede-pink-seg2-leg1-min.png);
+}
+.mpede-pede-pink-seg2-leg2-min{
+background-image: url(/img/pedes/pede-pink-seg2-leg2-min.png);
+}
+.mpede-pede-pink-seg3-leg0-min{
+background-image: url(/img/pedes/pede-pink-seg3-leg0-min.png);
+}
+.mpede-pede-pink-seg3-leg1-min{
+background-image: url(/img/pedes/pede-pink-seg3-leg1-min.png);
+}
+.mpede-pede-pink-seg3-leg2-min{
+background-image: url(/img/pedes/pede-pink-seg3-leg2-min.png);
+}
+.mpede-pede-pink-seg4-leg0-min{
+background-image: url(/img/pedes/pede-pink-seg4-leg0-min.png);
+}
+.mpede-pede-pink-seg4-leg1-min{
+background-image: url(/img/pedes/pede-pink-seg4-leg1-min.png);
+}
+.mpede-pede-pink-seg4-leg2-min{
+background-image: url(/img/pedes/pede-pink-seg4-leg2-min.png);
+}
+.mpede-pede-pink-seg5-leg0-min{
+background-image: url(/img/pedes/pede-pink-seg5-leg0-min.png);
+}
+.mpede-pede-pink-seg5-leg1-min{
+background-image: url(/img/pedes/pede-pink-seg5-leg1-min.png);
+}
+.mpede-pede-pink-seg5-leg2-min{
+background-image: url(/img/pedes/pede-pink-seg5-leg2-min.png);
+}
+.mpede-pede-white-seg1-leg0-min{
+background-image: url(/img/pedes/pede-white-seg1-leg0-min.png);
+}
+.mpede-pede-white-seg1-leg1-min{
+background-image: url(/img/pedes/pede-white-seg1-leg1-min.png);
+}
+.mpede-pede-white-seg1-leg2-min{
+background-image: url(/img/pedes/pede-white-seg1-leg2-min.png);
+}
+.mpede-pede-white-seg2-leg0-min{
+background-image: url(/img/pedes/pede-white-seg2-leg0-min.png);
+}
+.mpede-pede-white-seg2-leg1-min{
+background-image: url(/img/pedes/pede-white-seg2-leg1-min.png);
+}
+.mpede-pede-white-seg2-leg2-min{
+background-image: url(/img/pedes/pede-white-seg2-leg2-min.png);
+}
+.mpede-pede-white-seg3-leg0-min{
+background-image: url(/img/pedes/pede-white-seg3-leg0-min.png);
+}
+.mpede-pede-white-seg3-leg1-min{
+background-image: url(/img/pedes/pede-white-seg3-leg1-min.png);
+}
+.mpede-pede-white-seg3-leg2-min{
+background-image: url(/img/pedes/pede-white-seg3-leg2-min.png);
+}
+.mpede-pede-white-seg4-leg0-min{
+background-image: url(/img/pedes/pede-white-seg4-leg0-min.png);
+}
+.mpede-pede-white-seg4-leg1-min{
+background-image: url(/img/pedes/pede-white-seg4-leg1-min.png);
+}
+.mpede-pede-white-seg4-leg2-min{
+background-image: url(/img/pedes/pede-white-seg4-leg2-min.png);
+}
+.mpede-pede-white-seg5-leg0-min{
+background-image: url(/img/pedes/pede-white-seg5-leg0-min.png);
+}
+.mpede-pede-white-seg5-leg1-min{
+background-image: url(/img/pedes/pede-white-seg5-leg1-min.png);
+}
+.mpede-pede-white-seg5-leg2-min{
+background-image: url(/img/pedes/pede-white-seg5-leg2-min.png);
+}
+.mpede-pede-yellow-seg1-leg0-min{
+background-image: url(/img/pedes/pede-yellow-seg1-leg0-min.png);
+}
+.mpede-pede-yellow-seg1-leg1-min{
+background-image: url(/img/pedes/pede-yellow-seg1-leg1-min.png);
+}
+.mpede-pede-yellow-seg1-leg2-min{
+background-image: url(/img/pedes/pede-yellow-seg1-leg2-min.png);
+}
+.mpede-pede-yellow-seg2-leg0-min{
+background-image: url(/img/pedes/pede-yellow-seg2-leg0-min.png);
+}
+.mpede-pede-yellow-seg2-leg1-min{
+background-image: url(/img/pedes/pede-yellow-seg2-leg1-min.png);
+}
+.mpede-pede-yellow-seg2-leg2-min{
+background-image: url(/img/pedes/pede-yellow-seg2-leg2-min.png);
+}
+.mpede-pede-yellow-seg3-leg0-min{
+background-image: url(/img/pedes/pede-yellow-seg3-leg0-min.png);
+}
+.mpede-pede-yellow-seg3-leg1-min{
+background-image: url(/img/pedes/pede-yellow-seg3-leg1-min.png);
+}
+.mpede-pede-yellow-seg3-leg2-min{
+background-image: url(/img/pedes/pede-yellow-seg3-leg2-min.png);
+}
+.mpede-pede-yellow-seg4-leg0-min{
+background-image: url(/img/pedes/pede-yellow-seg4-leg0-min.png);
+}
+.mpede-pede-yellow-seg4-leg1-min{
+background-image: url(/img/pedes/pede-yellow-seg4-leg1-min.png);
+}
+.mpede-pede-yellow-seg4-leg2-min{
+background-image: url(/img/pedes/pede-yellow-seg4-leg2-min.png);
+}
+.mpede-pede-yellow-seg5-leg0-min{
+background-image: url(/img/pedes/pede-yellow-seg5-leg0-min.png);
+}
+.mpede-pede-yellow-seg5-leg1-min{
+background-image: url(/img/pedes/pede-yellow-seg5-leg1-min.png);
+}
+.mpede-pede-yellow-seg5-leg2-min{
+background-image: url(/img/pedes/pede-yellow-seg5-leg2-min.png);
+}
 
 

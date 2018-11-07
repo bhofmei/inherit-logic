@@ -51,14 +51,13 @@
                             </div>
                              <div class="pede-list">
                                <div *ngFor="let pede of currPedes" class="ls-strain m-0 row">
-                                <span class="pede-num text-secondary col-3 col-xl-2 p-0">{{ pede.bugId + 1 }}</span>
-                                <span [ngClass]="getMendelpede(pede.phenotype)"
-                                select-droppable [selectEnabled]="pede.phenotype !== null" [selectData]="pede"
-                                [title]="pede.bugId" [sourceName]="'fridge-'+pede.bugId" [dropDisabled]="true"></span>
+                                <span [ngClass]="getMendelpede(pede[0].phenotype)"
+                                select-droppable [selectEnabled]="pede[0].phenotype !== null" [selectData]="pede[0]"
+                                [title]="pede[0].bugId" [sourceName]="'fridge-'+pede[0].bugId" [dropDisabled]="true">{{ pede[0].bugId + 1 }}</span>
 
-                                <span [ngClass]="getMendelpedebottomleft(pede.phenotype)"
-                                select-droppable [selectEnabled]="pede.phenotype !== null" [selectData]="pede"
-                                [title]="pede.bugId" [sourceName]="'fridge-'+pede.bugId" [dropDisabled]="true"></span>
+                                <span [ngClass]="getMendelpede(pede[1].phenotype)"
+                                select-droppable [selectEnabled]="pede[1].phenotype !== null" [selectData]="pede"
+                                [title]="pede[1].bugId" [sourceName]="'fridge-'+pede[1].bugId" [dropDisabled]="true">{{ pede[1].bugId + 1 }}</span>
                                 <!--<span class="strain-empty col-7 col-xl-8 p-0" *ngIf="pede.phenotype === null" select-droppable [allowDrop]="canDrop(strain.strainNum)" (onDropSuccess)="dropStrain($event, strain.strainNum)"></span>
                                  <div class="col-2 p-0">
                                  <span *ngIf="strain.phageType !== 'empty'" class="oi oi-ellipses edit-phage-btn align-bottom" aria-hidden="true" (click)="editPhage(strain.strainNum)"></span>
@@ -66,24 +65,24 @@
                                 </div>
                             </div>
                           </div>
-                          <!-- end card body 
+                          <!-- end card body -->
                           <div class="card-footer text-center">
                             <div role="toolbar" class="btn-group btn-group-sm">
                               <button (click)="setShelf(0)" [disabled]="shelf==0" class="btn">
                               <span class="oi oi-media-step-backward"></span>
-                              <!--<span>&laquo;</span>
+                              <!--<span>&laquo;</span> -->
                               </button>
                             <button (click)="changeShelf(-1)" [disabled]="shelf==0" class="btn">
                               <span class="oi oi-media-skip-backward"></span>
-                              <!--<span>&laquo;</span>
+                              <!--<span>&laquo;</span> -->
                               </button>
                             <button (click)="changeShelf(1)" [disabled]="shelf==(maxShelf-1)" class="btn">
                               <span class="oi oi-media-skip-forward"></span>
-                              <!--<span>&raquo;</span>
+                              <!--<span>&raquo;</span> -->
                               </button>
                               <button (click)="setShelf(maxShelf-1)" [disabled]="shelf==(maxShelf-1)" class="btn">
                               <span class="oi oi-media-step-forward"></span>
-                              <!--<span>&laquo;</span>
+                              <!--<span>&laquo;</span> -->
                               </button>
                               </div>
                           </div>
