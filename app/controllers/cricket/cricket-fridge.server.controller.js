@@ -129,11 +129,10 @@ exports.stockFridge = function (req, res) {
   let geneLength = scenDefaults.geneLength;
   let stepSize = scenDefaults.deletionGuessLength;
   let guesses = {};
-  //console.log('unknowns', unknwnStrains);
   for (let i = 0; i < unknwnStrains.length; i++) {
     let guess = [];
     for (let j = 0; j < geneLength; j += stepSize) {
-      guess.push(false);
+      guess.push(null);
     } // end for j
     let s = unknwnStrains[i].strainNum;
     guesses[s] = guess;

@@ -11,7 +11,7 @@
       <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
         <div class="card-body">
           <div class="list-group mt-2">
-              <a *ngFor="let scenario of scenarios" [routerLink]="['/mendelpede/mpede-scenarios']" class="list-group-item list-group-item-action">{{scenario.label}}</a>
+              <a *ngFor="let scenario of scenarios" [routerLink]="[scenario.shortCode]" class="list-group-item list-group-item-action">{{scenario.label}}</a>
           </div>
         </div>
       </div>
