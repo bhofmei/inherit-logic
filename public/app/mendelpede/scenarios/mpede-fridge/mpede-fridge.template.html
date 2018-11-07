@@ -51,14 +51,30 @@
                             </div>
                              <div class="pede-list">
                                <div *ngFor="let pede of currPedes" class="ls-strain m-0 row">
-                                <span [ngClass]="getMendelpede(pede[0].phenotype)"
-                                select-droppable [selectEnabled]="pede[0].phenotype !== null" [selectData]="pede[0]"
-                                [title]="pede[0].bugId" [sourceName]="'fridge-'+pede[0].bugId" [dropDisabled]="true">{{ pede[0].bugId + 1 }}</span>
-
+                                        <div class="col-4 p-0 border" style="width: 68px">
+                                                <div *ngIf="pede[0].phenotype !== null" [ngClass]="getMendelpede(pede[0].phenotype)">
+                                                                <span>{{ pede[0].bugId + 1 }}</span>
+                                                                <span style="float:right">{{ pede[0].isFemale }}</span>
+                                                </div>
+                                                <div *ngIf="pede[0].phenotype === null" class="mpede-empty">
+                                                                
+                                                </div>
+                                        </div>
+                                        <div class="col-4 p-0 border" style="width: 68px">
+                                                        <div *ngIf="pede[1].phenotype !== null" [ngClass]="getMendelpede(pede[1].phenotype)">
+                                                                        <span>{{ pede[1].bugId + 1 }}</span>
+                                                                        <span style="float:right">{{ pede[1].isFemale }}</span>
+                                                        </div>
+                                                        <div *ngIf="pede[1].phenotype === null" class="mpede-empty">
+                                                                
+                                                        </div>
+                                                </div>
+                                
+                                <!--
                                 <span [ngClass]="getMendelpede(pede[1].phenotype)"
                                 select-droppable [selectEnabled]="pede[1].phenotype !== null" [selectData]="pede"
                                 [title]="pede[1].bugId" [sourceName]="'fridge-'+pede[1].bugId" [dropDisabled]="true">{{ pede[1].bugId + 1 }}</span>
-                                <!--<span class="strain-empty col-7 col-xl-8 p-0" *ngIf="pede.phenotype === null" select-droppable [allowDrop]="canDrop(strain.strainNum)" (onDropSuccess)="dropStrain($event, strain.strainNum)"></span>
+                                <span class="strain-empty col-7 col-xl-8 p-0" *ngIf="pede.phenotype === null" select-droppable [allowDrop]="canDrop(strain.strainNum)" (onDropSuccess)="dropStrain($event, strain.strainNum)"></span>
                                  <div class="col-2 p-0">
                                  <span *ngIf="strain.phageType !== 'empty'" class="oi oi-ellipses edit-phage-btn align-bottom" aria-hidden="true" (click)="editPhage(strain.strainNum)"></span>
                                    </div>-->

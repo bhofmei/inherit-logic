@@ -15,7 +15,7 @@ export interface MendelpedePede {
 
   bugId: number;
 
-  isFemale: boolean;
+  isFemale: string;
 
   genotype: number[];
 
