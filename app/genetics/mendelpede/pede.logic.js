@@ -28,7 +28,7 @@ const ternaryGenoSum = function(inNum){
 
 exports.determinePhenotype = function(genoFacts, inPede){
   console.log('66666666666666666666')
-  console.log(genoFacts)
+  console.log(typeof genoFacts, genoFacts)
   var traits = tEnum.TRAITS; // ["DotColor","EyeColor","SegColor","NumLegs","NumSegments"];
   var rawPheno = [null, null, null, null, null];
   for(var i = 0; i < genoFacts.length; i++){

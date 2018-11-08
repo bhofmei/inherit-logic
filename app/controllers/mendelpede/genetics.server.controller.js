@@ -17,7 +17,6 @@ exports.makeChildren = function (req, res){
   var femalePede = req.femalePede;
   console.log('printing female pede');
   console.log(femalePede);
-
   MendelFridge.findOne({
     owner: user._id,
     scenario: scen._id
@@ -30,7 +29,7 @@ exports.makeChildren = function (req, res){
     }
     console.log('got fridge');
     console.log(fridge);
-    var children = mendExp.makeChildren(femalePede, malePede, 20,  fridge.genoFacts)
+    var children = mendExp.makeChildren(femalePede, malePede, 20,  JSON.parse(fridge.genoFacts))
     console.log('got children');
     console.log(children);
     res.json(children);
