@@ -15,6 +15,8 @@ exports.seedEngine = function(num){
 }
 
 exports.makeChildren = function(mother, father, numChildren,  genoFacts){
+  console.log('#########################');
+  console.log(genoFacts);
   // father and mother have genotype information from database
   // genoFacts include trait type, inheritance, phenotypes, ect
   // assume father and mother sex are correct

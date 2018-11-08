@@ -1,7 +1,11 @@
 import { Component, OnInit} from '@angular/core';
+import { Subscription } from 'rxjs';
 import { User } from '../../../interfaces/user.interface';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { MendelpedePede } from '../../../interfaces/mendelpede-pede.interface';
+import { MendelpedeScenarioService } from '../../scenarios/mendelpede-scenarios.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'mpede-labroom',
@@ -13,8 +17,23 @@ export class MendelpedeLabroomComponent implements OnInit{
   user: User;
 
   malePede: MendelpedePede;
+  childPedes: MendelpedePede[];
   childPede: MendelpedePede;
   femalePede: MendelpedePede; 
+
+  private sSubscription: Subscription;
+
+  private paramObserver: any;
+
+  /**
+   * potential backend error message
+   */
+  errorMessage: string = '';
+  /**
+   * State to monitior if component active to make unsubscribing to
+   * multiple streams easier
+   */
+  private isDestroyed$: Subject<boolean>;
 
   ngOnInit() {
     this.user = this._authenticationService.getUser();
@@ -55,10 +74,33 @@ export class MendelpedeLabroomComponent implements OnInit{
         isFemale: pede.isFemale
       }
     }
+    if(this.malePede.phenotype !== null && this.femalePede.phenotype !== null){
+    console.log(this.user);
+    let userId = this.user.id;
+    this.paramObserver = this._route.params.subscribe((params) => {
+      console.log(params);
+      let scenShortCode = params['scenShortCode'];
+      this._scenarioService.makeChildren(userId, scenShortCode, this.malePede.bugId, this.femalePede.bugId)
+        .takeUntil(this.isDestroyed$)
+        .subscribe(
+          (childPedes) => {
+            this.childPedes = childPedes;
+            console.log(this.childPedes);
+          },
+          (err) => {
+            console.log('error occurred');
+            this.errorMessage = err;
+          }
+        );
+    });
+    }
   }
 
-  constructor(private _authenticationService: AuthenticationService) {
-
+  constructor(private _authenticationService: AuthenticationService,
+    private _router: Router,
+    private _scenarioService: MendelpedeScenarioService,
+    private _route: ActivatedRoute) {
+      this.isDestroyed$ = new Subject<boolean>();
   }
   /**
    * Gets CSS classes 

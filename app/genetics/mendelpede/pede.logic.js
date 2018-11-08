@@ -15,7 +15,7 @@ exports.toTernary = function(inAr){
   }
 }
 
-const fromTernary = function(inNum){
+exports.fromTernary = function(inNum){
   var tNums = [[0,0], [0,1], [0,2], [1,0], [1,1], [1,2], [2,0], [2,1], [2,2]];
   return inNum < 9 ? tNums[inNum] : -1;
 }
@@ -27,12 +27,18 @@ const ternaryGenoSum = function(inNum){
 }
 
 exports.determinePhenotype = function(genoFacts, inPede){
+  console.log('66666666666666666666')
+  console.log(genoFacts)
   var traits = tEnum.TRAITS; // ["DotColor","EyeColor","SegColor","NumLegs","NumSegments"];
   var rawPheno = [null, null, null, null, null];
   for(var i = 0; i < genoFacts.length; i++){
+    console.log('7777777777777777777')
+    console.log(genoFacts[i])
     var curTrait = genoFacts[i]['trait'];
     var traitInt = traits.indexOf(curTrait);
     var inheritType = genoFacts[i]['inherit'];
+    console.log('*********************************')
+    console.log(inheritType);
     if( i < 3 ) { // traits in play
       // second trait for 2-gene traits, continue
       if(i === 1 && (inheritType === tEnum.INHERIT.MULTGENES || inheritType.startsWith('epi')))
