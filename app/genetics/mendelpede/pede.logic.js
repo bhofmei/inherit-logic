@@ -20,7 +20,7 @@ exports.fromTernary = function(inNum){
   return inNum < 9 ? tNums[inNum] : -1;
 }
 
-const ternaryGenoSum = function(inNum){
+exports.ternaryGenoSum = function(inNum){
   // [0,0], [0,1], [0,2], [1,0], [1,1], [1,2], [2,0], [2,1], [2,2]
   var sums = [0, 1, 2, 1, 2, 3, 2, 3, 4];
   return inNum < 9 ? sums[inNum] : null;
@@ -47,21 +47,21 @@ exports.determinePhenotype = function(genoFacts, inPede){
       var genoSum;
       switch(inheritType){
         case tEnum.INHERIT.PENETRANCE:
-          genoSum = inPede.penetrant ? ternaryGenoSum(geno) : 0;
+          genoSum = inPede.penetrant ? this.ternaryGenoSum(geno) : 0;
           break;
         case tEnum.INHERIT.MATEFFECT:
-          genoSum = ternaryGenoSum(inPede.motherGeno);
+          genoSum = this.ternaryGenoSum(inPede.motherGeno);
           break;
         case tEnum.INHERIT.XLINK:
-          genoSum = inPede.isFemale ? ternaryGenoSum(geno) : fromTernary(geno)[0]*2;
+          genoSum = inPede.isFemale ? this.ternaryGenoSum(geno) : this.fromTernary(geno)[0]*2;
           break;
         case tEnum.INHERIT.MULTGENES:
-          genoSum = 1 + ternaryGenoSum(inPede.genotype[0]) + ternaryGenoSum(inPede.genotype[1]);
+          genoSum = 1 + this.ternaryGenoSum(inPede.genotype[0]) + this.ternaryGenoSum(inPede.genotype[1]);
           break;
         case tEnum.INHERIT.MULTALLELES:
-          genoSum = 1 + ternaryGenoSum(geno)
+          genoSum = 1 + this.ternaryGenoSum(geno)
         default:
-          genoSum = ternaryGenoSum(geno)
+          genoSum = this.ternaryGenoSum(geno)
       } // end switch
       if(genoSum === 1 && inheritType === tEnum.INHERIT.INCDOM){
         rawPheno[traitInt] = genoFacts[i]['interm']
@@ -70,8 +70,8 @@ exports.determinePhenotype = function(genoFacts, inPede){
         rawPheno[3] = 1; // numLegs = 1
       } else if(i===0 && inheritType.startsWith('epi')){ // epistatis
         rawPheno[3] = 1; // numLegs = 1
-        var locus1 = ternaryGenoSum(inPede.genotype[0]);
-        var locus2 = ternaryGenoSum(inPede.genotype[1]);
+        var locus1 = this.ternaryGenoSum(inPede.genotype[0]);
+        var locus2 = this.ternaryGenoSum(inPede.genotype[1]);
         switch(inheritType){
           case tEnum.INHERIT.EPIDUP:
             // both rec -> 'dom', both dom -> 'rec'
