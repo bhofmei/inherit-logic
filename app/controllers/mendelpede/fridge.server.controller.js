@@ -28,7 +28,7 @@ const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 const getPedeInfo = function(pede){
   return {
       bugId: pede.bugID,
-      isFemale: pede.isFemale,
+      isFemale: pede.isFemale?'F':'M',
       genotype: pede.genotype,
       phenotype: pede.phenotype,
       id: pede.id
@@ -170,7 +170,6 @@ exports.stockMendelFridge = function (req, res) {
  * @yields {200_OK} User's fridge for this scenario cleaned by [getFridgeInfo]{@link #getFridgeInfo}
  */
 exports.getMendelFridge = function (req, res) {
-  console.log('getting the fridge...**********************************************');
   var user = req.curUser;
   var scen = req.scenario;
   

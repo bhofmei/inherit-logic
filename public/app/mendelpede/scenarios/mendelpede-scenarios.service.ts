@@ -3,7 +3,7 @@ import { Observable ,  BehaviorSubject ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { MendelpedeScenario, MendelpedeFridge } from '../../interfaces';
+import { MendelpedeScenario, MendelpedeFridge, MendelpedePede } from '../../interfaces';
 
 /**
  * Scenario/fridge related functions that get/send data to the backend server
@@ -116,6 +116,23 @@ export class MendelpedeScenarioService {
   createMendelFridge(userId: number, scenShortCode: string): Observable<MendelpedeFridge> {
     console.log('userid...'+userId+' scenario short code:..'+scenShortCode);
     return this._http.get<MendelpedeFridge>(`${this._baseURL}/${userId}/${scenShortCode}/new-fridge`);
+  }
+
+  /**
+   * Create a new fridge for the user/scenario
+   *
+   * @param {number} userId userId of logged in user
+   * @param {string} scenId scenario code of current scenario
+   *
+   * @returns {Observable<Fridge>}
+   * - newly created fridge
+   * - or error "Unable to create new phage for scenario" if issue create phage
+   * - or error "Unable to save new fridge" if couldn't create
+   * - or other server/database error  /api/mendelpede/:userId/:scenShortCode/:malePedeId/:femalePedeId
+   */
+  makeChildren(userId: number, scenShortCode: string, malePedeId: number, femalePedeId:number): Observable<MendelpedePede[]> {
+    console.log('userid...'+userId+' scenario short code:..'+scenShortCode);
+    return this._http.get<MendelpedePede[]>(`${this._baseURL}/${userId}/${scenShortCode}/${malePedeId}/${femalePedeId}`);
   }
 
     /**

@@ -1,93 +1,73 @@
-<!--<div class="card bg-light border-dark" style="width: 18rem;margin: auto">
-                  <div class="card-header row m-0">
-                  <h4 class="card-title mb-0 pl-0 col-6">Fridge</h4>
-                  </div>
-                  <div class="card-body">
-                                <div class="m-0 row border" style="width: 250px">
-                                        <div class="col-6 p-0 border" style="width: 68px">
-                                                <div [ngClass]="getMendelpede()"></div>
-                                        </div>
-                                        <div class="col-6 p-0 border" style="width: 68px">
-                                                <div [ngClass]="getMendelpedetopleft()"></div>
-                                        </div>
-                                </div>
-                                <div class="m-0 row border" style="width: 250px">
-                                        <div class="col-6 p-0 border" style="width: 68px">
-                                                <div [ngClass]="getMendelpedebottomleft()" ></div>
-                                        </div>
-                                        <div class="col-6 p-0 border" style="width: 68px">
-                                                <div [ngClass]="getMendelpedetopleft()"></div>
-                                        </div>
-                                </div>
-                                <div class="m-0 row border" style="width: 250px">
-                                        <div class="col-6 p-0 border" style="width: 68px">
-                                                <div [ngClass]="getMendelpede()"></div>                
-                                        </div>
-                                        <div class="col-6 p-0 border" style="width: 68px">
-                                                <div [ngClass]="getMendelpedebottomleft()"></div>
-                                        </div>
-                                </div>
-                                <div class="m-0 row border" style="width: 250px">
-                                        <div class="col-6 p-0 border" style="width: 68px">
-                                                <div [ngClass]="getMendelpede()"></div>
-                                        </div>
-                                        <div class="col-6 p-0 border" style="width: 68px">
-                                                <div [ngClass]="getMendelpedebottomleft()"></div>
-                                        </div>
-                                </div>
-                        </div>
-                
-              </div>-->
 
-              <div class="card bg-light border-dark">
-                        <div *ngIf="fridge">
-                          <div class="card-header row m-0">
-                          <h4 class="card-title mb-0 pl-0 col-6">Fridge</h4>
-                          <h6 *ngIf="!fridge.accessGranted" class="pr-0 col-6 card-subtitle text-muted m-0 align-self-end text-right">Practice</h6>
-                          </div>
-                          <div class="card-body">
-                            <div *ngIf="errorMessage!==''" class="alert alert-danger">
-                            {{errorMessage}}
-                            </div>
-                             <div class="pede-list">
-                               <div *ngFor="let pede of currPedes" class="ls-strain m-0 row">
-                                <span [ngClass]="getMendelpede(pede[0].phenotype)"
-                                select-droppable [selectEnabled]="pede[0].phenotype !== null" [selectData]="pede[0]"
-                                [title]="pede[0].bugId" [sourceName]="'fridge-'+pede[0].bugId" [dropDisabled]="true">{{ pede[0].bugId + 1 }}</span>
-
-                                <span [ngClass]="getMendelpede(pede[1].phenotype)"
-                                select-droppable [selectEnabled]="pede[1].phenotype !== null" [selectData]="pede"
-                                [title]="pede[1].bugId" [sourceName]="'fridge-'+pede[1].bugId" [dropDisabled]="true">{{ pede[1].bugId + 1 }}</span>
-                                <!--<span class="strain-empty col-7 col-xl-8 p-0" *ngIf="pede.phenotype === null" select-droppable [allowDrop]="canDrop(strain.strainNum)" (onDropSuccess)="dropStrain($event, strain.strainNum)"></span>
-                                 <div class="col-2 p-0">
-                                 <span *ngIf="strain.phageType !== 'empty'" class="oi oi-ellipses edit-phage-btn align-bottom" aria-hidden="true" (click)="editPhage(strain.strainNum)"></span>
-                                   </div>-->
-                                </div>
-                            </div>
-                          </div>
-                          <!-- end card body -->
-                          <div class="card-footer text-center">
-                            <div role="toolbar" class="btn-group btn-group-sm">
-                              <button (click)="setShelf(0)" [disabled]="shelf==0" class="btn">
-                              <span class="oi oi-media-step-backward"></span>
-                              <!--<span>&laquo;</span> -->
-                              </button>
-                            <button (click)="changeShelf(-1)" [disabled]="shelf==0" class="btn">
-                              <span class="oi oi-media-skip-backward"></span>
-                              <!--<span>&laquo;</span> -->
-                              </button>
-                            <button (click)="changeShelf(1)" [disabled]="shelf==(maxShelf-1)" class="btn">
-                              <span class="oi oi-media-skip-forward"></span>
-                              <!--<span>&raquo;</span> -->
-                              </button>
-                              <button (click)="setShelf(maxShelf-1)" [disabled]="shelf==(maxShelf-1)" class="btn">
-                              <span class="oi oi-media-step-forward"></span>
-                              <!--<span>&laquo;</span> -->
-                              </button>
-                              </div>
-                          </div>
+<div class="card bg-light border-dark" style="width: 18rem;margin: auto">
+<div *ngIf="fridge">
+        <div class="card-header row m-0">
+        <h4 class="card-title mb-0 pl-0 col-6">Fridge</h4>
+        <h6 *ngIf="!fridge.accessGranted" class="pr-0 col-6 card-subtitle text-muted m-0 align-self-end text-right">Practice</h6>
+        </div>
+        <div class="card-body">
+        <div *ngIf="errorMessage!==''" class="alert alert-danger">
+        {{errorMessage}}
+        </div>
+        <div class="pede-list">
+        <div *ngFor="let pede of currPedes" class="ls-strain m-0 row">
+                <div class="col-3 p-0 col-xl-6 border" style="margin: auto">
+                        <div *ngIf="pede[0].phenotype !== null" [ngClass]="getMendelpede(pede[0].phenotype)" style="margin: auto"
+                        select-droppable [selectEnabled]="pede[0].phenotype !== null" [selectData]="pede[0]"
+                        [title]="pede[0].bugId+1" [sourceName]="'fridge-'+pede[0].bugId" [dropDisabled]="true">
+                                        <span>{{ pede[0].bugId + 1 }}</span>
+                                        <span style="float:right">{{ pede[0].isFemale }}</span>
                         </div>
-                        <!-- end if fridge -->
-                      </div>
+                        <div *ngIf="pede[0].phenotype === null" class="mpede-empty"><!--</div>select-droppable [allowDrop]="canDrop(strain.strainNum)" (onDropSuccess)="dropStrain($event, strain.strainNum)"-->
+                                        
+                        </div>
+                </div>
+                <div class="col-3 p-0 col-xl-6 border" style="margin: auto">
+                        <div *ngIf="pede[1].phenotype !== null" [ngClass]="getMendelpede(pede[1].phenotype)" style="margin: auto"
+                        select-droppable [selectEnabled]="pede[1].phenotype !== null" [selectData]="pede[1]"
+                        [title]="pede[1].bugId+1" [sourceName]="'fridge-'+pede[1].bugId" [dropDisabled]="true">
+                                        <span>{{ pede[1].bugId + 1 }}</span>
+                                        <span style="float:right">{{ pede[1].isFemale }}</span>
+                        </div>
+                        <div *ngIf="pede[1].phenotype === null" class="mpede-empty">
+                                
+                        </div>
+                </div>
+        
+        <!--
+        <span [ngClass]="getMendelpede(pede[1].phenotype)"
+        select-droppable [selectEnabled]="pede[1].phenotype !== null" [selectData]="pede"
+        [title]="pede[1].bugId" [sourceName]="'fridge-'+pede[1].bugId" [dropDisabled]="true">{{ pede[1].bugId + 1 }}</span>
+        <span class="strain-empty col-7 col-xl-8 p-0" *ngIf="pede.phenotype === null" select-droppable [allowDrop]="canDrop(strain.strainNum)" (onDropSuccess)="dropStrain($event, strain.strainNum)"></span>
+                <div class="col-2 p-0">
+                <span *ngIf="strain.phageType !== 'empty'" class="oi oi-ellipses edit-phage-btn align-bottom" aria-hidden="true" (click)="editPhage(strain.strainNum)"></span>
+                </div>-->
+        </div>
+        </div>
+        </div>
+        <!-- end card body -->
+        <div class="card-footer text-center">
+        <div role="toolbar" class="btn-group btn-group-sm">
+        <button (click)="setShelf(0)" [disabled]="shelf==0" class="btn">
+        <span class="oi oi-media-step-backward"></span>
+        <!--<span>&laquo;</span> -->
+        </button>
+        <button (click)="changeShelf(-1)" [disabled]="shelf==0" class="btn">
+        <span class="oi oi-media-skip-backward"></span>
+        <!--<span>&laquo;</span> -->
+        </button>
+        <button (click)="changeShelf(1)" [disabled]="shelf==(maxShelf-1)" class="btn">
+        <span class="oi oi-media-skip-forward"></span>
+        <!--<span>&raquo;</span> -->
+        </button>
+        <button (click)="setShelf(maxShelf-1)" [disabled]="shelf==(maxShelf-1)" class="btn">
+        <span class="oi oi-media-step-forward"></span>
+        <!--<span>&laquo;</span> -->
+        </button>
+        </div>
+        </div>
+</div>
+<!-- end if fridge -->
+</div>
                       
               
