@@ -117,7 +117,6 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    */
 
   getMendelpede(phenotype: string[]): Object{
-    console.log(phenotype)
     var mpedeCssClass: {} = {};
     
     // create css classes using traits
@@ -128,7 +127,6 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     mpedeCssClass[eyecol] = true
     mpedeCssClass[imurl] = true
     mpedeCssClass['sizeI'] = true
-    console.log(mpedeCssClass)
     return mpedeCssClass
   }
 
