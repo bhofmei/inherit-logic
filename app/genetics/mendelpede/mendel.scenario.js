@@ -336,7 +336,7 @@ const _genoSynthLeth = function(numBugs){
     var allele1 = _genoRandAllele(tEnum.INHERIT.SYNTHLETH);
     var allele2 = _genoRandAllele(tEnum.INHERIT.SYNTHLETH);
     // if lethal, switch one
-    if(allele1 === 0 && al2 === 0){
+    if(allele1 === 0 && allele2 === 0){
       switch(randGen.randDie(4, randEngine)){
         case 1:
           allele1 = 1; // 01
