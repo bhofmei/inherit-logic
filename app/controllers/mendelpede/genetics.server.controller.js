@@ -30,6 +30,10 @@ exports.makeChildren = function (req, res){
     console.log('got fridge');
     console.log(fridge);
     var children = mendExp.makeChildren(femalePede, malePede, 20,  JSON.parse(fridge.genoFacts))
+    for (let i= 0; i < children.length; i++){
+      console.log('---i---');
+      children[i]['isFemale'] = children[i]['isFemale']?'F':'M';
+    }
     console.log('got children');
     console.log(children);
     res.json(children);
@@ -57,24 +61,5 @@ exports.getPede = function(req, res, next, bugId){
       req.malePede = pede;
     }
     next();
-  });
-}
-
-const getFridge = function(user, scen){
-  MendelFridge.findOne({
-    owner: user._id,
-    scenario: scen._id
-  }, (error, fridge) => {
-    if(error){
-      console.log('error occured');
-    }
-    if(!fridge){
-      console.log('No fridge found');
-    }
-    console.log('got fridge');
-    console.log(fridge);
-    return {
-      genoFacts: fridge.genoFacts
-    };
   });
 }

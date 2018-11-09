@@ -18,12 +18,13 @@ export class MendelpedeLabroomComponent implements OnInit{
 
   malePede: MendelpedePede;
   childPedes: MendelpedePede[];
-  childPede: MendelpedePede;
   femalePede: MendelpedePede; 
 
   private sSubscription: Subscription;
 
   private paramObserver: any;
+
+  private numOfChildren: number;
 
   /**
    * potential backend error message
@@ -41,7 +42,10 @@ export class MendelpedeLabroomComponent implements OnInit{
   }
   _initPede() {
     this.malePede = {bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null}
-    this.childPede = {bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null}
+    this.childPedes = [];
+    for (let i = 0; i < this.numOfChildren; i++){
+      this.childPedes.push({bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null});
+    }
     this.femalePede = {bugId: 1, genotype: null, phenotype: null, userId: null, isFemale: null}
   }
 
@@ -101,6 +105,7 @@ export class MendelpedeLabroomComponent implements OnInit{
     private _scenarioService: MendelpedeScenarioService,
     private _route: ActivatedRoute) {
       this.isDestroyed$ = new Subject<boolean>();
+      this.numOfChildren = 20;
   }
   /**
    * Gets CSS classes 
