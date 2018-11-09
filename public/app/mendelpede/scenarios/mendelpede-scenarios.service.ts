@@ -130,14 +130,16 @@ export class MendelpedeScenarioService {
    * - or error "Unable to save new fridge" if couldn't create
    * - or other server/database error  /api/mendelpede/:userId/:scenShortCode/:malePedeId/:femalePedeId
    */
-  makeChildren(malePedeId: number, femalePedeId:number, genoFacts: string): Observable<MendelpedePede[]> {
-    console.log('male id...'+malePedeId+' female id:..'+femalePedeId);
+  makeChildren(malePede: MendelpedePede, femalePede: MendelpedePede, genoFacts: string): Observable<MendelpedePede[]> {
+    
     console.log(genoFacts);
     console.log(typeof genoFacts);
     var genoFactsObj = {
-      'genoFacts':genoFacts
+      'genoFacts': genoFacts,
+      'malePede': malePede,
+      'femalePede': femalePede 
     }
-    return this._http.post<MendelpedePede[]>(`${this._baseURL}/${malePedeId}/${femalePedeId}`, genoFactsObj);
+    return this._http.post<MendelpedePede[]>(`${this._baseURL}/make-children`, genoFactsObj);
   }
 
     /**

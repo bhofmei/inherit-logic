@@ -132,7 +132,7 @@ export class MendelpedeLabroomComponent implements OnInit{
         console.log(this.currFridgeGenoFacts);
         console.log('male id'+this.malePede.id);
         console.log('female id'+ this.femalePede.id);
-        this._scenarioService.makeChildren(this.malePede.id, this.femalePede.id, this.currFridgeGenoFacts)
+        this._scenarioService.makeChildren(this.malePede, this.femalePede, this.currFridgeGenoFacts)
           .takeUntil(this.isDestroyed$)
           .subscribe(
             (childPedes) => {
