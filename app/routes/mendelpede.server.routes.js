@@ -17,8 +17,8 @@ module.exports = function (app) {
   app.route('/api/mendelpede/:userId/:scenShortCode/new-fridge')
     .get(mendelFridge.stockMendelFridge);
   
-  app.route('/api/mendelpede/:userId/:scenShortCode/:malePedeId/:femalePedeId')
-    .get(genetics.makeChildren);
+  app.route('/api/mendelpede/:malePedeId/:femalePedeId')
+    .post(genetics.makeChildren);
   /* 
   app.route('/api/cricket/:userId/:scenarioId/deletions')
   .post(fridge.findFridgeByScenOwner, fridge.saveDeletions);

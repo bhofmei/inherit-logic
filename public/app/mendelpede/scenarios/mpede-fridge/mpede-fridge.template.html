@@ -18,7 +18,8 @@
                                         <span>{{ pede[0].bugId + 1 }}</span>
                                         <span style="float:right">{{ pede[0].isFemale }}</span>
                         </div>
-                        <div *ngIf="pede[0].phenotype === null" class="mpede-empty"><!--</div>select-droppable [allowDrop]="canDrop(strain.strainNum)" (onDropSuccess)="dropStrain($event, strain.strainNum)"-->
+                        <div *ngIf="pede[0].phenotype === null" class="mpede-empty" 
+                        select-droppable (onDropSuccess)="dropPede($event, pede[0].bugId)">
                                         
                         </div>
                 </div>
@@ -29,7 +30,8 @@
                                         <span>{{ pede[1].bugId + 1 }}</span>
                                         <span style="float:right">{{ pede[1].isFemale }}</span>
                         </div>
-                        <div *ngIf="pede[1].phenotype === null" class="mpede-empty">
+                        <div *ngIf="pede[1].phenotype === null" class="mpede-empty" 
+                        select-droppable (onDropSuccess)="dropPede($event, pede[1].bugId)">
                                 
                         </div>
                 </div>

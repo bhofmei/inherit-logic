@@ -167,6 +167,8 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
         ind++;
       }
     }
+    console.log('setting currpedes');
+    console.log(this.currPedes);
     
   }
 
@@ -193,7 +195,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   _fillPedes(fridgePedes: MendelpedePede[]): MendelpedePede[]{
     var out: MendelpedePede[] = [];
     for(let i = 0; i < this.maxShelf*this.spots; i++){
-      out.push({bugId: i, genotype: null, phenotype: null, userId: null, isFemale: null});
+      out.push({bugId: i, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null});
     }
     this.nextSpot = fridgePedes[0].bugId + 1;
     // add original pedes
@@ -221,6 +223,27 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
       this.shelf--;
       this._currPedes();
     }
+  }
+
+  dropPede($event: any, spot: number){
+    console.log('in drop pede');
+    console.log(this.currPedes);
+    let pede: MendelpedePede = $event.data;
+    //this.currPedes[Math.ceil(spot/2)] = [];
+    console.log('---'+(Math.ceil((spot+1)/2)-1));
+    console.log('-----'+spot)
+    console.log(spot%2 === 0?0:1);
+    /*
+    this.currPedes[(Math.ceil((spot+1)/2))-1][(spot+1)%2 === 0?0:1] = {
+      bugId: pede.bugId, 
+      genotype: pede.genotype, 
+      phenotype: pede.phenotype, 
+      userId: pede.userId, 
+      isFemale: pede.isFemale,
+      scenCode: pede.scenCode
+    }*/
+    console.log('after setting');
+    console.log(this.currPedes);
   }
 
   /**

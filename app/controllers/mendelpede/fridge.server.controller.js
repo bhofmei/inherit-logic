@@ -31,7 +31,8 @@ const getPedeInfo = function(pede){
       isFemale: pede.isFemale?'F':'M',
       genotype: pede.genotype,
       phenotype: pede.phenotype,
-      id: pede.id
+      id: pede.id,
+      scenCode: pede.scenario.shortCode
     }
 }
 /**
@@ -181,11 +182,16 @@ exports.getMendelFridge = function (req, res) {
     .populate('scenario', 'shortCode')
     .populate({
       path: 'pedeList',
-      select: 'bugID isFemale genotype phenotype id'
+      select: 'bugID isFemale genotype phenotype id',
+      populate: {
+        path: 'scenario',
+        select: 'shortCode',
+        model: 'MendelScenario'
+      },
     })
     .exec((err, mendelFridge) => {
       if (err) {
-        console.log('error in get fridge');
+        console.log('error in get fridge: '+err);
         return res.status(500)
           .send({
             message: getErrorMessage(err)
@@ -197,7 +203,6 @@ exports.getMendelFridge = function (req, res) {
             message: 'No fridge for scenario/user'
           });
       } else { //
-        console.log('setting fridge details');
         let i = getMendelFridgeInfo(mendelFridge);
         res.json(i);
       }

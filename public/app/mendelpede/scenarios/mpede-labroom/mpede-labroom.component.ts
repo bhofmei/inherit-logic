@@ -6,6 +6,7 @@ import { AuthenticationService } from '../../../authentication/authentication.se
 import { MendelpedePede } from '../../../interfaces/mendelpede-pede.interface';
 import { MendelpedeScenarioService } from '../../scenarios/mendelpede-scenarios.service';
 import { Subject } from 'rxjs';
+import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
   selector: 'mpede-labroom',
@@ -18,13 +19,18 @@ export class MendelpedeLabroomComponent implements OnInit{
 
   malePede: MendelpedePede;
   childPedes: MendelpedePede[];
-  femalePede: MendelpedePede; 
+  femalePede: MendelpedePede;
+  storablePedes: MendelpedePede[]; 
 
   private sSubscription: Subscription;
 
   private paramObserver: any;
 
   private numOfChildren: number;
+
+  private storageSlots: number;
+
+  private currFridgeGenoFacts: string = 's';
 
   /**
    * potential backend error message
@@ -37,16 +43,48 @@ export class MendelpedeLabroomComponent implements OnInit{
   private isDestroyed$: Subject<boolean>;
 
   ngOnInit() {
+    this._initPedes();
     this.user = this._authenticationService.getUser();
-    this._initPede();
+    let userId = this.user.id;
+    this._scenarioService.getGenoFacts
+    .takeUntil(this.isDestroyed$)
+      .subscribe((details) => {this.currFridgeGenoFacts = JSON.stringify(details)});
   }
-  _initPede() {
-    this.malePede = {bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null}
+
+  _initPedes() {
+    this.malePede = {bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null};
+    this._initChildPedes();
+
+    this.storablePedes = [];
+    for (let j = 0; j < this.storageSlots ; j++){
+        this.storablePedes.push({bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null});
+    }
+    this.femalePede = {bugId: 1, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null}
+  }
+
+  _initChildPedes() {
     this.childPedes = [];
     for (let i = 0; i < this.numOfChildren; i++){
-      this.childPedes.push({bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null});
+      this.childPedes.push({bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode:null, id: null});
     }
-    this.femalePede = {bugId: 1, genotype: null, phenotype: null, userId: null, isFemale: null}
+  }
+
+  dropPedeToStorage($event: any, spot: number){
+    if (this.childPedes.length === 1){
+      this.createChildPedes();
+    }else {
+      this.childPedes.shift();
+    }
+    let pede: MendelpedePede = $event.data;
+    this.storablePedes[spot] = {
+      bugId: pede.bugId, 
+      genotype: pede.genotype, 
+      phenotype: pede.phenotype, 
+      userId: pede.userId, 
+      isFemale: pede.isFemale,
+      scenCode: pede.scenCode,
+      id: pede.id
+    }
   }
 
   /**
@@ -58,7 +96,7 @@ export class MendelpedeLabroomComponent implements OnInit{
    * has: shifts, deletion, parents
    * @param {number} spot - slot to drop new strain
    */
-  dropPede($event: any, spot: number){
+  dropPede($event: any){
     console.log('dropping pede')
     let pede: MendelpedePede = $event.data;
     if (pede.isFemale === 'M'){
@@ -67,7 +105,9 @@ export class MendelpedeLabroomComponent implements OnInit{
         genotype: pede.genotype, 
         phenotype: pede.phenotype, 
         userId: pede.userId, 
-        isFemale: pede.isFemale
+        isFemale: pede.isFemale,
+        scenCode: pede.scenCode,
+        id: pede.id
       }
     } else{
       this.femalePede = {
@@ -75,29 +115,37 @@ export class MendelpedeLabroomComponent implements OnInit{
         genotype: pede.genotype, 
         phenotype: pede.phenotype, 
         userId: pede.userId, 
-        isFemale: pede.isFemale
+        isFemale: pede.isFemale,
+        scenCode: pede.scenCode,
+        id: pede.id
       }
     }
+    this.createChildPedes();
+  }
+
+  createChildPedes(){
     if(this.malePede.phenotype !== null && this.femalePede.phenotype !== null){
-    console.log(this.user);
-    let userId = this.user.id;
-    this.paramObserver = this._route.params.subscribe((params) => {
-      console.log(params);
-      let scenShortCode = params['scenShortCode'];
-      this._scenarioService.makeChildren(userId, scenShortCode, this.malePede.bugId, this.femalePede.bugId)
-        .takeUntil(this.isDestroyed$)
-        .subscribe(
-          (childPedes) => {
-            this.childPedes = childPedes;
-            console.log(this.childPedes);
-          },
-          (err) => {
-            console.log('error occurred');
-            this.errorMessage = err;
-          }
-        );
-    });
-    }
+      let userId = this.user.id;
+      this.paramObserver = this._route.params.subscribe((params) => {
+        console.log(params);
+        let scenShortCode = params['scenShortCode'];
+        console.log(this.currFridgeGenoFacts);
+        console.log('male id'+this.malePede.id);
+        console.log('female id'+ this.femalePede.id);
+        this._scenarioService.makeChildren(this.malePede.id, this.femalePede.id, this.currFridgeGenoFacts)
+          .takeUntil(this.isDestroyed$)
+          .subscribe(
+            (childPedes) => {
+              this.childPedes = childPedes;
+              console.log(this.childPedes);
+            },
+            (err) => {
+              console.log('error occurred');
+              this.errorMessage = err;
+            }
+          );
+      });
+      }
   }
 
   constructor(private _authenticationService: AuthenticationService,
@@ -106,6 +154,7 @@ export class MendelpedeLabroomComponent implements OnInit{
     private _route: ActivatedRoute) {
       this.isDestroyed$ = new Subject<boolean>();
       this.numOfChildren = 20;
+      this.storageSlots = 8
   }
   /**
    * Gets CSS classes 
@@ -140,6 +189,16 @@ export class MendelpedeLabroomComponent implements OnInit{
     mpedeCssClass[imurl] = true
     mpedeCssClass['sizeI'] = true
     return mpedeCssClass
+  }
+
+  /**
+   * When destroying the component, unsubscribe from services
+   * to prevent memory leak
+   */
+  ngOnDestroy(){
+    this.paramObserver.unsubscribe();
+    this.isDestroyed$.next(true);
+    this.isDestroyed$.unsubscribe();
   }
   
 }

@@ -19,7 +19,7 @@ const Schema = mongoose.Schema;
    },
    scenario: {
      type: Schema.ObjectId,
-     ref: 'MendelPedeScenario'
+     ref: 'MendelScenario'
    },
    isFemale: Boolean,
    // encoded with ternary for each trait that's part of scenario
