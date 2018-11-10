@@ -17,8 +17,8 @@ module.exports = function (app) {
   app.route('/api/mendelpede/:userId/:scenShortCode/new-fridge')
     .get(mendelFridge.stockMendelFridge);
   
-  app.route('/api/mendelpede/:userId/:scenShortCode/:malePedeId/:femalePedeId')
-    .get(genetics.makeChildren);
+  app.route('/api/mendelpede/make-children')
+    .post(genetics.makeChildren);
   /* 
   app.route('/api/cricket/:userId/:scenarioId/deletions')
   .post(fridge.findFridgeByScenOwner, fridge.saveDeletions);
@@ -39,8 +39,6 @@ module.exports = function (app) {
 */
   app.param('userId', user.userById);
   app.param('scenShortCode', scenarios.scenarioByCode);
-  app.param('malePedeId', genetics.getPede);
-  app.param('femalePedeId', genetics.getPede);
   //app.param('phageId', fridge.phageById); 
 
 };

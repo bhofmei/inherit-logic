@@ -39,7 +39,7 @@ export class MendelpedeScenarioService {
    * The current scenario guesses
    */
    private _scenarioGenoFacts = new BehaviorSubject<any>({});
-   getGuesses = this._scenarioGenoFacts.asObservable();
+   getGenoFacts = this._scenarioGenoFacts.asObservable();
   /**
    * The current scenario code
    *
@@ -130,9 +130,16 @@ export class MendelpedeScenarioService {
    * - or error "Unable to save new fridge" if couldn't create
    * - or other server/database error  /api/mendelpede/:userId/:scenShortCode/:malePedeId/:femalePedeId
    */
-  makeChildren(userId: number, scenShortCode: string, malePedeId: number, femalePedeId:number): Observable<MendelpedePede[]> {
-    console.log('userid...'+userId+' scenario short code:..'+scenShortCode);
-    return this._http.get<MendelpedePede[]>(`${this._baseURL}/${userId}/${scenShortCode}/${malePedeId}/${femalePedeId}`);
+  makeChildren(malePede: MendelpedePede, femalePede: MendelpedePede, genoFacts: string): Observable<MendelpedePede[]> {
+    
+    console.log(genoFacts);
+    console.log(typeof genoFacts);
+    var genoFactsObj = {
+      'genoFacts': genoFacts,
+      'malePede': malePede,
+      'femalePede': femalePede 
+    }
+    return this._http.post<MendelpedePede[]>(`${this._baseURL}/make-children`, genoFactsObj);
   }
 
     /**

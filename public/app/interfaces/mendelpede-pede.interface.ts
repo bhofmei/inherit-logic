@@ -8,10 +8,12 @@ export interface MendelpedePede {
    * User id for owner of this fridge
    */
   userId: number;
+
+  id: number;
   /**
    * Scenario id this fridge belongs to
    */
-  scenCode?: string;
+  scenCode: string;
 
   bugId: number;
 
