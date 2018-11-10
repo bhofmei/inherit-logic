@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, HostListener} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from '../../../interfaces/user.interface';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -20,7 +20,7 @@ export class MendelpedeLabroomComponent implements OnInit{
   malePede: MendelpedePede;
   childPedes: MendelpedePede[];
   femalePede: MendelpedePede;
-  storablePedes: MendelpedePede[]; 
+  storablePedes: MendelpedePede[][][]; 
 
   private sSubscription: Subscription;
 
@@ -30,7 +30,7 @@ export class MendelpedeLabroomComponent implements OnInit{
 
   private storageSlots: number;
 
-  private currFridgeGenoFacts: string = 's';
+  private currFridgeGenoFacts: string;
 
   /**
    * potential backend error message
@@ -54,12 +54,21 @@ export class MendelpedeLabroomComponent implements OnInit{
   _initPedes() {
     this.malePede = {bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null};
     this._initChildPedes();
-
-    this.storablePedes = [];
-    for (let j = 0; j < this.storageSlots ; j++){
-        this.storablePedes.push({bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null});
-    }
+    this._emptyStoragePedes();
     this.femalePede = {bugId: 1, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null}
+  }
+
+  _emptyStoragePedes() {
+    var counter: number = 0;
+    this.storablePedes = [];
+    for (let j = 0; j < this.storageSlots/4 ; j++){
+      this.storablePedes[j] = [];
+      for (let k = 0; k < 4; k++){
+        this.storablePedes[j][k] = [];
+        this.storablePedes[j][k].push({bugId: counter, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null});
+        counter++;
+      }
+    }
   }
 
   _initChildPedes() {
@@ -69,22 +78,27 @@ export class MendelpedeLabroomComponent implements OnInit{
     }
   }
 
-  dropPedeToStorage($event: any, spot: number){
-    if (this.childPedes.length === 1){
-      this.createChildPedes();
-    }else {
-      this.childPedes.shift();
-    }
-    let pede: MendelpedePede = $event.data;
-    this.storablePedes[spot] = {
-      bugId: pede.bugId, 
+  @HostListener('dropPedeToStorage')
+  dropPedeToStorage(spot: number){
+    let pede: MendelpedePede = this.childPedes[0];
+    console.log(Math.ceil((spot+1)/4)-1)
+    console.log(spot>3?(spot-4):(spot))
+    this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)].push( {
+      bugId: this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)][0].bugId, 
       genotype: pede.genotype, 
       phenotype: pede.phenotype, 
       userId: pede.userId, 
       isFemale: pede.isFemale,
       scenCode: pede.scenCode,
       id: pede.id
+    })
+    if (this.childPedes.length === 1){
+      this.createChildPedes();
+    }else {
+      this.childPedes.shift();
     }
+    console.log('stack of pedes');
+    console.log(this.storablePedes);
   }
 
   /**
@@ -96,9 +110,8 @@ export class MendelpedeLabroomComponent implements OnInit{
    * has: shifts, deletion, parents
    * @param {number} spot - slot to drop new strain
    */
-  dropPede($event: any){
+  dropPede(pede: MendelpedePede){
     console.log('dropping pede')
-    let pede: MendelpedePede = $event.data;
     if (pede.isFemale === 'M'){
       this.malePede = {
         bugId: pede.bugId, 

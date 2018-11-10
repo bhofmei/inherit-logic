@@ -1,6 +1,6 @@
 import { User } from '../../../interfaces/user.interface';
 import { AuthenticationService } from '../../../authentication/authentication.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
@@ -10,6 +10,7 @@ import { MendelpedeScenarioService } from '../mendelpede-scenarios.service';
 import { MendelpedeFridge } from '../../../interfaces/mendelpede-fridge.interface';
 import { MendelpedePede } from '../../../interfaces/mendelpede-pede.interface';
 import { readErrorMessage } from '../../../shared/read-error';
+import { MendelpedeLabroomComponent } from '../mpede-labroom/mpede-labroom.component';
 
 @Component({
   selector: 'mendelpede-fridge',
@@ -225,26 +226,15 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     }
   }
 
-  dropPede($event: any, spot: number){
-    console.log('in drop pede');
-    console.log(this.currPedes);
-    let pede: MendelpedePede = $event.data;
-    //this.currPedes[Math.ceil(spot/2)] = [];
-    console.log('---'+(Math.ceil((spot+1)/2)-1));
-    console.log('-----'+spot)
-    console.log(spot%2 === 0?0:1);
-    /*
-    this.currPedes[(Math.ceil((spot+1)/2))-1][(spot+1)%2 === 0?0:1] = {
-      bugId: pede.bugId, 
-      genotype: pede.genotype, 
-      phenotype: pede.phenotype, 
-      userId: pede.userId, 
-      isFemale: pede.isFemale,
-      scenCode: pede.scenCode
-    }*/
-    console.log('after setting');
-    console.log(this.currPedes);
+  @Input() labroom: MendelpedeLabroomComponent;
+
+  @HostListener('sendPede')
+  sendPede(pede: MendelpedePede){
+    console.log('click event called');
+    console.log(pede);
+    this.labroom.dropPede(pede)
   }
+  
 
   /**
    * Set visible shelf to a specific number;
