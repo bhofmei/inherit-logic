@@ -142,6 +142,23 @@ export class MendelpedeScenarioService {
     return this._http.post<MendelpedePede[]>(`${this._baseURL}/make-children`, genoFactsObj);
   }
 
+  insertPede(pede: MendelpedePede, fridge: MendelpedeFridge): Observable<MendelpedeFridge> {
+    console.log(pede);
+    console.log(fridge);
+    let isF: boolean = pede.isFemale==='F'?true:false
+    var insertObj = {
+      'fridgeId' : fridge.id,
+      'pedeToBeInserted' : {
+        bugID : pede.bugId,
+        genotype : pede.genotype,
+        isFemale : isF,
+        phenotype: pede.phenotype,
+      }
+    }
+    console.log(insertObj);
+    return this._http.post<MendelpedeFridge>(`${this._baseURL}/add-pede`, insertObj);
+  }
+
     /**
    * Get an existing fridge for user/scenario
    *

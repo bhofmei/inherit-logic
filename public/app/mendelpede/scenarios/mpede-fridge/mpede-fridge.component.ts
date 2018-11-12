@@ -234,6 +234,19 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     console.log(pede);
     this.labroom.dropPede(pede)
   }
+
+  storePede(pedeToStore: MendelpedePede){
+    pedeToStore.bugId = this.fridge.pedes.length;
+    this._scenarioService.insertPede(pedeToStore, this.fridge)
+    .takeUntil(this.isDestroyed$)
+      .subscribe((fridge)=>{
+        console.log('we got the new after inserted fridge: ');
+        console.log(fridge);
+      this._initFridge(fridge);
+    }, (err)=>{
+      this.errorMessage = readErrorMessage(err);
+    });
+  }
   
 
   /**
