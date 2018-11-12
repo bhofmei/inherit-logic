@@ -54,7 +54,8 @@ const getMendelFridgeInfo = function (mendelFridge) {
     accessGranted: mendelFridge.accessGranted,
     userId: mendelFridge.owner.userId,
     pedes: pedeList,
-    shortCode: mendelFridge.scenario.shortCode
+    shortCode: mendelFridge.scenario.shortCode,
+    id: mendelFridge.id
   }
 }
 
@@ -95,8 +96,7 @@ exports.stockMendelFridge = function (req, res) {
   var stock = mendScen.buildScenario(scen);
   let pedeList = stock.pedes;
   var pedeIdList = [];
-  //let unknwnPedes = [];
-  // loop through pedes, save pedes to database, and create empty pedes
+
   for (let i = 0; i < pedeList.length; i++) {
     let pede = pedeList[i];
     pede.owner = user;
@@ -110,27 +110,8 @@ exports.stockMendelFridge = function (req, res) {
         });
     });
     pedeIdList.push(newPede);
-    //console.log('p', newPhage);
-    /*if (strain.phageType === phageEnum.PHAGETYPE.UNKNOWN) {
-      unknwnStrains.push(newPhage);
-    }*/
-  } // end for i
-  /*let guessStr = '';
-  // add deletion guess info if needed
-  // initialize empty guesses
-  let geneLength = scenDefaults.geneLength;
-  let stepSize = scenDefaults.deletionGuessLength;
-  let guesses = {};
-  //console.log('unknowns', unknwnStrains);
-  for (let i = 0; i < unknwnStrains.length; i++) {
-    let guess = [];
-    for (let j = 0; j < geneLength; j += stepSize) {
-      guess.push(false);
-    } // end for j
-    let s = unknwnStrains[i].strainNum;
-    guesses[s] = guess;
-  } // end for i
-  guessStr = JSON.stringify(guesses);*/
+    
+  } 
   // fridge info
   var newFridge = {
     scenario: scen,
@@ -152,6 +133,53 @@ exports.stockMendelFridge = function (req, res) {
     }
   });
 };
+
+exports.insertPedeToFridge = function(req, res){
+  var reqBody = req.body;
+  var fridgeId = reqBody.fridgeId;
+  var pedeToBeInserted = reqBody.pedeToBeInserted;
+  pedeToBeInserted = new MendelPede(pedeToBeInserted)
+
+      MendelFridge.findOne({
+        _id: fridgeId
+      })
+      .populate('owner', 'userId')
+      .populate('scenario', 'shortCode')
+      .populate({
+        path: 'pedeList',
+        select: 'bugID isFemale genotype phenotype id',
+        populate: {
+          path: 'scenario',
+          select: 'shortCode',
+          model: 'MendelScenario'
+        }
+      }).exec((err, mendelFridge) => {
+        if (err) {
+          console.log('error occured while getting fridge');
+        } else{
+          pedeToBeInserted.owner = mendelFridge.owner;
+          pedeToBeInserted.scenario = mendelFridge.scenario;
+          
+          MendelPede.create( pedeToBeInserted, (err, mpede) => {
+          if (err)
+            return res.status(400)
+            .send({
+              message: 'Unable to create new pede for scenario'
+            });
+          fridge = new MendelFridge(mendelFridge);
+          fridge.pedeList.push(mpede);
+          fridge.save((err, fridge) => {
+            if (err)
+              return res.status(400)
+              .send({
+                message: 'Unable to save fridge'
+              });
+              res.json(getMendelFridgeInfo(fridge))
+            });
+          });
+        }
+      });
+    }
 
 /**
  * Get the current user's fridge
@@ -187,7 +215,7 @@ exports.getMendelFridge = function (req, res) {
         path: 'scenario',
         select: 'shortCode',
         model: 'MendelScenario'
-      },
+      }
     })
     .exec((err, mendelFridge) => {
       if (err) {

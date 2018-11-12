@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener} from '@angular/core';
+import { Component, OnInit, HostListener, Input} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from '../../../interfaces/user.interface';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,6 +6,7 @@ import { AuthenticationService } from '../../../authentication/authentication.se
 import { MendelpedePede } from '../../../interfaces/mendelpede-pede.interface';
 import { MendelpedeScenarioService } from '../../scenarios/mendelpede-scenarios.service';
 import { Subject } from 'rxjs';
+import { MendelpedeFridgeComponent } from '../mpede-fridge/mpede-fridge.component'
 import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
@@ -32,6 +33,8 @@ export class MendelpedeLabroomComponent implements OnInit{
 
   private currFridgeGenoFacts: string;
 
+  undoSpotList: number[] = [];
+
   /**
    * potential backend error message
    */
@@ -46,9 +49,11 @@ export class MendelpedeLabroomComponent implements OnInit{
     this._initPedes();
     this.user = this._authenticationService.getUser();
     let userId = this.user.id;
+    this.paramObserver = this._route.params.subscribe((params) => {
     this._scenarioService.getGenoFacts
     .takeUntil(this.isDestroyed$)
       .subscribe((details) => {this.currFridgeGenoFacts = JSON.stringify(details)});
+    })
   }
 
   _initPedes() {
@@ -78,16 +83,37 @@ export class MendelpedeLabroomComponent implements OnInit{
     }
   }
 
+  @Input() mendelFridge: MendelpedeFridgeComponent;
+
+  @HostListener('storePede')
+  storePede(pedeToStore: MendelpedePede){
+    console.log('button pressed');
+    this.mendelFridge.storePede(pedeToStore);
+  }
+
+  @HostListener('clearAll')
+  clearAll(){
+    this._initPedes();
+  }
+
+  @HostListener('clearAll')
+  undoPede(){
+    var undoSpot: number = this.undoSpotList[this.undoSpotList.length-1]
+    //var arrLength = this.storablePedes[Math.ceil((this.undoSpot+1)/4)-1][this.undoSpot>3?(this.undoSpot-4):(this.undoSpot)].length; 
+    var undoPede:MendelpedePede = this.storablePedes[Math.ceil((undoSpot+1)/4)-1][undoSpot>3?(undoSpot-4):(undoSpot)].pop();
+    this.childPedes.push(undoPede);
+    this.undoSpotList.pop();
+  }
+
   @HostListener('dropPedeToStorage')
   dropPedeToStorage(spot: number){
-    let pede: MendelpedePede = this.childPedes[0];
-    console.log(Math.ceil((spot+1)/4)-1)
-    console.log(spot>3?(spot-4):(spot))
+    let pede: MendelpedePede = this.childPedes[this.childPedes.length-1];
+    this.undoSpotList.push(spot);
     this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)].push( {
       bugId: this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)][0].bugId, 
       genotype: pede.genotype, 
-      phenotype: pede.phenotype, 
       userId: pede.userId, 
+      phenotype: pede.phenotype, 
       isFemale: pede.isFemale,
       scenCode: pede.scenCode,
       id: pede.id
@@ -95,7 +121,7 @@ export class MendelpedeLabroomComponent implements OnInit{
     if (this.childPedes.length === 1){
       this.createChildPedes();
     }else {
-      this.childPedes.shift();
+      this.childPedes.pop();
     }
     console.log('stack of pedes');
     console.log(this.storablePedes);
@@ -184,6 +210,7 @@ export class MendelpedeLabroomComponent implements OnInit{
       'mpede-basic-bottom-left': true,
     }
   }
+
   /**
    * Gets CSS classes 
    *

@@ -5,6 +5,9 @@ import { _User } from './user.interface';
  * A user/scenario fridge
  */
 export interface MendelpedeFridge {
+  
+  id: number;
+
   /**
    * Has access already been granted for this user/scenario;
    * Fridges for each scenario are the same when access not granted
