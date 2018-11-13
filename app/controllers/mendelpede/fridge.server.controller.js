@@ -29,7 +29,8 @@ const getPedeInfo = function(pede){
   return {
       bugId: pede.bugID,
       isFemale: pede.isFemale?'F':'M',
-      genotype: pede.genotype,
+      genotype: cryptr.encrypt(JSON.stringify(pede.genotype)),
+      //genotype: pede.genotype,
       phenotype: pede.phenotype,
       id: pede.id,
       scenCode: pede.scenario.shortCode
@@ -128,6 +129,7 @@ exports.stockMendelFridge = function (req, res) {
         message: 'Unable to save new fridge'
       });
     else {
+      fridge.genoFacts = cryptr.encrypt(fridge.genoFacts);
       let i = getMendelFridgeInfo(fridge);
       res.json(i);
     }
@@ -138,6 +140,7 @@ exports.insertPedeToFridge = function(req, res){
   var reqBody = req.body;
   var fridgeId = reqBody.fridgeId;
   var pedeToBeInserted = reqBody.pedeToBeInserted;
+  pedeToBeInserted.genotype = JSON.parse(cryptr.decrypt(pedeToBeInserted.genotype));
   pedeToBeInserted = new MendelPede(pedeToBeInserted)
 
       MendelFridge.findOne({
@@ -174,6 +177,10 @@ exports.insertPedeToFridge = function(req, res){
               .send({
                 message: 'Unable to save fridge'
               });
+              for (let i = 0; i< fridge.pedeList.length; i++){
+                fridge.pedeList[i].genotype = cryptr.encrypt(JSON.stringify(fridge.pedeList[i]));
+              }
+              fridge.genoFacts = cryptr.encrypt(fridge.genoFacts);
               res.json(getMendelFridgeInfo(fridge))
             });
           });
@@ -230,7 +237,8 @@ exports.getMendelFridge = function (req, res) {
           .send({
             message: 'No fridge for scenario/user'
           });
-      } else { //
+      } else { 
+        mendelFridge.genoFacts = cryptr.encrypt(mendelFridge.genoFacts);
         let i = getMendelFridgeInfo(mendelFridge);
         res.json(i);
       }

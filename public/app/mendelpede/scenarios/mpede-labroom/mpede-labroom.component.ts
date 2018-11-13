@@ -52,7 +52,7 @@ export class MendelpedeLabroomComponent implements OnInit{
     this.paramObserver = this._route.params.subscribe((params) => {
     this._scenarioService.getGenoFacts
     .takeUntil(this.isDestroyed$)
-      .subscribe((details) => {this.currFridgeGenoFacts = JSON.stringify(details)});
+      .subscribe((details) => {this.currFridgeGenoFacts = details});
     })
   }
 
@@ -166,11 +166,9 @@ export class MendelpedeLabroomComponent implements OnInit{
     if(this.malePede.phenotype !== null && this.femalePede.phenotype !== null){
       let userId = this.user.id;
       this.paramObserver = this._route.params.subscribe((params) => {
-        console.log(params);
+        
         let scenShortCode = params['scenShortCode'];
-        console.log(this.currFridgeGenoFacts);
-        console.log('male id'+this.malePede.id);
-        console.log('female id'+ this.femalePede.id);
+        
         this._scenarioService.makeChildren(this.malePede, this.femalePede, this.currFridgeGenoFacts)
           .takeUntil(this.isDestroyed$)
           .subscribe(

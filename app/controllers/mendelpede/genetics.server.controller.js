@@ -9,14 +9,19 @@ const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 
 exports.makeChildren = function (req, res){
   var reqBody = req.body;
-  var genoFacts = reqBody.genoFacts
+  var genoFacts = cryptr.decrypt(reqBody.genoFacts);
   var malePede = reqBody.malePede;
   var femalePede = reqBody.femalePede;
-    var children = mendExp.makeChildren(femalePede, malePede, 20, JSON.parse(genoFacts));
-    for (let i= 0; i < children.length; i++){
-      children[i]['isFemale'] = children[i]['isFemale']?'F':'M';
-    }
-    res.json(children);
+  
+  malePede.genotype = JSON.parse(cryptr.decrypt(malePede.genotype));
+  femalePede.genotype = JSON.parse(cryptr.decrypt(femalePede.genotype));
+  
+  var children = mendExp.makeChildren(femalePede, malePede, 20, JSON.parse(genoFacts));
+  for (let i= 0; i < children.length; i++){
+    children[i]['isFemale'] = children[i]['isFemale']?'F':'M';
+    children[i].genotype = cryptr.encrypt(JSON.stringify(children[i].genotype));
+  }
+  res.json(children);
 }
 
 exports.getPede = function(req, res, next, id){

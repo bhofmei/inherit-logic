@@ -88,6 +88,7 @@
                                                         <div class="col-xl-12 border" style="margin: auto">
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype !== null" [ngClass]="getMendelpede(pedes[pedes.length-1].phenotype)" style="margin: auto"
                                                                 (click)="dropPedeToStorage(pedes[pedes.length-1].bugId)">
+                                                                                <span style="float:left">{{ pedes.length-1 }}</span>
                                                                                 <span style="float:right">{{ pedes[pedes.length-1].isFemale }}</span>
                                                                 </div>
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype === null" class="mpede-empty" (click)="dropPedeToStorage(pedes[pedes.length-1].bugId)" style="margin:auto">

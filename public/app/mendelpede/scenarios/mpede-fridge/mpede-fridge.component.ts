@@ -98,7 +98,8 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
       this._scenarioService.getMendelFridge(userId, scenShortCode)
         .takeUntil(this.isDestroyed$)
         .subscribe(
-          (fridge) => {this._initFridge(fridge);},
+          (fridge) => {console.log(fridge);
+            this._initFridge(fridge);},
           (err) => {
             if(err.status === 307){
             console.log('creating a new fridge');
@@ -231,7 +232,6 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   @HostListener('sendPede')
   sendPede(pede: MendelpedePede){
     console.log('click event called');
-    console.log(pede);
     this.labroom.dropPede(pede)
   }
 
