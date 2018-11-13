@@ -1,341 +1,75 @@
-.mpede-basic-top-left{
-      background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
-      height: 128px;
-      width: 68px;
-      background-position: 68px 0px; 
-    }
-
-.mpede-basic-center{
-      background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
-      height: 128px;
-      width: 68px;
-      background-position: 50% 50%; 
-    }
-
-.mpede-basic-top-right{
-      background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
-    }
-.testbp{
-  background-position: right 680px bottom 1280px; 
+.selected-object{
+  box-shadow: 0 0 0 0.2rem rgba(52,58,64,.5);
 }
+.drop-object{
+  border: 1px dashed black;
+}
+
 .sizeI{
   height: 128px;
   width: 68px;
 }
 
-.mpede-basic-bottom-left{
-      background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
-      height: 128px;
-      width: 68px;
-      background-position: 0% 100%; 
-    }
+.mpede-eyecol-Red{
+  background-position-x: 680px;  
+}
+.mpede-eyecol-Orange{
+  background-position-x: 612px;  
+}
+.mpede-eyecol-Beige{
+  background-position-x: 544px;  
+}
+.mpede-eyecol-Teal{
+  background-position-x: 476px;  
+}
+.mpede-eyecol-LightGreen{
+  background-position-x: 408px;  
+}
+.mpede-eyecol-Cyan{
+  background-position-x: 340px;  
+}
+.mpede-eyecol-SkyBlue{
+  background-position-x: 272px;  
+}
+.mpede-eyecol-Purple{
+  background-position-x: 204px;  
+}
+.mpede-eyecol-Navy{
+  background-position-x: 136px;  
+}
+.mpede-eyecol-LightGray{
+  background-position-x: 68px;  
+}
 
-.mpede-basic-bottom-right{
-      background-image: url(/img/pedes/pede-black-seg4-leg2-min.png);
-      height: 128px;
-      width: 68px;
-      background-position: 100% 100%; 
-    }
-
-.mpede-loc-68-128{
-background-position: right 68px bottom 128px;
+.mpede-bodycol-Red{
+  background-position-y: 1280px;  
 }
-.mpede-loc-68-256{
-background-position: right 68px bottom 256px;
+.mpede-bodycol-Orange{
+  background-position-y: 1152px;  
 }
-.mpede-loc-68-384{
-background-position: right 68px bottom 384px;
+.mpede-bodycol-Beige{
+  background-position-y: 1024px;  
 }
-.mpede-loc-68-512{
-background-position: right 68px bottom 512px;
+.mpede-bodycol-Teal{
+  background-position-y: 896px;  
 }
-.mpede-loc-68-640{
-background-position: right 68px bottom 640px;
+.mpede-bodycol-LightGreen{
+  background-position-y: 768px;  
 }
-.mpede-loc-68-768{
-background-position: right 68px bottom 768px;
+.mpede-bodycol-Cyan{
+  background-position-y: 640px;  
 }
-.mpede-loc-68-896{
-background-position: right 68px bottom 896px;
+.mpede-bodycol-SkyBlue{
+  background-position-y: 512px;  
 }
-.mpede-loc-68-1024{
-background-position: right 68px bottom 1024px;
+.mpede-bodycol-Purple{
+  background-position-y: 384px;  
 }
-.mpede-loc-68-1152{
-background-position: right 68px bottom 1152px;
+.mpede-bodycol-Navy{
+  background-position-y: 256px;  
 }
-.mpede-loc-68-1280{
-background-position: right 68px bottom 1280px;
-}
-.mpede-loc-136-128{
-background-position: right 136px bottom 128px;
-}
-.mpede-loc-136-256{
-background-position: right 136px bottom 256px;
-}
-.mpede-loc-136-384{
-background-position: right 136px bottom 384px;
-}
-.mpede-loc-136-512{
-background-position: right 136px bottom 512px;
-}
-.mpede-loc-136-640{
-background-position: right 136px bottom 640px;
-}
-.mpede-loc-136-768{
-background-position: right 136px bottom 768px;
-}
-.mpede-loc-136-896{
-background-position: right 136px bottom 896px;
-}
-.mpede-loc-136-1024{
-background-position: right 136px bottom 1024px;
-}
-.mpede-loc-136-1152{
-background-position: right 136px bottom 1152px;
-}
-.mpede-loc-136-1280{
-background-position: right 136px bottom 1280px;
-}
-.mpede-loc-204-128{
-background-position: right 204px bottom 128px;
-}
-.mpede-loc-204-256{
-background-position: right 204px bottom 256px;
-}
-.mpede-loc-204-384{
-background-position: right 204px bottom 384px;
-}
-.mpede-loc-204-512{
-background-position: right 204px bottom 512px;
-}
-.mpede-loc-204-640{
-background-position: right 204px bottom 640px;
-}
-.mpede-loc-204-768{
-background-position: right 204px bottom 768px;
-}
-.mpede-loc-204-896{
-background-position: right 204px bottom 896px;
-}
-.mpede-loc-204-1024{
-background-position: right 204px bottom 1024px;
-}
-.mpede-loc-204-1152{
-background-position: right 204px bottom 1152px;
-}
-.mpede-loc-204-1280{
-background-position: right 204px bottom 1280px;
-}
-.mpede-loc-272-128{
-background-position: right 272px bottom 128px;
-}
-.mpede-loc-272-256{
-background-position: right 272px bottom 256px;
-}
-.mpede-loc-272-384{
-background-position: right 272px bottom 384px;
-}
-.mpede-loc-272-512{
-background-position: right 272px bottom 512px;
-}
-.mpede-loc-272-640{
-background-position: right 272px bottom 640px;
-}
-.mpede-loc-272-768{
-background-position: right 272px bottom 768px;
-}
-.mpede-loc-272-896{
-background-position: right 272px bottom 896px;
-}
-.mpede-loc-272-1024{
-background-position: right 272px bottom 1024px;
-}
-.mpede-loc-272-1152{
-background-position: right 272px bottom 1152px;
-}
-.mpede-loc-272-1280{
-background-position: right 272px bottom 1280px;
-}
-.mpede-loc-340-128{
-background-position: right 340px bottom 128px;
-}
-.mpede-loc-340-256{
-background-position: right 340px bottom 256px;
-}
-.mpede-loc-340-384{
-background-position: right 340px bottom 384px;
-}
-.mpede-loc-340-512{
-background-position: right 340px bottom 512px;
-}
-.mpede-loc-340-640{
-background-position: right 340px bottom 640px;
-}
-.mpede-loc-340-768{
-background-position: right 340px bottom 768px;
-}
-.mpede-loc-340-896{
-background-position: right 340px bottom 896px;
-}
-.mpede-loc-340-1024{
-background-position: right 340px bottom 1024px;
-}
-.mpede-loc-340-1152{
-background-position: right 340px bottom 1152px;
-}
-.mpede-loc-340-1280{
-background-position: right 340px bottom 1280px;
-}
-.mpede-loc-408-128{
-background-position: right 408px bottom 128px;
-}
-.mpede-loc-408-256{
-background-position: right 408px bottom 256px;
-}
-.mpede-loc-408-384{
-background-position: right 408px bottom 384px;
-}
-.mpede-loc-408-512{
-background-position: right 408px bottom 512px;
-}
-.mpede-loc-408-640{
-background-position: right 408px bottom 640px;
-}
-.mpede-loc-408-768{
-background-position: right 408px bottom 768px;
-}
-.mpede-loc-408-896{
-background-position: right 408px bottom 896px;
-}
-.mpede-loc-408-1024{
-background-position: right 408px bottom 1024px;
-}
-.mpede-loc-408-1152{
-background-position: right 408px bottom 1152px;
-}
-.mpede-loc-408-1280{
-background-position: right 408px bottom 1280px;
-}
-.mpede-loc-476-128{
-background-position: right 476px bottom 128px;
-}
-.mpede-loc-476-256{
-background-position: right 476px bottom 256px;
-}
-.mpede-loc-476-384{
-background-position: right 476px bottom 384px;
-}
-.mpede-loc-476-512{
-background-position: right 476px bottom 512px;
-}
-.mpede-loc-476-640{
-background-position: right 476px bottom 640px;
-}
-.mpede-loc-476-768{
-background-position: right 476px bottom 768px;
-}
-.mpede-loc-476-896{
-background-position: right 476px bottom 896px;
-}
-.mpede-loc-476-1024{
-background-position: right 476px bottom 1024px;
-}
-.mpede-loc-476-1152{
-background-position: right 476px bottom 1152px;
-}
-.mpede-loc-476-1280{
-background-position: right 476px bottom 1280px;
-}
-.mpede-loc-544-128{
-background-position: right 544px bottom 128px;
-}
-.mpede-loc-544-256{
-background-position: right 544px bottom 256px;
-}
-.mpede-loc-544-384{
-background-position: right 544px bottom 384px;
-}
-.mpede-loc-544-512{
-background-position: right 544px bottom 512px;
-}
-.mpede-loc-544-640{
-background-position: right 544px bottom 640px;
-}
-.mpede-loc-544-768{
-background-position: right 544px bottom 768px;
-}
-.mpede-loc-544-896{
-background-position: right 544px bottom 896px;
-}
-.mpede-loc-544-1024{
-background-position: right 544px bottom 1024px;
-}
-.mpede-loc-544-1152{
-background-position: right 544px bottom 1152px;
-}
-.mpede-loc-544-1280{
-background-position: right 544px bottom 1280px;
-}
-.mpede-loc-612-128{
-background-position: right 612px bottom 128px;
-}
-.mpede-loc-612-256{
-background-position: right 612px bottom 256px;
-}
-.mpede-loc-612-384{
-background-position: right 612px bottom 384px;
-}
-.mpede-loc-612-512{
-background-position: right 612px bottom 512px;
-}
-.mpede-loc-612-640{
-background-position: right 612px bottom 640px;
-}
-.mpede-loc-612-768{
-background-position: right 612px bottom 768px;
-}
-.mpede-loc-612-896{
-background-position: right 612px bottom 896px;
-}
-.mpede-loc-612-1024{
-background-position: right 612px bottom 1024px;
-}
-.mpede-loc-612-1152{
-background-position: right 612px bottom 1152px;
-}
-.mpede-loc-612-1280{
-background-position: right 612px bottom 1280px;
-}
-.mpede-loc-680-128{
-background-position: right 680px bottom 128px;
-}
-.mpede-loc-680-256{
-background-position: right 680px bottom 256px;
-}
-.mpede-loc-680-384{
-background-position: right 680px bottom 384px;
-}
-.mpede-loc-680-512{
-background-position: right 680px bottom 512px;
-}
-.mpede-loc-680-640{
-background-position: right 680px bottom 640px;
-}
-.mpede-loc-680-768{
-background-position: right 680px bottom 768px;
-}
-.mpede-loc-680-896{
-background-position: right 680px bottom 896px;
-}
-.mpede-loc-680-1024{
-background-position: right 680px bottom 1024px;
-}
-.mpede-loc-680-1152{
-background-position: right 680px bottom 1152px;
-}
-.mpede-loc-680-1280{
-background-position: right 680px bottom 1280px;
+.mpede-bodycol-LightGray{
+  background-position-y: 128px;  
 }
 
 .mpede-pede-black-seg1-leg0-min{
@@ -652,6 +386,11 @@ background-image: url(/img/pedes/pede-yellow-seg5-leg1-min.png);
 }
 .mpede-pede-yellow-seg5-leg2-min{
 background-image: url(/img/pedes/pede-yellow-seg5-leg2-min.png);
+}
+
+.mpede-empty{
+  height: 128px;
+  width: 68px;
 }
 
 
