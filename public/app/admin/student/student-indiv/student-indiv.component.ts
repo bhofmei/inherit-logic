@@ -9,6 +9,7 @@ import { Subscription ,  Subject } from 'rxjs';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { StudentService } from '../student.service';
 import { CricketService } from '../../../cricket/cricket.service';
+import { MendelpedeScenarioService } from '../../../mendelpede/scenarios/mendelpede-scenarios.service'
 import { StudentRolesArray } from '../student.roles';
 import { ConfirmDeleteDialogComponent } from '../../../shared/confirm-delete-dialog.component';
 
@@ -16,6 +17,7 @@ import { User } from '../../../interfaces/user.interface';
 import { Course } from '../../../interfaces/course.interface';
 import { AdminStudent } from '../../../interfaces/student.interface';
 import { Scenario } from '../../../interfaces/scenario.interface';
+import { MendelpedeScenario } from '../../../interfaces/mendelpede-scenarios.interface';
 import { readErrorMessage } from '../../../shared/read-error';
 
 /**
@@ -38,6 +40,8 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
    * List of all scenarios
    */
     private scenarios: Scenario[];
+  
+  
   /**
    * Boolean state variable to make unsubscribing from multiple
    * observables easier
@@ -59,6 +63,15 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
    * New role to change to if allowed
    */
     private newRole: string;
+  /**
+   * List of all Mendelpede scenarios
+   */
+  private mpedeOptions: MendelpedeScenario[];
+  
+  mpedeScenarios: MendelpedeScenario[] = Array();
+  quizes: MendelpedeScenario[] = Array();
+  discoveries: MendelpedeScenario[] = Array();
+  pathways: MendelpedeScenario[] = Array();
 
   /**
    * Potential error message
@@ -70,6 +83,7 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
         private _authService: AuthenticationService,
         private _studentService: StudentService,
         private _scenarioService: CricketService,
+        private _mpedeScenarioService: MendelpedeScenarioService,
         private _modalService: NgbModal) {
         this.isDestroyed$ = new Subject<boolean>();
     }
@@ -95,6 +109,57 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
                         .subscribe((scens) => {
                             this.scenarios = scens;
                         });
+                    this._mpedeScenarioService.listScenarios().takeUntil(this.isDestroyed$)
+                    .subscribe((scens) => {
+                      this.mpedeOptions = scens;
+                      this.mpedeOptions.forEach((option) => {
+                        if (option.scenType === 'scenario') {
+                          this.mpedeScenarios.push(option);
+                        } else if(option.scenType === 'quiz'){
+                          this.quizes.push(option);
+                        } else if(option.scenType === 'discovery'){
+                          this.discoveries.push(option);
+                        }else if(option.scenType === 'pathway'){
+                          this.pathways.push(option);
+                        }
+                      });
+                      this.mpedeScenarios = this.mpedeScenarios.sort((o1, o2) => {
+                        if (o1.ordOfScen < o2.ordOfScen){
+                          return -1;
+                        } else if (o1.ordOfScen > o2.ordOfScen){
+                          return 1;
+                        } else{
+                          return 0;
+                        }
+                      })
+                      this.quizes = this.quizes.sort((o1, o2) => {
+                        if (o1.ordOfScen < o2.ordOfScen){
+                          return -1;
+                        } else if (o1.ordOfScen > o2.ordOfScen){
+                          return 1;
+                        } else{
+                          return 0;
+                        }
+                      })
+                      this.discoveries = this.discoveries.sort((o1, o2) => {
+                        if (o1.ordOfScen < o2.ordOfScen){
+                          return -1;
+                        } else if (o1.ordOfScen > o2.ordOfScen){
+                          return 1;
+                        } else{
+                          return 0;
+                        }
+                      })
+                      this.pathways = this.pathways.sort((o1, o2) => {
+                        if (o1.ordOfScen < o2.ordOfScen){
+                          return -1;
+                        } else if (o1.ordOfScen > o2.ordOfScen){
+                          return 1;
+                        } else{
+                          return 0;
+                        }
+                      })
+                    });
                 },
                 (error) => {
                     this.errorMessage = readErrorMessage(error);

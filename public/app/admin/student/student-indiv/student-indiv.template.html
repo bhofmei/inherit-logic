@@ -45,22 +45,127 @@
     </div>
     <!-- end student info -->
 
-    <div id="student-scenarios">
-      <h5>Scenarios</h5>
-      <div class="list-group">
-        <div *ngFor="let scenario of scenarios" class="list-group-item justify-content-between d-flex">
-          <div class="">
-            <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(scenario.scenCode) }}</span>
+    <div class="accordion" id="accordionExample" style="margin: auto">
+        <div class="card">
+          <div class="card-header" id="headingOneCricket">
+            <h5 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOneCrc" aria-expanded="false" aria-controls="collapseOneCrc">
+                Cricket Scenarios
+              </button>
+            </h5>
           </div>
-          <div class="btn-group" role="group">
-            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="student.accessGranted[scenario.scenCode]">Grant access</button>
-            <a [routerLink]="['./', scenario.scenCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
-          </div>
+      
+          <div id="collapseOneCrc" class="collapse show" aria-labelledby="headingOneCricket" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="list-group mt-2">
+                  <div id="student-scenarios">
+                      <div class="list-group">
+                        <div *ngFor="let scenario of scenarios" class="list-group-item justify-content-between d-flex">
+                          <div class="">
+                            <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(scenario.scenCode) }}</span>
+                          </div>
+                          <div class="btn-group" role="group">
+                            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="student.accessGranted[scenario.scenCode]">Grant access</button>
+                            <a [routerLink]="['./', scenario.scenCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
+                          </div>
+                        </div>
+                        <!-- end list-group-item -->
+                      </div>
+                      <!-- end list-group -->
+                    </div>
+              </div>
+            </div>
         </div>
-        <!-- end list-group-item -->
-      </div>
-      <!-- end list-group -->
     </div>
+    <div class="card">
+        <div class="card-header" id="headingTwoM">
+          <h5 class="mb-0">
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwoM" aria-expanded="false" aria-controls="collapseTwoM">
+              Mendelpede
+            </button>
+          </h5>
+        </div>
+    
+        <div id="collapseTwoM" class="collapse show" aria-labelledby="headingTwoM" data-parent="#accordionExample">
+            <div class="accordion" id="accordionsub" style="width: 1000px;margin: auto">
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Scenarios
+                      </button>
+                    </h5>
+                  </div>
+              
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionsub">
+                    <div class="card-body">
+                      <div class="list-group mt-2">
+                          <div *ngFor="let scenario of mpedeScenarios" class="list-group-item justify-content-between d-flex">
+                              <div class="">
+                                <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(mpedeScenarios.scenCode) }}</span>
+                              </div>
+                              <div class="btn-group" role="group">
+                                <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="student.accessGranted[mpedeScenarios.scenCode]">Grant access</button>
+                                <a [routerLink]="['./', scenario.scenCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
+                              </div>
+                            </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Quizes
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionsub">
+                    <div class="card-body">
+                        <div class="list-group mt-2">
+                            <a *ngFor="let quiz of quizes" [routerLink]="['/mendelpede/mpede-scenarios']" class="list-group-item list-group-item-action">{{quiz.label}}</a>
+                          </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Discoveries
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionsub">
+                    <div class="card-body">
+                        <div class="list-group mt-2">
+                            <a *ngFor="let discovery of discoveries" [routerLink]="['/mendelpede/mpede-scenarios']" class="list-group-item list-group-item-action">{{discovery.label}}</a>
+                          </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingFour">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                          Pathways
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionsub">
+                      <div class="card-body">
+                          <div class="list-group mt-2">
+                              <a *ngFor="let pathway of pathways" [routerLink]="['/mendelpede/mpede-scenarios']" class="list-group-item list-group-item-action">{{pathway.label}}</a>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+      </div>
+  </div>
+    </div>
+    
     <!-- end student-scenarios -->
   </div>
   <!-- end if student -->
