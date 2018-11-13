@@ -73,7 +73,7 @@ export class MendelpedeScenarioService {
   setScenario(scenarioGenoFacts: string) {
         if (scenarioGenoFacts !== null)
             this._scenarioGenoFacts
-              .next(JSON.parse(scenarioGenoFacts));
+              .next(scenarioGenoFacts);
     }
 
 
