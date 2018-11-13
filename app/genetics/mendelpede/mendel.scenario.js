@@ -109,7 +109,7 @@ const setTraits = function(genoFacts){
       case tEnum.INHERIT.MULTALLELES:
         traitRem = util.removeFromArray(traitRem, 'NumSegments');
         genoFacts[0] = {inherit: inheritType, trait: 'NumSegments', rec: 0, dom: 1, interm: null};
-        break;
+        break; // break for multalleles and multgenes
       case tEnum.INHERIT.INCDOM:
         var res = _pickIncDom(traitRem, bodyColRem, dotColRem);
         genoFacts[0] = res.geno;
@@ -304,9 +304,9 @@ const _genoMultAllele = function(numBugs){
   // must have 01, 12, 02 -> randomly pick other three
   var outGeno = [1, 5, 2];
   for(var k = outGeno.length; k < numBugs; k++){
-    outGeno.push(randGen.randInt(0, 8));
-    return outGeno;
+    outGeno.push(randGen.randInt(0, 8, randEngine));
   }
+  return outGeno;
 };
 
 const _genoIncDom = function(numBugs){

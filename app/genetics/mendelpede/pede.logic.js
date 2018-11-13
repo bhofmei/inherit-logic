@@ -52,8 +52,9 @@ exports.determinePhenotype = function(genoFacts, inPede){
         case tEnum.INHERIT.MULTGENES:
           genoSum = 1 + this.ternaryGenoSum(inPede.genotype[0]) + this.ternaryGenoSum(inPede.genotype[1]);
           break;
-        case tEnum.INHERIT.MULTALLELES:
-          genoSum = 1 + this.ternaryGenoSum(geno)
+        /*case tEnum.INHERIT.MULTALLELES:
+          genoSum = 1 + this.ternaryGenoSum(geno);
+          break;*/
         default:
           genoSum = this.ternaryGenoSum(geno)
       } // end switch
@@ -62,6 +63,8 @@ exports.determinePhenotype = function(genoFacts, inPede){
       } else if(i === 0 && inheritType === tEnum.INHERIT.MULTGENES){
         rawPheno[traitInt] = genoSum;
         rawPheno[3] = 1; // numLegs = 1
+      } else if(i === 0 && inheritType === tEnum.INHERIT.MULTALLELES){
+        rawPheno[traitInt] = genoSum + 1;
       } else if(i===0 && inheritType.startsWith('epi')){ // epistatis
         rawPheno[3] = 1; // numLegs = 1
         var locus1 = this.ternaryGenoSum(inPede.genotype[0]);
