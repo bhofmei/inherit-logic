@@ -66,7 +66,7 @@
                           </div>
                           <div class="btn-group" role="group">
                             <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="student.accessGranted[scenario.scenCode]">Grant access</button>
-                            <a [routerLink]="['./', scenario.scenCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
+                            <a [routerLink]="['./cricket/', scenario.scenCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
                           </div>
                         </div>
                         <!-- end list-group-item -->
@@ -102,11 +102,11 @@
                       <div class="list-group mt-2">
                           <div *ngFor="let scenario of mpedeScenarios" class="list-group-item justify-content-between d-flex">
                               <div class="">
-                                <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(mpedeScenarios.scenCode) }}</span>
+                                <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(scenario.shortCode) }}</span>
                               </div>
                               <div class="btn-group" role="group">
-                                <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="student.accessGranted[mpedeScenarios.scenCode]">Grant access</button>
-                                <a [routerLink]="['./', scenario.scenCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
+                                <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.shortCode)" [disabled]="student.accessGranted[scenario.shortCode]">Grant access</button>
+                                <a [routerLink]="['./mendelpede/', scenario.shortCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
                               </div>
                             </div>
                       </div>

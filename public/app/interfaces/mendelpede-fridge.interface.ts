@@ -30,27 +30,25 @@ export interface MendelpedeFridge {
 
 /**
  * Fridge information used by admin
- 
-export interface StudentFridge {
+ */
+export interface StudentMendelFridge {
   /**
    * Owner of the fridge
-   
+  */ 
   owner: _User;
   /**
    * Scenario this fridge is for
-   
+   */
   scenario: {scenCode: string, label: string};
   /**
    * If fridge exists, the list of phage that are in this fridge
-   
-  strains?: StudentPhage[];
+   */
+  pedes?: MendelpedePede[];
   /**
    * If the fridge exists, has access been granted for this user/scenario
-   
+   */
   accessGranted?: boolean;
-  /**
-   * If the fridge exists, the deletion guesses by the student
-   
-  guesses?: string;
+
+  genoFacts: string;
 }
-*/
+

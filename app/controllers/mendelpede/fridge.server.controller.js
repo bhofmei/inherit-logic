@@ -244,3 +244,38 @@ exports.getMendelFridge = function (req, res) {
       }
     });
 };
+
+exports.getStudentFridge = function(req, res){
+  let student = req.student;
+  let scen = req.scenario;
+  MendelFridge.findOne({
+      owner: student._id,
+      scenario: scen._id
+    })
+    .populate('pedeList', 'bugID isFemale genotype id phenotype')
+    .populate('owner', 'firstName lastName userId')
+    .populate('scenario', 'shortCode label')
+    .exec((err, fridge) => {
+      if (err) {
+        return res.status(500)
+          .send({
+            message: getErrorMessage(err)
+          });
+      } else if (!fridge) {
+        let out = {
+          owner: {
+            firstName: student.firstName,
+            lastName: student.lastName,
+            userId: student.userId
+          },
+          scenario: {
+            scenCode: scen.shortCode,
+            label: scen.label
+          }
+        };
+        res.json(out);
+      } else {
+        res.json(fridge);
+      }
+    });
+}

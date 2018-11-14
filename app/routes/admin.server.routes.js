@@ -1,7 +1,9 @@
 const user = require('../controllers/user.server.controller');
 const admin = require('../controllers/admin.server.controller');
 const cricketScenario = require('../controllers/cricket/cricket-scenario.server.controller');
+const mendelScenario = require('../controllers/mendelpede/scenario.server.controller');
 const cricketFridge = require('../controllers/cricket/cricket-fridge.server.controller');
+const MendelFridge = require('../controllers/mendelpede/fridge.server.controller');
 
 module.exports = function (app) {
 
@@ -19,8 +21,13 @@ module.exports = function (app) {
   app.route('/api/admin/:userId/students/:studentId/:scenCode')
     .get(admin.hasAuthorization, cricketFridge.getStudentFridge)
     .post(admin.hasAuthorization, cricketFridge.deleteStudentFridge, user.grantAccess);
+  
+  app.route('/api/admin/:userId/mendel-students/:studentId/:scenShortCode')
+    .get(admin.hasAuthorization, MendelFridge.getStudentFridge)
+    //.post(admin.hasAuthorization, MendelFridge.deleteStudentFridge, user.grantAccess);
 
   app.param('userId', user.userById);
   app.param('studentId', user.userById);
   app.param('scenCode', cricketScenario.scenByCode);
+  app.param('scenShortCode', mendelScenario.scenarioByCode);
 };

@@ -7,6 +7,7 @@ import { StudentRoutes } from './student.routes';
 import { StudentListComponent } from './student-list/student-list.component';
 import { StudentIndivComponent } from './student-indiv/student-indiv.component';
 import { StudentFridgeComponent } from './student-fridge/student-fridge.component';
+import { StudentMendelFridgeComponent } from './student-mendel-fridge/student-mendel-fridge.component' 
 import { StudentPhageComponent } from './student-fridge/student-phage.component';
 import { ConfirmDeleteDialogComponent } from '../../shared/confirm-delete-dialog.component';
 
@@ -28,6 +29,7 @@ import { PhageDeletionsPipe } from '../../pipes/phage-deletions.pipe';
     StudentListComponent,
     StudentIndivComponent,
     StudentFridgeComponent,
+    StudentMendelFridgeComponent,
     StudentPhageComponent,
     PhageGuessesPipe,
     PhageMutationsPipe,
