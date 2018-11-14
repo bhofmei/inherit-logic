@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 /**
  * Format a MendelPede's genotype as A and a alleles
- * - When multAllele is true, uses A^0, A^1, A^2
+ * - When multAllele/multGenes, uses A^0, A^1, A^2
  *
- * **Usage:** `{{ genotypeNum | pedeGenotype:multAllele }}`
+ * **Usage:** `{{ genotypeNum | pedeGenotype:scenCode }}`
  *
  * @example <caption>Normal output :  </caption>
  * code>0</code> becomes "aa"
@@ -23,7 +23,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({name: 'pedeGenotype'})
 export class PedeGenotypePipe implements PipeTransform {
 
-  transform(pedeGenotype: int, multAllele: boolean): string {
+  transform(pedeGenotype: int, scenCode: string): string {
     if(pedeGenotype > 8){
       return 'invalid'
     }
@@ -32,7 +32,7 @@ export class PedeGenotypePipe implements PipeTransform {
     var regGenoStr = ['a', 'A', '?'];
     var alleleGenoStr = ['A<sup>0</sup>', 'A<sup>1</sup>', 'A<sup>2</sup>']
     var geno = genoList[pedeGenotype];
-    if(multAllele){
+    if(scenCode === "MultAlleles"){ // potentially include  || scenCode === "MultGenes"
       return alleleGenoStr[geno[0]] + alleleGenoStr[geno[1]]
     } else {
       return regGenoStr[geno[0]] + regGenoStr[geno[1]]
