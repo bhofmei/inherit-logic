@@ -60,20 +60,21 @@
             <div class="list-group mt-3" id="fridge">
               
                 <div class="ist-group-item m-0 row border" *ngFor="let pede of fridge.pedes">
-                        <div class="strain-num text-primary col-2 col-xl-1">
+                        <div class="strain-num text-primary col-1">
                           {{ pede.bugId + 1 }}
                         </div>
-                        <div class="col-2 col-xl-5" id="genoType">
-                        <div [ngClass]="getMendelpede(pede.phenotype)" class="col-xl-2 p-0" style="margin: auto">
+                        <div class="col-3" id="genoType" style="margin: auto;width: 500px;">
+                        <div [ngClass]="getMendelpede(pede.phenotype)" style="margin: auto;">
                         </div>
                         </div>
                         <!-- phage.strainNum -->
-                        <div class="col-2 col-xl-1" id="genoType">
-                            {{pede.genotype}}
+                        <div class="col-3" id="genoType">
                               <!--{{ pede.genotype | pedeGenotype:fridge.scenario.scenCode }}-->
-        
+                              <div *ngFor="let geno of pede.genotype; let i=index">
+                                  {{ currGenoFacts[i]["trait"] }}: {{ geno | pedeGenotype:fridge.scenario.scenCode }}
+                             </div>
                         </div> 
-                        <div class="col-2 col-xl-1" id="genoType">
+                        <div class="col-1" id="genoType">
                             
                                 {{ pede.isFemale }}
           
