@@ -68,7 +68,7 @@
                                 <div *ngIf="undoSpotList.length === 0">
                                         <button type="button" style="margin: auto" (click)="undoPede()" class="btn btn-primary btn-xs disabled">undo</button>  
                                 </div>
-                                <div *ngIf="undoSpotList.length !== 0">
+                                <div *ngIf="undoSpotList.length > 0">
                                         <button type="button" style="margin: auto" (click)="undoPede()" class="btn btn-primary btn-xs">undo</button>  
                                 </div>
                         </div>
