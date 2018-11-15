@@ -12,25 +12,31 @@
         <div class="pede-list">
         <div *ngFor="let pede of currPedes" class="ls-strain m-0 row">
                 <div class="col-3 p-0 col-xl-6 border" style="margin: auto">
-                        <div *ngIf="pede[0].phenotype !== null" [ngClass]="getMendelpede(pede[0].phenotype)" style="margin: auto"
-                        (click)="sendPede(pede[0])">
-                                        <span>{{ pede[0].bugId + 1 }}</span>
-                                        <span style="float:right">{{ pede[0].isFemale }}</span>
+                        <div *ngIf="pede[0].phenotype !== null" style="margin: auto;width: 115px">
+                                        <span style="margin:auto;float:left">#{{ pede[0].bugId + 1 }}</span>
+                                        <span style="margin:auto;float:right">{{ pede[0].isFemale }}</span>
+                                <div [ngClass]="getMendelpede(pede[0].phenotype)" style="margin: auto"
+                                (click)="sendPede(pede[0])">
+                                </div>
                         </div>
-                        <div *ngIf="pede[0].phenotype === null" class="mpede-empty" 
-                        select-droppable (onDropSuccess)="sendPede($event, pede[0].bugId)">
+                        <div *ngIf="pede[0].phenotype === null" style="margin: auto;width: 115px">
+                                <div  class="mpede-empty" style="margin:auto">
                                         
+                                </div>
                         </div>
                 </div>
                 <div class="col-3 p-0 col-xl-6 border" style="margin: auto">
-                        <div *ngIf="pede[1].phenotype !== null" [ngClass]="getMendelpede(pede[1].phenotype)" style="margin: auto"
-                        (click)="sendPede(pede[1])">
-                                        <span>{{ pede[1].bugId + 1 }}</span>
-                                        <span style="float:right">{{ pede[1].isFemale }}</span>
+                        <div *ngIf="pede[1].phenotype !== null" style="margin: auto;width: 115px">
+                                        <span style="margin:auto;float:left">#{{ pede[1].bugId + 1 }}</span>
+                                        <span style="margin:auto;float:right">{{ pede[1].isFemale }}</span>
+                                <div [ngClass]="getMendelpede(pede[1].phenotype)" style="margin: auto"
+                                (click)="sendPede(pede[1])">
+                                </div>
                         </div>
-                        <div *ngIf="pede[1].phenotype === null" class="mpede-empty" 
-                        select-droppable (onDropSuccess)="sendPede($event, pede[1].bugId)">
-                                
+                        <div *ngIf="pede[1].phenotype === null" style="margin: auto;width: 115px">
+                                <div  class="mpede-empty" style="margin:auto">
+                                        
+                                </div>
                         </div>
                 </div>
         </div>

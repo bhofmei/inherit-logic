@@ -22,11 +22,6 @@ export class OptionsComponent implements OnInit{
   discoveries: MendelpedeScenario[] = Array();
   pathways: MendelpedeScenario[] = Array();
 
-  s: number;
-  q: number;
-  d: number;
-  p: number;
-
   errorMessage: string;
   private sSubscription: Subscription;
 
@@ -40,24 +35,16 @@ export class OptionsComponent implements OnInit{
     this.user = this._authenticationService.getUser();
     this.sSubscription = this._scenarioService.listScenarios()
         .subscribe((options) => {
-          this.s = 0;
-          this.q = 0;
-          this.p = 0;
-          this.d = 0;
           this.options = options;
           this.options.forEach((option) => {
             if (option.scenType === 'scenario') {
-              this.scenarios[this.s] = option;
-              this.s++;
+              this.scenarios.push(option);
             } else if(option.scenType === 'quiz'){
-              this.quizes[this.q] = option;
-              this.q++;
+              this.quizes.push(option);
             } else if(option.scenType === 'discovery'){
-              this.discoveries[this.d] = option;
-              this.d++;
+              this.discoveries.push(option);
             }else if(option.scenType === 'pathway'){
-              this.pathways[this.p] = option;
-              this.p++;
+              this.pathways.push(option);
             }
           });
           this.scenarios = this.scenarios.sort((o1, o2) => {

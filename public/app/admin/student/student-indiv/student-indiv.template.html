@@ -45,22 +45,118 @@
     </div>
     <!-- end student info -->
 
-    <div id="student-scenarios">
-      <h5>Scenarios</h5>
-      <div class="list-group">
-        <div *ngFor="let scenario of scenarios" class="list-group-item justify-content-between d-flex">
-          <div class="">
-            <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(scenario.scenCode) }}</span>
+    <div class="accordion" id="accordionExample" style="margin: auto">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                Cricket Scenarios
+              </button>
+            </h5>
           </div>
-          <div class="btn-group" role="group">
-            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="student.accessGranted[scenario.scenCode]">Grant access</button>
-            <a [routerLink]="['./', scenario.scenCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
-          </div>
+      
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="list-group mt-2">
+                  <div id="student-scenarios">
+                      <div class="list-group">
+                        <div *ngFor="let scenario of scenarios" class="list-group-item justify-content-between d-flex">
+                          <div class="">
+                            <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(scenario.scenCode) }}</span>
+                          </div>
+                          <div class="btn-group" role="group">
+                            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.scenCode)" [disabled]="student.accessGranted[scenario.scenCode]">Grant access</button>
+                            <a [routerLink]="['./cricket/', scenario.scenCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
+                          </div>
+                        </div>
+                        <!-- end list-group-item -->
+                      </div>
+                      <!-- end list-group -->
+                    </div>
+              </div>
+            </div>
         </div>
-        <!-- end list-group-item -->
-      </div>
-      <!-- end list-group -->
     </div>
+    
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+          <h5 class="mb-0">
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Mendelpede
+            </button>
+          </h5>
+        </div>
+    
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+          
+          <div class="card-body">
+            <div class="list-group mt-2">
+                <div id="student-scenarios">
+                    <div class="list-group">
+                        <div class="justify-content-between d-flex mb-3" id="scenario-info">
+                            <div class="text-weight-bold text-primary mr-2">Scenarios</div>
+                        </div>
+                      <div *ngFor="let scenario of mpedeScenarios" class="list-group-item justify-content-between d-flex">
+                        <div class="">
+                          <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(scenario.shortCode) }}</span>
+                        </div>
+                        <div class="btn-group" role="group">
+                          <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.shortCode)" [disabled]="student.accessGranted[scenario.shortCode]">Grant access</button>
+                          <a [routerLink]="['./mendelpede/', scenario.shortCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
+                        </div>
+                      </div>
+                      <div class="row d-flex mb-3" id="scenario-info">
+                        </div>
+                      <div class="justify-content-between d-flex mb-3" id="scenario-info">
+                          <div class="text-weight-bold text-primary mr-2">Quizes</div>
+                      </div>
+                      <div *ngFor="let quiz of quizes" class="list-group-item justify-content-between d-flex">
+                          <div class="">
+                            <span class="scenario-label">{{quiz.label}}:</span> <span class="text-secondary"> {{ getScenStatus(quiz.shortCode) }}</span>
+                          </div>
+                          <div class="btn-group" role="group">
+                            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(quiz.shortCode)" [disabled]="student.accessGranted[quiz.shortCode]">Grant access</button>
+                            <a [routerLink]="['./mendelpede/', quiz.shortCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
+                          </div>
+                      </div>
+                      <div class="row d-flex mb-3" id="scenario-info">
+                        </div>
+                      <div class="justify-content-between d-flex mb-3" id="scenario-info">
+                          <div class="text-weight-bold text-primary mr-2">Discoveries</div>
+                      </div>
+                      <div *ngFor="let discovery of discoveries" class="list-group-item justify-content-between d-flex">
+                          <div class="">
+                            <span class="scenario-label">{{discovery.label}}:</span> <span class="text-secondary"> {{ getScenStatus(discovery.shortCode) }}</span>
+                          </div>
+                          <div class="btn-group" role="group">
+                            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(discovery.shortCode)" [disabled]="student.accessGranted[discovery.shortCode]">Grant access</button>
+                            <a [routerLink]="['./mendelpede/', discovery.shortCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
+                          </div>
+                      </div>
+                      <div class="row d-flex mb-3" id="scenario-info">
+                        </div>
+                      <div class="justify-content-between d-flex mb-3" id="scenario-info">
+                          <div class="text-weight-bold text-primary mr-2">Pathways</div>
+                      </div>
+                      <div *ngFor="let pathway of pathways" class="list-group-item justify-content-between d-flex">
+                          <div class="">
+                            <span class="scenario-label">{{pathway.label}}:</span> <span class="text-secondary"> {{ getScenStatus(pathway.shortCode) }}</span>
+                          </div>
+                          <div class="btn-group" role="group">
+                            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(pathway.shortCode)" [disabled]="student.accessGranted[pathway.shortCode]">Grant access</button>
+                            <a [routerLink]="['./mendelpede/', pathway.shortCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
+                          </div>
+                      </div>
+                      <!-- end list-group-item -->
+                    </div>
+                    <!-- end list-group -->
+                  </div>
+            </div>
+          </div>
+      </div>
+  </div>
+    </div>
+    
     <!-- end student-scenarios -->
   </div>
   <!-- end if student -->

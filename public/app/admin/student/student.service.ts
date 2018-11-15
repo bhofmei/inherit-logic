@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { AdminStudent, StudentFridge } from '../../interfaces';
+import { AdminStudent, StudentFridge, StudentMendelFridge } from '../../interfaces';
 
 /**
  * Service which deals with all student-related backend calls
@@ -90,6 +90,22 @@ export class StudentService {
   getFridge(adminId: number, studentId: number, scenId: string): Observable<StudentFridge>{
     return this._http
             .get<StudentFridge>(`${this._baseURL}/${adminId}/students/${studentId}/${scenId}`);
+  }
+
+  /**
+   * Get scenario fridge for a student; includes fridge details such as
+   * fridge strains and guesses
+   * @param {number} adminId - userId of logged in user
+   * @param {number} studentId - userId of student
+   * @param {string} scenId - scenario Id for fridge to find
+   *
+   * @returns{Observable<StudentFridge>} - the student's fridge
+   * - an empty fridge if the fridge doesn't exist yet
+   * - or other server error
+   */
+  getMendelFridge(adminId: number, studentId: number, scenId: string): Observable<StudentMendelFridge>{
+    return this._http
+            .get<StudentMendelFridge>(`${this._baseURL}/${adminId}/mendel-students/${studentId}/${scenId}`);
   }
 
   /**

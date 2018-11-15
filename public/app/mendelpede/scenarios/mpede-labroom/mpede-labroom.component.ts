@@ -60,6 +60,7 @@ export class MendelpedeLabroomComponent implements OnInit{
     this.malePede = {bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null};
     this._initChildPedes();
     this._emptyStoragePedes();
+    this.undoSpotList = [];
     this.femalePede = {bugId: 1, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null}
   }
 
@@ -138,7 +139,7 @@ export class MendelpedeLabroomComponent implements OnInit{
    */
   dropPede(pede: MendelpedePede){
     console.log('dropping pede')
-    if (pede.isFemale === 'M'){
+    if (pede.isFemale === 'M' && this.malePede.phenotype === null){
       this.malePede = {
         bugId: pede.bugId, 
         genotype: pede.genotype, 
@@ -148,7 +149,10 @@ export class MendelpedeLabroomComponent implements OnInit{
         scenCode: pede.scenCode,
         id: pede.id
       }
-    } else{
+      if(this.femalePede.phenotype !== null){
+        this.createChildPedes();
+      }
+    } else if (pede.isFemale === 'F' && this.femalePede.phenotype === null){
       this.femalePede = {
         bugId: pede.bugId, 
         genotype: pede.genotype, 
@@ -158,8 +162,11 @@ export class MendelpedeLabroomComponent implements OnInit{
         scenCode: pede.scenCode,
         id: pede.id
       }
+      if(this.malePede.phenotype !== null){
+        this.createChildPedes();
+      }
     }
-    this.createChildPedes();
+    
   }
 
   createChildPedes(){
