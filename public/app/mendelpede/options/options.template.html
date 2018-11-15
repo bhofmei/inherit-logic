@@ -1,4 +1,5 @@
-<div class="accordion" id="accordionExample" style="width: 800px;margin: auto">
+<div class="container">
+<div *ngIf="user" class="accordion" id="accordionExample" style="width: 800px;margin: auto">
     <div class="card">
       <div class="card-header" id="headingOne">
         <h5 class="mb-0">
@@ -65,3 +66,8 @@
         </div>
       </div>
   </div>
+  <div *ngIf="!user" class="col-12">
+      <p>
+        <a [routerLink]="['/authentication/signin']">Sign in</a> or <a [routerLink]="['/authentication/signup']">Sign up</a> to see scenarios.</p>
+    </div>
+</div>

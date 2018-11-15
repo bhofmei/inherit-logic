@@ -101,6 +101,9 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
                 console.log(mfridge)
               this.fridge = mfridge;
               this.currGenoFacts = JSON.parse(mfridge.genoFacts)
+              if (this.currGenoFacts !== null){
+                this.hasFridge = true
+              }
               console.log('we got genofacts')
               console.log(this.currGenoFacts)
               //this.pedes = this.fridge.pedeList;

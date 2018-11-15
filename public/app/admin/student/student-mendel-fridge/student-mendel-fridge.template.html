@@ -2,23 +2,23 @@
         <div *ngIf="errorMessage !== ''" class="alert alert-danger">
           {{ errorMessage }}
         </div>
-        <div *ngIf="!fridge" id="no-fridge">
-                Fridge does not exist yet
-        </div>
-        <div *ngIf="fridge">
           <div class="row" id="student-name">
             <a [routerLink]="['../']" class="text-dark">
               <h4>{{ fridge.owner | personName }}</h4>
             </a>
           </div>
-      
+          
           <div class="row d-flex mb-3" id="scenario-info">
             <div class="text-weight-bold text-primary mr-2">{{ fridge.scenario.scenCode }}</div>
             <div class="text-secondary">{{ fridge.scenario.label }}</div>
-            <div class="ml-auto">
+            <!--<div class="ml-auto">
               Access granted: {{ fridge.accessGranted }}
-            </div>
+            </div>-->
           </div>
+          <div *ngIf="!hasFridge" id="no-fridge">
+              Fridge does not exist yet
+          </div>
+          <div *ngIf="hasFridge">
           <div class="row d-flex mb-3" id="scenario-info">
                 <div class="text-weight-bold text-primary mr-2">GenoFacts</div>
             </div>
