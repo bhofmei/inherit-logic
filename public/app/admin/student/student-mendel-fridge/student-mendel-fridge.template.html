@@ -4,7 +4,7 @@
         </div>
         <div *ngIf="!fridge" id="no-fridge">
                 Fridge does not exist yet
-              </div>
+        </div>
         <div *ngIf="fridge">
           <div class="row" id="student-name">
             <a [routerLink]="['../']" class="text-dark">
@@ -19,59 +19,74 @@
               Access granted: {{ fridge.accessGranted }}
             </div>
           </div>
+          <div class="row d-flex mb-3" id="scenario-info">
+                <div class="text-weight-bold text-primary mr-2">GenoFacts</div>
+            </div>
+                <div class="m-0 row border" >
+                        <div class="col-2 col-xl-2">
+                            <div class="text-weight-bold text-primary mr-2">Dom</div>
+                        </div>
+                        <div class="col-2 col-xl-2">
+                            <div class="text-weight-bold text-primary mr-2">Inherit</div>
+                        </div>
+                        <div class="col-2 col-xl-2">
+                            <div class="text-weight-bold text-primary mr-2">Rec</div>
+                        </div>
+                        <div class="col-2 col-xl-2">
+                            <div class="text-weight-bold text-primary mr-2">Trait</div>
+                        </div>
+                </div>
+                <div class="ist-group-item m-0 row border" *ngFor="let genoFacts of currGenoFacts" > 
+                        <div class="col-2 col-xl-2">
+                            {{ genoFacts.dom }}
+                        </div>
+                        <div class="col-2 col-xl-2">
+                                {{ genoFacts.inherit }}
+                        </div>
+                        <div class="col-2 col-xl-2">
+                                {{ genoFacts.rec }}
+                        </div>
+                        <div class="col-2 col-xl-2">
+                                {{ genoFacts.trait }}
+                        </div>
+                </div>
+                <div class="row d-flex mb-3" id="scenario-info">
+                    </div>
+            <div class="row d-flex mb-3" id="scenario-info">
+                    <div class="text-weight-bold text-primary mr-2">MendelPedes</div>
+                </div>
           <!-- end not hasFridge -->
           <div id="fridge-outer">
-            <!--<div class="row m-0">
-              <div class="btn-group" role="group">
-                <button [ngClass]="getButtonClass('all')" (click)="setPhage('all')">All Strains</button>
-                <button [ngClass]="getButtonClass('graded')" (click)="setPhage('graded')">Graded Strains</button>
-              </div>
-            </div>-->
             <div class="list-group mt-3" id="fridge">
-              <div class="list-group-item" *ngFor="let pede of pedes">
-                <div class="row">
-                        <div class="strain-num text-primary col-2 col-xl-1" id="phageNum">
+              
+                <div class="ist-group-item m-0 row border" *ngFor="let pede of fridge.pedes">
+                        <div class="strain-num text-primary col-2 col-xl-1">
                           {{ pede.bugId + 1 }}
+                        </div>
+                        <div class="col-2 col-xl-5" id="genoType">
+                        <div [ngClass]="getMendelpede(pede.phenotype)" class="col-xl-2 p-0" style="margin: auto">
+                        </div>
                         </div>
                         <!-- phage.strainNum -->
                         <div class="col-2 col-xl-1" id="genoType">
-                            <div class="row">
-                              {{ pede.genotype }}
-                            </div>
-                          <div class="row phageImage">
-                            <span [class]="'p-0 strain-image strain-image-'+phage.phageType"></span>
-                          </div>
-                        </div> <!-- end phageType -->
-                        <div class="col-6 col-xl-10" id="phage-details">
-                          <div class="row phage-row-comment">
-                            <label for="phageComment" class="col-sm-3 text-secondary col-label">Comment</label>
-                            <div class="col-sm-9" id="phageComment">{{ phage.comment }}</div>
-                          </div>
-                          <div class="row phage-row-mutations" *ngIf="phage.mutationList.length > 0">
-                            <label for="phageMutations" class="col-sm-3 text-secondary col-label">Mutations</label>
-                            <div class="col-sm-9" id="phageMutations">
-                              {{ phage.mutationList | phageMutations }}
-                            </div>
-                          </div>
-                          <!-- end phage-row-mutations -->
-                          <div class="row phage-row-deletions" *ngIf="phage.deletion.length > 0">
-                            <label for="phageDeletion" class="col-sm-3 text-secondary col-label">Deletion</label>
-                            <div class="col-sm-9" id="phageDeletion">
-                              {{phage.deletion | phageDeletions}}
-                            </div>
-                          </div>
-                          <!-- end phage-row-deletion -->
-                          <div class="row phage-row-guesses" *ngIf="phage.guesses.length > 0">
-                            <label for="phageGuess" class="col-sm-3 text-secondary col-label">Guess</label>
-                            <div class="col-sm-9" id="phageGuess">
-                              {{ phage.guesses | phageGuesses }}
-                            </div>
-                          </div>
-                          <!-- end phage-row-deletion -->
-                        </div>
+                            {{pede.genotype}}
+                              <!--{{ pede.genotype | pedeGenotype:fridge.scenario.scenCode }}-->
+        
+                        </div> 
+                        <div class="col-2 col-xl-1" id="genoType">
+                            
+                                {{ pede.isFemale }}
+          
+                          </div> 
+                          <div class="col-2 col-xl-4" id="genoType">
+                            
+                                {{ pede.phenotype }}
+          
+                          </div> 
+                        <!-- end phageType -->
                         <!-- end phage-details -->
                         </div>
-              </div>
+              
             </div> <!-- end fridge -->
           </div>
           <!-- end hasFridge -->

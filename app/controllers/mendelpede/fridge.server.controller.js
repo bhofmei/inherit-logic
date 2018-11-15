@@ -275,7 +275,31 @@ exports.getStudentFridge = function(req, res){
         };
         res.json(out);
       } else {
-        res.json(fridge);
+        let ret = {
+          owner: {
+            firstName: student.firstName,
+            lastName: student.lastName,
+            userId: student.userId
+          },
+          scenario: {
+            scenCode: scen.shortCode,
+            label: scen.label
+          },
+          pedes: fridge.pedeList.map((pede) => {
+            return {
+            bugId: pede.bugID,
+            isFemale: pede.isFemale?'F':'M',
+            genotype: pede.genotype,
+            //genotype: pede.genotype,
+            phenotype: pede.phenotype,
+            id: pede.id
+            }
+          }
+          ),
+          accessGranted: fridge.accessGranted,
+          genoFacts: fridge.genoFacts
+        }
+        res.json(ret);
       }
     });
 }

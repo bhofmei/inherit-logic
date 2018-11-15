@@ -35,6 +35,8 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
    */
   private paramObserver: any;
 
+  private currGenoFacts: any;
+
   /**
    * Option to show all strains in fridge or
    * only strains of interest for grading (unknown
@@ -46,7 +48,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
   /**
    * List of phage currently being viewed
    */
-  private pedes: MendelpedePede[];
+  pedes: MendelpedePede[];
   /**
    * Error message from the server
    */
@@ -57,6 +59,25 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
     private _studentService: StudentService,
     private _authService: AuthenticationService){
     this.isDestroyed$ = new Subject<boolean>();
+  }
+  /**
+   * Gets CSS classes 
+   *
+   * @returns {Object} classes wh
+   */
+
+  getMendelpede(phenotype: string[]): Object{
+    var mpedeCssClass: {} = {};
+    
+    // create css classes using traits
+    var segcol: string = 'mpede-bodycol-'+phenotype[2];
+    var eyecol: string = 'mpede-eyecol-'+phenotype[1]
+    var imurl: string = 'mpede-pede-'+phenotype[0].toLowerCase()+'-seg'+phenotype[4]+'-leg'+phenotype[3]+'-min'
+    mpedeCssClass[segcol] = true
+    mpedeCssClass[eyecol] = true
+    mpedeCssClass[imurl] = true
+    mpedeCssClass['sizeI'] = true
+    return mpedeCssClass
   }
 
   /**
@@ -75,12 +96,14 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
 
       this._studentService.getMendelFridge(admin.id, studentId, scenId)
         .takeUntil(this.isDestroyed$)
-              .subscribe((fridge) => {
-                
-              this.fridge = fridge;
-              this.pedes = this.fridge.pedes;
-              console.log('we got fridge')
-                console.log(this.fridge)
+              .subscribe((mfridge) => {
+                console.log('we got fridge from db')
+                console.log(mfridge)
+              this.fridge = mfridge;
+              this.currGenoFacts = JSON.parse(mfridge.genoFacts)
+              console.log('we got genofacts')
+              console.log(this.currGenoFacts)
+              //this.pedes = this.fridge.pedeList;
               //this.hasFridge = (fridge.strains !== undefined);
               /*if(this.hasFridge){
                 let guesses = JSON.parse(this.fridge.guesses);
