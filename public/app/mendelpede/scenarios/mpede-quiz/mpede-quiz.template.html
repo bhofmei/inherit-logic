@@ -1,0 +1,33 @@
+<div class="card bg-light border-dark" style="width:25rem; margin: auto">
+    <div class="card-header row m-0">
+        <h4 class="card-title mb-0 pl-0 col-6" style="margin: auto">Quiz</h4>
+    </div>
+    <div class="card-body">
+        <div class="text-weight-bold text-primary mr-2">Your task is to determine dominance and the genotype of each individual for: {{quizTrait | pedeQuizTrait}}</div>
+        <div style="padding-top: 28px"></div>
+        <div class = "row m-0" *ngFor="let pede of quizAnswers; let i=index">
+            <div class="col" [ngClass]="getQuizBackgroundColor(actualAnswers[i])" style="padding-top: 15px">Mendelpede {{pede.id+1}}:</div>
+            <div class="col p-2 btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="pede.answer">
+                
+                <label ngbButtonLabel class="btn btn-primary">
+                    <input ngbButton type="radio" value="AA"> AA
+                </label>
+                
+                <label ngbButtonLabel class="btn btn-primary">
+                    <input ngbButton type="radio" value="Aa"> Aa
+                </label>
+                
+                <label ngbButtonLabel class="btn btn-primary">
+                    <input ngbButton type="radio" value="aa"> aa
+                </label>
+            </div>
+        </div>
+        <div style="padding-top: 29px"></div>
+        <div *ngIf="quizSubmitted">
+            <button type="button" style="margin: auto" disabled (click)="submitQuiz()" class="btn btn-primary">Submit Quiz</button> 
+        </div> 
+        <div *ngIf="!quizSubmitted">
+            <button type="button" style="margin: auto" (click)="submitQuiz()" class="btn btn-primary">Submit Quiz</button> 
+        </div>
+    </div>
+</div>

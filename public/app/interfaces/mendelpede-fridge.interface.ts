@@ -6,7 +6,7 @@ import { _User } from './user.interface';
  */
 export interface MendelpedeFridge {
   
-  id: number;
+  id: string;
 
   /**
    * Has access already been granted for this user/scenario;
@@ -25,6 +25,10 @@ export interface MendelpedeFridge {
   pedes: MendelpedePede[];
 
   genoFacts: string;
+
+  firstTraitForQuiz?: string;
+
+  quizScore?: string;
   
 }
 
@@ -50,5 +54,8 @@ export interface StudentMendelFridge {
   accessGranted?: boolean;
 
   genoFacts: string;
+
+  quizScore?: string
+
 }
 

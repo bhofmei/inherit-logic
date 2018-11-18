@@ -66,7 +66,7 @@
                         </div>
                         <div class="col-2">
                                 <div *ngIf="undoSpotList.length === 0">
-                                        <button type="button" style="margin: auto" (click)="undoPede()" class="btn btn-primary btn-xs disabled">undo</button>  
+                                        <button type="button" disabled style="margin: auto" (click)="undoPede()" class="btn btn-primary btn-xs">undo</button>  
                                 </div>
                                 <div *ngIf="undoSpotList.length > 0">
                                         <button type="button" style="margin: auto" (click)="undoPede()" class="btn btn-primary btn-xs">undo</button>  
@@ -84,7 +84,7 @@
                                                 <div class="ls-strain m-0 row" *ngIf="pederow === storablePedes[0]">
                                                         <div class="col-xl-4">
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype === null">
-                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs disabled">store</button>  
+                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-primary btn-xs">store</button>  
                                                                 </div>
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype !== null">
                                                                         <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">store</button>  
@@ -110,7 +110,7 @@
                                                 <div class="ls-strain m-0 row" *ngIf="pederow === storablePedes[1]">
                                                         <div class="col-xl-4">
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype === null">
-                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs disabled">store</button>  
+                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-primary btn-xs">store</button>  
                                                                 </div>
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype !== null">
                                                                         <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">store</button>  

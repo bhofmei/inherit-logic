@@ -24,6 +24,47 @@ exports.makeChildren = function (req, res){
   res.json(children);
 }
 
+exports.calculateQuizScore = function(req, res){
+  var reqBody = req.body;
+  var quizPedes = reqBody.quizPedes;
+  var studentAnswers = reqBody.studentAnswers;
+  var fridgeId = reqBody.fridgeId
+
+
+  var gradedQuiz = []
+  var quizScore = 0;
+  for (let i = 0; i < quizPedes.length; i++){
+    quizPedes[i]['genotype'] = JSON.parse(cryptr.decrypt(quizPedes[i]['genotype']));
+    var scenCode = quizPedes[i]['scenCode']
+    var genoList = [[0,0], [1,0], [2,0], [1,0], [1,1], [2,1], [2,0], [2,1], [2,2]];
+    var regGenoStr = ['a', 'A', '?'];
+    var alleleGenoStr = ['A<sup>0</sup>', 'A<sup>1</sup>', 'A<sup>2</sup>']
+    var geno = genoList[quizPedes[i]['genotype'][0]];
+
+    gradedQuiz.push(regGenoStr[geno[0]] + regGenoStr[geno[1]] === studentAnswers[i]['answer'])
+    if(gradedQuiz[i]){
+      quizScore++;
+    }
+  }
+  var quizFinalScore = quizScore+"/8";
+  console.log('**********')
+  console.log(quizFinalScore)
+  console.log(fridgeId)
+  MendelFridge.update({_id: fridgeId}, 
+      {
+        $set:{
+        quizScore: quizScore
+      }
+    }, 
+    (err) => {
+      if(err){
+        console.log('error occurred');
+      }
+    }
+  );
+  res.json(gradedQuiz)
+}
+
 exports.getPede = function(req, res, next, id){
   console.log('*************************getPede method');
   MendelPede.findOne({

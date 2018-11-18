@@ -11,6 +11,9 @@
           <div class="row d-flex mb-3" id="scenario-info">
             <div class="text-weight-bold text-primary mr-2">{{ fridge.scenario.scenCode }}</div>
             <div class="text-secondary">{{ fridge.scenario.label }}</div>
+            <div class="text-secondary" style="padding-right: 700px" *ngIf="isQuiz && hasFridge">
+                  Score: {{fridge.quizScore}}
+            </div>
             <!--<div class="ml-auto">
               Access granted: {{ fridge.accessGranted }}
             </div>-->
@@ -24,30 +27,30 @@
             </div>
                 <div class="m-0 row border" >
                         <div class="col-2 col-xl-2">
-                            <div class="text-weight-bold text-primary mr-2">Dom</div>
+                            <div class="text-weight-bold text-primary mr-2">Trait</div>
                         </div>
                         <div class="col-2 col-xl-2">
                             <div class="text-weight-bold text-primary mr-2">Inherit</div>
                         </div>
                         <div class="col-2 col-xl-2">
-                            <div class="text-weight-bold text-primary mr-2">Rec</div>
+                            <div class="text-weight-bold text-primary mr-2">Dom</div>
                         </div>
                         <div class="col-2 col-xl-2">
-                            <div class="text-weight-bold text-primary mr-2">Trait</div>
+                            <div class="text-weight-bold text-primary mr-2">Rec</div>
                         </div>
                 </div>
                 <div class="ist-group-item m-0 row border" *ngFor="let genoFacts of currGenoFacts" > 
                         <div class="col-2 col-xl-2">
+                                {{ genoFacts.trait }}
+                        </div>
+                        <div class="col-2 col-xl-2">
+                            {{ genoFacts.inherit }}
+                        </div>
+                        <div class="col-2 col-xl-2">
                             {{ genoFacts.dom }}
                         </div>
                         <div class="col-2 col-xl-2">
-                                {{ genoFacts.inherit }}
-                        </div>
-                        <div class="col-2 col-xl-2">
-                                {{ genoFacts.rec }}
-                        </div>
-                        <div class="col-2 col-xl-2">
-                                {{ genoFacts.trait }}
+                            {{ genoFacts.rec }}
                         </div>
                 </div>
                 <div class="row d-flex mb-3" id="scenario-info">

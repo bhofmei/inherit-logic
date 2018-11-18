@@ -20,22 +20,20 @@ import { Pipe, PipeTransform } from '@angular/core';
  * @example <caption>Invalid :  </caption>
  * <code>10</code> becomes "invalid"
  */
-@Pipe({name: 'pedeGenotype'})
-export class PedeGenotypePipe implements PipeTransform {
+@Pipe({name: 'pedeQuizTrait'})
+export class PedeQuizTraitPipe implements PipeTransform {
 
-  transform(pedeGenotype: number, scenCode: string): string {
-    if(pedeGenotype > 8){
-      return 'invalid'
-    }
-    // includes ordering alleles by dominance
-    var genoList = [[0,0], [1,0], [2,0], [1,0], [1,1], [2,1], [2,0], [2,1], [2,2]];
-    var regGenoStr = ['a', 'A', '?'];
-    var alleleGenoStr = ['A<sup>0</sup>', 'A<sup>1</sup>', 'A<sup>2</sup>']
-    var geno = genoList[pedeGenotype];
-    if(scenCode === "MultAlleles"){ // potentially include  || scenCode === "MultGenes"
-      return alleleGenoStr[geno[0]] + alleleGenoStr[geno[1]]
-    } else {
-      return regGenoStr[geno[0]] + regGenoStr[geno[1]]
+  transform(quizTrait: string): string {
+    if (quizTrait === "DotColor"){
+      return "Color of dot"
+    } else if (quizTrait === "SegColor"){
+      return "Color of body segment"
+    } else if (quizTrait === "EyeColor"){
+      return "Color of eyes"
+    } else if (quizTrait === "NumSegments"){
+      return "Number of segments"
+    } else if (quizTrait === "NumLegs"){
+      return "Number of Legs"
     }
   }
 }

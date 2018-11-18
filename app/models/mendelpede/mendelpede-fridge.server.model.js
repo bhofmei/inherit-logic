@@ -18,7 +18,11 @@ const MendelFridgeSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'MendelPede'
   }],
-  genoFacts: String
+  genoFacts: String,
+  /**
+   * Only in case of quiz scenario
+   */
+  quizScore: String
 });
 
 MendelFridgeSchema.set('toJSON', {getters: true});
