@@ -99,18 +99,21 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
       this._studentService.getMendelFridge(admin.id, studentId, scenId)
         .takeUntil(this.isDestroyed$)
               .subscribe((mfridge) => {
-                console.log('we got fridge from db')
+                //console.log('we got fridge from db')
               this.fridge = mfridge;
               this.fridge.owner = mfridge.owner;
               if(this.fridge.scenario.scenCode.toUpperCase().includes('QUIZ')){
                 this.isQuiz = true;
               }
-              this.currGenoFacts = JSON.parse(mfridge.genoFacts)
-              if (this.currGenoFacts !== null){
-                this.hasFridge = true
+              if(mfridge.genoFacts){
+                this.currGenoFacts = JSON.parse(mfridge.genoFacts)
+                if (this.currGenoFacts !== null){
+                  this.hasFridge = true
+                }
               }
-              console.log('we got fridge')
-              console.log(this.fridge)
+              
+              //console.log('we got fridge')
+              //console.log(this.fridge)
             },
                 (error) => {
               this.errorMessage = readErrorMessage(error);

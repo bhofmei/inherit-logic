@@ -50,7 +50,7 @@ export class MendelpedeQuizComponent{
   }
 
   ngOnInit(){
-    console.log('getting Mendelpedes for quiz');
+    //console.log('getting Mendelpedes for quiz');
 
     this._scenarioService.getQuizPedes
     .takeUntil(this.isDestroyed$)
@@ -77,17 +77,17 @@ export class MendelpedeQuizComponent{
   @Input() mendelFridge: MendelpedeFridgeComponent;
   
   submitQuiz(){
-    console.log('submitting the quiz')
-    console.log(this.quizAnswers)
-    console.log(this.quizPedes)
+    //console.log('submitting the quiz')
+    //console.log(this.quizAnswers)
+    //console.log(this.quizPedes)
     this.quizSubmitted = true
     this._scenarioService.calculateQuizScore(this.quizPedes, this.quizAnswers, this.quizFridgeId)
     .takeUntil(this.isDestroyed$)
     .subscribe((answers) => {
       this.actualAnswers = answers;
       this.quizSubmitted = true
-      console.log('we got the answers');
-      console.log(this.actualAnswers);
+      //console.log('we got the answers');
+      //console.log(this.actualAnswers);
     })
   }
 

@@ -78,7 +78,7 @@ const getMendelFridgeInfo = function (mendelFridge) {
  * @yields {200_OK} Newly created fridge cleaned by [getFridgeInfo]{@link #getFridgeInfo}
  */
 exports.stockMendelFridge = function (req, res) {
-  console.log('Create fridge method called.....')
+  //console.log('Create fridge method called.....')
   var user = req.curUser;
   var scen = req.scenario;
   // determine if access granted -> default true bc of testing
@@ -165,7 +165,7 @@ exports.insertPedeToFridge = function(req, res){
         }
       }).exec((err, mendelFridge) => {
         if (err) {
-          console.log('error occured while getting fridge');
+          //console.log('error occured while getting fridge');
         } else{
           pedeToBeInserted.owner = mendelFridge.owner;
           pedeToBeInserted.scenario = mendelFridge.scenario;
@@ -233,13 +233,13 @@ exports.getMendelFridge = function (req, res) {
     })
     .exec((err, mendelFridge) => {
       if (err) {
-        console.log('error in get fridge: '+err);
+        //console.log('error in get fridge: '+err);
         return res.status(500)
           .send({
             message: getErrorMessage(err)
           });
       } else if (!mendelFridge) {
-        console.log('no fridge');
+        //console.log('no fridge');
         return res.status(307)
           .send({
             message: 'No fridge for scenario/user'
@@ -247,7 +247,7 @@ exports.getMendelFridge = function (req, res) {
       } else { 
         mendelFridge.genoFacts = cryptr.encrypt(mendelFridge.genoFacts);
         let i = getMendelFridgeInfo(mendelFridge);
-        console.log(scen);
+        //console.log(scen);
         if (scen.shortCode.toUpperCase().includes("QUIZ")){
           
           i['firstTraitForQuiz'] = JSON.parse(cryptr.decrypt(mendelFridge.genoFacts))[0]['trait'];
@@ -312,7 +312,7 @@ exports.getStudentFridge = function(req, res){
           genoFacts: fridge.genoFacts,
           quizScore: fridge.quizScore
         }
-        console.log(ret);
+        //console.log(ret);
         res.json(ret);
       }
     });

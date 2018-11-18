@@ -47,9 +47,9 @@ exports.calculateQuizScore = function(req, res){
     }
   }
   var quizFinalScore = quizScore+"/8";
-  console.log('**********')
-  console.log(quizFinalScore)
-  console.log(fridgeId)
+  //console.log('**********')
+  //console.log(quizFinalScore)
+  //console.log(fridgeId)
   MendelFridge.update({_id: fridgeId}, 
       {
         $set:{
@@ -58,7 +58,7 @@ exports.calculateQuizScore = function(req, res){
     }, 
     (err) => {
       if(err){
-        console.log('error occurred');
+        //console.log('error occurred');
       }
     }
   );
@@ -66,15 +66,23 @@ exports.calculateQuizScore = function(req, res){
 }
 
 exports.getPede = function(req, res, next, id){
-  console.log('*************************getPede method');
+  //console.log('*************************getPede method');
   MendelPede.findOne({
     _id: id
   },(error, pede) => {
     if(error){
-      console.log('error occured');
+      //console.log('error occured');
+      return res.status(400)
+              .send({
+                message: 'Error occurred while getting pede'
+              });
     }
     if(!pede){
-      console.log('No pede found');
+      //console.log('No pede found');
+      return res.status(400)
+              .send({
+                message: 'No pede found'
+              });
     }
     if(pede.isFemale){
       req.femalePede = pede;

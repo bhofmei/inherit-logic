@@ -165,7 +165,7 @@ export class MendelpedeScenarioService {
    * - or other server/database error
    */
   createMendelFridge(userId: number, scenShortCode: string): Observable<MendelpedeFridge> {
-    console.log('userid...'+userId+' scenario short code:..'+scenShortCode);
+    //console.log('userid...'+userId+' scenario short code:..'+scenShortCode);
     return this._http.get<MendelpedeFridge>(`${this._baseURL}/${userId}/${scenShortCode}/new-fridge`);
   }
 
@@ -183,8 +183,8 @@ export class MendelpedeScenarioService {
    */
   makeChildren(malePede: MendelpedePede, femalePede: MendelpedePede, genoFacts: string): Observable<MendelpedePede[]> {
     
-    console.log(genoFacts);
-    console.log(typeof genoFacts);
+    //console.log(genoFacts);
+    //console.log(typeof genoFacts);
     var genoFactsObj = {
       'genoFacts': genoFacts,
       'malePede': malePede,
@@ -194,8 +194,8 @@ export class MendelpedeScenarioService {
   }
 
   insertPede(pede: MendelpedePede, fridge: MendelpedeFridge): Observable<MendelpedeFridge> {
-    console.log(pede);
-    console.log(fridge);
+    //console.log(pede);
+    //console.log(fridge);
     let isF: boolean = pede.isFemale==='F'?true:false
     var insertObj = {
       'fridgeId' : fridge.id,
@@ -206,7 +206,7 @@ export class MendelpedeScenarioService {
         phenotype: pede.phenotype,
       }
     }
-    console.log(insertObj);
+    //console.log(insertObj);
     return this._http.post<MendelpedeFridge>(`${this._baseURL}/add-pede`, insertObj);
   }
 
@@ -231,7 +231,7 @@ export class MendelpedeScenarioService {
    * - or other server/database error
    */
   getMendelFridge(userId: number, scenShortCode: string): Observable<MendelpedeFridge> {
-    console.log('userId--'+userId+' Scen short code: '+scenShortCode);
+    //console.log('userId--'+userId+' Scen short code: '+scenShortCode);
     return this._http.get<MendelpedeFridge>(`${this._baseURL}/${userId}/${scenShortCode}`);
     
   }
