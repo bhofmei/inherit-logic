@@ -49,7 +49,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   /**
    * currently visible pedes based on shelf number 1D
    */
-  currPedes_1d: MendelpedePede[];
+  currPedes_1d: MendelpedePede[] = [];
 
   /**
    * maximum number of shelves in fridge
@@ -89,7 +89,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    * 3b. If the fridge does exist, initialize it
    */
   ngOnInit(){
-    console.log('ng init......');
+    //console.log('ng init......');
     this.user = this._authenticationService.getUser();
 
     let userId = this.user.id;
@@ -98,14 +98,14 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
       this._scenarioService.getMendelFridge(userId, scenShortCode)
         .takeUntil(this.isDestroyed$)
         .subscribe(
-          (fridge) => {console.log(fridge);
+          (fridge) => {
             this._initFridge(fridge);},
           (err) => {
             if(err.status === 307){
-            console.log('creating a new fridge');
+            //console.log('creating a new fridge');
             this._createMendelFridge(userId, scenShortCode);
           } else {
-            console.log('error message'+ err);
+            //console.log('error message'+ err);
             this.errorMessage = readErrorMessage(err);
           } }
         );
@@ -144,8 +144,8 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     this._scenarioService.createMendelFridge(userId, scenShortCode)
     .takeUntil(this.isDestroyed$)
       .subscribe((fridge)=>{
-        console.log('we got the new fridge: ');
-        console.log(fridge);
+        //console.log('we got the new fridge: ');
+        //console.log(fridge);
       this._initFridge(fridge);
     }, (err)=>{
       this.errorMessage = readErrorMessage(err);
@@ -159,6 +159,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     let start = this.shelf*this.spots;
     let end = start+this.spots;
     this.currPedes_1d = this.pedeList.slice(start,end);
+    this._scenarioService.setQuizPedes(this.currPedes_1d);
     var ind: number = 0;
     
     this.currPedes = [];
@@ -169,8 +170,8 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
         ind++;
       }
     }
-    console.log('setting currpedes');
-    console.log(this.currPedes);
+    //console.log('setting currpedes');
+    //console.log(this.currPedes);
     
   }
 
@@ -182,9 +183,17 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    */
   _initFridge(newFridge: MendelpedeFridge){
     this.fridge = newFridge;
+    //console.log(this.fridge);
     this.pedeList = this._fillPedes(newFridge.pedes);
     this._currPedes();
     this._scenarioService.setScenario(newFridge.genoFacts);
+    this._scenarioService.setFridgeId(newFridge.id);
+    this._scenarioService.setFirstTraitForQuiz(newFridge.firstTraitForQuiz);
+    if(this.fridge.quizScore.toUpperCase().includes('QUIZ NOT SUBMITTED YET')){
+      this._scenarioService.setQuizDone(false);
+    }else{
+      this._scenarioService.setQuizDone(true);
+    }
   }
 
   /**
@@ -231,7 +240,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
 
   @HostListener('sendPede')
   sendPede(pede: MendelpedePede){
-    console.log('click event called');
+    //console.log('click event called');
     this.labroom.dropPede(pede)
   }
 
@@ -240,14 +249,13 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     this._scenarioService.insertPede(pedeToStore, this.fridge)
     .takeUntil(this.isDestroyed$)
       .subscribe((fridge)=>{
-        console.log('we got the new after inserted fridge: ');
-        console.log(fridge);
+        //console.log('we got the new after inserted fridge: ');
+        //console.log(fridge);
       this._initFridge(fridge);
     }, (err)=>{
       this.errorMessage = readErrorMessage(err);
     });
   }
-  
 
   /**
    * Set visible shelf to a specific number;

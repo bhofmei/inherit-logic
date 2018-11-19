@@ -23,6 +23,9 @@ module.exports = function (app) {
   app.route('/api/mendelpede/add-pede')
     .post(mendelFridge.insertPedeToFridge);
 
+  app.route('/api/mendelpede/calculate-score')
+    .post(genetics.calculateQuizScore);
+
   app.param('userId', user.userById);
   app.param('scenShortCode', scenarios.scenarioByCode);
 };

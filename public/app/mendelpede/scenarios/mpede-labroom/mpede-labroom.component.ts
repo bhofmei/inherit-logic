@@ -88,7 +88,7 @@ export class MendelpedeLabroomComponent implements OnInit{
 
   @HostListener('storePede')
   storePede(pedeToStore: MendelpedePede){
-    console.log('button pressed');
+    //console.log('button pressed');
     this.mendelFridge.storePede(pedeToStore);
   }
 
@@ -124,8 +124,8 @@ export class MendelpedeLabroomComponent implements OnInit{
     }else {
       this.childPedes.pop();
     }
-    console.log('stack of pedes');
-    console.log(this.storablePedes);
+    //console.log('stack of pedes');
+    //console.log(this.storablePedes);
   }
 
   /**
@@ -138,7 +138,7 @@ export class MendelpedeLabroomComponent implements OnInit{
    * @param {number} spot - slot to drop new strain
    */
   dropPede(pede: MendelpedePede){
-    console.log('dropping pede')
+    //console.log('dropping pede')
     if (pede.isFemale === 'M' && this.malePede.phenotype === null){
       this.malePede = {
         bugId: pede.bugId, 
@@ -181,10 +181,10 @@ export class MendelpedeLabroomComponent implements OnInit{
           .subscribe(
             (childPedes) => {
               this.childPedes = childPedes;
-              console.log(this.childPedes);
+              //console.log(this.childPedes);
             },
             (err) => {
-              console.log('error occurred');
+              //console.log('error occurred');
               this.errorMessage = err;
             }
           );

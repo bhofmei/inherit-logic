@@ -56,7 +56,8 @@ const getMendelFridgeInfo = function (mendelFridge) {
     userId: mendelFridge.owner.userId,
     pedes: pedeList,
     shortCode: mendelFridge.scenario.shortCode,
-    id: mendelFridge.id
+    id: mendelFridge.id,
+    quizScore: mendelFridge.quizScore
   }
 }
 
@@ -77,7 +78,7 @@ const getMendelFridgeInfo = function (mendelFridge) {
  * @yields {200_OK} Newly created fridge cleaned by [getFridgeInfo]{@link #getFridgeInfo}
  */
 exports.stockMendelFridge = function (req, res) {
-  console.log('Create fridge method called.....')
+  //console.log('Create fridge method called.....')
   var user = req.curUser;
   var scen = req.scenario;
   // determine if access granted -> default true bc of testing
@@ -119,7 +120,8 @@ exports.stockMendelFridge = function (req, res) {
     accessGranted: access,
     owner: user,
     pedeList: pedeIdList,
-    genoFacts: JSON.stringify(stock.genoFacts)
+    genoFacts: JSON.stringify(stock.genoFacts),
+    quizScore: 'Quiz not submitted yet'
   };
   // save fridge
   MendelFridge.create(newFridge, (err, fridge) => {
@@ -130,7 +132,12 @@ exports.stockMendelFridge = function (req, res) {
       });
     else {
       fridge.genoFacts = cryptr.encrypt(fridge.genoFacts);
+
       let i = getMendelFridgeInfo(fridge);
+
+      if (scen.shortCode.toUpperCase().includes("QUIZ")){
+        i['firstTraitForQuiz'] = JSON.parse(cryptr.decrypt(fridge.genoFacts))[0]['trait'];
+      } 
       res.json(i);
     }
   });
@@ -158,7 +165,7 @@ exports.insertPedeToFridge = function(req, res){
         }
       }).exec((err, mendelFridge) => {
         if (err) {
-          console.log('error occured while getting fridge');
+          //console.log('error occured while getting fridge');
         } else{
           pedeToBeInserted.owner = mendelFridge.owner;
           pedeToBeInserted.scenario = mendelFridge.scenario;
@@ -226,13 +233,13 @@ exports.getMendelFridge = function (req, res) {
     })
     .exec((err, mendelFridge) => {
       if (err) {
-        console.log('error in get fridge: '+err);
+        //console.log('error in get fridge: '+err);
         return res.status(500)
           .send({
             message: getErrorMessage(err)
           });
       } else if (!mendelFridge) {
-        console.log('no fridge');
+        //console.log('no fridge');
         return res.status(307)
           .send({
             message: 'No fridge for scenario/user'
@@ -240,6 +247,11 @@ exports.getMendelFridge = function (req, res) {
       } else { 
         mendelFridge.genoFacts = cryptr.encrypt(mendelFridge.genoFacts);
         let i = getMendelFridgeInfo(mendelFridge);
+        //console.log(scen);
+        if (scen.shortCode.toUpperCase().includes("QUIZ")){
+          
+          i['firstTraitForQuiz'] = JSON.parse(cryptr.decrypt(mendelFridge.genoFacts))[0]['trait'];
+        } 
         res.json(i);
       }
     });
@@ -297,8 +309,10 @@ exports.getStudentFridge = function(req, res){
           }
           ),
           accessGranted: fridge.accessGranted,
-          genoFacts: fridge.genoFacts
+          genoFacts: fridge.genoFacts,
+          quizScore: fridge.quizScore
         }
+        //console.log(ret);
         res.json(ret);
       }
     });

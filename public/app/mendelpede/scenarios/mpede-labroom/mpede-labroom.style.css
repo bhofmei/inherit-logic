@@ -387,7 +387,15 @@ background-image: url(/img/pedes/pede-yellow-seg5-leg1-min.png);
 .mpede-pede-yellow-seg5-leg2-min{
 background-image: url(/img/pedes/pede-yellow-seg5-leg2-min.png);
 }
-  .mpede-empty{
-    height: 128px;
-    width: 68px;
-  }
+
+.mpede-empty{
+  height: 128px;
+  width: 68px;
+}
+
+.btn-group-xs > .btn, .btn-xs {
+  padding  : .60rem .8rem;
+  font-size  : .950rem;
+  line-height  : .5;
+  border-radius : .2rem;
+}

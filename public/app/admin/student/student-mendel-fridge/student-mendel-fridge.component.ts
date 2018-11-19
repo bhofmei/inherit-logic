@@ -37,6 +37,8 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
 
   private currGenoFacts: any;
 
+  protected isQuiz: boolean = false;
+
   /**
    * Option to show all strains in fridge or
    * only strains of interest for grading (unknown
@@ -97,27 +99,21 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
       this._studentService.getMendelFridge(admin.id, studentId, scenId)
         .takeUntil(this.isDestroyed$)
               .subscribe((mfridge) => {
-                console.log('we got fridge from db')
-                console.log(mfridge)
+                //console.log('we got fridge from db')
               this.fridge = mfridge;
-              this.currGenoFacts = JSON.parse(mfridge.genoFacts)
-              console.log('we got genofacts')
-              console.log(this.currGenoFacts)
-              //this.pedes = this.fridge.pedeList;
-              //this.hasFridge = (fridge.strains !== undefined);
-              /*if(this.hasFridge){
-                let guesses = JSON.parse(this.fridge.guesses);
-                for(let strain of this.fridge.strains){
-                  let x = guesses[strain.strainNum];
-                  if(x){
-                    strain.guesses = x;
-                  } else{
-                    strain.guesses = [];
-                  }
+              this.fridge.owner = mfridge.owner;
+              if(this.fridge.scenario.scenCode.toUpperCase().includes('QUIZ')){
+                this.isQuiz = true;
+              }
+              if(mfridge.genoFacts){
+                this.currGenoFacts = JSON.parse(mfridge.genoFacts)
+                if (this.currGenoFacts !== null){
+                  this.hasFridge = true
                 }
-                this.fridge.strains.sort((a,b)=>{return a.strainNum - b.strainNum});
-              }*/
-              //this.setPhage('all');
+              }
+              
+              //console.log('we got fridge')
+              //console.log(this.fridge)
             },
                 (error) => {
               this.errorMessage = readErrorMessage(error);

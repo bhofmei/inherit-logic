@@ -98,10 +98,10 @@
                         </div>
                       <div *ngFor="let scenario of mpedeScenarios" class="list-group-item justify-content-between d-flex">
                         <div class="">
-                          <span class="scenario-label">{{scenario.label}}:</span> <span class="text-secondary"> {{ getScenStatus(scenario.shortCode) }}</span>
+                          <span class="scenario-label">{{scenario.label}}</span> <!--<span class="text-secondary"> {{ getScenStatus(scenario.shortCode) }}</span>-->
                         </div>
                         <div class="btn-group" role="group">
-                          <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.shortCode)" [disabled]="student.accessGranted[scenario.shortCode]">Grant access</button>
+                          <!--<button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(scenario.shortCode)" [disabled]="student.accessGranted[scenario.shortCode]">Grant access</button>-->
                           <a [routerLink]="['./mendelpede/', scenario.shortCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
                         </div>
                       </div>
@@ -112,10 +112,10 @@
                       </div>
                       <div *ngFor="let quiz of quizes" class="list-group-item justify-content-between d-flex">
                           <div class="">
-                            <span class="scenario-label">{{quiz.label}}:</span> <span class="text-secondary"> {{ getScenStatus(quiz.shortCode) }}</span>
+                            <span class="scenario-label">{{quiz.label}}</span> <!--<span class="text-secondary"> {{ getScenStatus(quiz.shortCode) }}</span>-->
                           </div>
                           <div class="btn-group" role="group">
-                            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(quiz.shortCode)" [disabled]="student.accessGranted[quiz.shortCode]">Grant access</button>
+                            <!--<button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(quiz.shortCode)" [disabled]="student.accessGranted[quiz.shortCode]">Grant access</button>-->
                             <a [routerLink]="['./mendelpede/', quiz.shortCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
                           </div>
                       </div>
@@ -126,10 +126,10 @@
                       </div>
                       <div *ngFor="let discovery of discoveries" class="list-group-item justify-content-between d-flex">
                           <div class="">
-                            <span class="scenario-label">{{discovery.label}}:</span> <span class="text-secondary"> {{ getScenStatus(discovery.shortCode) }}</span>
+                            <span class="scenario-label">{{discovery.label}}</span> <!--<span class="text-secondary"> {{ getScenStatus(discovery.shortCode) }}</span>-->
                           </div>
                           <div class="btn-group" role="group">
-                            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(discovery.shortCode)" [disabled]="student.accessGranted[discovery.shortCode]">Grant access</button>
+                            <!--<button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(discovery.shortCode)" [disabled]="student.accessGranted[discovery.shortCode]">Grant access</button>-->
                             <a [routerLink]="['./mendelpede/', discovery.shortCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
                           </div>
                       </div>
@@ -140,10 +140,10 @@
                       </div>
                       <div *ngFor="let pathway of pathways" class="list-group-item justify-content-between d-flex">
                           <div class="">
-                            <span class="scenario-label">{{pathway.label}}:</span> <span class="text-secondary"> {{ getScenStatus(pathway.shortCode) }}</span>
+                            <span class="scenario-label">{{pathway.label}}</span> <!--<span class="text-secondary"> {{ getScenStatus(pathway.shortCode) }}</span>-->
                           </div>
                           <div class="btn-group" role="group">
-                            <button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(pathway.shortCode)" [disabled]="student.accessGranted[pathway.shortCode]">Grant access</button>
+                            <!--<button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(pathway.shortCode)" [disabled]="student.accessGranted[pathway.shortCode]">Grant access</button>-->
                             <a [routerLink]="['./mendelpede/', pathway.shortCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
                           </div>
                       </div>

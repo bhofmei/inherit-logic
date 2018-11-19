@@ -40,6 +40,24 @@ export class MendelpedeScenarioService {
    */
    private _scenarioGenoFacts = new BehaviorSubject<any>({});
    getGenoFacts = this._scenarioGenoFacts.asObservable();
+
+   /**
+    * Quiz Pedes
+    */
+   private _quizPedes = new BehaviorSubject<any>([]);
+   getQuizPedes = this._quizPedes.asObservable();
+  
+  /**
+   * Quiz traits
+   */
+   private _firstTraitForQuiz = new BehaviorSubject<string>("");
+   getFirstTraitForQuiz = this._firstTraitForQuiz.asObservable();
+
+   private _fridgeId = new BehaviorSubject<string>("");
+   getFridgeId = this._fridgeId.asObservable();
+
+   private _isQuizDone = new BehaviorSubject<boolean>(false);
+   isQuizDone = this._isQuizDone.asObservable();
   /**
    * The current scenario code
    *
@@ -75,7 +93,40 @@ export class MendelpedeScenarioService {
             this._scenarioGenoFacts
               .next(scenarioGenoFacts);
     }
+  /**
+   * set first trait fro quiz
+   */
+  setFirstTraitForQuiz(firstTraitForQuiz: string){
+    if (this._firstTraitForQuiz != null){
+      this._firstTraitForQuiz
+      .next(firstTraitForQuiz);
+    }
+  }
+  
+  /**
+   * set the pedes for quiz
+   */
+  setQuizPedes(quizPedes: MendelpedePede[]) {
+    if (this._quizPedes !== null){
+      this._quizPedes.next(quizPedes);
+    }
+  }
 
+  /**
+   * set the fridge id
+   */
+  setFridgeId(id: string) {
+    if (this._fridgeId !== null){
+      this._fridgeId.next(id);
+    }
+  }
+
+  /**
+   * Is quiz done?
+   */
+  setQuizDone(quizDone: boolean) {
+    this._isQuizDone.next(quizDone);
+  }
 
   /**
    * The current scenario code
@@ -114,7 +165,7 @@ export class MendelpedeScenarioService {
    * - or other server/database error
    */
   createMendelFridge(userId: number, scenShortCode: string): Observable<MendelpedeFridge> {
-    console.log('userid...'+userId+' scenario short code:..'+scenShortCode);
+    //console.log('userid...'+userId+' scenario short code:..'+scenShortCode);
     return this._http.get<MendelpedeFridge>(`${this._baseURL}/${userId}/${scenShortCode}/new-fridge`);
   }
 
@@ -132,8 +183,8 @@ export class MendelpedeScenarioService {
    */
   makeChildren(malePede: MendelpedePede, femalePede: MendelpedePede, genoFacts: string): Observable<MendelpedePede[]> {
     
-    console.log(genoFacts);
-    console.log(typeof genoFacts);
+    //console.log(genoFacts);
+    //console.log(typeof genoFacts);
     var genoFactsObj = {
       'genoFacts': genoFacts,
       'malePede': malePede,
@@ -143,8 +194,8 @@ export class MendelpedeScenarioService {
   }
 
   insertPede(pede: MendelpedePede, fridge: MendelpedeFridge): Observable<MendelpedeFridge> {
-    console.log(pede);
-    console.log(fridge);
+    //console.log(pede);
+    //console.log(fridge);
     let isF: boolean = pede.isFemale==='F'?true:false
     var insertObj = {
       'fridgeId' : fridge.id,
@@ -155,8 +206,17 @@ export class MendelpedeScenarioService {
         phenotype: pede.phenotype,
       }
     }
-    console.log(insertObj);
+    //console.log(insertObj);
     return this._http.post<MendelpedeFridge>(`${this._baseURL}/add-pede`, insertObj);
+  }
+
+  calculateQuizScore(quizPedes: MendelpedePede[], studentAnswers: string[], quizFridgeId: string): Observable<boolean[]> {
+    var scoreHelperObj = {
+      quizPedes: quizPedes,
+      studentAnswers: studentAnswers,
+      fridgeId : quizFridgeId
+    }
+    return this._http.post<boolean[]>(`${this._baseURL}/calculate-score`, scoreHelperObj);
   }
 
     /**
@@ -171,7 +231,7 @@ export class MendelpedeScenarioService {
    * - or other server/database error
    */
   getMendelFridge(userId: number, scenShortCode: string): Observable<MendelpedeFridge> {
-    console.log('userId--'+userId+' Scen short code: '+scenShortCode);
+    //console.log('userId--'+userId+' Scen short code: '+scenShortCode);
     return this._http.get<MendelpedeFridge>(`${this._baseURL}/${userId}/${scenShortCode}`);
     
   }

@@ -174,6 +174,23 @@ export class CourseService {
   }
 
   /**
+   * Get scenario status (aka access granted) for a scenario for all students in a course
+   *
+   * @param {number} adminId userId of the logged in user who is an admin or instr
+   * @param {string} courseNum course number of course
+   * @param {string} scenId scenCode of scenario of interest
+   *
+   * @returns {Observable<Student[]>} - list of students in course each with properties `firstName`, `lastName`, `userId`, and `status`
+   * - or "no students found" if no students in the course
+   * - or "Failed to load course <courseNum> if course doesn't exist
+   * - or other server/database error
+   */
+  getMendelScenarioStatus(adminId: number, courseNum: string, scenId: string): Observable<Student[]>{
+    return this._http
+      .get<Student[]>(`${this._baseURL}/${adminId}/mendel-courses/${courseNum}/${scenId}`);
+  }
+
+  /**
    * Get list of course numbers for all available courses
    *
    * @returns {Observable<any>} - list of courses with properties `courseNum` and `id`

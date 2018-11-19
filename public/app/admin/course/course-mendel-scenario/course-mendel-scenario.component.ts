@@ -5,11 +5,11 @@ import { Subject } from 'rxjs';
 
 
 import { CourseService } from '../course.service';
-import { CricketService } from '../../../cricket/cricket.service';
+import { MendelpedeScenarioService } from '../../../mendelpede/scenarios/mendelpede-scenarios.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { StudentService } from '../../student/student.service';
 
-import { Course, Student, Scenario, User } from '../../../interfaces/';
+import { Course, Student, User, MendelpedeScenario } from '../../../interfaces/';
 
 import { readErrorMessage } from '../../../shared/read-error';
 
@@ -20,11 +20,11 @@ import { readErrorMessage } from '../../../shared/read-error';
  */
 @Component({
   selector: 'course-scen',
-  templateUrl: './course-scenario.template.html',
-  styleUrls: ['./course-scenario.style.css']
+  templateUrl: './course-mendel-scenario.template.html',
+  styleUrls: ['../course-scenario/course-scenario.style.css']
 })
 
-export class CourseScenarioComponent implements OnInit, OnDestroy {
+export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
 
   /**
    * List of students in the course
@@ -37,7 +37,7 @@ export class CourseScenarioComponent implements OnInit, OnDestroy {
   /**
    * Information about the scenario
    */
-  protected scenario: Scenario;
+  protected scenario: MendelpedeScenario;
   /**
    * State variable to make unsubscribing from services easier
    */
@@ -60,7 +60,7 @@ export class CourseScenarioComponent implements OnInit, OnDestroy {
     private _authService: AuthenticationService,
     private _courseService: CourseService,
     private _studentService: StudentService,
-    private _scenarioService: CricketService
+    private _scenarioService: MendelpedeScenarioService
               ){
     this.isDestroyed$ = new Subject<boolean>();
   }
@@ -77,14 +77,14 @@ export class CourseScenarioComponent implements OnInit, OnDestroy {
     this.paramObserver = this._route.params
       .subscribe(params => {
           let course = params['courseNum'];
-          let scenCode = params['scenId'];
+          let scenCode = params['scenShortCode'];
       this.courseNum = course.toUpperCase();
       this._scenarioService.getScenario(scenCode)
         .takeUntil(this.isDestroyed$)
         .subscribe((res)=>{
           // success
           this.scenario = res;
-        this._courseService.getScenarioStatus(this.admin.id, course, scenCode)
+        this._courseService.getMendelScenarioStatus(this.admin.id, course, scenCode)
           .takeUntil(this.isDestroyed$)
           .subscribe((stats)=>{
 
@@ -112,28 +112,6 @@ export class CourseScenarioComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Calls service to grant the student access to the scenario
-   *
-   * Called on `(click)` of "Grant access" button for a student
-   *
-   * @param {number} studentIndex - positional index of student in the list of students;
-   * This is **NOT** the student's userId
-   */
-  grantAccess(studentIndex: number){
-    let scenId = this.scenario.scenCode;
-    let studentId = this.students[studentIndex].userId;
-    this._studentService.grantScenAccess(this.admin.id, studentId, scenId, true)
-      .takeUntil(this.isDestroyed$)
-      .subscribe((res)=>{
-        if(res !== undefined && res !== null){
-          this.students[studentIndex].status = res.accessGranted[scenId];
-        }
-    }, (err)=>{
-      this.errorMessage = readErrorMessage(err);
-    })
-  }
-
-  /**
    * On "View Fridge" button, navigates to that student's fridge
    * for this scenario
    *
@@ -142,7 +120,7 @@ export class CourseScenarioComponent implements OnInit, OnDestroy {
    * @param {number} studentId - the student's userID
    */
   goToFridge(studentId: number){
-    this._router.navigate(['/admin/students/', studentId,'cricket', this.scenario.scenCode]);
+    this._router.navigate(['/admin/students/', studentId,'mendelpede', this.scenario.shortCode]);
   }
 
   /**

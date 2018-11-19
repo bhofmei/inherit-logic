@@ -2,52 +2,56 @@
         <div *ngIf="errorMessage !== ''" class="alert alert-danger">
           {{ errorMessage }}
         </div>
-        <div *ngIf="!fridge" id="no-fridge">
-                Fridge does not exist yet
-        </div>
         <div *ngIf="fridge">
           <div class="row" id="student-name">
             <a [routerLink]="['../']" class="text-dark">
               <h4>{{ fridge.owner | personName }}</h4>
             </a>
           </div>
-      
+          
           <div class="row d-flex mb-3" id="scenario-info">
             <div class="text-weight-bold text-primary mr-2">{{ fridge.scenario.scenCode }}</div>
             <div class="text-secondary">{{ fridge.scenario.label }}</div>
-            <div class="ml-auto">
-              Access granted: {{ fridge.accessGranted }}
+            <div class="text-secondary" style="padding-left: 900px" *ngIf="isQuiz && hasFridge">
+                  Score: {{fridge.quizScore}}
             </div>
+            <!--<div class="ml-auto">
+              Access granted: {{ fridge.accessGranted }}
+            </div>-->
           </div>
+          <div *ngIf="!hasFridge" id="no-fridge">
+              Fridge does not exist yet
+          </div>
+          <div *ngIf="hasFridge">
           <div class="row d-flex mb-3" id="scenario-info">
                 <div class="text-weight-bold text-primary mr-2">GenoFacts</div>
             </div>
                 <div class="m-0 row border" >
                         <div class="col-2 col-xl-2">
-                            <div class="text-weight-bold text-primary mr-2">Dom</div>
+                            <div class="text-weight-bold text-primary mr-2">Trait</div>
                         </div>
                         <div class="col-2 col-xl-2">
                             <div class="text-weight-bold text-primary mr-2">Inherit</div>
                         </div>
                         <div class="col-2 col-xl-2">
-                            <div class="text-weight-bold text-primary mr-2">Rec</div>
+                            <div class="text-weight-bold text-primary mr-2">Dom</div>
                         </div>
                         <div class="col-2 col-xl-2">
-                            <div class="text-weight-bold text-primary mr-2">Trait</div>
+                            <div class="text-weight-bold text-primary mr-2">Rec</div>
                         </div>
                 </div>
                 <div class="ist-group-item m-0 row border" *ngFor="let genoFacts of currGenoFacts" > 
                         <div class="col-2 col-xl-2">
+                                {{ genoFacts.trait }}
+                        </div>
+                        <div class="col-2 col-xl-2">
+                            {{ genoFacts.inherit }}
+                        </div>
+                        <div class="col-2 col-xl-2">
                             {{ genoFacts.dom }}
                         </div>
                         <div class="col-2 col-xl-2">
-                                {{ genoFacts.inherit }}
-                        </div>
-                        <div class="col-2 col-xl-2">
-                                {{ genoFacts.rec }}
-                        </div>
-                        <div class="col-2 col-xl-2">
-                                {{ genoFacts.trait }}
+                            {{ genoFacts.rec }}
                         </div>
                 </div>
                 <div class="row d-flex mb-3" id="scenario-info">
@@ -94,3 +98,4 @@
         </div>
         <!-- end if fridge -->
       </div>
+    </div>
