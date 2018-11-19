@@ -27,7 +27,7 @@ const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 
 const getPedeInfo = function(pede){
   return {
-      bugId: pede.bugID,
+      bugID: pede.bugID,
       isFemale: pede.isFemale?'F':'M',
       genotype: cryptr.encrypt(JSON.stringify(pede.genotype)),
       //genotype: pede.genotype,
@@ -299,7 +299,7 @@ exports.getStudentFridge = function(req, res){
           },
           pedes: fridge.pedeList.map((pede) => {
             return {
-            bugId: pede.bugID,
+            bugID: pede.bugID,
             isFemale: pede.isFemale?'F':'M',
             genotype: pede.genotype,
             //genotype: pede.genotype,

@@ -206,12 +206,12 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   _fillPedes(fridgePedes: MendelpedePede[]): MendelpedePede[]{
     var out: MendelpedePede[] = [];
     for(let i = 0; i < this.maxShelf*this.spots; i++){
-      out.push({bugId: i, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null});
+      out.push({bugID: i, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null});
     }
-    this.nextSpot = fridgePedes[0].bugId + 1;
+    this.nextSpot = fridgePedes[0].bugID + 1;
     // add original pedes
     for(let i=0; i < fridgePedes.length; i++){
-      let n = fridgePedes[i].bugId;
+      let n = fridgePedes[i].bugID;
       out[n] = fridgePedes[i];
       this.nextSpot = (n === this.nextSpot ? n+1 : this.nextSpot);
     }
@@ -245,7 +245,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   }
 
   storePede(pedeToStore: MendelpedePede){
-    pedeToStore.bugId = this.fridge.pedes.length;
+    pedeToStore.bugID = this.fridge.pedes.length;
     this._scenarioService.insertPede(pedeToStore, this.fridge)
     .takeUntil(this.isDestroyed$)
       .subscribe((fridge)=>{

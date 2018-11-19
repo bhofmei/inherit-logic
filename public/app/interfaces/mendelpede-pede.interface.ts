@@ -15,7 +15,7 @@ export interface MendelpedePede {
    */
   scenCode: string;
 
-  bugId: number;
+  bugID: number;
 
   isFemale: string;
 
