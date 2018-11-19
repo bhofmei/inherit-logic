@@ -112,10 +112,11 @@
                       </div>
                       <div *ngFor="let quiz of quizes" class="list-group-item justify-content-between d-flex">
                           <div class="">
-                            <span class="scenario-label">{{quiz.label}}</span> <!--<span class="text-secondary"> {{ getScenStatus(quiz.shortCode) }}</span>-->
+                            <span class="scenario-label">{{quiz.label}}</span> 
                           </div>
                           <div class="btn-group" role="group">
                             <!--<button class="btn btn-outline-secondary btn-sm" (click)="grantAccess(quiz.shortCode)" [disabled]="student.accessGranted[quiz.shortCode]">Grant access</button>-->
+                            <span style="padding-right: 10px" class="text-secondary"> Score: {{ getQuizScore(quiz.shortCode) }}</span>
                             <a [routerLink]="['./mendelpede/', quiz.shortCode]" class="btn btn-outline-primary btn-sm">View fridge</a>
                           </div>
                       </div>

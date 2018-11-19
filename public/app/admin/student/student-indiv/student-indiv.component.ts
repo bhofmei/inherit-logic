@@ -63,6 +63,8 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
    * New role to change to if allowed
    */
     private newRole: string;
+
+    private scoreMap: Map<string, number> = new Map<string, number>(); 
   /**
    * List of all Mendelpede scenarios
    */
@@ -116,6 +118,22 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
                         if (option.scenType === 'scenario') {
                           this.mpedeScenarios.push(option);
                         } else if(option.scenType === 'quiz'){
+                          this.paramObserver = this._route.params.subscribe(params => {
+                            let studentId = params['studentId'];
+                            let scenId = params['scenShortCode'];
+                            let admin = this._authService.getUser();
+                      
+                            this._studentService.getMendelFridge(admin.id, studentId, option.shortCode)
+                              .takeUntil(this.isDestroyed$)
+                                    .subscribe((mfridge) => {
+                                      //console.log('we got fridge from db')
+                                    var score = mfridge.quizScore;
+                                    this.scoreMap[option.shortCode] = score;
+                                  },
+                                      (error) => {
+                                    this.errorMessage = readErrorMessage(error);
+                                  });
+                              });
                           this.quizes.push(option);
                         } else if(option.scenType === 'discovery'){
                           this.discoveries.push(option);
@@ -164,7 +182,8 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
                 (error) => {
                     this.errorMessage = readErrorMessage(error);
                 });
-
+                //console.log(this.scoreMap);
+                
         });
     }
 
@@ -184,6 +203,12 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
         } else {
             return 'NA'
         }
+    }
+
+    getQuizScore(scenId: string){
+      //console.log(this.scoreMap);
+      //console.log(scenId);
+      return this.scoreMap[scenId];
     }
 
   /**
