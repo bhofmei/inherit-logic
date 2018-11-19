@@ -15,7 +15,7 @@
                                 </div>
                         </div>
                       <div class="m-0 row" style="width: auto">
-                                <div class="col-3 p-0 col-l-6 border" style="margin: auto">
+                                <div class="col-3 p-0 col-l-6 border border-dark" style="margin: auto">
                                         <div *ngIf="malePede.phenotype !== null" style="margin: auto;width: 120px">
                                                         <span style="margin:auto;float:left">#{{ malePede.bugId + 1 }}</span>
                                                         <span style="margin:auto;float:right">{{ malePede.isFemale }}</span>
@@ -28,7 +28,7 @@
                                                 </div>
                                         </div>
                                 </div>
-                                <div class="col-3 p-0 col-l-6 border" style="margin: auto">
+                                <div class="col-3 p-0 col-l-6 border border-dark" style="margin: auto">
                                         <div *ngIf="childPedes[childPedes.length-1].phenotype !== null" style="margin: auto;width: 120px">
                                                         <span style="margin:auto;float:left">#{{ childPedes.length }}</span>
                                                         <span style="margin:auto;float:right">{{ childPedes[childPedes.length-1].isFemale }}</span>
@@ -41,7 +41,7 @@
                                                 </div>
                                         </div>
                                 </div>
-                                <div class="col-3 p-0 col-l-6 border" style="margin: auto">
+                                <div class="col-3 p-0 col-l-6 border border-dark" style="margin: auto">
                                         <div *ngIf="femalePede.phenotype !== null" style="margin: auto;width: 120px">
                                                         <span style="margin:auto;float:left">#{{ femalePede.bugId + 1 }}</span>
                                                         <span style="margin:auto;float:right">{{ femalePede.isFemale }}</span>
@@ -62,14 +62,14 @@
                         </div>
                       <div class="ls-strain m-0 row">
                         <div class="col-2">
-                                <button type="button" style="margin: auto" (click)="clearAll()" class="btn btn-primary btn-xs">clear</button> 
+                                <button type="button" style="margin: auto" (click)="clearAll()" class="btn btn-secondary">Clear</button> 
                         </div>
                         <div class="col-2">
                                 <div *ngIf="undoSpotList.length === 0">
-                                        <button type="button" disabled style="margin: auto" (click)="undoPede()" class="btn btn-primary btn-xs">undo</button>  
+                                        <button type="button" disabled style="margin: auto" (click)="undoPede()" class="btn btn-primary">Undo</button>  
                                 </div>
                                 <div *ngIf="undoSpotList.length > 0">
-                                        <button type="button" style="margin: auto" (click)="undoPede()" class="btn btn-primary btn-xs">undo</button>  
+                                        <button type="button" style="margin: auto" (click)="undoPede()" class="btn btn-primary">Undo</button>  
                                 </div>
                         </div>
                       </div>
@@ -82,17 +82,17 @@
                                 <div *ngFor="let pederow of storablePedes" class="ls-strain m-0 row">
                                         <div *ngFor="let pedes of pederow" style="margin: auto">
                                                 <div class="ls-strain m-0 row" *ngIf="pederow === storablePedes[0]">
-                                                        <div class="col-xl-4">
+                                                        <div class="col-xl-4" style="padding-left: 25px;padding-bottom: 10px">
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype === null">
-                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-primary btn-xs">store</button>  
+                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-primary btn-xs">Store</button>  
                                                                 </div>
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype !== null">
-                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">store</button>  
+                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">Store</button>  
                                                                 </div>
                                                         </div>
                                                 </div>
                                                 <div class="ls-strain m-0 row">
-                                                        <div class="col-xl-14 p-0 border" style="margin: auto">
+                                                        <div class="col-xl-14 p-0 border border-dark" style="margin: auto">
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype !== null" style="margin: auto;width: 115px">
                                                                                 <span style="margin:auto;float:left">#{{ pedes.length-1 }}</span>
                                                                                 <span style="margin:auto;float:right">{{ pedes[pedes.length-1].isFemale }}</span>
@@ -108,12 +108,12 @@
                                                         </div>
                                                 </div>
                                                 <div class="ls-strain m-0 row" *ngIf="pederow === storablePedes[1]">
-                                                        <div class="col-xl-4">
+                                                        <div class="col-xl-4" style="padding-left: 25px; padding-top: 10px">
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype === null">
-                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-primary btn-xs">store</button>  
+                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-primary btn-xs">Store</button>  
                                                                 </div>
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype !== null">
-                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">store</button>  
+                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">Store</button>  
                                                                 </div>
                                                         </div>
                                                 </div>
