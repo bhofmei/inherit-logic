@@ -1,0 +1,6 @@
+.quiz-bg-color{
+    background-color: green
+}
+input[type="radio"] {
+    margin-right: 0;
+  }

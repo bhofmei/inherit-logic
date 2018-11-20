@@ -1,0 +1,101 @@
+<div class="container">
+        <div *ngIf="errorMessage !== ''" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+        <div *ngIf="fridge">
+          <div class="row" id="student-name">
+            <a [routerLink]="['../']" class="text-dark">
+              <h4>{{ fridge.owner | personName }}</h4>
+            </a>
+          </div>
+          
+          <div class="row d-flex mb-3" id="scenario-info">
+            <div class="text-weight-bold text-primary mr-2">{{ fridge.scenario.scenCode }}</div>
+            <div class="text-secondary">{{ fridge.scenario.label }}</div>
+            <div class="text-secondary" style="padding-left: 900px" *ngIf="isQuiz && hasFridge">
+                  Score: {{fridge.quizScore}}
+            </div>
+            <!--<div class="ml-auto">
+              Access granted: {{ fridge.accessGranted }}
+            </div>-->
+          </div>
+          <div *ngIf="!hasFridge" id="no-fridge">
+              Fridge does not exist yet
+          </div>
+          <div *ngIf="hasFridge">
+          <div class="row d-flex mb-3" id="scenario-info">
+                <div class="text-weight-bold text-primary mr-2">GenoFacts</div>
+            </div>
+                <div class="m-0 row border" >
+                        <div class="col-2 col-xl-2">
+                            <div class="text-weight-bold text-primary mr-2">Trait</div>
+                        </div>
+                        <div class="col-2 col-xl-2">
+                            <div class="text-weight-bold text-primary mr-2">Inherit</div>
+                        </div>
+                        <div class="col-2 col-xl-2">
+                            <div class="text-weight-bold text-primary mr-2">Dom</div>
+                        </div>
+                        <div class="col-2 col-xl-2">
+                            <div class="text-weight-bold text-primary mr-2">Rec</div>
+                        </div>
+                </div>
+                <div class="ist-group-item m-0 row border" *ngFor="let genoFacts of currGenoFacts" > 
+                        <div class="col-2 col-xl-2">
+                                {{ genoFacts.trait }}
+                        </div>
+                        <div class="col-2 col-xl-2">
+                            {{ genoFacts.inherit }}
+                        </div>
+                        <div class="col-2 col-xl-2">
+                            {{ genoFacts.dom }}
+                        </div>
+                        <div class="col-2 col-xl-2">
+                            {{ genoFacts.rec }}
+                        </div>
+                </div>
+                <div class="row d-flex mb-3" id="scenario-info">
+                    </div>
+            <div class="row d-flex mb-3" id="scenario-info">
+                    <div class="text-weight-bold text-primary mr-2">MendelPedes</div>
+                </div>
+          <!-- end not hasFridge -->
+          <div id="fridge-outer">
+            <div class="list-group mt-3" id="fridge">
+              
+                <div class="ist-group-item m-0 row border" *ngFor="let pede of fridge.pedes">
+                        <div class="strain-num text-primary col-1">
+                          {{ pede.bugID + 1 }}
+                        </div>
+                        <div class="col-3" id="genoType" style="margin: auto;width: 500px;">
+                        <div [ngClass]="getMendelpede(pede.phenotype)" style="margin: auto;">
+                        </div>
+                        </div>
+                        <!-- phage.strainNum -->
+                        <div class="col-3" id="genoType">
+                              <!--{{ pede.genotype | pedeGenotype:fridge.scenario.scenCode }}-->
+                              <div *ngFor="let geno of pede.genotype; let i=index">
+                                  {{ currGenoFacts[i]["trait"] }}: {{ geno | pedeGenotype:fridge.scenario.scenCode }}
+                             </div>
+                        </div> 
+                        <div class="col-1" id="genoType">
+                            
+                                {{ pede.isFemale }}
+          
+                          </div> 
+                          <div class="col-2 col-xl-4" id="genoType">
+                            
+                                {{ pede.phenotype }}
+          
+                          </div> 
+                        <!-- end phageType -->
+                        <!-- end phage-details -->
+                        </div>
+              
+            </div> <!-- end fridge -->
+          </div>
+          <!-- end hasFridge -->
+        </div>
+        <!-- end if fridge -->
+      </div>
+    </div>
