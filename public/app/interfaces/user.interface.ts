@@ -24,6 +24,8 @@ export interface User{
    * 0 = student, 1 = instr, 2 = admin
    */
   role: number;
+
+  courseId?: string;
 }
 
 /**

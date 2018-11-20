@@ -57,7 +57,8 @@ export class CourseServiceStub {
     let newCourse: Course = {
       courseNum: course.courseNum,
       description: course.description,
-      instructors: newIn
+      instructors: newIn,
+      isGraduateCourse: false
     }
     return Observable.of(newCourse);
   }

@@ -77,8 +77,8 @@ export class MendelpedeQuizComponent{
   @Input() mendelFridge: MendelpedeFridgeComponent;
   
   submitQuiz(){
-    console.log('submitting the quiz')
-    console.log(this.quizAnswers)
+    //console.log('submitting the quiz')
+    //console.log(this.quizAnswers)
     //console.log(this.quizPedes)
     this.quizSubmitted = true
     this._scenarioService.calculateQuizScore(this.quizPedes, this.quizAnswers, this.quizFridgeId)

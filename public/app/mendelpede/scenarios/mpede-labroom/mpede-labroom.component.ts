@@ -189,10 +189,10 @@ export class MendelpedeLabroomComponent implements OnInit{
           .subscribe(
             (childPedes) => {
               //this.childPedes = childPedes;
-              console.log(childPedes);
+              //console.log(childPedes);
               if(this.childPedes[this.childPedes.length-1].phenotype === null){
-                console.log('clearing the list')
-                console.log(this.childPedes[this.childPedes.length-1])
+                //console.log('clearing the list')
+                //console.log(this.childPedes[this.childPedes.length-1])
                 this.childPedes = [];
               }
               for(let i = 0 ; i < childPedes.length; i++){
@@ -200,7 +200,7 @@ export class MendelpedeLabroomComponent implements OnInit{
                 this.childPedes.push(childPedes[i]);
               }
               this.currNumChildren += this.childPedes.length;
-              console.log(this.childPedes);
+              //console.log(this.childPedes);
             },
             (err) => {
               //console.log('error occurred');

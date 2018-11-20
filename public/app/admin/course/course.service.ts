@@ -62,6 +62,21 @@ export class CourseService {
   }
 
   /**
+   * Get information about a specific course
+   *
+   * @param {number} adminId userId of the logged in user (who is an admin or instr)
+   * @param {String} courseNum course number of course to get information for
+   *
+   * @returns {Observable<Course>} - the course information including `courseNum`, `description`, and `instructors`
+   * - or error "Failed to load course <courseNum>" if course doesn't exist
+   * - or other server/database error
+   */
+  getCourseById(courseId: string): Observable<Course>{
+    return this._http
+      .get<Course>(`${this._baseURL}/course-by-id/${courseId}`);
+  }
+
+  /**
    * Get the list of students in a course
    *
    * @param {number} adminId userId of the logged in user who is an admin or instr
