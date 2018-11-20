@@ -107,13 +107,14 @@ export class MendelpedeLabroomComponent implements OnInit{
     var undoSpot: number = this.undoSpotList[this.undoSpotList.length-1]
     //var arrLength = this.storablePedes[Math.ceil((this.undoSpot+1)/4)-1][this.undoSpot>3?(this.undoSpot-4):(this.undoSpot)].length; 
     var undoPede:MendelpedePede = this.storablePedes[Math.ceil((undoSpot+1)/4)-1][undoSpot>3?(undoSpot-4):(undoSpot)].pop();
-    this.childPedes.push(undoPede);
+    undoPede.bugID = this.childPedes[0].bugID-1;
+    this.childPedes.unshift(undoPede);
     this.undoSpotList.pop();
   }
 
   @HostListener('dropPedeToStorage')
   dropPedeToStorage(spot: number){
-    let pede: MendelpedePede = this.childPedes[this.childPedes.length-1];
+    let pede: MendelpedePede = this.childPedes[0];
     this.undoSpotList.push(spot);
     this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)].push( {
       bugID: this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)][0].bugID, 
