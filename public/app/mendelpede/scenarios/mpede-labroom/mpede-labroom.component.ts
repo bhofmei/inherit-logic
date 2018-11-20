@@ -113,7 +113,7 @@ export class MendelpedeLabroomComponent implements OnInit{
 
   @HostListener('dropPedeToStorage')
   dropPedeToStorage(spot: number){
-    let pede: MendelpedePede = this.childPedes[this.childPedes.length-1];
+    let pede: MendelpedePede = this.childPedes[0];
     this.undoSpotList.push(spot);
     this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)].push( {
       bugID: this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)][0].bugID, 
