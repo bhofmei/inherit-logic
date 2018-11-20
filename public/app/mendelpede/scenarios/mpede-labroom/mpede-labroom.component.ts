@@ -94,7 +94,9 @@ export class MendelpedeLabroomComponent implements OnInit{
   @HostListener('storePede')
   storePede(pedeToStore: MendelpedePede){
     //console.log('button pressed');
+    //console.log(this.storablePedes);
     this.mendelFridge.storePede(pedeToStore);
+    //console.log(this.storablePedes);
   }
 
   @HostListener('clearAll')
@@ -115,6 +117,9 @@ export class MendelpedeLabroomComponent implements OnInit{
   @HostListener('dropPedeToStorage')
   dropPedeToStorage(spot: number){
     let pede: MendelpedePede = this.childPedes[0];
+    //console.log(pede);
+    //console.log(spot);
+    //console.log(this.storablePedes);
     this.undoSpotList.push(spot);
     this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)].push( {
       bugID: this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)][0].bugID, 

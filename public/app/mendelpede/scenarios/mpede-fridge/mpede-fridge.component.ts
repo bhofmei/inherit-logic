@@ -245,8 +245,17 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   }
 
   storePede(pedeToStore: MendelpedePede){
-    pedeToStore.bugID = this.fridge.pedes.length;
-    this._scenarioService.insertPede(pedeToStore, this.fridge)
+    //pedeToStoreL['bugID'] = this.fridge.pedes.length;
+    let pedeToStoreL: MendelpedePede = {
+      bugID: this.fridge.pedes.length,
+      userId: pedeToStore.userId,
+      id: pedeToStore.id,
+      scenCode: pedeToStore.scenCode,
+      isFemale: pedeToStore.isFemale,
+      genotype: pedeToStore.genotype,
+      phenotype: pedeToStore.phenotype
+    }
+    this._scenarioService.insertPede(pedeToStoreL, this.fridge)
     .takeUntil(this.isDestroyed$)
       .subscribe((fridge)=>{
         //console.log('we got the new after inserted fridge: ');
