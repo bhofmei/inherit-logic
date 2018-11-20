@@ -32,6 +32,12 @@
       Description
     </div>
     <textarea type="text" id="desc-input" class="form-control" [(ngModel)]="courseInfo.description" placeholder="Course description" name="description"></textarea>
+    <div class="radio">
+      <input type="radio" [(ngModel)]="courseInfo.isGraduateCourse" name="isGraduate" [value]=true checked><label style="margin-left: 5px">Graduate Course</label>
+    </div>
+    <div class="radio">
+      <input type="radio" [(ngModel)]="courseInfo.isGraduateCourse" name="isGraduate" [value]=false><label style="margin-left: 5px">Undergraduate Course</label>
+    </div>
     <div class="">
       <div class="btn-group">
         <button class="btn btn-primary" type="submit" (click)="update()">Submit</button>

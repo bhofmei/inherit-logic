@@ -64,14 +64,14 @@ module.exports = {
     //      name: 'manifest'
     //    }),
     new HtmlWebpackPlugin({
-      title: 'Cricket',
+      title: 'Inherit Logic',
       filename: 'index.ejs',
       template: require('html-webpack-template'),
       inject: false,
       baseHref: '/',
       bodyHtmlSnippet: `<cricket-app>
-<div class="container">
-<h1 id="load-header">Loading Cricket...</h1>
+<div class="container text-center">
+<h1 id="load-header" class="mt-3">Loading INHERIT <span style="font-weight:200;">LOGIC</span>...</h1>
 Please wait.
 </div>
 </cricket-app>`,
@@ -81,7 +81,6 @@ Please wait.
           type: 'image/png'
         },
         "lib/bootstrap/dist/css/bootstrap.min.css",
-        "lib/ng2-dnd/bundles/style.css",
         "lib/open-iconic/font/css/open-iconic-bootstrap.css"
       ],
       scripts: [

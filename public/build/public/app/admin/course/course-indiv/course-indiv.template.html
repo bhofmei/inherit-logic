@@ -38,11 +38,80 @@
       </div>
       <!-- end statusByStudent -->
       <div id="statusByScenario" class="col-12 col-lg-6">
-        <h6 class="mb-2">By Scenario</h6>
-        <div class="list-group">
-          <a *ngFor="let scen of scenarios" [routerLink]="['./', scen.scenCode]" class="list-group-item list-group-item-action">{{ scen.label }}</a>
-        </div>
+      <h6 class="mb-2">By Cricket and Mendelpede Scenario</h6>
+      <div class="accordion" id="accordionExample" style="margin: auto">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  By Cricket Scenario
+                </button>
+              </h5>
+            </div>
+        
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div class="card-body">
+                <div class="list-group mt-2">
+                    <div id="student-scenarios">
+                        <div class="list-group">
+                            <div class="list-group">
+                                <a *ngFor="let scen of scenarios" [routerLink]="['./', scen.scenCode]" class="list-group-item list-group-item-action">{{ scen.label }}</a>
+                              </div>
+                        </div>
+                        <!-- end list-group -->
+                      </div>
+                </div>
+              </div>
+          </div>
       </div>
+      <div class="card">
+          <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                By Mendelpede Scenarios 
+              </button>
+            </h5>
+          </div>
+      
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            
+            <div class="card-body">
+              <div class="list-group mt-2">
+                  <div id="student-scenarios">
+                      <div class="list-group">
+                          <div class="justify-content-between d-flex mb-3" id="scenario-info">
+                              <div class="text-weight-bold text-primary mr-2">Scenarios</div>
+                          </div>
+                        <a *ngFor="let scenario of mpedeScenarios" [routerLink]="['./mendelpede/', scenario.shortCode]" class="list-group-item list-group-item-action">{{scenario.label}}</a>
+                        
+                        <div class="row d-flex mb-3" id="scenario-info">
+                        </div>
+                        <div class="justify-content-between d-flex mb-3" id="scenario-info">
+                            <div class="text-weight-bold text-primary mr-2">Quizes</div>
+                        </div>
+                        <a *ngFor="let quiz of quizes" [routerLink]="['./mendelpede/', quiz.shortCode]" class="list-group-item list-group-item-action">{{quiz.label}}</a>
+                        <div class="row d-flex mb-3" id="scenario-info">
+                          </div>
+                        <div class="justify-content-between d-flex mb-3" id="scenario-info">
+                            <div class="text-weight-bold text-primary mr-2">Discoveries</div>
+                        </div>
+                        <a *ngFor="let discovery of discoveries" [routerLink]="['./mendelpede/', discovery.shortCode]" class="list-group-item list-group-item-action">{{discovery.label}}</a>
+                        <div class="row d-flex mb-3" id="scenario-info">
+                          </div>
+                        <div class="justify-content-between d-flex mb-3" id="scenario-info">
+                            <div class="text-weight-bold text-primary mr-2">Pathways</div>
+                        </div>
+                        <a *ngFor="let pathway of pathways" [routerLink]="['./mendelpede/', pathway.shortCode]" class="list-group-item list-group-item-action">{{pathway.label}}</a>
+                        <!-- end list-group-item -->
+                      </div>
+                      <!-- end list-group -->
+                    </div>
+              </div>
+            </div>
+        </div>
+    </div>
+      </div>
+    </div>
       <!-- statusByScenario -->
     </div>
     <!-- end row -->

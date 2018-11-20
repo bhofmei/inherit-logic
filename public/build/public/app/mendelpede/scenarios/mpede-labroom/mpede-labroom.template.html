@@ -15,37 +15,44 @@
                                 </div>
                         </div>
                       <div class="m-0 row" style="width: auto">
-                                <div class="col-3 p-0 col-l-6 border" style="margin: auto">
-                                                <div *ngIf="malePede.phenotype !== null" [ngClass]="getMendelpede(malePede.phenotype)" style="margin: auto"
-                                                select-droppable [selectEnabled]="malePede.phenotype !== null" [selectData]="malePede"
-                                                [title]="malePede.bugId+1" [sourceName]="'lab-'+malePede.bugId" [dropDisabled]="true">
-                                                                <span>{{ malePede.bugId + 1 }}</span>
-                                                                <span style="float:right">{{ malePede.isFemale }}</span>
+                                <div class="col-3 p-0 col-l-6 border border-dark" style="margin: auto">
+                                        <div *ngIf="malePede.phenotype !== null" style="margin: auto;width: 120px">
+                                                        <span style="margin:auto;float:left">#{{ malePede.bugID + 1 }}</span>
+                                                        <span style="margin:auto;float:right">{{ malePede.isFemale }}</span>
+                                                <div [ngClass]="getMendelpede(malePede.phenotype)" style="margin: auto">
                                                 </div>
-                                                <div *ngIf="malePede.phenotype === null" class="mpede-empty" select-droppable (onDropSuccess)="dropPede($event)" style="margin:auto">
-                                                                
+                                        </div>
+                                        <div *ngIf="malePede.phenotype === null" style="margin: auto;width: 120px">
+                                                <div  class="mpede-empty" style="margin:auto">
+                                                        
                                                 </div>
+                                        </div>
                                 </div>
-                                <div class="col-3 p-0 col-l-6 border" style="margin: auto">
-                                                <div *ngIf="childPedes[childPedes.length-1].phenotype !== null" [ngClass]="getMendelpede(childPedes[childPedes.length-1].phenotype)" style="margin: auto"
-                                                select-droppable [selectEnabled]="childPedes[childPedes.length-1].phenotype !== null" [selectData]="childPedes[childPedes.length-1]"
-                                                [title]="childPedes[childPedes.length-1].bugId+1" [sourceName]="'lab-'+childPedes[childPedes.length-1].bugId" [dropDisabled]="true">
-                                                        <span style="float:right">{{ childPedes[childPedes.length-1].isFemale }}</span>
+                                <div class="col-3 p-0 col-l-6 border border-dark" style="margin: auto">
+                                        <div *ngIf="childPedes[0].phenotype !== null" style="margin: auto;width: 120px">
+                                                        <span style="margin:auto;float:left">#{{ childPedes[0].bugID }}</span>
+                                                        <span style="margin:auto;float:right">{{ childPedes[0].isFemale }}</span>
+                                                <div [ngClass]="getMendelpede(childPedes[0].phenotype)" style="margin:auto">
                                                 </div>
-                                                <div *ngIf="childPedes[childPedes.length-1].phenotype === null" class="mpede-empty" select-droppable (onDropSuccess)="dropPede($event)" style="margin:auto">
+                                        </div>
+                                        <div *ngIf="childPedes[0].phenotype === null" style="margin: auto;width: 120px">
+                                                <div class="mpede-empty" style="margin:auto">
                                                                 
                                                 </div>
+                                        </div>
                                 </div>
-                                <div class="col-3 p-0 col-l-6 border" style="margin: auto">
-                                                <div *ngIf="femalePede.phenotype !== null" [ngClass]="getMendelpede(femalePede.phenotype)" style="margin: auto"
-                                                select-droppable [selectEnabled]="femalePede.phenotype !== null" [selectData]="femalePede"
-                                                [title]="femalePede.bugId+1" [sourceName]="'lab-'+femalePede.bugId" [dropDisabled]="true">
-                                                                <span>{{ femalePede.bugId + 1 }}</span>
-                                                                <span style="float:right">{{ femalePede.isFemale }}</span>
+                                <div class="col-3 p-0 col-l-6 border border-dark" style="margin: auto">
+                                        <div *ngIf="femalePede.phenotype !== null" style="margin: auto;width: 120px">
+                                                        <span style="margin:auto;float:left">#{{ femalePede.bugID + 1 }}</span>
+                                                        <span style="margin:auto;float:right">{{ femalePede.isFemale }}</span>
+                                                <div [ngClass]="getMendelpede(femalePede.phenotype)" style="margin: auto">
                                                 </div>
-                                                <div *ngIf="femalePede.phenotype === null" class="mpede-empty" select-droppable (onDropSuccess)="dropPede($event)" style="margin:auto">
-                                                                
+                                        </div>
+                                        <div *ngIf="femalePede.phenotype === null" style="margin: auto;width: 120px">
+                                                <div  class="mpede-empty" style="margin:auto">
+                                                        
                                                 </div>
+                                        </div>
                                 </div>
                       </div>
                       <div>
@@ -55,14 +62,14 @@
                         </div>
                       <div class="ls-strain m-0 row">
                         <div class="col-2">
-                                <button type="button" style="margin: auto" (click)="clearAll()" class="btn btn-primary btn-xs">clear</button> 
+                                <button type="button" style="margin: auto" (click)="clearAll()" class="btn btn-secondary">Clear</button> 
                         </div>
                         <div class="col-2">
                                 <div *ngIf="undoSpotList.length === 0">
-                                        <button type="button" style="margin: auto" (click)="undoPede()" class="btn btn-primary btn-xs disabled">undo</button>  
+                                        <button type="button" disabled style="margin: auto" (click)="undoPede()" class="btn btn-primary">Undo</button>  
                                 </div>
-                                <div *ngIf="undoSpotList.length !== 0">
-                                        <button type="button" style="margin: auto" (click)="undoPede()" class="btn btn-primary btn-xs">undo</button>  
+                                <div *ngIf="undoSpotList.length > 0">
+                                        <button type="button" style="margin: auto" (click)="undoPede()" class="btn btn-primary">Undo</button>  
                                 </div>
                         </div>
                       </div>
@@ -75,34 +82,38 @@
                                 <div *ngFor="let pederow of storablePedes" class="ls-strain m-0 row">
                                         <div *ngFor="let pedes of pederow" style="margin: auto">
                                                 <div class="ls-strain m-0 row" *ngIf="pederow === storablePedes[0]">
-                                                        <div class="col-xl-4">
+                                                        <div class="col-xl-4" style="padding-left: 25px;padding-bottom: 10px">
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype === null">
-                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs disabled">store</button>  
+                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-primary btn-xs">Store</button>  
                                                                 </div>
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype !== null">
-                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">store</button>  
+                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">Store</button>  
                                                                 </div>
                                                         </div>
                                                 </div>
                                                 <div class="ls-strain m-0 row">
-                                                        <div class="col-xl-12 border" style="margin: auto">
-                                                                <div *ngIf="pedes[pedes.length-1].phenotype !== null" [ngClass]="getMendelpede(pedes[pedes.length-1].phenotype)" style="margin: auto"
-                                                                (click)="dropPedeToStorage(pedes[pedes.length-1].bugId)">
-                                                                                <span style="float:left">{{ pedes.length-1 }}</span>
-                                                                                <span style="float:right">{{ pedes[pedes.length-1].isFemale }}</span>
+                                                        <div class="col-xl-14 p-0 border border-dark" style="margin: auto">
+                                                                <div *ngIf="pedes[pedes.length-1].phenotype !== null" style="margin: auto;width: 115px">
+                                                                                <span style="margin:auto;float:left">#{{ pedes.length-1 }}</span>
+                                                                                <span style="margin:auto;float:right">{{ pedes[pedes.length-1].isFemale }}</span>
+                                                                        <div [ngClass]="getMendelpede(pedes[pedes.length-1].phenotype)" style="margin: auto"
+                                                                        (click)="dropPedeToStorage(pedes[pedes.length-1].bugID)">
+                                                                        </div>
                                                                 </div>
-                                                                <div *ngIf="pedes[pedes.length-1].phenotype === null" class="mpede-empty" (click)="dropPedeToStorage(pedes[pedes.length-1].bugId)" style="margin:auto">
+                                                                <div *ngIf="pedes[pedes.length-1].phenotype === null" style="margin: auto;width: 115px">
+                                                                        <div  class="mpede-empty" (click)="dropPedeToStorage(pedes[pedes.length-1].bugID)" style="margin:auto">
                                                                                 
+                                                                        </div>
                                                                 </div>
                                                         </div>
                                                 </div>
                                                 <div class="ls-strain m-0 row" *ngIf="pederow === storablePedes[1]">
-                                                        <div class="col-xl-4">
+                                                        <div class="col-xl-4" style="padding-left: 25px; padding-top: 10px">
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype === null">
-                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs disabled">store</button>  
+                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-primary btn-xs">Store</button>  
                                                                 </div>
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype !== null">
-                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">store</button>  
+                                                                        <button type="button" style="margin: auto" (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">Store</button>  
                                                                 </div>
                                                         </div>
                                                 </div>

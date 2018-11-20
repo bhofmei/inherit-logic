@@ -1,14 +1,15 @@
-<div class="accordion" id="accordionExample" style="width: 800px;margin: auto">
+<div class="container">
+<div *ngIf="user" class="accordion" id="accordionExample" style="width: 800px;margin: auto">
     <div class="card">
       <div class="card-header" id="headingOne">
         <h5 class="mb-0">
-          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
             Select Scenario
           </button>
         </h5>
       </div>
   
-      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
         <div class="card-body">
           <div class="list-group mt-2">
               <a *ngFor="let scenario of scenarios" [routerLink]="[scenario.shortCode]" class="list-group-item list-group-item-action">{{scenario.label}}</a>
@@ -27,12 +28,12 @@
       <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
         <div class="card-body">
             <div class="list-group mt-2">
-                <a *ngFor="let quiz of quizes" [routerLink]="['/mendelpede/mpede-scenarios']" class="list-group-item list-group-item-action">{{quiz.label}}</a>
+                <a *ngFor="let quiz of quizes" [routerLink]="[quiz.shortCode]" class="list-group-item list-group-item-action">{{quiz.label}}</a>
               </div>
         </div>
       </div>
     </div>
-    <div class="card">
+    <div *ngIf="discoveries.length!==0" class="card">
       <div class="card-header" id="headingThree">
         <h5 class="mb-0">
           <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -43,7 +44,7 @@
       <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
         <div class="card-body">
             <div class="list-group mt-2">
-                <a *ngFor="let discovery of discoveries" [routerLink]="['/mendelpede/mpede-scenarios']" class="list-group-item list-group-item-action">{{discovery.label}}</a>
+                <a *ngFor="let discovery of discoveries" [routerLink]="[discovery.shortCode]" class="list-group-item list-group-item-action">{{discovery.label}}</a>
               </div>
         </div>
       </div>
@@ -59,9 +60,14 @@
         <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
           <div class="card-body">
               <div class="list-group mt-2">
-                  <a *ngFor="let pathway of pathways" [routerLink]="['/mendelpede/mpede-scenarios']" class="list-group-item list-group-item-action">{{pathway.label}}</a>
+                  <a *ngFor="let pathway of pathways" [routerLink]="[pathway.shortCode]" class="list-group-item list-group-item-action">{{pathway.label}}</a>
               </div>
           </div>
         </div>
       </div>
   </div>
+  <div *ngIf="!user" class="col-12">
+      <p>
+        <a [routerLink]="['/authentication/signin']">Sign in</a> or <a [routerLink]="['/authentication/signup']">Sign up</a> to see scenarios.</p>
+    </div>
+</div>
