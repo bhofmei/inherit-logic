@@ -34,9 +34,13 @@ module.exports = function (app) {
   app.route('/api/admin/:userId/mendel-courses/:courseNum/:scenShortCode')
     .get(admin.hasAuthorization, course.isInstructor, course.getScenarioStatus);
 
+  app.route('/api/admin/course-by-id/:courseId')
+    .get(course.getCourse)
+
   app.param('userId', user.userById);
   app.param('studentId', user.userById);
   app.param('scenCode', cricketScenario.scenByCode);
   app.param('courseNum', course.courseByNum);
   app.param('scenShortCode', mendelScenario.scenarioByCode);
+  app.param('courseId', course.courseById)
 }

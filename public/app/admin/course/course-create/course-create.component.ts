@@ -56,6 +56,7 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
    * If error, display error message
    */
   createCourse(){
+    //console.log(this.courseDetails)
     if(this.courseDetails.courseNum===''){
       this.errorMessage = 'Course number is required'
     } else {

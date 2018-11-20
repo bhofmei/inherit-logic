@@ -20,5 +20,10 @@ export interface Course {
   /**
    * Instructors of the course, if any
    */
-  instructors?: _User[]
+  instructors?: _User[];
+
+  /**
+   * If the course is graduate or Undergraduate course
+   */
+  isGraduateCourse: boolean;
 }

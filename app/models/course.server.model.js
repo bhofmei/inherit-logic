@@ -36,7 +36,12 @@ const CourseSchema = new Schema({
   instructors: [{
     type: Schema.ObjectId,
     ref: 'User'
-  }]
+  }],
+  /**
+   * Determines if the course is Graduate course or Ungraduate course- 
+   * True if graduate course and false if undergraduate course
+   */
+  isGraduateCourse: Boolean
 });
 
 CourseSchema.set('toJSON',{getters: true});

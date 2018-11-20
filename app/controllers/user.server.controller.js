@@ -39,12 +39,14 @@ const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
  * `lastName`, `email`, and `role`
  */
 const getUserInfo = function (user) {
+
   return {
     id: user.userId,
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
-    role: roles.indexOf(user.role)
+    role: roles.indexOf(user.role),
+    courseId: user.course
   }
 };
 

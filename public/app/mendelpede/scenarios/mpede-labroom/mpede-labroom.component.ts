@@ -26,12 +26,16 @@ export class MendelpedeLabroomComponent implements OnInit{
   private sSubscription: Subscription;
 
   private paramObserver: any;
-
+  
+  // Used to determine how many children we will get from backend
   private numOfChildren: number;
 
   private storageSlots: number;
 
   private currFridgeGenoFacts: string;
+
+  //Used to fill correct number of child pedes
+  private currNumChildren: number;
 
   undoSpotList: number[] = [];
 
@@ -57,11 +61,12 @@ export class MendelpedeLabroomComponent implements OnInit{
   }
 
   _initPedes() {
-    this.malePede = {bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null};
+    this.currNumChildren = 0;
+    this.malePede = {bugID: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null};
     this._initChildPedes();
     this._emptyStoragePedes();
     this.undoSpotList = [];
-    this.femalePede = {bugId: 1, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null}
+    this.femalePede = {bugID: 1, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null}
   }
 
   _emptyStoragePedes() {
@@ -71,7 +76,7 @@ export class MendelpedeLabroomComponent implements OnInit{
       this.storablePedes[j] = [];
       for (let k = 0; k < 4; k++){
         this.storablePedes[j][k] = [];
-        this.storablePedes[j][k].push({bugId: counter, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null});
+        this.storablePedes[j][k].push({bugID: counter, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null});
         counter++;
       }
     }
@@ -80,7 +85,7 @@ export class MendelpedeLabroomComponent implements OnInit{
   _initChildPedes() {
     this.childPedes = [];
     for (let i = 0; i < this.numOfChildren; i++){
-      this.childPedes.push({bugId: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode:null, id: null});
+      this.childPedes.push({bugID: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode:null, id: null});
     }
   }
 
@@ -111,7 +116,7 @@ export class MendelpedeLabroomComponent implements OnInit{
     let pede: MendelpedePede = this.childPedes[this.childPedes.length-1];
     this.undoSpotList.push(spot);
     this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)].push( {
-      bugId: this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)][0].bugId, 
+      bugID: this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)][0].bugID, 
       genotype: pede.genotype, 
       userId: pede.userId, 
       phenotype: pede.phenotype, 
@@ -121,8 +126,11 @@ export class MendelpedeLabroomComponent implements OnInit{
     })
     if (this.childPedes.length === 1){
       this.createChildPedes();
+      this.childPedes.push({bugID: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode:null, id: null});
+      this.childPedes.shift();
+      
     }else {
-      this.childPedes.pop();
+      this.childPedes.shift();
     }
     //console.log('stack of pedes');
     //console.log(this.storablePedes);
@@ -141,7 +149,7 @@ export class MendelpedeLabroomComponent implements OnInit{
     //console.log('dropping pede')
     if (pede.isFemale === 'M' && this.malePede.phenotype === null){
       this.malePede = {
-        bugId: pede.bugId, 
+        bugID: pede.bugID, 
         genotype: pede.genotype, 
         phenotype: pede.phenotype, 
         userId: pede.userId, 
@@ -154,7 +162,7 @@ export class MendelpedeLabroomComponent implements OnInit{
       }
     } else if (pede.isFemale === 'F' && this.femalePede.phenotype === null){
       this.femalePede = {
-        bugId: pede.bugId, 
+        bugID: pede.bugID, 
         genotype: pede.genotype, 
         phenotype: pede.phenotype, 
         userId: pede.userId, 
@@ -180,7 +188,18 @@ export class MendelpedeLabroomComponent implements OnInit{
           .takeUntil(this.isDestroyed$)
           .subscribe(
             (childPedes) => {
-              this.childPedes = childPedes;
+              //this.childPedes = childPedes;
+              //console.log(childPedes);
+              if(this.childPedes[this.childPedes.length-1].phenotype === null){
+                //console.log('clearing the list')
+                //console.log(this.childPedes[this.childPedes.length-1])
+                this.childPedes = [];
+              }
+              for(let i = 0 ; i < childPedes.length; i++){
+                childPedes[i].bugID = this.currNumChildren+i+1; 
+                this.childPedes.push(childPedes[i]);
+              }
+              this.currNumChildren += this.childPedes.length;
               //console.log(this.childPedes);
             },
             (err) => {

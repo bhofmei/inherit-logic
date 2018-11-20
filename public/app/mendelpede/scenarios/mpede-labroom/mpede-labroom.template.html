@@ -17,7 +17,7 @@
                       <div class="m-0 row" style="width: auto">
                                 <div class="col-3 p-0 col-l-6 border border-dark" style="margin: auto">
                                         <div *ngIf="malePede.phenotype !== null" style="margin: auto;width: 120px">
-                                                        <span style="margin:auto;float:left">#{{ malePede.bugId + 1 }}</span>
+                                                        <span style="margin:auto;float:left">#{{ malePede.bugID + 1 }}</span>
                                                         <span style="margin:auto;float:right">{{ malePede.isFemale }}</span>
                                                 <div [ngClass]="getMendelpede(malePede.phenotype)" style="margin: auto">
                                                 </div>
@@ -29,13 +29,13 @@
                                         </div>
                                 </div>
                                 <div class="col-3 p-0 col-l-6 border border-dark" style="margin: auto">
-                                        <div *ngIf="childPedes[childPedes.length-1].phenotype !== null" style="margin: auto;width: 120px">
-                                                        <span style="margin:auto;float:left">#{{ childPedes.length }}</span>
-                                                        <span style="margin:auto;float:right">{{ childPedes[childPedes.length-1].isFemale }}</span>
-                                                <div [ngClass]="getMendelpede(childPedes[childPedes.length-1].phenotype)" style="margin:auto">
+                                        <div *ngIf="childPedes[0].phenotype !== null" style="margin: auto;width: 120px">
+                                                        <span style="margin:auto;float:left">#{{ childPedes[0].bugID }}</span>
+                                                        <span style="margin:auto;float:right">{{ childPedes[0].isFemale }}</span>
+                                                <div [ngClass]="getMendelpede(childPedes[0].phenotype)" style="margin:auto">
                                                 </div>
                                         </div>
-                                        <div *ngIf="childPedes[childPedes.length-1].phenotype === null" style="margin: auto;width: 120px">
+                                        <div *ngIf="childPedes[0].phenotype === null" style="margin: auto;width: 120px">
                                                 <div class="mpede-empty" style="margin:auto">
                                                                 
                                                 </div>
@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="col-3 p-0 col-l-6 border border-dark" style="margin: auto">
                                         <div *ngIf="femalePede.phenotype !== null" style="margin: auto;width: 120px">
-                                                        <span style="margin:auto;float:left">#{{ femalePede.bugId + 1 }}</span>
+                                                        <span style="margin:auto;float:left">#{{ femalePede.bugID + 1 }}</span>
                                                         <span style="margin:auto;float:right">{{ femalePede.isFemale }}</span>
                                                 <div [ngClass]="getMendelpede(femalePede.phenotype)" style="margin: auto">
                                                 </div>
@@ -97,11 +97,11 @@
                                                                                 <span style="margin:auto;float:left">#{{ pedes.length-1 }}</span>
                                                                                 <span style="margin:auto;float:right">{{ pedes[pedes.length-1].isFemale }}</span>
                                                                         <div [ngClass]="getMendelpede(pedes[pedes.length-1].phenotype)" style="margin: auto"
-                                                                        (click)="dropPedeToStorage(pedes[pedes.length-1].bugId)">
+                                                                        (click)="dropPedeToStorage(pedes[pedes.length-1].bugID)">
                                                                         </div>
                                                                 </div>
                                                                 <div *ngIf="pedes[pedes.length-1].phenotype === null" style="margin: auto;width: 115px">
-                                                                        <div  class="mpede-empty" (click)="dropPedeToStorage(pedes[pedes.length-1].bugId)" style="margin:auto">
+                                                                        <div  class="mpede-empty" (click)="dropPedeToStorage(pedes[pedes.length-1].bugID)" style="margin:auto">
                                                                                 
                                                                         </div>
                                                                 </div>

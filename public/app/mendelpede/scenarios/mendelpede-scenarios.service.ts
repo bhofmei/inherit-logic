@@ -200,7 +200,7 @@ export class MendelpedeScenarioService {
     var insertObj = {
       'fridgeId' : fridge.id,
       'pedeToBeInserted' : {
-        bugID : pede.bugId,
+        bugID : pede.bugID,
         genotype : pede.genotype,
         isFemale : isF,
         phenotype: pede.phenotype,

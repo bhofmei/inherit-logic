@@ -214,7 +214,7 @@ exports.editCourse = function (req, res) {
 
   // Update the fields
   course.description = req.body.description;
-
+  course.isGraduateCourse = req.body.isGraduateCourse;
   // Try saving the updated article
   course.save((err) => {
     if (err) {
@@ -516,6 +516,40 @@ exports.getScenarioStatus = function (req, res) {
 exports.courseByNum = function (req, res, next, id) {
   Course.findOne({
       courseNum: id
+    })
+    .populate('instructors', 'firstName lastName userId')
+    .exec((err, course) => {
+      if (err) {
+        return next(err);
+      }
+      if (!course) {
+        return next('Failed to load course ' + id);
+      }
+      req.course = course;
+      // Call the next middleware
+      next();
+    })
+};
+
+/**
+ * Middleware to find course by course number
+ * @protected
+ *
+ * @apiPath :courseNum
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - next middleware function
+ * @param {string} id - course number from URL
+ *
+ * @returns {Function} go to next middleware
+ * @yields {next(error)} If error, pass the error to the next middleware
+ * @yields {next('Failed to load course id')} If course doesn't exist, pass message to middleware
+ * @yield {next()} If success, set request `course` and go to next middleware
+ */
+exports.courseById = function (req, res, next, id) {
+  Course.findOne({
+      _id: id
     })
     .populate('instructors', 'firstName lastName userId')
     .exec((err, course) => {
