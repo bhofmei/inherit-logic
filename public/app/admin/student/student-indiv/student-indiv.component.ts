@@ -64,7 +64,7 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
    */
     private newRole: string;
 
-    private scoreMap: Map<string, number> = new Map<string, number>(); 
+    private scoreMap: Map<string, string> = new Map<string, string>(); 
   /**
    * List of all Mendelpede scenarios
    */
@@ -122,13 +122,17 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
                             let studentId = params['studentId'];
                             let scenId = params['scenShortCode'];
                             let admin = this._authService.getUser();
-                      
+                            //console.log('setting scoremap');
+                            //var s = "Fridge does not exist";
+                            //this.scoreMap[option.shortCode] = s;
+                            //console.log(this.scoreMap);
                             this._studentService.getMendelFridge(admin.id, studentId, option.shortCode)
                               .takeUntil(this.isDestroyed$)
                                     .subscribe((mfridge) => {
                                       //console.log('we got fridge from db')
-                                    var score = mfridge.quizScore;
-                                    this.scoreMap[option.shortCode] = score;
+                                      //console.log('coming for quiz');
+                                      var score = mfridge.quizScore;
+                                      this.scoreMap[option.shortCode] = score;
                                   },
                                       (error) => {
                                     this.errorMessage = readErrorMessage(error);
@@ -208,7 +212,7 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
     getQuizScore(scenId: string){
       //console.log(this.scoreMap);
       //console.log(scenId);
-      return this.scoreMap[scenId];
+      return this.scoreMap[scenId]==null?'Quiz not submitted':this.scoreMap[scenId];
     }
 
   /**
