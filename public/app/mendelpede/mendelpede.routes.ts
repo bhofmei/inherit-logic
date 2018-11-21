@@ -4,19 +4,19 @@ import { MendelpedeComponent } from './mendelpede.component';
 import { LoggedInGuard } from '../authentication/logged-in.guard.service';
 import { MendelpedeScenariosComponent } from './scenarios/mendelpede-scenarios.component';
 import { MendelpedeScenarioResolver } from './mendelpede-scenario.resolver';
- 
+
 export const MendelpedeRoutes: Routes = [
   {
     path : 'mendelpede',
     component : MendelpedeComponent,
     canActivate: [LoggedInGuard],
     data: {
-      breadcrumbs: 'mendelpede'
+      breadcrumbs: 'MendelPede'
     },
 
     children:[
       {
-        path : '', 
+        path : '',
         component : OptionsComponent
       },
       {

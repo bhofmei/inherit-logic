@@ -34,8 +34,12 @@
     </div>
   <!-- end jumbotron -->
 </div>
-<div *ngIf="user" class="text-center">
-  <a class="btn btn-primary btn-lg" [routerLink]="['/cricket']">Cricket</a>
-  <hr>
-  <a class="btn btn-primary btn-lg" [routerLink]="['/mendelpede']">Mendelpede</a>
+<div *ngIf="user" class="d-flex justify-content-around container mb-5">
+  <a class="btn btn-primary btn-lg col-4 col-lg-3 mx-2" [routerLink]="['/cricket']">Cricket
+  <img class="d-block mx-auto" src="./img/logos/cricket-light.png" height="45px" width="45px">
+  </a>
+  <a class="btn btn-primary btn-lg col-4 col-lg-3 mx-2" [routerLink]="['/mendelpede']">MendelPede
+  <img class="d-block mx-auto" src="./img/logos/pede-logo.png" height="45px" width="45px">
+  </a>
+  <!-- ADD ADDITIONAL APPS IN ANOTHER ROW -->
 </div>

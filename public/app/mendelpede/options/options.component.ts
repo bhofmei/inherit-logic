@@ -7,7 +7,8 @@ import { User } from '../../interfaces/user.interface';
 import { MendelpedeScenario } from '../../interfaces/mendelpede-scenarios.interface';
 @Component({
   selector: 'options',
-  templateUrl: './options.template.html'
+  templateUrl: './options.template.html',
+  styles: ['.list-group-item {padding: 0.5em 1.25em!important; }']
 })
 export class OptionsComponent implements OnInit{
 
@@ -38,7 +39,7 @@ export class OptionsComponent implements OnInit{
     this.sSubscription = this._scenarioService.listScenarios()
         .subscribe((options) => {
           //get course details
-          
+
           this.options = options;
           this.options.forEach((option) => {
             if (option.scenType === 'scenario') {
@@ -56,7 +57,7 @@ export class OptionsComponent implements OnInit{
                   this.discoveries = [];
                 }
             })
-              
+
             }else if(option.scenType === 'pathway'){
               this.pathways.push(option);
             }
