@@ -76,7 +76,7 @@ Please wait.
 </div>
 </cricket-app>`,
       links: [{
-          href: './img/cricket-icon.png',
+          href: './img/logos/white-blue-black.png',
           rel: 'shortcut icon',
           type: 'image/png'
         },
