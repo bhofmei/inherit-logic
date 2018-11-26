@@ -1,28 +1,16 @@
-<div *ngIf="hasQuiz">
-    <div class="container-fluid">
-        <div *ngIf="user" class="row m-0 no-gutter">
-            <div class="col-xs-3">
-                <mendelpede-fridge #mendelFridge [labroom] = "labroom"></mendelpede-fridge>
-            </div>
-            <div class="col-xs-3">
-                <mpede-labroom #labroom [mendelFridge] = "mendelFridge"></mpede-labroom>
-            </div>
-            <div class="col-xs-4">
-                <mendelpede-quiz [mendelFridge] = "mendelFridge"></mendelpede-quiz>
-            </div>
-        </div>
-    </div>
-</div>
-<div *ngIf="!hasQuiz">
+<div *ngIf="hasQuiz"  class="container-fluid">
+  <div class="row m-0">
+    <mendelpede-fridge class="col-3" #mendelFridge [labroom] = "labroom"></mendelpede-fridge>
+    <mpede-labroom class="col-5" #labroom [mendelFridge] = "mendelFridge"></mpede-labroom>
+    <mendelpede-quiz class="col-3" [mendelFridge] = "mendelFridge"></mendelpede-quiz>
+    </div> <!-- end row -->
+</div> <!-- end hasQuiz -->
+<div *ngIf="!hasQuiz" class="container con-flu-sm">
     <div class="row">
-        <div class="col-sm-4">
-            <mendelpede-fridge #mendelFridge [labroom] = "labroom"></mendelpede-fridge>
-        </div>
-        <div class="col-sm-4">
-            <mpede-labroom #labroom [mendelFridge] = "mendelFridge"></mpede-labroom>
-        </div>
-    </div>
-</div>
+      <mendelpede-fridge class="col-4" #mendelFridge [labroom] = "labroom"></mendelpede-fridge>
+      <mpede-labroom class="col-8" #labroom [mendelFridge] = "mendelFridge"></mpede-labroom>
+    </div> <!-- end row -->
+</div> <!-- end !hasQuiz -->
 <div *ngIf="!user" class="col-12">
     <p>
     <a [routerLink]="['/authentication/signin']">Sign in</a> or <a [routerLink]="['/authentication/signup']">Sign up</a> to see scenarios.</p>
