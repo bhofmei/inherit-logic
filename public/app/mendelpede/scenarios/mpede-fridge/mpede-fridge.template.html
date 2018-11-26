@@ -1,70 +1,61 @@
-
-<div class="card bg-light border-dark" style="width: 18rem;margin: auto">
-<div *ngIf="fridge">
-        <div class="card-header row m-0">
-        <h4 class="card-title mb-0 pl-0 col-6">Fridge</h4>
-        <h6 *ngIf="!fridge.accessGranted" class="pr-0 col-6 card-subtitle text-muted m-0 align-self-end text-right">Practice</h6>
-        </div>
-        <div class="card-body">
-        <div *ngIf="errorMessage!==''" class="alert alert-danger">
+<div class="card bg-light border-dark">
+  <div *ngIf="fridge">
+    <div class="card-header row m-0">
+      <h4 class="card-title mb-0 pl-0">Fridge</h4>
+      <!-- <h6 *ngIf="!fridge.accessGranted" class="pr-0 col-6 card-subtitle text-muted m-0 align-self-end text-right">Practice</h6> -->
+    </div>
+    <div class="card-body">
+      <div *ngIf="errorMessage!==''" class="alert alert-danger">
         {{errorMessage}}
+      </div>
+      <div class="pede-list">
+        <div *ngFor="let pede of currPedes" class="m-0 row">
+          <div class="col p-0 border border-secondary rounded m-1 pede">
+            <div *ngIf="pede[0].phenotype !== null" class="row my-0 mx-1">
+              <div class="text-secondary col-6 col-lg-3 order-first pl-1 pr-0">{{ pede[0].bugID + 1 }}</div>
+              <div class="col-6 col-lg-3 text-right pl-0 pr-1 order-lg-12">{{ pede[0].isFemale }}</div>
+              <div class="col-12 col-lg-6 p-0">
+                <div [ngClass]="getMendelpede(pede[0].phenotype)" (click)="sendPede(pede[0])"></div>
+              </div>
+            </div> <!-- end not null -->
+            <div *ngIf="pede[0].phenotype === null" class="mpede-empty row p-0">
+            </div>
+          </div> <!-- end pede1 -->
+          <div class="col p-0 border border-secondary rounded m-1 pede">
+            <div *ngIf="pede[1].phenotype !== null" class="row my-0 mx-1">
+              <div class="text-secondary col-6 col-lg-3 order-first pl-1 pr-0">{{ pede[1].bugID + 1 }}</div>
+              <div class="col-6 col-lg-3 text-right pl-0 pr-1 order-lg-12">{{ pede[1].isFemale }}</div>
+              <div class="col-12 col-lg-6 p-0">
+                <div [ngClass]="getMendelpede(pede[1].phenotype)" (click)="sendPede(pede[1])"></div>
+              </div>
+            </div> <!-- end not null -->
+            <div *ngIf="pede[1].phenotype === null" class="mpede-empty row p-0">
+            </div>
+          </div> <!-- end pede2 -->
         </div>
-        <div class="pede-list">
-        <div *ngFor="let pede of currPedes" class="ls-strain m-0 row">
-                <div class="col-3 p-0 col-xl-6 border border-dark" style="margin: auto">
-                        <div *ngIf="pede[0].phenotype !== null" style="margin: auto;width: 115px">
-                                        <span style="margin:auto;float:left">#{{ pede[0].bugID + 1 }}</span>
-                                        <span style="margin:auto;float:right">{{ pede[0].isFemale }}</span>
-                                <div [ngClass]="getMendelpede(pede[0].phenotype)" style="margin: auto"
-                                (click)="sendPede(pede[0])">
-                                </div>
-                        </div>
-                        <div *ngIf="pede[0].phenotype === null" style="margin: auto;width: 115px">
-                                <div  class="mpede-empty" style="margin:auto">
-                                        
-                                </div>
-                        </div>
-                </div>
-                <div class="col-3 p-0 col-xl-6 border border-dark" style="margin: auto">
-                        <div *ngIf="pede[1].phenotype !== null" style="margin: auto;width: 115px">
-                                        <span style="margin:auto;float:left">#{{ pede[1].bugID + 1 }}</span>
-                                        <span style="margin:auto;float:right">{{ pede[1].isFemale }}</span>
-                                <div [ngClass]="getMendelpede(pede[1].phenotype)" style="margin: auto"
-                                (click)="sendPede(pede[1])">
-                                </div>
-                        </div>
-                        <div *ngIf="pede[1].phenotype === null" style="margin: auto;width: 115px">
-                                <div  class="mpede-empty" style="margin:auto">
-                                        
-                                </div>
-                        </div>
-                </div>
-        </div>
-        </div>
-        </div>
-        <!-- end card body -->
-        <div class="card-footer text-center">
-        <div role="toolbar" class="btn-group btn-group-sm">
+      </div> <!-- end pede-list -->
+    </div>
+    <!-- end card body -->
+    <div class="card-footer text-center">
+      <div role="toolbar" class="btn-group btn-group-sm">
         <button (click)="setShelf(0)" [disabled]="shelf==0" class="btn">
-        <span class="oi oi-media-step-backward"></span>
-        <!--<span>&laquo;</span> -->
+          <span class="oi oi-media-step-backward"></span>
+          <!--<span>&laquo;</span> -->
         </button>
         <button (click)="changeShelf(-1)" [disabled]="shelf==0" class="btn">
-        <span class="oi oi-media-skip-backward"></span>
-        <!--<span>&laquo;</span> -->
+          <span class="oi oi-media-skip-backward"></span>
+          <!--<span>&laquo;</span> -->
         </button>
         <button (click)="changeShelf(1)" [disabled]="shelf==(maxShelf-1)" class="btn">
-        <span class="oi oi-media-skip-forward"></span>
-        <!--<span>&raquo;</span> -->
+          <span class="oi oi-media-skip-forward"></span>
+          <!--<span>&raquo;</span> -->
         </button>
         <button (click)="setShelf(maxShelf-1)" [disabled]="shelf==(maxShelf-1)" class="btn">
-        <span class="oi oi-media-step-forward"></span>
-        <!--<span>&laquo;</span> -->
+          <span class="oi oi-media-step-forward"></span>
+          <!--<span>&laquo;</span> -->
         </button>
-        </div>
-        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end if fridge -->
 </div>
-<!-- end if fridge -->
-</div>
-                      
-              

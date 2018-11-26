@@ -7,3 +7,9 @@
     padding-right: 7px;
     padding-left: 7px;
   }
+
+  @media (max-width: 768px) {
+    .con-flu-sm {
+    max-width: 100%;
+  }
+}
