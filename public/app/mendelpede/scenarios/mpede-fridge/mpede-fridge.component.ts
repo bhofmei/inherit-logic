@@ -15,7 +15,7 @@ import { MendelpedeLabroomComponent } from '../mpede-labroom/mpede-labroom.compo
 @Component({
   selector: 'mendelpede-fridge',
   templateUrl: './mpede-fridge.template.html',
-  styleUrls: ['./mpede-fridge.style.css']
+  styleUrls: ['./mpede-fridge.style.css', '../mpede-pedes.style.css']
 })
 export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
 
@@ -30,7 +30,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     this.spots = 8;
     this.isDestroyed$ = new Subject<boolean>();
     }
-  
+
   /**
    * The fridge object
    */
@@ -64,7 +64,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    * current shelf
    */
   shelf: number = 0;
-  
+
   /**
    * potential backend error message
    */
@@ -80,7 +80,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   private paramObserver: any;
 
   private nextSpot: number;
-  
+
    /**
    * Initailize the fridge when creating component
    * 1. Get logged in user and current scenario
@@ -113,14 +113,14 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   }
 
   /**
-   * Gets CSS classes 
+   * Gets CSS classes
    *
    * @returns {Object} classes wh
    */
 
   getMendelpede(phenotype: string[]): Object{
-    var mpedeCssClass: {} = {};
-    
+    var mpedeCssClass = {'mx-auto sizeI': true};
+
     // create css classes using traits
     var segcol: string = 'mpede-bodycol-'+phenotype[2];
     var eyecol: string = 'mpede-eyecol-'+phenotype[1]
@@ -128,7 +128,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     mpedeCssClass[segcol] = true
     mpedeCssClass[eyecol] = true
     mpedeCssClass[imurl] = true
-    mpedeCssClass['sizeI'] = true
+    //mpedeCssClass['sizeI'] = true
     return mpedeCssClass
   }
 
@@ -161,7 +161,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     this.currPedes_1d = this.pedeList.slice(start,end);
     this._scenarioService.setQuizPedes(this.currPedes_1d);
     var ind: number = 0;
-    
+
     this.currPedes = [];
     for (var j = 0; j < (this.spots/2) ; j++){
       this.currPedes[j] = [];
@@ -172,7 +172,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     }
     //console.log('setting currpedes');
     //console.log(this.currPedes);
-    
+
   }
 
   /**
@@ -189,7 +189,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     this._scenarioService.setScenario(newFridge.genoFacts);
     this._scenarioService.setFridgeId(newFridge.id);
     this._scenarioService.setFirstTraitForQuiz(newFridge.firstTraitForQuiz);
-    if(this.fridge.quizScore.toUpperCase().includes('QUIZ NOT SUBMITTED YET')){
+    if(this.fridge.quizScore && this.fridge.quizScore.toUpperCase().includes('QUIZ NOT SUBMITTED YET')){
       this._scenarioService.setQuizDone(false);
     }else{
       this._scenarioService.setQuizDone(true);
@@ -216,7 +216,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
       this.nextSpot = (n === this.nextSpot ? n+1 : this.nextSpot);
     }
     return out;
-  } 
+  }
 
   /**
    * Increase or decrease visible shelf then update the visible strains

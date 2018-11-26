@@ -12,7 +12,7 @@ import { readErrorMessage } from '../../../shared/read-error';
 @Component({
   selector: 'mpede-labroom',
   templateUrl: './mpede-labroom.template.html',
-  styleUrls: ['./mpede-labroom.style.css']
+  styleUrls: ['./mpede-labroom.style.css', '../mpede-pedes.style.css']
 })
 export class MendelpedeLabroomComponent implements OnInit{
 
@@ -21,12 +21,12 @@ export class MendelpedeLabroomComponent implements OnInit{
   malePede: MendelpedePede;
   childPedes: MendelpedePede[];
   femalePede: MendelpedePede;
-  storablePedes: MendelpedePede[][][]; 
+  storablePedes: MendelpedePede[][][];
 
   private sSubscription: Subscription;
 
   private paramObserver: any;
-  
+
   // Used to determine how many children we will get from backend
   private numOfChildren: number;
 
@@ -107,7 +107,7 @@ export class MendelpedeLabroomComponent implements OnInit{
   @HostListener('clearAll')
   undoPede(){
     var undoSpot: number = this.undoSpotList[this.undoSpotList.length-1]
-    //var arrLength = this.storablePedes[Math.ceil((this.undoSpot+1)/4)-1][this.undoSpot>3?(this.undoSpot-4):(this.undoSpot)].length; 
+    //var arrLength = this.storablePedes[Math.ceil((this.undoSpot+1)/4)-1][this.undoSpot>3?(this.undoSpot-4):(this.undoSpot)].length;
     var undoPede:MendelpedePede = this.storablePedes[Math.ceil((undoSpot+1)/4)-1][undoSpot>3?(undoSpot-4):(undoSpot)].pop();
     undoPede.bugID = this.childPedes[0].bugID-1;
     this.childPedes.unshift(undoPede);
@@ -122,10 +122,10 @@ export class MendelpedeLabroomComponent implements OnInit{
     //console.log(this.storablePedes);
     this.undoSpotList.push(spot);
     this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)].push( {
-      bugID: this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)][0].bugID, 
-      genotype: pede.genotype, 
-      userId: pede.userId, 
-      phenotype: pede.phenotype, 
+      bugID: this.storablePedes[Math.ceil((spot+1)/4)-1][spot>3?(spot-4):(spot)][0].bugID,
+      genotype: pede.genotype,
+      userId: pede.userId,
+      phenotype: pede.phenotype,
       isFemale: pede.isFemale,
       scenCode: pede.scenCode,
       id: pede.id
@@ -134,7 +134,7 @@ export class MendelpedeLabroomComponent implements OnInit{
       this.createChildPedes();
       this.childPedes.push({bugID: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode:null, id: null});
       this.childPedes.shift();
-      
+
     }else {
       this.childPedes.shift();
     }
@@ -155,10 +155,10 @@ export class MendelpedeLabroomComponent implements OnInit{
     //console.log('dropping pede')
     if (pede.isFemale === 'M' && this.malePede.phenotype === null){
       this.malePede = {
-        bugID: pede.bugID, 
-        genotype: pede.genotype, 
-        phenotype: pede.phenotype, 
-        userId: pede.userId, 
+        bugID: pede.bugID,
+        genotype: pede.genotype,
+        phenotype: pede.phenotype,
+        userId: pede.userId,
         isFemale: pede.isFemale,
         scenCode: pede.scenCode,
         id: pede.id
@@ -168,10 +168,10 @@ export class MendelpedeLabroomComponent implements OnInit{
       }
     } else if (pede.isFemale === 'F' && this.femalePede.phenotype === null){
       this.femalePede = {
-        bugID: pede.bugID, 
-        genotype: pede.genotype, 
-        phenotype: pede.phenotype, 
-        userId: pede.userId, 
+        bugID: pede.bugID,
+        genotype: pede.genotype,
+        phenotype: pede.phenotype,
+        userId: pede.userId,
         isFemale: pede.isFemale,
         scenCode: pede.scenCode,
         id: pede.id
@@ -180,16 +180,16 @@ export class MendelpedeLabroomComponent implements OnInit{
         this.createChildPedes();
       }
     }
-    
+
   }
 
   createChildPedes(){
     if(this.malePede.phenotype !== null && this.femalePede.phenotype !== null){
       let userId = this.user.id;
       this.paramObserver = this._route.params.subscribe((params) => {
-        
+
         let scenShortCode = params['scenShortCode'];
-        
+
         this._scenarioService.makeChildren(this.malePede, this.femalePede, this.currFridgeGenoFacts)
           .takeUntil(this.isDestroyed$)
           .subscribe(
@@ -202,7 +202,7 @@ export class MendelpedeLabroomComponent implements OnInit{
                 this.childPedes = [];
               }
               for(let i = 0 ; i < childPedes.length; i++){
-                childPedes[i].bugID = this.currNumChildren+i+1; 
+                childPedes[i].bugID = this.currNumChildren+i+1;
                 this.childPedes.push(childPedes[i]);
               }
               this.currNumChildren += this.childPedes.length;
@@ -226,7 +226,7 @@ export class MendelpedeLabroomComponent implements OnInit{
       this.storageSlots = 8
   }
   /**
-   * Gets CSS classes 
+   * Gets CSS classes
    *
    * @returns {Object} classes wh
    */
@@ -242,14 +242,14 @@ export class MendelpedeLabroomComponent implements OnInit{
   }
 
   /**
-   * Gets CSS classes 
+   * Gets CSS classes
    *
    * @returns {Object} classes wh
    */
 
   getMendelpede(phenotype: string[]): Object{
     var mpedeCssClass: {} = {};
-    
+
     // create css classes using traits
     var segcol: string = 'mpede-bodycol-'+phenotype[2];
     var eyecol: string = 'mpede-eyecol-'+phenotype[1]
@@ -270,5 +270,5 @@ export class MendelpedeLabroomComponent implements OnInit{
     this.isDestroyed$.next(true);
     this.isDestroyed$.unsubscribe();
   }
-  
+
 }
