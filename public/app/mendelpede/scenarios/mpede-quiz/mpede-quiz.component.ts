@@ -45,7 +45,7 @@ export class MendelpedeQuizComponent{
 
   getQuizBackgroundColor(answer: boolean){
     return {
-      'quiz-bg-color': answer && this.quizSubmitted
+      'bg-success': answer && this.quizSubmitted
     }
   }
 
@@ -61,11 +61,11 @@ export class MendelpedeQuizComponent{
         .subscribe((trait) => {
           this.quizTrait = trait;
           this._scenarioService.getFridgeId
-          .takeUntil(this.isDestroyed$) 
+          .takeUntil(this.isDestroyed$)
           .subscribe((fridgeId) => {
             this.quizFridgeId = fridgeId;
             this._scenarioService.isQuizDone
-            .takeUntil(this.isDestroyed$) 
+            .takeUntil(this.isDestroyed$)
             .subscribe((isQuizDone) => {
               this.quizSubmitted = isQuizDone;
             });
@@ -75,7 +75,7 @@ export class MendelpedeQuizComponent{
   }
 
   @Input() mendelFridge: MendelpedeFridgeComponent;
-  
+
   submitQuiz(){
     //console.log('submitting the quiz')
     //console.log(this.quizAnswers)
