@@ -21,7 +21,7 @@ export class PedePhenotypePipe implements PipeTransform {
     outStr += 'Eye Color: ' + phenoList[1] + '<br>';
     outStr += 'Segment Color: ' + phenoList[2] + '<br>';
     outStr += 'Number of Legs: ' + phenoList[3] + '<br>';
-    outStr += 'Number of Segments: ' + phenoList[1=4];
+    outStr += 'Number of Segments: ' + phenoList[4];
     return outStr
   }
 }
