@@ -49,6 +49,15 @@ export class MendelpedeLabroomComponent implements OnInit{
    */
   private isDestroyed$: Subject<boolean>;
 
+  constructor(private _authenticationService: AuthenticationService,
+    private _router: Router,
+    private _scenarioService: MendelpedeScenarioService,
+    private _route: ActivatedRoute) {
+      this.isDestroyed$ = new Subject<boolean>();
+      this.numOfChildren = 20;
+      this.storageSlots = 8
+  }
+
   ngOnInit() {
     this._initPedes();
     this.user = this._authenticationService.getUser();
@@ -217,38 +226,14 @@ export class MendelpedeLabroomComponent implements OnInit{
       }
   }
 
-  constructor(private _authenticationService: AuthenticationService,
-    private _router: Router,
-    private _scenarioService: MendelpedeScenarioService,
-    private _route: ActivatedRoute) {
-      this.isDestroyed$ = new Subject<boolean>();
-      this.numOfChildren = 20;
-      this.storageSlots = 8
-  }
   /**
    * Gets CSS classes
    *
-   * @returns {Object} classes wh
-   */
-  getMendelpedetopleft(): Object{
-    return {
-      'mpede-basic-top-left': true,
-    }
-  }
-  getMendelpedebottomleft(): Object{
-    return {
-      'mpede-basic-bottom-left': true,
-    }
-  }
-
-  /**
-   * Gets CSS classes
-   *
-   * @returns {Object} classes wh
+   * @returns {Object} classes
    */
 
   getMendelpede(phenotype: string[]): Object{
-    var mpedeCssClass: {} = {};
+    var mpedeCssClass = {'mx-auto sizeI': true};
 
     // create css classes using traits
     var segcol: string = 'mpede-bodycol-'+phenotype[2];
@@ -257,7 +242,6 @@ export class MendelpedeLabroomComponent implements OnInit{
     mpedeCssClass[segcol] = true
     mpedeCssClass[eyecol] = true
     mpedeCssClass[imurl] = true
-    mpedeCssClass['sizeI'] = true
     return mpedeCssClass
   }
 
