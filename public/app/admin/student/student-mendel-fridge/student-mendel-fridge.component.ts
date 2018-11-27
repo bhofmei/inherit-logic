@@ -14,7 +14,7 @@ import { readErrorMessage } from '../../../shared/read-error';
 @Component({
   selector: 'student-mendel-fridge',
   templateUrl: './student-mendel-fridge.template.html',
-  styleUrls: ['../../../mendelpede/scenarios/mpede-labroom/mpede-labroom.style.css']
+  styleUrls: ['./student-mendel-fridge.style.css','../../../mendelpede/scenarios/mpede-pedes.style.css']
 })
 
 export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
@@ -63,14 +63,14 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
     this.isDestroyed$ = new Subject<boolean>();
   }
   /**
-   * Gets CSS classes 
+   * Gets CSS classes
    *
    * @returns {Object} classes wh
    */
 
   getMendelpede(phenotype: string[]): Object{
     var mpedeCssClass: {} = {};
-    
+
     // create css classes using traits
     var segcol: string = 'mpede-bodycol-'+phenotype[2];
     var eyecol: string = 'mpede-eyecol-'+phenotype[1]
@@ -111,7 +111,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
                   this.hasFridge = true
                 }
               }
-              
+
               //console.log('we got fridge')
               //console.log(this.fridge)
             },
@@ -131,7 +131,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
    * @example <caption>View strains is "all"</caption>
    * getButtonClass('all') -> {'btn btn-small': true, 'btn-primary': true, 'btn-primary-outline': false}
    * getButtonClass('graded') -> {'btn btn-small': true, 'btn-primary': false, 'btn-primary-outline': true}
-   
+
   getButtonClass(src: string): Object{
     return {
       'btn btn-sm': true,
@@ -146,7 +146,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
    * Called on `(click)` of "View Strain" button
    * @param {string} src - button which was clicked;
    * Should be one of `["all", "graded"]`
-  
+
   setPhage(src: string){
     this.viewStrains = src;
     if(this.viewStrains === 'all'){
