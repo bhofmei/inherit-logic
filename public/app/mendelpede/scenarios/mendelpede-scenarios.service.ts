@@ -46,7 +46,7 @@ export class MendelpedeScenarioService {
     */
    private _quizPedes = new BehaviorSubject<any>([]);
    getQuizPedes = this._quizPedes.asObservable();
-  
+
   /**
    * Quiz traits
    */
@@ -102,7 +102,7 @@ export class MendelpedeScenarioService {
       .next(firstTraitForQuiz);
     }
   }
-  
+
   /**
    * set the pedes for quiz
    */
@@ -151,7 +151,7 @@ export class MendelpedeScenarioService {
       return this._http
           .get<MendelpedeScenario>(`${this._baseURL}/${scenShortCode}`);
   }
-  
+
   /**
    * Create a new fridge for the user/scenario
    *
@@ -182,13 +182,13 @@ export class MendelpedeScenarioService {
    * - or other server/database error  /api/mendelpede/:userId/:scenShortCode/:malePedeId/:femalePedeId
    */
   makeChildren(malePede: MendelpedePede, femalePede: MendelpedePede, genoFacts: string): Observable<MendelpedePede[]> {
-    
+
     //console.log(genoFacts);
     //console.log(typeof genoFacts);
     var genoFactsObj = {
       'genoFacts': genoFacts,
       'malePede': malePede,
-      'femalePede': femalePede 
+      'femalePede': femalePede
     }
     return this._http.post<MendelpedePede[]>(`${this._baseURL}/make-children`, genoFactsObj);
   }
@@ -233,7 +233,7 @@ export class MendelpedeScenarioService {
   getMendelFridge(userId: number, scenShortCode: string): Observable<MendelpedeFridge> {
     //console.log('userId--'+userId+' Scen short code: '+scenShortCode);
     return this._http.get<MendelpedeFridge>(`${this._baseURL}/${userId}/${scenShortCode}`);
-    
+
   }
 
   /**

@@ -4,8 +4,8 @@
   </div> <!-- end card header -->
   <div class="card-body">
     <div class="clear-fix row" id="cross-row">
-      <div id="crosses" class="col-12 col-sm-9 col-lg-10">
-        <div class="row">
+      <!--<div id="crosses" class="col-12 col-sm-9 col-lg-10">
+        <div class="row">-->
       <div class="col-4 cross-pede">
         <label class="cross-label d-block text-center text-info mb-1" for="cross-male">Male</label>
         <div class="p-0 border border-info rounded m-1" id="cross-male">
@@ -57,23 +57,25 @@
           </div>
         </div> <!-- end cross-female -->
       </div> <!-- end cross-pede female -->
-      </div>
-      </div> <!-- end crosses -->
-      <div id="cross-buttons" class="col-3 col-lg-2 btn-group-vertical">
-        <button type="button" class="btn btn-secondary btn-sm" (click)="clearAll()">Clear</button>
-        <button type="button" class="btn btn-primary btn-sm" [disabled]="undoSpotList.length === 0"  (click)="undoPede()">Undo</button>
-      </div> <!-- end cross-buttons -->
+      <!--</div>
+      </div> -- end crosses -->
     </div> <!-- end cross row -->
+    <div id="cross-buttons" class="row my-2">
+      <div class="btn-group mx-auto">
+      <button type="button" class="btn btn-secondary" (click)="clearAll()">Clear</button>
+      <button type="button" class="btn btn-primary" [disabled]="undoSpotList.length === 0"  (click)="undoPede()">Undo</button>
+      </div>
+    </div> <!-- end cross-buttons -->
     <div class="pede-list">
-      <div *ngFor="let pederow of storablePedes" class="ls-strain m-0 row">
+      <div *ngFor="let pederow of storablePedes" class="m-0 row">
         <div *ngFor="let pedes of pederow" >
           <div class="ls-strain m-0 row" *ngIf="pederow === storablePedes[0]">
             <div class="col-xl-4" >
               <div *ngIf="pedes[pedes.length-1].phenotype === null">
-                <button type="button"  (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-primary btn-xs">Store</button>
+                <button type="button"  (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-outline-primary btn-xs">Store</button>
               </div>
               <div *ngIf="pedes[pedes.length-1].phenotype !== null">
-                <button type="button"  (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">Store</button>
+                <button type="button"  (click)="storePede(pedes[pedes.length-1])" class="btn btn-outline-primary btn-xs">Store</button>
               </div>
             </div>
           </div>
@@ -95,15 +97,15 @@
           <div class="ls-strain m-0 row" *ngIf="pederow === storablePedes[1]">
             <div class="col-xl-4" >
               <div *ngIf="pedes[pedes.length-1].phenotype === null">
-                <button type="button"  (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-primary btn-xs">Store</button>
+                <button type="button"  (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-outline-primary btn-xs">Store</button>
               </div>
               <div *ngIf="pedes[pedes.length-1].phenotype !== null">
-                <button type="button"  (click)="storePede(pedes[pedes.length-1])" class="btn btn-primary btn-xs">Store</button>
+                <button type="button"  (click)="storePede(pedes[pedes.length-1])" class="btn btn-outline-primary btn-xs">Store</button>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </div> <!-- end pede -->
+      </div><!-- end pederow -->
+    </div> <!-- end pede-list -->
   </div> <!-- end card body -->
 </div> <!-- end card -->

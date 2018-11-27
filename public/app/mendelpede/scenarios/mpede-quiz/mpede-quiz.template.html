@@ -1,33 +1,28 @@
-<div class="card bg-light border-dark" style="width:25rem; margin: auto">
-    <div class="card-header row m-0">
-        <h4 class="card-title mb-0 pl-0 col-6">Quiz</h4>
-        <h4 class="card-title mb-0 pl-0 col-6"></h4>
+<div class="card border-primary">
+    <div class="card-header text-primary">
+        <h4 class="card-title mb-0 pl-0">Quiz</h4>
     </div>
     <div class="card-body">
-        <div class="text-weight-bold text-primary mr-2">Your task is to determine dominance and the genotype of each individual for: {{quizTrait | pedeQuizTrait}}</div>
-        <div style="padding-top: 28px"></div>
+        <div class="text-weight-bold mD-2">Determine the genotype of each individual for trait <span class="text-primary">{{quizTrait | pedeQuizTrait}}</span></div>
+        <hr class="my-2">
         <form>
-        <div class = "row m-0" *ngFor="let pede of quizAnswers; let i=index">
-            <div class="col col-sm-5" [ngClass]="getQuizBackgroundColor(actualAnswers[i])" style="padding-top: 10px">Mendelpede {{pede.id+1}}:</div>
-            <div class="col p-2 btn-group btn-group-toggle" ngDefaultControl id="radioBasic{{i}}" [(ngModel)]="pede.answer" [ngModelOptions]="{standalone: true}">
+        <div class="row m-0" *ngFor="let pede of quizAnswers; let i=index">
+            <div class="col-12 col-lg-5 px-0" [ngClass]="getQuizBackgroundColor(actualAnswers[i])">Pede {{pede.id+1}}:</div>
+            <div class="col-12 col-lg-7 btn-group btn-group-toggle" ngDefaultControl id="radioBasic{{i}}" [(ngModel)]="pede.answer" [ngModelOptions]="{standalone: true}">
                 <div class="radio">
-                    <input style="margin-left: 20px" type="radio" name="radioBasic{{i}}" value="AA"><label style="margin-left: 5px">AA</label>
+                    <input type="radio" name="radioBasic{{i}}" value="AA"><label>AA</label>
                 </div>
                 <div class="radio">
-                    <input style="margin-left: 20px" type="radio" name="radioBasic{{i}}" value="Aa"><label style="margin-left: 5px">Aa</label>
+                    <input type="radio" name="radioBasic{{i}}" value="Aa"><label>Aa</label>
                 </div>
                 <div class="radio">
-                    <input style="margin-left: 20px" type="radio" name="radioBasic{{i}}" value="aa"><label style="margin-left: 5px">aa</label>
+                    <input type="radio" name="radioBasic{{i}}" value="aa"><label>aa</label>
                 </div>
             </div>
         </div>
         </form>
-        <div style="padding-top: 29px"></div>
-        <div *ngIf="quizSubmitted">
-            <button type="button" style="margin: auto" disabled (click)="submitQuiz()" class="btn btn-primary">Submit Quiz</button> 
-        </div> 
-        <div *ngIf="!quizSubmitted">
-            <button type="button" style="margin: auto" (click)="submitQuiz()" class="btn btn-primary">Submit Quiz</button> 
+        <div>
+            <button type="button" [disabled]="quizSubmitted" (click)="submitQuiz()" class="btn btn-primary">Submit Quiz</button>
         </div>
     </div>
 </div>

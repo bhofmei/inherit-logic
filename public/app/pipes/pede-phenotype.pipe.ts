@@ -17,7 +17,7 @@ export class PedePhenotypePipe implements PipeTransform {
 
   transform(phenoList: string[]): string {
     // ["DotColor","EyeColor","SegColor","NumLegs","NumSegments"];
-    var outStr = 'Dot Color: ' + phenoList[0] +'<;br>';
+    var outStr = 'Dot Color: ' + phenoList[0] +'<br>';
     outStr += 'Eye Color: ' + phenoList[1] + '<br>';
     outStr += 'Segment Color: ' + phenoList[2] + '<br>';
     outStr += 'Number of Legs: ' + phenoList[3] + '<br>';
