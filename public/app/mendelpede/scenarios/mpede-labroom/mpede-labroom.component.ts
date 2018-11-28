@@ -150,6 +150,18 @@ export class MendelpedeLabroomComponent implements OnInit{
     //console.log('stack of pedes');
     //console.log(this.storablePedes);
   }
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent){
+    console.log(event.keyCode);
+    var keyCode = event.keyCode;
+    if(this.childPedes[0].phenotype !== null){
+    if (keyCode > 48 && keyCode < 57){
+      this.dropPedeToStorage(keyCode-49);
+    } else if (keyCode === 48 && this.undoSpotList.length > 0){
+      this.undoPede();
+    }
+  }
+  }
 
   /**
    * Adds a new strain to a fridge
