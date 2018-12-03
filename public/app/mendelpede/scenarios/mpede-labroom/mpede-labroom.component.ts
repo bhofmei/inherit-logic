@@ -152,12 +152,16 @@ export class MendelpedeLabroomComponent implements OnInit{
   }
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent){
-    console.log(event.keyCode);
+    //console.log(event.keyCode);
+    // keycode for numbers above keypad are 48-56 for 0-8
+    // keycode for numpad are 96-104 for 0-8
     var keyCode = event.keyCode;
     if(this.childPedes[0].phenotype !== null){
     if (keyCode > 48 && keyCode < 57){
       this.dropPedeToStorage(keyCode-49);
-    } else if (keyCode === 48 && this.undoSpotList.length > 0){
+    } else if (keyCode > 96 && keyCode < 105){
+      this.dropPedeToStorage(keyCode-97);
+    } else if ((keyCode === 48 || keyCode === 96) && this.undoSpotList.length > 0){
       this.undoPede();
     }
   }
