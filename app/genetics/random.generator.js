@@ -11,7 +11,6 @@ const config = require('../../config/config');
 
 exports.getEngine = function(){
   if(config.phageSeed === null || config.phageSeed === undefined){
-    console.error('AUTOSEED');
     return rand.engines.mt19937().autoSeed();
   } else {
     return rand.engines.mt19937().seed(config.phageSeed);
