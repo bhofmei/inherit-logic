@@ -8,6 +8,7 @@ import { McBreadcrumbsModule } from 'ngx-breadcrumbs';
 import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog.component';
 
 import { PersonNamePipe } from '../pipes/person-name.pipe';
+import { TitleCasePipe } from '../pipes/title-case.pipe';
 import { PedeQuizTraitPipe } from '../pipes/pede-quizTrait.pipe'
 import { PedeGenotypePipe } from '../pipes/pede-genotype.pipe';
 import { PeopleListNamesPipe } from '../pipes/people-list-names.pipe';
@@ -35,6 +36,7 @@ import { SelectDropModule } from './select-drop/select-drop.module';
     ],
   declarations: [
     PersonNamePipe,
+    TitleCasePipe,
     PedeGenotypePipe,
     PedeQuizTraitPipe,
     PeopleListNamesPipe,
@@ -50,6 +52,7 @@ import { SelectDropModule } from './select-drop/select-drop.module';
       SelectDropModule,
       McBreadcrumbsModule,
       PersonNamePipe,
+      TitleCasePipe,
       PedeGenotypePipe,
       PeopleListNamesPipe,
       PhageParentsPipe,
