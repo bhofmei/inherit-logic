@@ -10,7 +10,7 @@ const config = require('../../config/config');
 }*/
 
 exports.getEngine = function(){
-  if(config.phageSeed === null){
+  if(config.phageSeed === null || config.phageSeed === undefined){
     return rand.engines.mt19937().autoSeed();
   } else {
     return rand.engines.mt19937().seed(config.phageSeed);
@@ -55,10 +55,10 @@ exports.getCount = function(engine){
 
 exports.reset = function(engine){
   // reset counter when testing
-  if(config.phageSeed !== null){
-    engine.seed(config.phageSeed);
-  } else {
+  if(config.phageSeed === null || config.phageSeed === undefined){
     engine.autoSeed();
+  } else {
+    engine.seed(config.phageSeed);
   }
 }
 
