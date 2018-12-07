@@ -3,3 +3,9 @@
   margin-bottom: 10px;
   display: block;
 }
+.del-inst-btn{
+  display: none;
+}
+.curr-instr > span.del-inst-btn:hover{
+  display: inline-block;
+}

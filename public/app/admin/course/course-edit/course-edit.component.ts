@@ -134,7 +134,10 @@ export class CourseEditComponent implements OnInit, OnDestroy{
     });
     }
   }
-  // TODO: remove instructor
+
+  deleteInstructor(userId: number){
+    console.log('Deleting '+userId);
+  }
 
   /**
    * - When clicking delete course button, open a dialog

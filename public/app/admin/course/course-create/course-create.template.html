@@ -1,28 +1,49 @@
-<form (ngSubmit)="createCourse()" class="form-create-course col-12 col-md-8 justify-content-center">
-  <h4 class="form-create-course-heading">
-    Create Course
-  </h4>
-  <label for="courseNum" class="sr-only">
-    Course Number
-  </label>
-  <input type="text" id="courseNum" class="form-control" required autofocus placeholder="Course Number" [(ngModel)]="courseDetails.courseNum" name="courseNum">
+<div class="container">
+<!-- <form (ngSubmit)="createCourse()" class="form-create-course col-12 col-md-8 justify-content-center"> -->
+<form [formGroup]="course" (ngSubmit)="createCourse()" class="col-12 col-md-10 col-lg-8 mx-auto">
+  <h4 class="text-dark row">Create Course</h4>
+  <div class="form-row form-group" id="rowNum">
+    <label for="inputNum" class="col-12 col-md-4 text-primary">Course Number</label>
+    <div class="col-12 col-md-8">
+    <input type="text" id="inputNum" class="form-control" required autofocus formControlName="courseNum" name="courseNum">
+    <required-error [field]="courseNum" [textLabel]="'Course number'"></required-error>
+    </div>
+  </div> <!-- end rowNum -->
 
-  <label for="courseDesc" class="sr-only">
-    Course Description
-  </label>
-  <textarea type="text" id="courseDesc" class="form-control" placeholder="Description" [(ngModel)]="courseDetails.description" name="courseDesc"></textarea>
-  
-  <div class="radio">
-    <input type="radio" [(ngModel)]="courseDetails.isGraduateCourse" name="isGraduate" [value]=true checked><label style="margin-left: 5px">Graduate Course</label>
-  </div>
-  <div class="radio">
-    <input type="radio" [(ngModel)]="courseDetails.isGraduateCourse" name="isGraduate" [value]=false><label style="margin-left: 5px">Undergraduate Course</label>
-  </div>
+  <div class="form-row form-group" id="rowDesc">
+    <label for="inputDesc" class="col-12 col-md-4 text-primary">Course Description</label>
+    <div class="col-12 col-md-8">
+      <textarea type="text" id="inputDesc" class="form-control" formControlName="description" name="description"></textarea>
+    </div>
+  </div> <!-- end rowDesc -->
 
-  <button class="btn btn-primary" type="submit">
-    Submit
-  </button>
+  <div class="form-row form-group" id="rowLevel">
+    <label id="inputLevel" class="col-12 col-md-4 text-primary">Course Level</label>
+    <div id="inputLevel" class="col-12 col-md-8">
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" formControlName="level" name="level" id="level-all" value="all">
+    <label class="form-check-label" for="level-all">All</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" formControlName="level" name="level" id="level-grad" value="graduate">
+    <label class="form-check-label" for="level-grad">Graduate</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" formControlName="level" name="level" id="level-ungrad" value="undergraduate">
+    <label class="form-check-label" for="level-ungrad">Undergraduate</label>
+  </div>
+  </div>
+  </div> <!-- end rowLevel -->
+
+  <div class="form-row" id="rowBtns">
+    <div class="d-none d-md-block col-md-4"></div>
+  <div class="btn-group col-12 col-md-8">
+  <button class="btn btn-primary" type="submit">Submit</button>
+  <button class="btn btn-outline-primary" type="button" (click)="onCancel()">Cancel</button>
+  </div>
+  </div> <!-- end rowBtns -->
   <p class="text-danger">
     {{errorMessage}}
   </p>
 </form>
+</div>

@@ -21,7 +21,7 @@ import { readErrorMessage } from '../../../shared/read-error';
 @Component({
   selector: 'course-scen',
   templateUrl: './course-scenario.template.html',
-  styleUrls: ['./course-scenario.style.css']
+  styles: ['.access-status { color: #495057; }', '.student-label {font-weight: 500; }']
 })
 
 export class CourseScenarioComponent implements OnInit, OnDestroy {

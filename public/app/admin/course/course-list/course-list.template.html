@@ -1,10 +1,11 @@
 <div class="container">
-<h4 class="text-dark">Courses</h4>
-<div class="col-12">
-  <a [routerLink]="['create']">Create new course</a>
-  <div class="list-group mt-2">
+  <div class="col-12 col-md-10 col-lg-8 mx-auto">
+    <h4 class="text-dark row">Courses</h4>
+    <div class="" id="rowCreate">
+      <a [routerLink]="['create']">Create new course</a>
+    </div> <!-- end rowCreate -->
+    <div class="list-group mt-2" id="rowList">
       <a *ngFor="let course of courses" [routerLink]="[course.courseNum]" class="list-group-item list-group-item-action">{{course.courseNum}}</a>
-  </div> <!-- end list-group -->
-</div> <!-- end col-12 -->
+  </div> <!-- end rowList  -->
 </div>
-
+</div>

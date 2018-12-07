@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
 import { CourseService } from '../course.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
@@ -12,8 +13,7 @@ import { readErrorMessage } from '../../../shared/read-error'
  */
 @Component({
   selector: 'course-create',
-  templateUrl: './course-create.template.html',
-  styleUrls: ['./course-create.style.css']
+  templateUrl: './course-create.template.html'
 })
 
 export class CourseCreateComponent implements OnInit, OnDestroy {
@@ -27,7 +27,7 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
    * - Course details to be sent to the backend server
    * - Includes `courseNum` and `description`
    */
-  private courseDetails: any = {};
+  private course: FormGroup;
   /**
    * Logged in admin user
    */
@@ -38,7 +38,8 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _route: ActivatedRoute,
      private _authService: AuthenticationService
-  ){}
+  ){
+  }
 
   /**
    * When initializing the component, get the currently logged
@@ -46,7 +47,17 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
    */
   ngOnInit(){
     this.admin = this._authService.getUser();
+    // set up for group;
+    this.course = new FormGroup({
+      'courseNum': new FormControl('', Validators.required),
+      'description': new FormControl(''),
+      'level': new FormControl('all')
+    });
   }
+
+  get courseNum(){ return this.course.get('courseNum'); }
+  get description(){ return this.course.get('description'); }
+  get level(){ return this.course.get('level'); }
 
   /**
    * Check that a course number has been entered then
@@ -56,18 +67,18 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
    * If error, display error message
    */
   createCourse(){
-    //console.log(this.courseDetails)
-    if(this.courseDetails.courseNum===''){
-      this.errorMessage = 'Course number is required'
-    } else {
-      this.subscription = this._courseService
-      .createCourse(this.admin.id, this.courseDetails)
-    .subscribe( (result)=>{
-      this._router.navigate(['../', result.courseNum], {relativeTo: this._route})
-    }, (err)=>{
-      this.errorMessage = readErrorMessage(err);
-    });
-    }
+    this.subscription = this._courseService
+      .createCourse(this.admin.id, this.course.value)
+      .subscribe( (result)=>{
+        this._router.navigate(['../', result.courseNum], {relativeTo: this._route})
+      }, (err)=>{
+        this.errorMessage = readErrorMessage(err);
+      });
+  }
+
+  /** When cancel button is pressed, go back to the course listing page */
+  onCancel(){
+    this._router.navigate(['../'], {relativeTo: this._route});
   }
 
   /**

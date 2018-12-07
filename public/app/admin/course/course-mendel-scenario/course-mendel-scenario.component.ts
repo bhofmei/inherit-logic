@@ -21,7 +21,7 @@ import { readErrorMessage } from '../../../shared/read-error';
 @Component({
   selector: 'course-scen',
   templateUrl: './course-mendel-scenario.template.html',
-  styleUrls: ['../course-scenario/course-scenario.style.css']
+  styles: []
 })
 
 export class CourseMendelScenarioComponent implements OnInit, OnDestroy {

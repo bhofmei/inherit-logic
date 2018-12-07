@@ -10,12 +10,11 @@ import { MendelpedeScenarioService } from '../../../mendelpede/scenarios/mendelp
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { readErrorMessage } from '../../../shared/read-error';
 
-import { Course, Student, sortStudents, Scenario, User, MendelpedeScenario } from '../../../interfaces';
+import { Course, CourseLevels, Student, sortStudents, Scenario, User, MendelpedeScenario } from '../../../interfaces';
 
 @Component({
   selector: 'course-indiv',
-  templateUrl: './course-indiv.template.html',
-  styleUrls: ['./course-indiv.style.css']
+  templateUrl: './course-indiv.template.html'
 })
 
 
@@ -23,7 +22,7 @@ import { Course, Student, sortStudents, Scenario, User, MendelpedeScenario } fro
  * Component to view an individual course
  * Includes information such as course number, description, instructors, and students
  */
-export class CourseIndivComponent implements OnInit, OnDestroy{
+export class CourseIndivComponent implements OnInit, OnDestroy {
 
   /**
    * List of students enrolled in the course
@@ -52,7 +51,7 @@ export class CourseIndivComponent implements OnInit, OnDestroy{
    * List of all Mendelpede scenarios
    */
   private mpedeOptions: MendelpedeScenario[];
-  
+
   mpedeScenarios: MendelpedeScenario[] = Array();
   quizes: MendelpedeScenario[] = Array();
   discoveries: MendelpedeScenario[] = Array();
@@ -64,7 +63,7 @@ export class CourseIndivComponent implements OnInit, OnDestroy{
     private _courseService: CourseService,
     private _authService: AuthenticationService,
     private _scenarioService: CricketService,
-    private _mpedeScenarioService: MendelpedeScenarioService,){
+    private _mpedeScenarioService: MendelpedeScenarioService, ) {
     this.isDestroyed$ = new Subject<boolean>();
   }
 
@@ -75,85 +74,85 @@ export class CourseIndivComponent implements OnInit, OnDestroy{
    * 3. Get the list of students in the course
    * 4. Get the list of scenarios
    */
-  ngOnInit(){
+  ngOnInit() {
     let admin: User = this._authService.getUser();
     this.paramObserver = this._route.params.subscribe(params => {
-            let course = params['courseNum'];
-            this._courseService.getCourse(admin.id, course)
+      let course = params['courseNum'];
+      this._courseService.getCourse(admin.id, course)
         .takeUntil(this.isDestroyed$)
-              .subscribe((info) => {
-              this.courseInfo = info;
-              this._courseService.getStudents(admin.id, course)
-              .takeUntil(this.isDestroyed$)
-              .subscribe((students)=>{
-                this.students = students.sort(sortStudents);
-                this._scenarioService.listScenarios()
-                  .takeUntil(this.isDestroyed$)
-                  .subscribe((scens)=>{
-                    this.scenarios = scens;
+        .subscribe((info) => {
+          this.courseInfo = info;
+          this._courseService.getStudents(admin.id, course)
+            .takeUntil(this.isDestroyed$)
+            .subscribe((students) => {
+              this.students = students.sort(sortStudents);
+              this._scenarioService.listScenarios()
+                .takeUntil(this.isDestroyed$)
+                .subscribe((scens) => {
+                  this.scenarios = scens;
                 });
-                this._mpedeScenarioService.listScenarios().takeUntil(this.isDestroyed$)
-                    .subscribe((scens) => {
-                      this.mpedeOptions = scens;
-                      this.mpedeOptions.forEach((option) => {
-                        if (option.scenType === 'scenario') {
-                          this.mpedeScenarios.push(option);
-                        } else if(option.scenType === 'quiz'){
-                          this.quizes.push(option);
-                        } else if(option.scenType === 'discovery'){
-                          this.discoveries.push(option);
-                        }else if(option.scenType === 'pathway'){
-                          this.pathways.push(option);
-                        }
-                      });
-                      this.mpedeScenarios = this.mpedeScenarios.sort((o1, o2) => {
-                        if (o1.ordOfScen < o2.ordOfScen){
-                          return -1;
-                        } else if (o1.ordOfScen > o2.ordOfScen){
-                          return 1;
-                        } else{
-                          return 0;
-                        }
-                      })
-                      this.quizes = this.quizes.sort((o1, o2) => {
-                        if (o1.ordOfScen < o2.ordOfScen){
-                          return -1;
-                        } else if (o1.ordOfScen > o2.ordOfScen){
-                          return 1;
-                        } else{
-                          return 0;
-                        }
-                      })
-                      this.discoveries = this.discoveries.sort((o1, o2) => {
-                        if (o1.ordOfScen < o2.ordOfScen){
-                          return -1;
-                        } else if (o1.ordOfScen > o2.ordOfScen){
-                          return 1;
-                        } else{
-                          return 0;
-                        }
-                      })
-                      this.pathways = this.pathways.sort((o1, o2) => {
-                        if (o1.ordOfScen < o2.ordOfScen){
-                          return -1;
-                        } else if (o1.ordOfScen > o2.ordOfScen){
-                          return 1;
-                        } else{
-                          return 0;
-                        }
-                      })
-                    });
-              });
-            },(error) => {
-              this.errorMessage = readErrorMessage(error);
+              this._mpedeScenarioService.listScenarios(this.courseInfo.level).takeUntil(this.isDestroyed$)
+                .subscribe((scens) => {
+                  this.mpedeOptions = scens;
+                  this.mpedeOptions.forEach((option) => {
+                    if (option.scenType === 'scenario') {
+                      this.mpedeScenarios.push(option);
+                    } else if (option.scenType === 'quiz') {
+                      this.quizes.push(option);
+                    } else if (option.scenType === 'discovery') {
+                      this.discoveries.push(option);
+                    } else if (option.scenType === 'pathway') {
+                      this.pathways.push(option);
+                    }
+                  });
+                  this.mpedeScenarios = this.mpedeScenarios.sort((o1, o2) => {
+                    if (o1.ordOfScen < o2.ordOfScen) {
+                      return -1;
+                    } else if (o1.ordOfScen > o2.ordOfScen) {
+                      return 1;
+                    } else {
+                      return 0;
+                    }
+                  })
+                  this.quizes = this.quizes.sort((o1, o2) => {
+                    if (o1.ordOfScen < o2.ordOfScen) {
+                      return -1;
+                    } else if (o1.ordOfScen > o2.ordOfScen) {
+                      return 1;
+                    } else {
+                      return 0;
+                    }
+                  })
+                  this.discoveries = this.discoveries.sort((o1, o2) => {
+                    if (o1.ordOfScen < o2.ordOfScen) {
+                      return -1;
+                    } else if (o1.ordOfScen > o2.ordOfScen) {
+                      return 1;
+                    } else {
+                      return 0;
+                    }
+                  })
+                  this.pathways = this.pathways.sort((o1, o2) => {
+                    if (o1.ordOfScen < o2.ordOfScen) {
+                      return -1;
+                    } else if (o1.ordOfScen > o2.ordOfScen) {
+                      return 1;
+                    } else {
+                      return 0;
+                    }
+                  })
+                });
             });
+        }, (error) => {
+          this.errorMessage = readErrorMessage(error);
         });
+    });
   }
 
   /**
    * Unsubscribe from subscriptions to prevent memory leaks
    */
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.paramObserver.unsubscribe();
     this.isDestroyed$.next(true);
     this.isDestroyed$.unsubscribe();
