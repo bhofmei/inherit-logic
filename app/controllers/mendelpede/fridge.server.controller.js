@@ -82,9 +82,9 @@ exports.stockMendelFridge = function (req, res) {
   var user = req.curUser;
   var scen = req.scenario;
   // determine if access granted -> default true bc of testing
-  /*let accessGranted = user.get('accessGranted');
-  let access;
-  if (accessGranted) {
+  //let accessGranted = user.get('accessGranted');
+  let access = true;
+  /*if (accessGranted) {
     // created user
     access = accessGranted[scen.scenShortCode];
   } else {
