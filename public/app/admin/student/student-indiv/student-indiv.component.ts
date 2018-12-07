@@ -40,8 +40,8 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
    * List of all scenarios
    */
     private scenarios: Scenario[];
-  
-  
+
+
   /**
    * Boolean state variable to make unsubscribing from multiple
    * observables easier
@@ -64,12 +64,12 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
    */
     private newRole: string;
 
-    private scoreMap: Map<string, string> = new Map<string, string>(); 
+    private scoreMap: Map<string, string> = new Map<string, string>();
   /**
    * List of all Mendelpede scenarios
    */
   private mpedeOptions: MendelpedeScenario[];
-  
+
   mpedeScenarios: MendelpedeScenario[] = Array();
   quizes: MendelpedeScenario[] = Array();
   discoveries: MendelpedeScenario[] = Array();
@@ -111,7 +111,7 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
                         .subscribe((scens) => {
                             this.scenarios = scens;
                         });
-                    this._mpedeScenarioService.listScenarios().takeUntil(this.isDestroyed$)
+                    this._mpedeScenarioService.listScenarios('all').takeUntil(this.isDestroyed$)
                     .subscribe((scens) => {
                       this.mpedeOptions = scens;
                       this.mpedeOptions.forEach((option) => {
@@ -187,7 +187,7 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
                     this.errorMessage = readErrorMessage(error);
                 });
                 //console.log(this.scoreMap);
-                
+
         });
     }
 

@@ -21,16 +21,6 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
 
   user: User;
 
-  constructor(private _router: Router,
-    private _route: ActivatedRoute,
-    private _authenticationService: AuthenticationService,
-    private _scenarioService: MendelpedeScenarioService,
-    private _modalService: NgbModal) {
-    this.maxShelf = 32;
-    this.spots = 8;
-    this.isDestroyed$ = new Subject<boolean>();
-    }
-
   /**
    * The fridge object
    */
@@ -81,6 +71,16 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
 
   private nextSpot: number;
 
+  constructor(private _router: Router,
+    private _route: ActivatedRoute,
+    private _authenticationService: AuthenticationService,
+    private _scenarioService: MendelpedeScenarioService,
+    private _modalService: NgbModal) {
+    this.maxShelf = 32;
+    this.spots = 8;
+    this.isDestroyed$ = new Subject<boolean>();
+    }
+
    /**
    * Initailize the fridge when creating component
    * 1. Get logged in user and current scenario
@@ -117,7 +117,6 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    *
    * @returns {Object} classes wh
    */
-
   getMendelpede(phenotype: string[]): Object{
     var mpedeCssClass = {'mx-auto sizeI': true};
 

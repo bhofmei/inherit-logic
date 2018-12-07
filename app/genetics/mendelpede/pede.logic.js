@@ -71,17 +71,19 @@ exports.determinePhenotype = function(genoFacts, inPede){
         var locus2 = this.ternaryGenoSum(inPede.genotype[1]);
         switch(inheritType){
           case tEnum.INHERIT.EPIDUP:
-            // both rec -> 'dom', both dom -> 'rec'
+            // either dom -> 'dom', both rec -> `rec`
             rawPheno[traitInt] = ((locus1 > 0 || locus2 > 0) ? genoFacts[0]['dom'] : genoFacts[0]['rec']);
             break;
           case tEnum.INHERIT.EPICOMP:
-            // both dom -> 'dom', both dom -> 'rec'
+            // both dom -> 'dom', either rec -> `rec`
             rawPheno[traitInt] = ((locus1 > 0 && locus2 > 0) ? genoFacts[0]['dom'] : genoFacts[0]['rec']);
             break;
           case tEnum.INHERIT.EPIREC:
+          // gene1 rec -> 'rec' (no progress); gene1 dom and gene2 rec -> `inter`; both dom -> `dom`
             rawPheno[traitInt] = (locus1 === 0 ? genoFacts[0]['rec'] : (locus2 === 0 ? genoFacts[0]['interm'] : genoFacts[0]['dom']));
             break;
           case tEnum.INHERIT.EPIDOM:
+          // gene1 dom -> `rec` (no progress); gene1 and gene 2 rec -> `inter`; gene1 rec and gene 2 dom -> `dom`
             rawPheno[traitInt] = (locus1 > 0 ? genoFacts[0]['rec'] : (locus2 === 0 ? genoFacts[0]['interm'] : genoFacts[0]['dom']));
             break;
         }
