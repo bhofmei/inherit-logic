@@ -5,25 +5,23 @@
   <div *ngIf="courseInfo" id="course-info">
     <div class="row mb-0" id="course-name">
       <div class="m-0 p-0">
-        <h4 class="text-dark">
-          {{ courseInfo.courseNum }}
-        </h4>
+        <h4 class="text-dark">{{ courseInfo.courseNum }}</h4>
       </div>
       <a class="ml-auto btn btn-sm btn-outline-primary" [routerLink]="['./edit']">Edit</a>
     </div>
 
     <div class="row mt-2" id="course-desc">
-      <div class="col-6 col-md-4 col-xl-2">
-          Description
-        </div>
+      <div class="col-6 col-md-4 col-xl-2">Description</div>
         <div class="col-6 col-md-8 col-xl-10 text-secondary">{{ courseInfo.description }}</div>
     </div> <!-- end course-desc -->
     <div class="row" id="course-instr">
-      <div class="col-6 col-md-4 col-xl-2">
-          Instructors
-        </div>
+      <div class="col-6 col-md-4 col-xl-2">Instructors</div>
         <div *ngIf="courseInfo.instructors" class="col-6 col-md-8 col-xl-10 text-secondary">{{ courseInfo.instructors | peopleListNames }}</div>
     </div> <!-- course-instr -->
+    <div class="row" id="course-level">
+      <div class="col-6 col-md-4 col-xl-2">Level</div>
+      <div class="col-6 col-md-8 col-xl-10 text-secondary">{{ courseInfo.level | titleCase }}</div>
+    </div> <!-- end course-level -->
   </div>
   <!-- end course info -->
   <div id="scenario-status">
@@ -48,7 +46,7 @@
                 </button>
               </h5>
             </div>
-        
+
             <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
               <div class="card-body">
                 <div class="list-group mt-2">
@@ -68,13 +66,13 @@
           <div class="card-header" id="headingTwo">
             <h5 class="mb-0">
               <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                By Mendelpede Scenarios 
+                By Mendelpede Scenarios
               </button>
             </h5>
           </div>
-      
+
           <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-            
+
             <div class="card-body">
               <div class="list-group mt-2">
                   <div id="student-scenarios">
@@ -83,7 +81,7 @@
                               <div class="text-weight-bold text-primary mr-2">Scenarios</div>
                           </div>
                         <a *ngFor="let scenario of mpedeScenarios" [routerLink]="['./mendelpede/', scenario.shortCode]" class="list-group-item list-group-item-action">{{scenario.label}}</a>
-                        
+
                         <div class="row d-flex mb-3" id="scenario-info">
                         </div>
                         <div class="justify-content-between d-flex mb-3" id="scenario-info">
@@ -92,7 +90,7 @@
                         <a *ngFor="let quiz of quizes" [routerLink]="['./mendelpede/', quiz.shortCode]" class="list-group-item list-group-item-action">{{quiz.label}}</a>
                         <div class="row d-flex mb-3" id="scenario-info">
                           </div>
-                        <div class="justify-content-between d-flex mb-3" id="scenario-info">
+                        <div *ngIf="discoveries.length > 0" class="justify-content-between d-flex mb-3" id="scenario-info">
                             <div class="text-weight-bold text-primary mr-2">Discoveries</div>
                         </div>
                         <a *ngFor="let discovery of discoveries" [routerLink]="['./mendelpede/', discovery.shortCode]" class="list-group-item list-group-item-action">{{discovery.label}}</a>

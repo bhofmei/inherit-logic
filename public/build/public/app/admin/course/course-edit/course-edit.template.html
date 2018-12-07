@@ -1,47 +1,56 @@
-<div class="container-fluid">
+<div class="container">
   <div *ngIf="errorMessage !== ''" class="alert alert-danger">
     {{ errorMessage }}
   </div>
-  <div *ngIf="courseInfo" id="course-info">
-    <h4 class="row">{{ courseInfo.courseNum }}</h4>
+  <div *ngIf="courseInfo" id="course-info" class="col-12 col-md-10 col-lg-8 mx-auto">
+    <h4 class="row text-dark">Edit Course:  <span class="pl-2 text-secondary">{{ courseInfo.courseNum }}</span></h4>
 
-    <div id="currInstructors">
-      <div class="text-secondary d-block">
-        Instructors
+    <div id="currInstructors" class="form-row form-group">
+      <label class="text-primary d-block w-100" for="listInstr">Instructors</label>
+      <div class="ml-2 list-group" id="listInstr">
+        <div *ngFor="let instr of courseInfo.instructors" class="curr-instr">
+          <span>{{ instr | personName }}</span>
+          <span class="ml-3 del-inst-btn" (click)="deleteInstructor(instr.userId)">X</span>
+        </div>
       </div>
-      <div class="list-group">
-        <div *ngFor="let instr of courseInfo.instructors" class="ml-2">{{ instr | personName }}</div>
-      </div>
-    </div>
-
-    <div id="addInstructor">
-      <div class="text-secondary d-block">
-        Add Instructor
-      </div>
-      <div class="input-group input-group-sm">
-        <select class="form-control" [(ngModel)]="selectedAdd" name="addInstr">
-        <option value="undefined" disabled>Instructor to add</option>
-        <option *ngFor="let instr of possibleInstr" [value]="instr.userId">{{instr | personName:true }}</option>
-      </select>
+    </div> <!-- end currInstructors -->
+    <div id="addInstructor" class="form-row form-group">
+      <label class="text-primary d-block" for="addInstr">Add Instructor</label>
+      <div class="ml-2 input-group input-group-sm">
+        <select class="form-control" [(ngModel)]="selectedAdd" name="addInstr" id="addInstr">
+          <option value="undefined" disabled>Instructor to add</option>
+          <option *ngFor="let instr of possibleInstr" [value]="instr.userId">{{instr | personName:true }}</option>
+        </select>
         <div class="input-group-append">
           <button class="btn btn-secondary" (click)="addInstructor()">Add</button>
         </div>
       </div>
-    </div>
-    <div class="text-secondary d-block">
-      Description
-    </div>
-    <textarea type="text" id="desc-input" class="form-control" [(ngModel)]="courseInfo.description" placeholder="Course description" name="description"></textarea>
-    <div class="radio">
-      <input type="radio" [(ngModel)]="courseInfo.isGraduateCourse" name="isGraduate" [value]=true checked><label style="margin-left: 5px">Graduate Course</label>
-    </div>
-    <div class="radio">
-      <input type="radio" [(ngModel)]="courseInfo.isGraduateCourse" name="isGraduate" [value]=false><label style="margin-left: 5px">Undergraduate Course</label>
-    </div>
-    <div class="">
+    </div> <!-- end addInstructor -->
+    <div class="form-row form-group" id="courseDesc">
+    <label class="text-primary d-block" for="inputDesc">Description</label>
+    <textarea type="text" id="inputDesc" class="form-control ml-2" [(ngModel)]="courseInfo.description" name="description"></textarea>
+</div><!-- end courseDesc -->
+    <div class="form-row form-group" id="courseLevel">
+        <label class="text-primary d-block w-100" for="inputLevel">Course Level</label>
+        <div id="inputLevel" class="ml-2">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="courseLevel" id="level-all" [(ngModel)]="courseInfo.level" value="all">
+        <label class="form-check-label" for="level-all">All</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="courseLevel" id="level-grad" [(ngModel)]="courseInfo.level" value="graduate">
+        <label class="form-check-label" for="level-grad">Graduate</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="courseLevel" id="level-ungrad" [(ngModel)]="courseInfo.level" value="undergraduate">
+        <label class="form-check-label" for="level-ungrad">Undergraduate</label>
+      </div>
+      </div> <!-- end inputLevel -->
+    </div> <!-- end courseLevel -->
+    <div class="form-row">
       <div class="btn-group">
         <button class="btn btn-primary" type="submit" (click)="update()">Submit</button>
-        <button class="btn btn-outline-secondary" type="button" (click)="onCancel()">Cancel</button>
+        <button class="btn btn-outline-primary" type="button" (click)="onCancel()">Cancel</button>
       </div>
     </div>
     <div *ngIf="courseInfo.courseNum !== 'NA'" class="btn-group mt-3" id="delete-course-btns">
