@@ -82,7 +82,7 @@ exports.stockMendelFridge = function (req, res) {
   var user = req.curUser;
   var scen = req.scenario;
   // determine if access granted -> default true bc of testing
-  let accessGranted = user.get('accessGranted');
+  /*let accessGranted = user.get('accessGranted');
   let access;
   if (accessGranted) {
     // created user
@@ -94,7 +94,7 @@ exports.stockMendelFridge = function (req, res) {
   // get stock phage and details
   if (!access) {
     mendScen.seedEngine(scen.ordOfScen);
-  }
+  }*/
   var stock = mendScen.buildScenario(scen);
   let pedeList = stock.pedes;
   var pedeIdList = [];
@@ -112,8 +112,8 @@ exports.stockMendelFridge = function (req, res) {
         });
     });
     pedeIdList.push(newPede);
-    
-  } 
+
+  }
   // fridge info
   var newFridge = {
     scenario: scen,
@@ -137,7 +137,8 @@ exports.stockMendelFridge = function (req, res) {
 
       if (scen.shortCode.toUpperCase().includes("QUIZ")){
         i['firstTraitForQuiz'] = JSON.parse(cryptr.decrypt(fridge.genoFacts))[0]['trait'];
-      } 
+      }
+      i['n'] = stock.n;
       res.json(i);
     }
   });
@@ -169,7 +170,7 @@ exports.insertPedeToFridge = function(req, res){
         } else{
           pedeToBeInserted.owner = mendelFridge.owner;
           pedeToBeInserted.scenario = mendelFridge.scenario;
-          
+
           MendelPede.create( pedeToBeInserted, (err, mpede) => {
           if (err)
             return res.status(400)
@@ -215,7 +216,7 @@ exports.insertPedeToFridge = function(req, res){
 exports.getMendelFridge = function (req, res) {
   var user = req.curUser;
   var scen = req.scenario;
-  
+
   MendelFridge.findOne({
       owner: user._id,
       scenario: scen._id
@@ -244,14 +245,14 @@ exports.getMendelFridge = function (req, res) {
           .send({
             message: 'No fridge for scenario/user'
           });
-      } else { 
+      } else {
         mendelFridge.genoFacts = cryptr.encrypt(mendelFridge.genoFacts);
         let i = getMendelFridgeInfo(mendelFridge);
         //console.log(scen);
         if (scen.shortCode.toUpperCase().includes("QUIZ")){
-          
+
           i['firstTraitForQuiz'] = JSON.parse(cryptr.decrypt(mendelFridge.genoFacts))[0]['trait'];
-        } 
+        }
         res.json(i);
       }
     });

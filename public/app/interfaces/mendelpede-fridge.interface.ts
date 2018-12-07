@@ -5,7 +5,7 @@ import { _User } from './user.interface';
  * A user/scenario fridge
  */
 export interface MendelpedeFridge {
-  
+
   id: string;
 
   /**
@@ -29,7 +29,8 @@ export interface MendelpedeFridge {
   firstTraitForQuiz?: string;
 
   quizScore?: string;
-  
+  n?: number;
+
 }
 
 /**
@@ -38,7 +39,7 @@ export interface MendelpedeFridge {
 export interface StudentMendelFridge {
   /**
    * Owner of the fridge
-  */ 
+  */
   owner: _User;
   /**
    * Scenario this fridge is for
@@ -58,4 +59,3 @@ export interface StudentMendelFridge {
   quizScore?: string
 
 }
-
