@@ -15,7 +15,7 @@ exports.seedEngine = function(num){
 }
 
 exports.buildScenario = function(scenario){
-  console.log('scenario ', randGen.randInt(1,10000, randEngine))
+  console.error('scenario ', randGen.randInt(1,10000, randEngine))
   // build inheritance model
   var genoFacts = getInheritance(scenario);
   // determine traits
