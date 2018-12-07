@@ -13,6 +13,17 @@ const Schema = mongoose.Schema;
  * @see {@link user-model.html}
  */
 
+ /**
+  * List of course level and error message
+  * @enum {string}
+  */
+ const courseEnum = {
+   /** acceptable values **/
+   values: ['all', 'graduate', 'undergraduate'],
+   /** error message on unacceptable value */
+   message: 'Value "{VALUE}" is not a valid course level'
+ };
+
 const CourseSchema = new Schema({
   /**
    * @member {string} courseNum - uniquely identifable course ID
@@ -38,10 +49,13 @@ const CourseSchema = new Schema({
     ref: 'User'
   }],
   /**
-   * Determines if the course is Graduate course or Ungraduate course- 
-   * True if graduate course and false if undergraduate course
+   * @member {string} level - Indicate course level
    */
-  isGraduateCourse: Boolean
+   level: {
+     type: String,
+     enum: courseEnum,
+     default: 'all'
+   },
 });
 
 CourseSchema.set('toJSON',{getters: true});

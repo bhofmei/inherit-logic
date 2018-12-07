@@ -1,6 +1,7 @@
 import { Student } from './student.interface';
 import { _User } from './user.interface';
 
+export const CourseLevels = ['all', 'graduate', 'undergraduate'];
 /**
  * Information about a course
  */
@@ -23,7 +24,7 @@ export interface Course {
   instructors?: _User[];
 
   /**
-   * If the course is graduate or Undergraduate course
+   * Course level: 'all', 'graduate', or 'undergraduate'
    */
-  isGraduateCourse: boolean;
+  level: string;
 }

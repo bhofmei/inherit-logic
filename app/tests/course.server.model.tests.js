@@ -47,6 +47,25 @@ describe('Course Model Unit Tests:', () => {
       });
     });
 
+    it('Should be able to save course with level', ()=>{
+      let oCourse = new Course({
+        courseNum: 'TEST002',
+        level: 'all'
+      });
+      oCourse.save((err) => {
+        should.not.exist(err);
+      });
+    }); // end Should be able to save course with level
+
+    it('Should not be able to save with invalid course level', ()=>{
+      let oCourse = new Course({
+        courseNum: 'TEST003',
+        level: 'fake'
+      });
+      course.save((err)=>{
+        should.exist(err);
+      });
+    });
     /*it('Should not be able to save a course with duplicate courseNum', () => {
       course.save();
       var badCourse = new Course({

@@ -145,7 +145,7 @@ exports.listCourseNum = function (req, res) {
  *
  * @param {Object} req - Express request object
  * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
- * @property {Object} body - details about new course: `courseNum` and `description`
+ * @property {Object} body - details about new course: `courseNum`, `level`, and `description`
  * @param {Object} res - Express response object
  *
  * @returns {Object} json object to response
@@ -214,7 +214,7 @@ exports.editCourse = function (req, res) {
 
   // Update the fields
   course.description = req.body.description;
-  course.isGraduateCourse = req.body.isGraduateCourse;
+  course.level = req.body.level;
   // Try saving the updated article
   course.save((err) => {
     if (err) {
@@ -489,7 +489,7 @@ exports.getScenarioStatus = function (req, res) {
           firstName: student.firstName,
           lastName: student.lastName,
           userId: student.userId,
-          status: student.accessGranted[scenId]
+          status: student.accessGranted[scenId] || false
         }
       });
       res.json(output);
