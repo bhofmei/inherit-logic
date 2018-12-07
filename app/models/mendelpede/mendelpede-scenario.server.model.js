@@ -9,7 +9,8 @@ const MendelScenarioSchema = new Schema({
   },
   inheritType: String,
   scenType: String,
-  ordOfScen: Number
+  ordOfScen: Number,
+  courseLevel: Number
 });
 
 mongoose.model('MendelScenario', MendelScenarioSchema);

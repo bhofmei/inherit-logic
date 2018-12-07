@@ -20,3 +20,11 @@ export interface MendelpedeScenario{
    */
   ordOfScen: number;
 }
+
+/**
+ * Function to sort scenarios by ordOfScen
+ *
+ */
+export const sortScenarios = function(a,b){
+    return a.ordOfScen - b.ordOfScen;
+}

@@ -6,21 +6,22 @@
  */
 const mongoose = require('mongoose');
 const Scenario = mongoose.model('MendelScenario');
+const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 
+const courseLevels = ['','all', 'graduate', 'undergraduate'];
 /**
  * @external SCENARIO
  * @see {@link ../models/mendescenario-model.html}
  */
 
-const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
-
 /**
- * List all of the sceanrios
+ * List of the sceanrios
  *
- * @apiType GET
+ * @apiType POST
  * @apiPath /api/mendelpede
  *
  * @param {Object} req - Express request object
+ * @property {Object} body - course level: `level`
  * @param {Object} res - Express response object
  *
  * @returns {Object} json object to response
@@ -29,8 +30,10 @@ const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
  * each scenario has properties `label`, `scenCode`, `purpose`, `startingPoint`, `relevance`, and `degOfDifficulty`
  */
 exports.list = function (req, res) {
-  //console.log('before find in controller');
-  Scenario.find({}, 'label shortCode scenType ordOfScen')
+  let lStr = req.body.level || 'all';
+  let level = courseLevels.indexOf(lStr);
+  Scenario.find({}, 'label shortCode scenType ordOfScen courseLevel')
+    .mod('courseLevel', [level, 0])
     .exec((err, scenarios) => {
       //console.log('before find in controller');
       if (err) {
@@ -41,7 +44,6 @@ exports.list = function (req, res) {
           });
       } else {
         // Send a JSON representation
-        //console.log(scenarios);
         res.json(scenarios);
       }
     });

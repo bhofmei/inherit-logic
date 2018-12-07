@@ -24,9 +24,10 @@ export class MendelpedeScenarioService {
     *
     * @returns {Observable<Scenario[]>} list of scenarios
     */
-    listScenarios(): Observable<MendelpedeScenario[]> {
+    listScenarios(courseLevel: string): Observable<MendelpedeScenario[]> {
+      var body = {level: courseLevel};
       return this._http
-          .get<MendelpedeScenario[]>(this._baseURL)
+          .post<MendelpedeScenario[]>(this._baseURL, body);
     }
 
   /**

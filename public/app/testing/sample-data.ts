@@ -43,7 +43,7 @@ export var listOfCourses: Course[] = [
     courseNum: 'TEST001',
     description: 'This is a test course',
     instructors: [sampleInstr],
-    isGraduateCourse: false
+    level: 'all'
   },
   {
     courseNum: 'TEST002',
@@ -56,7 +56,7 @@ export var listOfCourses: Course[] = [
       role: 'instr',
       course: null
     }],
-    isGraduateCourse: false
+    level: 'graduate'
   }
 ];
 
