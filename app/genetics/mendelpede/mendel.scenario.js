@@ -15,8 +15,6 @@ exports.seedEngine = function(num){
 }
 
 exports.buildScenario = function(scenario){
-  var testnumber = randGen.randInt(1,10000, randEngine);
-  //console.error('scenario ', )
   // build inheritance model
   var genoFacts = getInheritance(scenario);
   // determine traits
@@ -24,7 +22,7 @@ exports.buildScenario = function(scenario){
   // get list of starting bugs
   var pedeList = createPedes(scenario, genoFacts);
   // return genoFacts and pedeList
-  return {genoFacts: genoFacts, pedes: pedeList, n: testnumber};
+  return {genoFacts: genoFacts, pedes: pedeList};
 };
 
 const getInheritance = function(scenario) {

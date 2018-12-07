@@ -29,7 +29,6 @@ export interface MendelpedeFridge {
   firstTraitForQuiz?: string;
 
   quizScore?: string;
-  n?: number;
 
 }
 

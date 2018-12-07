@@ -138,7 +138,6 @@ exports.stockMendelFridge = function (req, res) {
       if (scen.shortCode.toUpperCase().includes("QUIZ")){
         i['firstTraitForQuiz'] = JSON.parse(cryptr.decrypt(fridge.genoFacts))[0]['trait'];
       }
-      i['n'] = stock.n;
       res.json(i);
     }
   });
