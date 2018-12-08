@@ -7,6 +7,7 @@
       <a [routerLink]="['../']" class="text-dark">
         <h4>{{ fridge.owner | personName }}</h4>
       </a>
+      <button *ngIf="hasFridge" class="btn btn-outline-danger d-block btn-sm mx-auto float-right" type="button" (click)="deleteStudentFridge()">Delete Fridge</button>
     </div>
 
     <div class="row d-flex mb-3" id="scenario-info">

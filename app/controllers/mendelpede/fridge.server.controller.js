@@ -446,3 +446,39 @@ exports.deletePede = function (req, res) {
     }
   });
 };
+
+exports.deleteStudentMendelFridge = function (req, res, next) {
+  let student = req.student;
+  let scen = req.scenario;
+  MendelFridge.remove({
+    owner: student._id,
+    scenario: scen._id
+  }, (err) => {
+    if (err) {
+      next(err);
+    } else {
+      MendelPede.remove({
+        owner: student._id,
+        scenario: scen._id
+      }, (err2) => {
+        if (err2) {
+          next(err2)
+        } else {
+          let out = {
+            owner: {
+              firstName: student.firstName,
+              lastName: student.lastName,
+              userId: student.userId
+            },
+            scenario: {
+              scenCode: scen.shortCode,
+              label: scen.label
+            }
+          };
+          res.json(out);
+          next()
+        }
+      });
+    }
+  });
+}

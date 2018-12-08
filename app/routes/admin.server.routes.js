@@ -26,6 +26,9 @@ module.exports = function (app) {
     .get(admin.hasAuthorization, MendelFridge.getStudentFridge)
     //.post(admin.hasAuthorization, MendelFridge.deleteStudentFridge, user.grantAccess);
 
+  app.route('/api/admin/:userId/delete-mendel-fridge/:studentId/:scenShortCode')
+    .delete(admin.hasAuthorization, MendelFridge.deleteStudentMendelFridge)
+
   app.param('userId', user.userById);
   app.param('studentId', user.userById);
   app.param('scenCode', cricketScenario.scenByCode);

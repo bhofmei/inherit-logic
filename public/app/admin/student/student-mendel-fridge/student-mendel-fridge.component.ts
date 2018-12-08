@@ -56,6 +56,12 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
    */
   private errorMessage: string = '';
 
+  private studentId: any;
+
+  private scenId: any;
+
+  private admin: any;
+
   constructor(private _router: Router,
     private _route: ActivatedRoute,
     private _studentService: StudentService,
@@ -92,11 +98,11 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
    */
   ngOnInit(){
     this.paramObserver = this._route.params.subscribe(params => {
-      let studentId = params['studentId'];
-      let scenId = params['scenShortCode'];
-      let admin = this._authService.getUser();
+      this.studentId = params['studentId'];
+      this.scenId = params['scenShortCode'];
+      this.admin = this._authService.getUser();
 
-      this._studentService.getMendelFridge(admin.id, studentId, scenId)
+      this._studentService.getMendelFridge(this.admin.id, this.studentId, this.scenId)
         .takeUntil(this.isDestroyed$)
               .subscribe((mfridge) => {
                 //console.log('we got fridge from db')
@@ -121,49 +127,29 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
         });
   }
 
-  /**
-   * Determine the CSS class for the view strains button depending on selected option
-   *
-   * @param {string} src - button determining classes for
-   *
-   * @returns {Object} classes which appy to this button in the form {"class": boolean, ...}
-   *
-   * @example <caption>View strains is "all"</caption>
-   * getButtonClass('all') -> {'btn btn-small': true, 'btn-primary': true, 'btn-primary-outline': false}
-   * getButtonClass('graded') -> {'btn btn-small': true, 'btn-primary': false, 'btn-primary-outline': true}
-
-  getButtonClass(src: string): Object{
-    return {
-      'btn btn-sm': true,
-      'btn-primary': (src === this.viewStrains),
-      'btn-outline-primary': (src !== this.viewStrains)
-    }
-  }
-*/
-  /**
-   * update the list of visible phage appropriately
-   *
-   * Called on `(click)` of "View Strain" button
-   * @param {string} src - button which was clicked;
-   * Should be one of `["all", "graded"]`
-
-  setPhage(src: string){
-    this.viewStrains = src;
-    if(this.viewStrains === 'all'){
-      this.strainList = this.fridge.strains;
-    } else {
-      this.strainList = this.fridge.strains.filter((strain)=>{
-        if(strain.phageType === 'unknown'){
-          return true;
-        } else if(strain.phageType === 'user' && strain.submitted){
-          return true;
-        } else {
-          return false;
+  deleteStudentFridge(){
+    this.fridge = null;
+    this.hasFridge = false;
+    this.currGenoFacts = null;
+    this._studentService.deleteStudentMendelFridge(this.admin.id, this.studentId, this.scenId)
+    .takeUntil(this.isDestroyed$)
+    .subscribe((mfridge)=>{
+      // successful
+      this.fridge = mfridge;
+      this.fridge.owner = mfridge.owner;
+      if(this.fridge.scenario.scenCode.toUpperCase().includes('QUIZ')){
+        this.isQuiz = true;
+      }
+      if(mfridge.genoFacts){
+        this.currGenoFacts = JSON.parse(mfridge.genoFacts)
+        if (this.currGenoFacts !== null){
+          this.hasFridge = true
         }
-      });
-    }
+      }
+    }, (err)=>{
+      this.errorMessage = readErrorMessage(err);
+    })
   }
- */
   /**
    * When destorying the component, unsubscribe from services and
    * observables to prevent memory leak

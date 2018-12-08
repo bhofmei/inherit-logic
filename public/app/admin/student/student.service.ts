@@ -108,6 +108,11 @@ export class StudentService {
             .get<StudentMendelFridge>(`${this._baseURL}/${adminId}/mendel-students/${studentId}/${scenId}`);
   }
 
+  deleteStudentMendelFridge(adminId: number, studentId: number, scenShortCode: string):Observable<any>{
+    return this._http
+            .delete(`${this._baseURL}/${adminId}/delete-mendel-fridge/${studentId}/${scenShortCode}`);
+  }
+
   /**
    * Update scenario access for a student; this deletes the existing
    * fridge
