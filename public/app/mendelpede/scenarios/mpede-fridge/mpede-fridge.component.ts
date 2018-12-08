@@ -71,6 +71,10 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
 
   private nextSpot: number;
 
+  private scenShortCode: any;
+
+  private userId: any;
+
   constructor(private _router: Router,
     private _route: ActivatedRoute,
     private _authenticationService: AuthenticationService,
@@ -92,10 +96,10 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     //console.log('ng init......');
     this.user = this._authenticationService.getUser();
 
-    let userId = this.user.id;
+    this.userId = this.user.id;
     this.paramObserver = this._route.params.subscribe((params) => {
-      let scenShortCode = params['scenShortCode'];
-      this._scenarioService.getMendelFridge(userId, scenShortCode)
+      this.scenShortCode = params['scenShortCode'];
+      this._scenarioService.getMendelFridge(this.userId, this.scenShortCode)
         .takeUntil(this.isDestroyed$)
         .subscribe(
           (fridge) => {
@@ -103,7 +107,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
           (err) => {
             if(err.status === 307){
             //console.log('creating a new fridge');
-            this._createMendelFridge(userId, scenShortCode);
+            this._createMendelFridge(this.userId, this.scenShortCode);
           } else {
             //console.log('error message'+ err);
             this.errorMessage = readErrorMessage(err);
@@ -203,15 +207,22 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    * @returns {FridgePhage[]} array of all slots in fridge, including empty
    */
   _fillPedes(fridgePedes: MendelpedePede[]): MendelpedePede[]{
+    //console.log(fridgePedes);
     var out: MendelpedePede[] = [];
     for(let i = 0; i < this.maxShelf*this.spots; i++){
       out.push({bugID: i, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null});
     }
     this.nextSpot = fridgePedes[0].bugID + 1;
+    let noOriginalPedes = this.scenShortCode.toUpperCase().includes('QUIZ')?8:6
     // add original pedes
     for(let i=0; i < fridgePedes.length; i++){
       let n = fridgePedes[i].bugID;
       out[n] = fridgePedes[i];
+      if( i < noOriginalPedes){
+        out[n].canDelete = false
+      } else {
+        out[n].canDelete = true
+      }
       this.nextSpot = (n === this.nextSpot ? n+1 : this.nextSpot);
     }
     return out;
@@ -243,6 +254,29 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     this.labroom.dropPede(pede)
   }
 
+  @HostListener('deletePede')
+  deletePede(pede: MendelpedePede){
+    //console.log('click event called');
+    let pedeToDelete: MendelpedePede = {
+      bugID: pede.bugID,
+      userId: pede.userId,
+      id: pede.id,
+      scenCode: pede.scenCode,
+      isFemale: pede.isFemale,
+      genotype: pede.genotype,
+      phenotype: pede.phenotype
+    }
+    this._scenarioService.deletePede(this.userId, this.scenShortCode, pedeToDelete)
+    .takeUntil(this.isDestroyed$)
+      .subscribe((fridge)=>{
+        //console.log('we got the new after deleting fridge: ');
+        //console.log(fridge);
+      this._initFridge(fridge);
+    }, (err)=>{
+      this.errorMessage = readErrorMessage(err);
+    });
+  }
+
   storePede(pedeToStore: MendelpedePede){
     //pedeToStoreL['bugID'] = this.fridge.pedes.length;
     let pedeToStoreL: MendelpedePede = {
@@ -254,7 +288,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
       genotype: pedeToStore.genotype,
       phenotype: pedeToStore.phenotype
     }
-    this._scenarioService.insertPede(pedeToStoreL, this.fridge)
+    this._scenarioService.insertPede(pedeToStoreL, this.fridge, this.scenShortCode)
     .takeUntil(this.isDestroyed$)
       .subscribe((fridge)=>{
         //console.log('we got the new after inserted fridge: ');

@@ -20,12 +20,16 @@ module.exports = function (app) {
   app.route('/api/mendelpede/make-children')
     .post(genetics.makeChildren);
 
-  app.route('/api/mendelpede/add-pede')
+  app.route('/api/mendelpede/:scenShortCode/add-pede')
     .post(mendelFridge.insertPedeToFridge);
 
   app.route('/api/mendelpede/calculate-score')
     .post(genetics.calculateQuizScore);
+  
+  app.route('/api/mendelpede/:userId/:scenShortCode/:mendelPedeId')
+    .delete(mendelFridge.findFridgeByScenOwner, mendelFridge.deletePede);
 
   app.param('userId', user.userById);
   app.param('scenShortCode', scenarios.scenarioByCode);
+  app.param('mendelPedeId', mendelFridge.mendelpedeById);
 };

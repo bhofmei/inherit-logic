@@ -16,6 +16,7 @@
               <div class="col-6 col-lg-3 text-right pl-0 pr-1 order-lg-12">
                 <span *ngIf="pede[0].isFemale === 'F'" class="text-danger">F</span>
                 <span *ngIf="pede[0].isFemale === 'M'" class="text-info">M</span>
+                <span *ngIf="pede[0].canDelete" class = "oi oi-trash new-line" (click)="deletePede(pede[0])"></span>
               </div>
               <div class="col-12 col-lg-6 p-0">
                 <div [ngClass]="getMendelpede(pede[0].phenotype)" (click)="sendPede(pede[0])"></div>
@@ -30,6 +31,7 @@
               <div class="col-6 col-lg-3 text-right pl-0 pr-1 order-lg-12">
                 <span *ngIf="pede[1].isFemale === 'F'" class="text-danger">F</span>
                 <span *ngIf="pede[1].isFemale === 'M'" class="text-info">M</span>
+                <span *ngIf="pede[1].canDelete" class = "oi oi-trash new-line" (click)="deletePede(pede[1])"></span>
               </div>
               <div class="col-12 col-lg-6 p-0">
                 <div [ngClass]="getMendelpede(pede[1].phenotype)" (click)="sendPede(pede[1])"></div>

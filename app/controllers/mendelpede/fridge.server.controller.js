@@ -47,8 +47,12 @@ const getPedeInfo = function(pede){
  * - Each strain of `strains` has `comment`, `id`, `parents`, `strainNum`, `phageType`, `submitted`, and `numParents`
  */
 const getMendelFridgeInfo = function (mendelFridge) {
+  var count = 0;
   let pedeList = mendelFridge.pedeList.map((pede) => {
-    return getPedeInfo(pede);
+    var pede = getPedeInfo(pede)
+    pede.bugID = count
+    count++;
+    return pede;
   });
   return {
     genoFacts: mendelFridge.genoFacts,
@@ -146,6 +150,7 @@ exports.stockMendelFridge = function (req, res) {
 exports.insertPedeToFridge = function(req, res){
   var reqBody = req.body;
   var fridgeId = reqBody.fridgeId;
+  var scen = req.scenario;
   var pedeToBeInserted = reqBody.pedeToBeInserted;
   pedeToBeInserted.genotype = JSON.parse(cryptr.decrypt(pedeToBeInserted.genotype));
   pedeToBeInserted = new MendelPede(pedeToBeInserted)
@@ -188,7 +193,13 @@ exports.insertPedeToFridge = function(req, res){
                 fridge.pedeList[i].genotype = cryptr.encrypt(JSON.stringify(fridge.pedeList[i]));
               }
               fridge.genoFacts = cryptr.encrypt(fridge.genoFacts);
-              res.json(getMendelFridgeInfo(fridge))
+
+              let i = getMendelFridgeInfo(fridge);
+
+              if (scen.shortCode.toUpperCase().includes("QUIZ")){
+                i['firstTraitForQuiz'] = JSON.parse(cryptr.decrypt(fridge.genoFacts))[0]['trait'];
+              }
+              res.json(i);
             });
           });
         }
@@ -317,3 +328,121 @@ exports.getStudentFridge = function(req, res){
       }
     });
 }
+
+exports.mendelpedeById = function(req, res, next, id){
+  //console.log('*************************getPede method');
+  MendelPede.findOne({
+    '_id': id
+  },(error, pede) => {
+    if(error){
+      //console.log('error occured');
+      console.log(err)
+      return next(error)
+    }
+    if(!pede){
+      //console.log('No pede found');
+      return res.status(400)
+              .send({
+                message: 'No pede found'
+              });
+    }
+    req.mendelpede = pede;
+    next();
+  });
+}
+
+exports.findFridgeByScenOwner = function (req, res, next) {
+  /*
+  var user = req.curUser;
+  var scen = req.scenario;
+  MendelFridge.findOne({
+    owner: user._id,
+    scenario: scen._id
+  }, (err, fridge) => {
+    if (err) {
+      console.log(err)
+      next(err)
+    } else if (!fridge) {
+      return next('Failed to find fridge')
+    } else {
+      req.mendelFridge = fridge;
+      next()
+    }
+  });*/
+  var user = req.curUser;
+  var scen = req.scenario;
+
+  MendelFridge.findOne({
+      owner: user._id,
+      scenario: scen._id
+    })
+    .populate('owner', 'userId')
+    .populate('scenario', 'shortCode')
+    .populate({
+      path: 'pedeList',
+      select: 'bugID isFemale genotype phenotype id',
+      populate: {
+        path: 'scenario',
+        select: 'shortCode',
+        model: 'MendelScenario'
+      }
+    })
+    .exec((err, mendelFridge) => {
+      if (err) {
+        //console.log('error in get fridge: '+err);
+        return res.status(500)
+          .send({
+            message: getErrorMessage(err)
+          });
+      } else if (!mendelFridge) {
+        //console.log('no fridge');
+        return res.status(307)
+          .send({
+            message: 'No fridge for scenario/user'
+          });
+      } else {
+        //mendelFridge.genoFacts = cryptr.encrypt(mendelFridge.genoFacts);
+        //let i = getMendelFridgeInfo(mendelFridge);
+        //console.log(scen);
+        req.mendelFridge = mendelFridge;
+        next()
+      }
+    });
+};
+
+exports.deletePede = function (req, res) {
+  var fridge = req.mendelFridge;
+  var mendelpede = req.mendelpede;
+  var scen = req.scenario;
+  // delete strain from fridge list
+  fridge.pedeList.pull(mendelpede._id);
+  fridge.save((error) => {
+    if (error) {
+      console.log(err)
+      return res.status(500)
+        .send({
+          message: 'Unable to remove pede from fridge'
+        });
+    } else {
+      mendelpede.remove((err) => {
+        if (err) {
+          console.log(err)
+          return res.status(400)
+            .send({
+              message: getErrorMessage(err)
+            });
+        } else {
+        fridge.genoFacts = cryptr.encrypt(fridge.genoFacts);
+        let i = getMendelFridgeInfo(fridge);
+        //console.log(scen);
+        if (scen.shortCode.toUpperCase().includes("QUIZ")){
+
+          i['firstTraitForQuiz'] = JSON.parse(cryptr.decrypt(fridge.genoFacts))[0]['trait'];
+        }
+        //console.log(i)
+        res.json(i);
+        }
+      });
+    }
+  });
+};

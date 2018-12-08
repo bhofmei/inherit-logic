@@ -23,5 +23,5 @@ export interface MendelpedePede {
 
   phenotype: string[];
 
-  
+  canDelete?: boolean
 }

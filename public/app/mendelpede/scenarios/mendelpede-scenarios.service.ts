@@ -194,7 +194,7 @@ export class MendelpedeScenarioService {
     return this._http.post<MendelpedePede[]>(`${this._baseURL}/make-children`, genoFactsObj);
   }
 
-  insertPede(pede: MendelpedePede, fridge: MendelpedeFridge): Observable<MendelpedeFridge> {
+  insertPede(pede: MendelpedePede, fridge: MendelpedeFridge, scenShortCode: String): Observable<MendelpedeFridge> {
     //console.log(pede);
     //console.log(fridge);
     let isF: boolean = pede.isFemale==='F'?true:false
@@ -208,7 +208,7 @@ export class MendelpedeScenarioService {
       }
     }
     //console.log(insertObj);
-    return this._http.post<MendelpedeFridge>(`${this._baseURL}/add-pede`, insertObj);
+    return this._http.post<MendelpedeFridge>(`${this._baseURL}/${scenShortCode}/add-pede`, insertObj);
   }
 
   calculateQuizScore(quizPedes: MendelpedePede[], studentAnswers: string[], quizFridgeId: string): Observable<boolean[]> {
@@ -237,6 +237,11 @@ export class MendelpedeScenarioService {
 
   }
 
+  deletePede(userId: number, scenShortCode: string, pede: MendelpedePede): Observable<any> {
+    let mendelPedeId = pede.id;
+    return this._http
+        .delete(`${this._baseURL}/${userId}/${scenShortCode}/${mendelPedeId}`)
+  }
   /**
    * Send updated guesses for the scenario to be saved in database
    *
