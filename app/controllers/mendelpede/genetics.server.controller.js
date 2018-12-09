@@ -3,6 +3,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const MendelPede = mongoose.model('MendelPede');
 const mendExp = require('../../genetics/mendelpede/mendel.experiment');
 const MendelFridge = mongoose.model('MendelFridge');
+const MendelPedeQuiz = mongoose.model('MendelPedeQuiz');
 const mendScen = require('../../genetics/mendelpede/mendel.scenario');
 const cryptr = require('../../../config/client.cryptr');
 const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
@@ -32,7 +33,6 @@ exports.calculateQuizScore = function(req, res){
 
 
   var gradedQuiz = []
-  var quizScore = 0;
   for (let i = 0; i < quizPedes.length; i++){
     quizPedes[i]['genotype'] = JSON.parse(cryptr.decrypt(quizPedes[i]['genotype']));
     var scenCode = quizPedes[i]['scenCode']
@@ -42,27 +42,40 @@ exports.calculateQuizScore = function(req, res){
     var geno = genoList[quizPedes[i]['genotype'][0]];
 
     gradedQuiz.push(regGenoStr[geno[0]] + regGenoStr[geno[1]] === studentAnswers[i]['answer'])
-    if(gradedQuiz[i]){
-      quizScore++;
-    }
   }
-  var quizFinalScore = quizScore+"/8";
+  var quizScore = gradedQuiz.filter(Boolean).length
   //console.log('**********')
   //console.log(quizFinalScore)
   //console.log(fridgeId)
-  MendelFridge.update({_id: fridgeId}, 
-      {
-        $set:{
-        quizScore: quizScore
+
+  var quiz = {
+    score: quizScore,
+    quizTakenDate: Date.now(),
+    studentAnswers: gradedQuiz
+  }
+  MendelPedeQuiz.create(quiz, (err, quiz) => {
+    if (err)
+      return res.status(500)
+      .send({
+        message: 'Unable to create new Quiz'
+      });
+    else{
+      MendelFridge.update({_id: fridgeId}, 
+        {
+          $set:{
+          quiz: quiz
+        }
+      }, 
+      (err) => {
+        if(err){
+          //console.log('error occurred');
+        }
       }
-    }, 
-    (err) => {
-      if(err){
-        //console.log('error occurred');
-      }
+    );
+    res.json(gradedQuiz)
     }
-  );
-  res.json(gradedQuiz)
+  })
+  
 }
 
 exports.getPede = function(req, res, next, id){

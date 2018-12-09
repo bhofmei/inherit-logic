@@ -22,7 +22,10 @@ const MendelFridgeSchema = new Schema({
   /**
    * Only in case of quiz scenario
    */
-  quizScore: String
+  quiz: {
+    type: Schema.ObjectId,
+    ref: 'MendelPedeQuiz'
+  }
 });
 
 MendelFridgeSchema.set('toJSON', {getters: true});

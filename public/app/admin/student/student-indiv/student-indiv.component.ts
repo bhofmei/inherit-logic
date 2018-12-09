@@ -131,7 +131,10 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
                                     .subscribe((mfridge) => {
                                       //console.log('we got fridge from db')
                                       //console.log('coming for quiz');
-                                      var score = mfridge.quizScore;
+                                      let score = 'Quiz not submitted yet'
+                                      if(mfridge.quiz){
+                                        score = mfridge.quiz.score.toString();
+                                      } 
                                       this.scoreMap[option.shortCode] = score;
                                   },
                                       (error) => {

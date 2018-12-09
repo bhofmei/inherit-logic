@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subject } from 'rxjs';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmDeleteDialogComponent } from '../../../shared/confirm-delete-dialog.component';
 
 import { StudentService } from '../student.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
@@ -37,7 +38,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
 
   private currGenoFacts: any;
 
-  protected isQuiz: boolean = false;
+  protected isQuizTaken: boolean = false;
 
   /**
    * Option to show all strains in fridge or
@@ -65,7 +66,8 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
   constructor(private _router: Router,
     private _route: ActivatedRoute,
     private _studentService: StudentService,
-    private _authService: AuthenticationService){
+    private _authService: AuthenticationService,
+    private _modalService: NgbModal){
     this.isDestroyed$ = new Subject<boolean>();
   }
   /**
@@ -108,8 +110,8 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
                 //console.log('we got fridge from db')
               this.fridge = mfridge;
               this.fridge.owner = mfridge.owner;
-              if(this.fridge.scenario.scenCode.toUpperCase().includes('QUIZ')){
-                this.isQuiz = true;
+              if(this.fridge.quiz){
+                this.isQuizTaken = true;
               }
               if(mfridge.genoFacts){
                 this.currGenoFacts = JSON.parse(mfridge.genoFacts)
@@ -127,18 +129,63 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
         });
   }
 
+  /**
+   * - when clicking delete button, open a modal dialog to confirm delete
+   * - if confirm, delete and redirect to students
+   * - otherwise, do nothing
+   *
+   * Called on `(click)` of the "Delete" button
+   */
+  checkDeleteStudentFridge(){
+    const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm'});
+    modelRef.componentInstance.message = 'Are you sure you want to delete?';
+
+    modelRef.result.then((result)=>{
+      if(result === 'delete'){
+        this.deleteStudentFridge();
+      }
+    }, (dismiss)=>{
+      // do nothing
+      return;
+    });
+  }
+
+  checkDeleteQuizScore(){
+    const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm'});
+    modelRef.componentInstance.message = 'Are you sure you want to delete?';
+
+    modelRef.result.then((result)=>{
+      if(result === 'delete'){
+        this.deleteQuizScore();
+      }
+    }, (dismiss)=>{
+      // do nothing
+      return;
+    });
+  }
+
+  deleteQuizScore(){
+    this.isQuizTaken = false;
+    this._studentService.deleteQuizScore(this.admin.id, this.studentId, this.scenId)
+    .takeUntil(this.isDestroyed$)
+    .subscribe((err)=>{
+      
+    });
+  }
+
   deleteStudentFridge(){
     this.fridge = null;
     this.hasFridge = false;
     this.currGenoFacts = null;
+    this.isQuizTaken = false;
     this._studentService.deleteStudentMendelFridge(this.admin.id, this.studentId, this.scenId)
     .takeUntil(this.isDestroyed$)
     .subscribe((mfridge)=>{
       // successful
       this.fridge = mfridge;
       this.fridge.owner = mfridge.owner;
-      if(this.fridge.scenario.scenCode.toUpperCase().includes('QUIZ')){
-        this.isQuiz = true;
+      if(this.fridge.quiz){
+        this.isQuizTaken = true;
       }
       if(mfridge.genoFacts){
         this.currGenoFacts = JSON.parse(mfridge.genoFacts)

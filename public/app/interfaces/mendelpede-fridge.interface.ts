@@ -28,7 +28,7 @@ export interface MendelpedeFridge {
 
   firstTraitForQuiz?: string;
 
-  quizScore?: string;
+  quiz?: {score: number, quizTakenDate: Date, id: string, studentAnswers: boolean[]};
 
 }
 
@@ -55,6 +55,6 @@ export interface StudentMendelFridge {
 
   genoFacts: string;
 
-  quizScore?: string
+  quiz?: {score: number, quizTakenDate: Date, id: string};
 
 }

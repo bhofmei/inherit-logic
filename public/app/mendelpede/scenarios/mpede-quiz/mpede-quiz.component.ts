@@ -43,6 +43,8 @@ export class MendelpedeQuizComponent{
 
   private quizFridgeId: string
 
+  private quizScore: number
+
   getQuizBackgroundColor(answer: boolean){
     return {
       'bg-success': answer && this.quizSubmitted
@@ -52,6 +54,22 @@ export class MendelpedeQuizComponent{
   ngOnInit(){
     //console.log('getting Mendelpedes for quiz');
 
+    this._scenarioService.getFridge
+    .takeUntil(this.isDestroyed$)
+      .subscribe((fridge) => {
+        this.quizPedes = fridge.pedes
+        this.quizTrait = fridge.firstTraitForQuiz;
+        this.quizFridgeId = fridge.id;
+        if(fridge.quiz){
+          this.quizSubmitted = true;
+          this.quizScore = fridge.quiz.score;
+          this.actualAnswers = fridge.quiz.studentAnswers;
+        } else{
+          this.quizSubmitted = false;
+        }
+      });
+
+    /*
     this._scenarioService.getQuizPedes
     .takeUntil(this.isDestroyed$)
       .subscribe((details) => {
@@ -71,7 +89,7 @@ export class MendelpedeQuizComponent{
             });
           });
         });
-    });
+    });*/
   }
 
   @Input() mendelFridge: MendelpedeFridgeComponent;
@@ -80,12 +98,14 @@ export class MendelpedeQuizComponent{
     //console.log('submitting the quiz')
     //console.log(this.quizAnswers)
     //console.log(this.quizPedes)
+    this.quizPedes = this.quizPedes.slice(0,7);
     this.quizSubmitted = true
     this._scenarioService.calculateQuizScore(this.quizPedes, this.quizAnswers, this.quizFridgeId)
     .takeUntil(this.isDestroyed$)
     .subscribe((answers) => {
       this.actualAnswers = answers;
       this.quizSubmitted = true
+      this.quizScore = answers.filter(Boolean).length
       //console.log('we got the answers');
       //console.log(this.actualAnswers);
     })

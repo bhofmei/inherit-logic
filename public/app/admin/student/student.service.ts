@@ -113,6 +113,11 @@ export class StudentService {
             .delete(`${this._baseURL}/${adminId}/delete-mendel-fridge/${studentId}/${scenShortCode}`);
   }
 
+  deleteQuizScore(adminId: number, studentId: number, scenShortCode: string):Observable<any>{
+    return this._http
+            .delete(`${this._baseURL}/${adminId}/delete-quiz-score/${studentId}/${scenShortCode}`);
+  }
+
   /**
    * Update scenario access for a student; this deletes the existing
    * fridge

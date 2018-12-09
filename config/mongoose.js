@@ -11,6 +11,7 @@ module.exports = function(){
   require('../app/models/mendelpede/mendelpede-fridge.server.model')
   require('../app/models/mendelpede/mendelpede-pede.model')
   require('../app/models/mendelpede/mendelpede-scenario.server.model')
+  require('../app/models/mendelpede/mendelpede-quiz.server.model')
 
 
   if(config.loadScenario){

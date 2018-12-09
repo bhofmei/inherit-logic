@@ -8,16 +8,16 @@
         <h4>{{ fridge.owner | personName }}</h4>
       </a>
       <div class="col">
-      <button *ngIf="hasFridge" class="btn btn-outline-danger d-block btn-sm mx-auto float-right" type="button" (click)="deleteStudentFridge()">Delete Fridge</button>
+        <button *ngIf="hasFridge" class="btn btn-outline-danger btn-sm mx-auto float-right" type="button" (click)="checkDeleteStudentFridge()">Delete Fridge</button>
+        <button *ngIf="isQuizTaken && hasFridge" class="btn btn-outline-danger btn-sm mx-auto float-right" type="button" (click)="checkDeleteQuizScore()">Delete Quiz Score</button>
       </div>
     </div>
 
     <div class="row d-flex mb-3" id="scenario-info">
       <div class="text-weight-bold text-primary mr-2">{{ fridge.scenario.scenCode }}</div>
-      <div class="text-secondary">{{ fridge.scenario.label }}</div>
-      <div class="text-secondary" *ngIf="isQuiz && hasFridge">
-        Score: {{fridge.quizScore}}
-      </div>
+      <div class="text-secondary mr-4">{{ fridge.scenario.label }} </div>
+      <div *ngIf="isQuizTaken && hasFridge" class="text-primary mr-2">Score: </div><div *ngIf="isQuizTaken && hasFridge" class="text-secondary mr-4">{{fridge.quiz.score}}</div>
+      <div *ngIf="isQuizTaken && hasFridge" class="text-primary mr-2">Date Taken: </div><div *ngIf="isQuizTaken && hasFridge" class="text-secondary">{{fridge.quiz.quizTakenDate}}</div>
       <!--<div class="ml-auto">
               Access granted: {{ fridge.accessGranted }}
             </div>-->

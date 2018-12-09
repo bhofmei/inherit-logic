@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const MendelPede = mongoose.model('MendelPede');
 const MendelFridge = mongoose.model('MendelFridge');
+const MendelPedeQuiz = mongoose.model('MendelPedeQuiz')
 const mendScen = require('../../genetics/mendelpede/mendel.scenario');
 const cryptr = require('../../../config/client.cryptr');
 const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
@@ -61,7 +62,7 @@ const getMendelFridgeInfo = function (mendelFridge) {
     pedes: pedeList,
     shortCode: mendelFridge.scenario.shortCode,
     id: mendelFridge.id,
-    quizScore: mendelFridge.quizScore
+    //quizScore: mendelFridge.quizScore
   }
 }
 
@@ -125,7 +126,7 @@ exports.stockMendelFridge = function (req, res) {
     owner: user,
     pedeList: pedeIdList,
     genoFacts: JSON.stringify(stock.genoFacts),
-    quizScore: 'Quiz not submitted yet'
+    //quizScore: 'Quiz not submitted yet'
   };
   // save fridge
   MendelFridge.create(newFridge, (err, fridge) => {
@@ -242,6 +243,7 @@ exports.getMendelFridge = function (req, res) {
         model: 'MendelScenario'
       }
     })
+    .populate('quiz','quizTakenDate score id studentAnswers')
     .exec((err, mendelFridge) => {
       if (err) {
         //console.log('error in get fridge: '+err);
@@ -262,6 +264,14 @@ exports.getMendelFridge = function (req, res) {
         if (scen.shortCode.toUpperCase().includes("QUIZ")){
 
           i['firstTraitForQuiz'] = JSON.parse(cryptr.decrypt(mendelFridge.genoFacts))[0]['trait'];
+          if(mendelFridge.quiz){
+            i['quiz'] = {
+              score: mendelFridge.quiz.score,
+              quizTakenDate: mendelFridge.quiz.quizTakenDate,
+              id: mendelFridge.quiz.id,
+              studentAnswers: mendelFridge.quiz.studentAnswers
+            }
+          }
         }
         res.json(i);
       }
@@ -278,6 +288,7 @@ exports.getStudentFridge = function(req, res){
     .populate('pedeList', 'bugID isFemale genotype id phenotype')
     .populate('owner', 'firstName lastName userId')
     .populate('scenario', 'shortCode label')
+    .populate('quiz','quizTakenDate score id studentAnswers')
     .exec((err, fridge) => {
       if (err) {
         return res.status(500)
@@ -322,6 +333,14 @@ exports.getStudentFridge = function(req, res){
           accessGranted: fridge.accessGranted,
           genoFacts: fridge.genoFacts,
           quizScore: fridge.quizScore
+        }
+        if(fridge.quiz){
+          ret['quiz'] = {
+            score: fridge.quiz.score,
+            quizTakenDate: fridge.quiz.quizTakenDate,
+            id: fridge.quiz.id,
+            studentAnswers: fridge.quiz.studentAnswers
+          }
         }
         //console.log(ret);
         res.json(ret);
@@ -378,6 +397,7 @@ exports.findFridgeByScenOwner = function (req, res, next) {
     })
     .populate('owner', 'userId')
     .populate('scenario', 'shortCode')
+    .populate('quiz','quizTakenDate score id studentAnswers')
     .populate({
       path: 'pedeList',
       select: 'bugID isFemale genotype phenotype id',
@@ -446,6 +466,42 @@ exports.deletePede = function (req, res) {
     }
   });
 };
+exports.deleteQuiz = function(req, res, next) {
+  var fridge = req.mendelFridge;
+  if(fridge.quiz){
+    MendelPedeQuiz.remove({
+      '_id': fridge.quiz.id
+    }, (err) => {
+      if(err){
+        next(err);
+      } else{
+        next();
+      }
+    });
+  }
+}
+
+exports.deleteQuizScore = function(req, res, next) {
+  var fridge = req.mendelFridge;
+  if(fridge.quiz){
+    MendelPedeQuiz.remove({
+      '_id': fridge.quiz.id
+    }, (err) => {
+      if(err){
+        console.log(err)
+          return res.status(400)
+            .send({
+              message: getErrorMessage(err)
+            });
+      } else{
+        let out = {
+          success: 'true'
+        }
+        res.json(out);
+      }
+    });
+  }
+}
 
 exports.deleteStudentMendelFridge = function (req, res, next) {
   let student = req.student;

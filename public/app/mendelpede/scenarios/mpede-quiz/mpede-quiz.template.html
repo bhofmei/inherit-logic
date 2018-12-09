@@ -4,6 +4,7 @@
     </div>
     <div class="card-body">
         <div class="text-weight-bold mD-2">Determine the genotype of each individual for trait <span class="text-primary">{{quizTrait | pedeQuizTrait}}</span></div>
+        <div *ngIf='quizSubmitted' class="text-weight-bold mD-2">Your Score: <span class="text-primary">{{quizScore}}</span></div>
         <hr class="my-2">
         <form>
         <div class="row m-0" *ngFor="let pede of quizAnswers; let i=index">

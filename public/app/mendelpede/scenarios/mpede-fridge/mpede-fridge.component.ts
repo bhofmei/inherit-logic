@@ -103,6 +103,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
         .takeUntil(this.isDestroyed$)
         .subscribe(
           (fridge) => {
+            //console.log(fridge)
             this._initFridge(fridge);},
           (err) => {
             if(err.status === 307){
@@ -162,7 +163,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     let start = this.shelf*this.spots;
     let end = start+this.spots;
     this.currPedes_1d = this.pedeList.slice(start,end);
-    this._scenarioService.setQuizPedes(this.currPedes_1d);
+    //this._scenarioService.setQuizPedes(this.currPedes_1d);
     var ind: number = 0;
 
     this.currPedes = [];
@@ -189,14 +190,16 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     //console.log(this.fridge);
     this.pedeList = this._fillPedes(newFridge.pedes);
     this._currPedes();
+    this._scenarioService.setFridge(newFridge);
     this._scenarioService.setScenario(newFridge.genoFacts);
+    /*
     this._scenarioService.setFridgeId(newFridge.id);
     this._scenarioService.setFirstTraitForQuiz(newFridge.firstTraitForQuiz);
     if(this.fridge.quizScore && this.fridge.quizScore.toUpperCase().includes('QUIZ NOT SUBMITTED YET')){
       this._scenarioService.setQuizDone(false);
     }else{
       this._scenarioService.setQuizDone(true);
-    }
+    }*/
   }
 
   /**
