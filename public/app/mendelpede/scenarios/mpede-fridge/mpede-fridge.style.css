@@ -4,3 +4,6 @@
 .drop-object{
   border: 1px dashed black;
 }
+span.new-line{
+  display:block;
+}

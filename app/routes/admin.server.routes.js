@@ -26,6 +26,12 @@ module.exports = function (app) {
     .get(admin.hasAuthorization, MendelFridge.getStudentFridge)
     //.post(admin.hasAuthorization, MendelFridge.deleteStudentFridge, user.grantAccess);
 
+  app.route('/api/admin/:userId/delete-mendel-fridge/:studentId/:scenShortCode')
+    .delete(admin.hasAuthorization, MendelFridge.findFridgeByScenOwner, MendelFridge.deleteStudentMendelFridge, MendelFridge.deleteQuiz)
+
+  app.route('/api/admin/:userId/delete-quiz-score/:studentId/:scenShortCode')
+    .delete(admin.hasAuthorization, MendelFridge.findFridgeByScenOwner, MendelFridge.deleteQuizScore)
+
   app.param('userId', user.userById);
   app.param('studentId', user.userById);
   app.param('scenCode', cricketScenario.scenByCode);

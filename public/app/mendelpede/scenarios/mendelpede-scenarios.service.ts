@@ -11,54 +11,35 @@ import { MendelpedeScenario, MendelpedeFridge, MendelpedePede } from '../../inte
 @Injectable()
 export class MendelpedeScenarioService {
 
-    private _baseURL = 'api/mendelpede';
-    /**
-     * Construct the service
-     *
-     * @param {HttpClient} _http Anguar mechanism to make calls to backend server
-     */
-    constructor(private _http: HttpClient) {}
-
-    /**
-    * List available scenarios
-    *
-    * @returns {Observable<Scenario[]>} list of scenarios
-    */
-    listScenarios(courseLevel: string): Observable<MendelpedeScenario[]> {
-      var body = {level: courseLevel};
-      return this._http
-          .post<MendelpedeScenario[]>(this._baseURL, body);
-    }
+  private _baseURL = 'api/mendelpede';
+  /**
+   * Construct the service
+   *
+   * @param {HttpClient} _http Anguar mechanism to make calls to backend server
+   */
+  constructor(private _http: HttpClient) {}
 
   /**
-   * The current scenario details which is needed when
-   * performing crosses
-   */
-   // private _scenarioDetails = new BehaviorSubject<string>('');
-   // getScenarioDetails = this._scenarioDetails.asObservable();
+  * List available scenarios
+  *
+  * @returns {Observable<Scenario[]>} list of scenarios
+  */
+  listScenarios(courseLevel: string): Observable<MendelpedeScenario[]> {
+    var body = {level: courseLevel};
+    return this._http
+        .post<MendelpedeScenario[]>(this._baseURL, body);
+  }
+
+/**
+ * The current scenario guesses
+ */
+  private _scenarioGenoFacts = new BehaviorSubject<any>({});
+  getGenoFacts = this._scenarioGenoFacts.asObservable();
   /**
-   * The current scenario guesses
+   * Set Fridge: to be used by Quiz component
    */
-   private _scenarioGenoFacts = new BehaviorSubject<any>({});
-   getGenoFacts = this._scenarioGenoFacts.asObservable();
-
-   /**
-    * Quiz Pedes
-    */
-   private _quizPedes = new BehaviorSubject<any>([]);
-   getQuizPedes = this._quizPedes.asObservable();
-
-  /**
-   * Quiz traits
-   */
-   private _firstTraitForQuiz = new BehaviorSubject<string>("");
-   getFirstTraitForQuiz = this._firstTraitForQuiz.asObservable();
-
-   private _fridgeId = new BehaviorSubject<string>("");
-   getFridgeId = this._fridgeId.asObservable();
-
-   private _isQuizDone = new BehaviorSubject<boolean>(false);
-   isQuizDone = this._isQuizDone.asObservable();
+  private _fridge = new BehaviorSubject<any>({});
+  getFridge = this._fridge.asObservable();
   /**
    * The current scenario code
    *
@@ -95,40 +76,12 @@ export class MendelpedeScenarioService {
               .next(scenarioGenoFacts);
     }
   /**
-   * set first trait fro quiz
+   * 
+   * @param fridge Fridge to be set
    */
-  setFirstTraitForQuiz(firstTraitForQuiz: string){
-    if (this._firstTraitForQuiz != null){
-      this._firstTraitForQuiz
-      .next(firstTraitForQuiz);
-    }
+  setFridge(fridge: MendelpedeFridge) {
+    this._fridge.next(fridge);
   }
-
-  /**
-   * set the pedes for quiz
-   */
-  setQuizPedes(quizPedes: MendelpedePede[]) {
-    if (this._quizPedes !== null){
-      this._quizPedes.next(quizPedes);
-    }
-  }
-
-  /**
-   * set the fridge id
-   */
-  setFridgeId(id: string) {
-    if (this._fridgeId !== null){
-      this._fridgeId.next(id);
-    }
-  }
-
-  /**
-   * Is quiz done?
-   */
-  setQuizDone(quizDone: boolean) {
-    this._isQuizDone.next(quizDone);
-  }
-
   /**
    * The current scenario code
    *
@@ -194,7 +147,7 @@ export class MendelpedeScenarioService {
     return this._http.post<MendelpedePede[]>(`${this._baseURL}/make-children`, genoFactsObj);
   }
 
-  insertPede(pede: MendelpedePede, fridge: MendelpedeFridge): Observable<MendelpedeFridge> {
+  insertPede(pede: MendelpedePede, fridge: MendelpedeFridge, scenShortCode: String): Observable<MendelpedeFridge> {
     //console.log(pede);
     //console.log(fridge);
     let isF: boolean = pede.isFemale==='F'?true:false
@@ -208,7 +161,7 @@ export class MendelpedeScenarioService {
       }
     }
     //console.log(insertObj);
-    return this._http.post<MendelpedeFridge>(`${this._baseURL}/add-pede`, insertObj);
+    return this._http.post<MendelpedeFridge>(`${this._baseURL}/${scenShortCode}/add-pede`, insertObj);
   }
 
   calculateQuizScore(quizPedes: MendelpedePede[], studentAnswers: string[], quizFridgeId: string): Observable<boolean[]> {
@@ -237,6 +190,11 @@ export class MendelpedeScenarioService {
 
   }
 
+  deletePede(userId: number, scenShortCode: string, pede: MendelpedePede): Observable<any> {
+    let mendelPedeId = pede.id;
+    return this._http
+        .delete(`${this._baseURL}/${userId}/${scenShortCode}/${mendelPedeId}`)
+  }
   /**
    * Send updated guesses for the scenario to be saved in database
    *

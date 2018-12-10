@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subject } from 'rxjs';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmDeleteDialogComponent } from '../../../shared/confirm-delete-dialog.component';
 
 import { StudentService } from '../student.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
@@ -37,7 +38,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
 
   private currGenoFacts: any;
 
-  protected isQuiz: boolean = false;
+  protected isQuizTaken: boolean = false;
 
   /**
    * Option to show all strains in fridge or
@@ -56,10 +57,17 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
    */
   private errorMessage: string = '';
 
+  private studentId: any;
+
+  private scenId: any;
+
+  private admin: any;
+
   constructor(private _router: Router,
     private _route: ActivatedRoute,
     private _studentService: StudentService,
-    private _authService: AuthenticationService){
+    private _authService: AuthenticationService,
+    private _modalService: NgbModal){
     this.isDestroyed$ = new Subject<boolean>();
   }
   /**
@@ -92,18 +100,18 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
    */
   ngOnInit(){
     this.paramObserver = this._route.params.subscribe(params => {
-      let studentId = params['studentId'];
-      let scenId = params['scenShortCode'];
-      let admin = this._authService.getUser();
+      this.studentId = params['studentId'];
+      this.scenId = params['scenShortCode'];
+      this.admin = this._authService.getUser();
 
-      this._studentService.getMendelFridge(admin.id, studentId, scenId)
+      this._studentService.getMendelFridge(this.admin.id, this.studentId, this.scenId)
         .takeUntil(this.isDestroyed$)
               .subscribe((mfridge) => {
                 //console.log('we got fridge from db')
               this.fridge = mfridge;
               this.fridge.owner = mfridge.owner;
-              if(this.fridge.scenario.scenCode.toUpperCase().includes('QUIZ')){
-                this.isQuiz = true;
+              if(this.fridge.quiz){
+                this.isQuizTaken = true;
               }
               if(mfridge.genoFacts){
                 this.currGenoFacts = JSON.parse(mfridge.genoFacts)
@@ -122,48 +130,73 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Determine the CSS class for the view strains button depending on selected option
+   * - when clicking delete button, open a modal dialog to confirm delete
+   * - if confirm, delete and redirect to students
+   * - otherwise, do nothing
    *
-   * @param {string} src - button determining classes for
-   *
-   * @returns {Object} classes which appy to this button in the form {"class": boolean, ...}
-   *
-   * @example <caption>View strains is "all"</caption>
-   * getButtonClass('all') -> {'btn btn-small': true, 'btn-primary': true, 'btn-primary-outline': false}
-   * getButtonClass('graded') -> {'btn btn-small': true, 'btn-primary': false, 'btn-primary-outline': true}
+   * Called on `(click)` of the "Delete" button
+   */
+  checkDeleteStudentFridge(){
+    const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm'});
+    modelRef.componentInstance.message = 'Are you sure you want to delete?';
 
-  getButtonClass(src: string): Object{
-    return {
-      'btn btn-sm': true,
-      'btn-primary': (src === this.viewStrains),
-      'btn-outline-primary': (src !== this.viewStrains)
-    }
+    modelRef.result.then((result)=>{
+      if(result === 'delete'){
+        this.deleteStudentFridge();
+      }
+    }, (dismiss)=>{
+      // do nothing
+      return;
+    });
   }
-*/
-  /**
-   * update the list of visible phage appropriately
-   *
-   * Called on `(click)` of "View Strain" button
-   * @param {string} src - button which was clicked;
-   * Should be one of `["all", "graded"]`
 
-  setPhage(src: string){
-    this.viewStrains = src;
-    if(this.viewStrains === 'all'){
-      this.strainList = this.fridge.strains;
-    } else {
-      this.strainList = this.fridge.strains.filter((strain)=>{
-        if(strain.phageType === 'unknown'){
-          return true;
-        } else if(strain.phageType === 'user' && strain.submitted){
-          return true;
-        } else {
-          return false;
+  checkDeleteQuizScore(){
+    const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm'});
+    modelRef.componentInstance.message = 'Are you sure you want to delete?';
+
+    modelRef.result.then((result)=>{
+      if(result === 'delete'){
+        this.deleteQuizScore();
+      }
+    }, (dismiss)=>{
+      // do nothing
+      return;
+    });
+  }
+
+  deleteQuizScore(){
+    this.isQuizTaken = false;
+    this._studentService.deleteQuizScore(this.admin.id, this.studentId, this.scenId)
+    .takeUntil(this.isDestroyed$)
+    .subscribe((err)=>{
+      
+    });
+  }
+
+  deleteStudentFridge(){
+    this.fridge = null;
+    this.hasFridge = false;
+    this.currGenoFacts = null;
+    this.isQuizTaken = false;
+    this._studentService.deleteStudentMendelFridge(this.admin.id, this.studentId, this.scenId)
+    .takeUntil(this.isDestroyed$)
+    .subscribe((mfridge)=>{
+      // successful
+      this.fridge = mfridge;
+      this.fridge.owner = mfridge.owner;
+      if(this.fridge.quiz){
+        this.isQuizTaken = true;
+      }
+      if(mfridge.genoFacts){
+        this.currGenoFacts = JSON.parse(mfridge.genoFacts)
+        if (this.currGenoFacts !== null){
+          this.hasFridge = true
         }
-      });
-    }
+      }
+    }, (err)=>{
+      this.errorMessage = readErrorMessage(err);
+    })
   }
- */
   /**
    * When destorying the component, unsubscribe from services and
    * observables to prevent memory leak
