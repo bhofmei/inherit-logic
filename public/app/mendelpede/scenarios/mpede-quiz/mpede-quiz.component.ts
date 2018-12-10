@@ -45,9 +45,22 @@ export class MendelpedeQuizComponent{
 
   private quizScore: number
 
+  constructor(private _authenticationService: AuthenticationService,
+    private _router: Router,
+    private _scenarioService: MendelpedeScenarioService,
+    private _route: ActivatedRoute) {
+      this.isDestroyed$ = new Subject<boolean>();
+      for (let i = 0; i < 8; i++){
+          this.quizAnswers.push({
+            id: i,
+            answer: "Not answered yet"
+          });
+        }
+  }
+
   getQuizBackgroundColor(answer: boolean){
     return {
-      'bg-success': answer && this.quizSubmitted
+      'text-success': answer && this.quizSubmitted
     }
   }
 
@@ -109,19 +122,6 @@ export class MendelpedeQuizComponent{
       //console.log('we got the answers');
       //console.log(this.actualAnswers);
     })
-  }
-
-  constructor(private _authenticationService: AuthenticationService,
-    private _router: Router,
-    private _scenarioService: MendelpedeScenarioService,
-    private _route: ActivatedRoute) {
-      this.isDestroyed$ = new Subject<boolean>();
-      for (let i = 0; i < 8; i++){
-          this.quizAnswers.push({
-            id: i,
-            answer: "Not answered yet"
-          });
-        }
   }
   /**
    * When destroying the component, unsubscribe from services

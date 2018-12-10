@@ -4,6 +4,7 @@
 .drop-object{
   border: 1px dashed black;
 }
-span.new-line{
-  display:block;
+
+.mr-2p{
+  margin-right: -2px;
 }
