@@ -4,3 +4,7 @@
 .drop-object{
   border: 1px dashed black;
 }
+
+.mr-2p{
+  margin-right: -2px;
+}
