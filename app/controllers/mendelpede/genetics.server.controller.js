@@ -3,7 +3,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const MendelPede = mongoose.model('MendelPede');
 const mendExp = require('../../genetics/mendelpede/mendel.experiment');
 const MendelFridge = mongoose.model('MendelFridge');
-const MendelPedeQuiz = mongoose.model('MendelPedeQuiz');
+const MendelQuiz = mongoose.model('MendelQuiz');
 const mendScen = require('../../genetics/mendelpede/mendel.scenario');
 const cryptr = require('../../../config/client.cryptr');
 const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
@@ -13,10 +13,10 @@ exports.makeChildren = function (req, res){
   var genoFacts = cryptr.decrypt(reqBody.genoFacts);
   var malePede = reqBody.malePede;
   var femalePede = reqBody.femalePede;
-  
+
   malePede.genotype = JSON.parse(cryptr.decrypt(malePede.genotype));
   femalePede.genotype = JSON.parse(cryptr.decrypt(femalePede.genotype));
-  
+
   var children = mendExp.makeChildren(femalePede, malePede, 20, JSON.parse(genoFacts));
   for (let i= 0; i < children.length; i++){
     children[i]['isFemale'] = children[i]['isFemale']?'F':'M';
@@ -33,15 +33,16 @@ exports.calculateQuizScore = function(req, res){
 
 
   var gradedQuiz = []
+  var submitAnswers = [];
   for (let i = 0; i < quizPedes.length; i++){
     quizPedes[i]['genotype'] = JSON.parse(cryptr.decrypt(quizPedes[i]['genotype']));
-    var scenCode = quizPedes[i]['scenCode']
     var genoList = [[0,0], [1,0], [2,0], [1,0], [1,1], [2,1], [2,0], [2,1], [2,2]];
     var regGenoStr = ['a', 'A', '?'];
-    var alleleGenoStr = ['A<sup>0</sup>', 'A<sup>1</sup>', 'A<sup>2</sup>']
     var geno = genoList[quizPedes[i]['genotype'][0]];
-
+    //console.log(quizPedes[i]['genotype'], geno, studentAnswers[i]);
+    submitAnswers.push(studentAnswers[i]['answer']);
     gradedQuiz.push(regGenoStr[geno[0]] + regGenoStr[geno[1]] === studentAnswers[i]['answer'])
+    //console.log(regGenoStr[geno[0]] + regGenoStr[geno[1]], regGenoStr[geno[0]] + regGenoStr[geno[1]] === studentAnswers[i]['answer'])
   }
   var quizScore = gradedQuiz.filter(Boolean).length
   //console.log('**********')
@@ -51,21 +52,22 @@ exports.calculateQuizScore = function(req, res){
   var quiz = {
     score: quizScore,
     quizTakenDate: Date.now(),
+    submittedAnswers: submitAnswers,
     studentAnswers: gradedQuiz
   }
-  MendelPedeQuiz.create(quiz, (err, quiz) => {
+  MendelQuiz.create(quiz, (err, quiz) => {
     if (err)
       return res.status(500)
       .send({
         message: 'Unable to create new Quiz'
       });
     else{
-      MendelFridge.update({_id: fridgeId}, 
+      MendelFridge.update({_id: fridgeId},
         {
           $set:{
           quiz: quiz
         }
-      }, 
+      },
       (err) => {
         if(err){
           //console.log('error occurred');
@@ -75,7 +77,7 @@ exports.calculateQuizScore = function(req, res){
     res.json(gradedQuiz)
     }
   })
-  
+
 }
 
 exports.getPede = function(req, res, next, id){

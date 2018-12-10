@@ -111,7 +111,7 @@ export class MendelpedeQuizComponent{
     //console.log('submitting the quiz')
     //console.log(this.quizAnswers)
     //console.log(this.quizPedes)
-    this.quizPedes = this.quizPedes.slice(0,7);
+    this.quizPedes = this.quizPedes.slice(0,8);
     this.quizSubmitted = true
     this._scenarioService.calculateQuizScore(this.quizPedes, this.quizAnswers, this.quizFridgeId)
     .takeUntil(this.isDestroyed$)
