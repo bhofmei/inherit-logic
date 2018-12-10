@@ -2,21 +2,23 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 /**
- * Database schema for pedes
- * @module mendelpede/pede.model.js
- * @name MendelPede Pede Model
+ * Database schema for quizzes
+ * @module mendelpede/quiz.model.js
+ * @name MendelPede Quiz Model
  * @type Model
  */
 
- const MendelPedeQuizSchema = new Schema({
+ const MendelQuizSchema = new Schema({
 
    score: Number,
-   
+
    quizTakenDate: Date,
+
+   submittedAnswers: [String],
 
    studentAnswers: [Boolean]
  });
 
- MendelPedeQuizSchema.set('toJSON',{getters: true});
+ MendelQuizSchema.set('toJSON',{getters: true});
 
- mongoose.model('MendelPedeQuiz', MendelPedeQuizSchema);
+ mongoose.model('MendelQuiz', MendelQuizSchema);

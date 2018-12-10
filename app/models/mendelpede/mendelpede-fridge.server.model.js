@@ -12,7 +12,7 @@ const MendelFridgeSchema = new Schema({
   },
   accessGranted: {
     type: Boolean,
-    defaul: false
+    default: false
   },
   pedeList: [{
     type: Schema.ObjectId,
@@ -24,7 +24,7 @@ const MendelFridgeSchema = new Schema({
    */
   quiz: {
     type: Schema.ObjectId,
-    ref: 'MendelPedeQuiz'
+    ref: 'MendelQuiz'
   }
 });
 

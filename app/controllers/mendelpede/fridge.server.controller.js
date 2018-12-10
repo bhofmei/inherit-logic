@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const MendelPede = mongoose.model('MendelPede');
 const MendelFridge = mongoose.model('MendelFridge');
-const MendelPedeQuiz = mongoose.model('MendelPedeQuiz')
+const MendelQuiz = mongoose.model('MendelQuiz')
 const mendScen = require('../../genetics/mendelpede/mendel.scenario');
 const cryptr = require('../../../config/client.cryptr');
 const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
@@ -469,7 +469,7 @@ exports.deletePede = function (req, res) {
 exports.deleteQuiz = function(req, res, next) {
   var fridge = req.mendelFridge;
   if(fridge.quiz){
-    MendelPedeQuiz.remove({
+    MendelQuiz.remove({
       '_id': fridge.quiz.id
     }, (err) => {
       if(err){
@@ -484,7 +484,7 @@ exports.deleteQuiz = function(req, res, next) {
 exports.deleteQuizScore = function(req, res, next) {
   var fridge = req.mendelFridge;
   if(fridge.quiz){
-    MendelPedeQuiz.remove({
+    MendelQuiz.remove({
       '_id': fridge.quiz.id
     }, (err) => {
       if(err){
