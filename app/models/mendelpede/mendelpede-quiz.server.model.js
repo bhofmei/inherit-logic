@@ -16,7 +16,7 @@ const Schema = mongoose.Schema;
 
    submittedAnswers: [String],
 
-   studentAnswers: [Boolean]
+   isAnswerCorrect: [Boolean]
  });
 
  MendelQuizSchema.set('toJSON',{getters: true});

@@ -17,7 +17,7 @@
       <div class="text-weight-bold text-primary mr-2">{{ fridge.scenario.scenCode }}</div>
       <div class="text-secondary mr-4">{{ fridge.scenario.label }} </div>
       <div *ngIf="isQuizTaken && hasFridge" class="text-primary mr-2">Score: </div><div *ngIf="isQuizTaken && hasFridge" class="text-secondary mr-4">{{fridge.quiz.score}}</div>
-      <div *ngIf="isQuizTaken && hasFridge" class="text-primary mr-2">Date Taken: </div><div *ngIf="isQuizTaken && hasFridge" class="text-secondary">{{fridge.quiz.quizTakenDate}}</div>
+      <div *ngIf="isQuizTaken && hasFridge" class="text-primary mr-2">Date Taken: </div><div *ngIf="isQuizTaken && hasFridge" class="text-secondary">{{fridge.quiz.quizTakenDate | date:'short'}}</div>
       <!--<div class="ml-auto">
               Access granted: {{ fridge.accessGranted }}
             </div>-->

@@ -3,7 +3,7 @@ import { Observable ,  BehaviorSubject ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { MendelpedeScenario, MendelpedeFridge, MendelpedePede } from '../../interfaces';
+import { MendelpedeScenario, MendelpedeFridge, MendelpedePede, MendelpedeQuiz } from '../../interfaces';
 
 /**
  * Scenario/fridge related functions that get/send data to the backend server
@@ -76,7 +76,7 @@ export class MendelpedeScenarioService {
               .next(scenarioGenoFacts);
     }
   /**
-   * 
+   *
    * @param fridge Fridge to be set
    */
   setFridge(fridge: MendelpedeFridge) {
@@ -164,13 +164,13 @@ export class MendelpedeScenarioService {
     return this._http.post<MendelpedeFridge>(`${this._baseURL}/${scenShortCode}/add-pede`, insertObj);
   }
 
-  calculateQuizScore(quizPedes: MendelpedePede[], studentAnswers: string[], quizFridgeId: string): Observable<boolean[]> {
+  calculateQuizScore(quizPedes: MendelpedePede[], studentAnswers: string[], quizFridgeId: string): Observable<MendelpedeQuiz> {
     var scoreHelperObj = {
       quizPedes: quizPedes,
       studentAnswers: studentAnswers,
       fridgeId : quizFridgeId
     }
-    return this._http.post<boolean[]>(`${this._baseURL}/calculate-score`, scoreHelperObj);
+    return this._http.post<MendelpedeQuiz>(`${this._baseURL}/calculate-score`, scoreHelperObj);
   }
 
     /**

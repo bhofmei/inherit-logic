@@ -30,19 +30,19 @@ exports.calculateQuizScore = function(req, res){
   var quizPedes = reqBody.quizPedes;
   var studentAnswers = reqBody.studentAnswers;
   var fridgeId = reqBody.fridgeId
-
-
+  
   var gradedQuiz = []
-  var submitAnswers = [];
   for (let i = 0; i < quizPedes.length; i++){
     quizPedes[i]['genotype'] = JSON.parse(cryptr.decrypt(quizPedes[i]['genotype']));
     var genoList = [[0,0], [1,0], [2,0], [1,0], [1,1], [2,1], [2,0], [2,1], [2,2]];
     var regGenoStr = ['a', 'A', '?'];
     var geno = genoList[quizPedes[i]['genotype'][0]];
-    //console.log(quizPedes[i]['genotype'], geno, studentAnswers[i]);
-    submitAnswers.push(studentAnswers[i]['answer']);
-    gradedQuiz.push(regGenoStr[geno[0]] + regGenoStr[geno[1]] === studentAnswers[i]['answer'])
-    //console.log(regGenoStr[geno[0]] + regGenoStr[geno[1]], regGenoStr[geno[0]] + regGenoStr[geno[1]] === studentAnswers[i]['answer'])
+    var studentAnswer = studentAnswers[i];
+    if( ['AA', 'Aa', 'aa'].indexOf(studentAnswer) === -1){
+      return res.status(500)
+        .send({message: 'Error: '+ studentAnswer+' is not a valid genotype.'})
+    }
+    gradedQuiz.push(regGenoStr[geno[0]] + regGenoStr[geno[1]] === studentAnswer)
   }
   var quizScore = gradedQuiz.filter(Boolean).length
   //console.log('**********')
@@ -52,8 +52,8 @@ exports.calculateQuizScore = function(req, res){
   var quiz = {
     score: quizScore,
     quizTakenDate: Date.now(),
-    submittedAnswers: submitAnswers,
-    studentAnswers: gradedQuiz
+    submittedAnswers: studentAnswers,
+    isAnswerCorrect: gradedQuiz
   }
   MendelQuiz.create(quiz, (err, quiz) => {
     if (err)
@@ -70,11 +70,12 @@ exports.calculateQuizScore = function(req, res){
       },
       (err) => {
         if(err){
-          //console.log('error occurred');
+          return res.status(400)
+          .send({message: getErrorMessage(err)})
         }
       }
     );
-    res.json(gradedQuiz)
+    res.json(quiz)
     }
   })
 

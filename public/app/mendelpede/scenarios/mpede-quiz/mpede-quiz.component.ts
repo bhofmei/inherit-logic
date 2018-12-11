@@ -1,13 +1,15 @@
 import { Component, Input, OnInit, HostListener} from '@angular/core';
-import { MendelpedeFridgeComponent } from '../mpede-fridge/mpede-fridge.component';
-import { MendelpedePede } from '../../../interfaces/mendelpede-pede.interface';
-import { MendelpedeScenarioService } from '../mendelpede-scenarios.service';
-import { AuthenticationService } from '../../../authentication/authentication.service';
-//import { User } from '../../interfaces/user.interface';
-//import { AuthenticationService } from '../../authentication/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+
+import { MendelpedeFridgeComponent } from '../mpede-fridge/mpede-fridge.component';
+import { MendelpedeScenarioService } from '../mendelpede-scenarios.service';
+import { AuthenticationService } from '../../../authentication/authentication.service';
+import { readErrorMessage } from '../../../shared/read-error';
+
+import { MendelpedePede, MendelpedeQuiz } from '../../../interfaces';
+
+//import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'mendelpede-quiz',
@@ -33,96 +35,78 @@ export class MendelpedeQuizComponent{
   /**
    * placeholder to store Quiz answers
    */
-  private quizAnswers: any[] = [];
-
   private quizTrait: string;
-
-  private actualAnswers: boolean[] = [];
 
   private quizSubmitted: boolean = false;
 
-  private quizFridgeId: string
+  private quizFridgeId: string;
 
-  private quizScore: number
+  private quiz: MendelpedeQuiz;
+
+  private errorMessage: string = '';
+
+  @Input() mendelFridge: MendelpedeFridgeComponent;
 
   constructor(private _authenticationService: AuthenticationService,
     private _router: Router,
     private _scenarioService: MendelpedeScenarioService,
     private _route: ActivatedRoute) {
       this.isDestroyed$ = new Subject<boolean>();
-      for (let i = 0; i < 8; i++){
-          this.quizAnswers.push({
-            id: i,
-            answer: "Not answered yet"
-          });
-        }
   }
 
-  getQuizBackgroundColor(answer: boolean){
+  getQuizBackgroundColor(n: number){
     return {
-      'text-success': answer && this.quizSubmitted
+      'text-success': this.quiz.isAnswerCorrect && this.quiz.isAnswerCorrect[n] && this.quizSubmitted
     }
   }
 
   ngOnInit(){
-    //console.log('getting Mendelpedes for quiz');
-
     this._scenarioService.getFridge
     .takeUntil(this.isDestroyed$)
       .subscribe((fridge) => {
-        this.quizPedes = fridge.pedes
+        this.quizPedes = fridge.pedes;
         this.quizTrait = fridge.firstTraitForQuiz;
         this.quizFridgeId = fridge.id;
         if(fridge.quiz){
           this.quizSubmitted = true;
-          this.quizScore = fridge.quiz.score;
-          this.actualAnswers = fridge.quiz.studentAnswers;
+          this.quiz = fridge.quiz;
         } else{
           this.quizSubmitted = false;
+          this.quiz = this._initQuiz();
         }
       });
-
-    /*
-    this._scenarioService.getQuizPedes
-    .takeUntil(this.isDestroyed$)
-      .subscribe((details) => {
-        this.quizPedes = details;
-        this._scenarioService.getFirstTraitForQuiz
-        .takeUntil(this.isDestroyed$)
-        .subscribe((trait) => {
-          this.quizTrait = trait;
-          this._scenarioService.getFridgeId
-          .takeUntil(this.isDestroyed$)
-          .subscribe((fridgeId) => {
-            this.quizFridgeId = fridgeId;
-            this._scenarioService.isQuizDone
-            .takeUntil(this.isDestroyed$)
-            .subscribe((isQuizDone) => {
-              this.quizSubmitted = isQuizDone;
-            });
-          });
-        });
-    });*/
   }
 
-  @Input() mendelFridge: MendelpedeFridgeComponent;
+  private _initQuiz(){
+    var arr1 = [];
+    var arr2 = [];
+    for(let i = 0; i < 8; i++){
+      arr1.push(null);
+      arr2.push(false);
+    }
+    return {
+      score: -1,
+      submittedAnswers: arr1,
+      isAnswerCorrect: arr2
+    }
+  }
 
   submitQuiz(){
-    //console.log('submitting the quiz')
-    //console.log(this.quizAnswers)
-    //console.log(this.quizPedes)
-    this.quizPedes = this.quizPedes.slice(0,8);
-    this.quizSubmitted = true
-    this._scenarioService.calculateQuizScore(this.quizPedes, this.quizAnswers, this.quizFridgeId)
+    // reset error messages
+    this.errorMessage = '';
+    console.log(this.quiz.submittedAnswers);
+    var returnPedes = this.quizPedes.slice(0,8);
+    this._scenarioService.calculateQuizScore(returnPedes, this.quiz.submittedAnswers, this.quizFridgeId)
     .takeUntil(this.isDestroyed$)
-    .subscribe((answers) => {
-      this.actualAnswers = answers;
-      this.quizSubmitted = true
-      this.quizScore = answers.filter(Boolean).length
-      //console.log('we got the answers');
-      //console.log(this.actualAnswers);
-    })
+    .subscribe((res) => {
+      this.quiz = res;
+      this.quizSubmitted = true;
+    }, (err)=>{
+      this.errorMessage = readErrorMessage(err);
+      this.quiz = this._initQuiz();
+    });
   }
+
   /**
    * When destroying the component, unsubscribe from services
    * to prevent memory leak

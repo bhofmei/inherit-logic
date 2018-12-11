@@ -243,7 +243,7 @@ exports.getMendelFridge = function (req, res) {
         model: 'MendelScenario'
       }
     })
-    .populate('quiz','quizTakenDate score id studentAnswers')
+    .populate('quiz','quizTakenDate score id isAnswerCorrect submittedAnswers')
     .exec((err, mendelFridge) => {
       if (err) {
         //console.log('error in get fridge: '+err);
@@ -269,7 +269,8 @@ exports.getMendelFridge = function (req, res) {
               score: mendelFridge.quiz.score,
               quizTakenDate: mendelFridge.quiz.quizTakenDate,
               id: mendelFridge.quiz.id,
-              studentAnswers: mendelFridge.quiz.studentAnswers
+              isAnswerCorrect: mendelFridge.quiz.isAnswerCorrect,
+              submittedAnswers: mendelFridge.quiz.submittedAnswers
             }
           }
         }
@@ -288,7 +289,7 @@ exports.getStudentFridge = function(req, res){
     .populate('pedeList', 'bugID isFemale genotype id phenotype')
     .populate('owner', 'firstName lastName userId')
     .populate('scenario', 'shortCode label')
-    .populate('quiz','quizTakenDate score id studentAnswers')
+    .populate('quiz','quizTakenDate score id isAnswerCorrect submittedAnswers')
     .exec((err, fridge) => {
       if (err) {
         return res.status(500)
@@ -339,7 +340,8 @@ exports.getStudentFridge = function(req, res){
             score: fridge.quiz.score,
             quizTakenDate: fridge.quiz.quizTakenDate,
             id: fridge.quiz.id,
-            studentAnswers: fridge.quiz.studentAnswers
+            isAnswerCorrect: fridge.quiz.isAnswerCorrect,
+            submittedAnswers: fridge.quiz.submittedAnswers
           }
         }
         //console.log(ret);
@@ -397,7 +399,7 @@ exports.findFridgeByScenOwner = function (req, res, next) {
     })
     .populate('owner', 'userId')
     .populate('scenario', 'shortCode')
-    .populate('quiz','quizTakenDate score id studentAnswers')
+    .populate('quiz','quizTakenDate score id isAnswerCorrect submittedAnswers')
     .populate({
       path: 'pedeList',
       select: 'bugID isFemale genotype phenotype id',

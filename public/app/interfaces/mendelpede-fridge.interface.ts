@@ -1,5 +1,6 @@
 import { MendelpedePede } from './mendelpede-pede.interface';
 import { _User } from './user.interface';
+import { MendelpedeQuiz } from './mendelpede-quiz.interface';
 
 /**
  * A user/scenario fridge
@@ -28,7 +29,7 @@ export interface MendelpedeFridge {
 
   firstTraitForQuiz?: string;
 
-  quiz?: {score: number, quizTakenDate: Date, id: string, studentAnswers: boolean[]};
+  quiz?: MendelpedeQuiz;
 
 }
 
@@ -55,6 +56,6 @@ export interface StudentMendelFridge {
 
   genoFacts: string;
 
-  quiz?: {score: number, quizTakenDate: Date, id: string};
+  quiz?: MendelpedeQuiz;
 
 }
