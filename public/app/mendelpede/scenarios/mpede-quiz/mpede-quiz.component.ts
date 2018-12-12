@@ -48,9 +48,10 @@ export class MendelpedeQuizComponent{
   @Input() mendelFridge: MendelpedeFridgeComponent;
 
   constructor(private _authenticationService: AuthenticationService,
-    private _router: Router,
+    //private _router: Router,
     private _scenarioService: MendelpedeScenarioService,
-    private _route: ActivatedRoute) {
+    //private _route: ActivatedRoute
+  ) {
       this.isDestroyed$ = new Subject<boolean>();
   }
 
@@ -94,7 +95,6 @@ export class MendelpedeQuizComponent{
   submitQuiz(){
     // reset error messages
     this.errorMessage = '';
-    console.log(this.quiz.submittedAnswers);
     var returnPedes = this.quizPedes.slice(0,8);
     this._scenarioService.calculateQuizScore(returnPedes, this.quiz.submittedAnswers, this.quizFridgeId)
     .takeUntil(this.isDestroyed$)
