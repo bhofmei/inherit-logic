@@ -1,5 +1,6 @@
 const courseEnum = {
   ALL: 0,
+  OTHER: 1, // list for 'all' level but not 'grad' and 'undergrad'
   GRAD: 2,
   UNGRAD: 3
 }
@@ -67,7 +68,7 @@ module.exports = [
     inheritType: 'segDistort',
     scenType: 'scenario',
     ordOfScen: 8,
-    courseLevel: courseEnum.GRAD
+    courseLevel: courseEnum.OTHER
   },
   {
     label: 'Maternal Effect',
@@ -75,7 +76,7 @@ module.exports = [
     inheritType: 'matEffect',
     scenType: 'scenario',
     ordOfScen: 9,
-    courseLevel: courseEnum.GRAD
+    courseLevel: courseEnum.OTHER
   },
   {
     label: 'Penetrance',
@@ -83,7 +84,7 @@ module.exports = [
     inheritType: 'penetrance',
     scenType: 'scenario',
     ordOfScen: 10,
-    courseLevel: courseEnum.GRAD
+    courseLevel: courseEnum.OTHER
   },
   {
     label: 'Multiple Genes',
@@ -91,7 +92,7 @@ module.exports = [
     inheritType: 'multGenes',
     scenType: 'scenario',
     ordOfScen: 11,
-    courseLevel: courseEnum.ALL
+    courseLevel: courseEnum.UNGRAD
   },
   {
     label: 'Multiple Alleles',
@@ -99,7 +100,7 @@ module.exports = [
     inheritType: 'multAlleles',
     scenType: 'scenario',
     ordOfScen: 12,
-    courseLevel: courseEnum.ALL
+    courseLevel: courseEnum.UNGRAD
   },
   {
     label: 'Discovery1',
@@ -133,14 +134,14 @@ module.exports = [
     ordOfScen: 4,
     courseLevel: courseEnum.UNGRAD
   },
-  {
+  /*{
     label: 'Discovery5',
     shortCode: 'Disc5',
     inheritType: 'penetrance',
     scenType: 'discovery',
     ordOfScen: 5,
     courseLevel: courseEnum.UNGRAD
-  },
+  },*/
   {
     label: 'Pathway1',
     shortCode: 'Path1',

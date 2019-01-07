@@ -126,6 +126,10 @@ const setTraits = function(genoFacts){
         genoFacts[i]['rec'] = tmpGeno.rec;
         bodyColRem = tmpGeno.colRem;
     }; // end switch
+    // if inherit[0] multGene or epi and i == 2, dom and rec phen are the same
+    // if(i === 2 && (genoFacts[0]['inherit'] === tEnum.INHERIT.MULTGENES || genoFacts[0]['inherit'].startsWith('epi'))){
+    //   genoFacts[i]['rec'] = genoFacts[i]['dom'];
+    // }
   } // end for i
   return genoFacts;
 }; // end setTraits
@@ -290,6 +294,7 @@ const _pickTrait = function(i, inTrait, bodyColRem, dotCol){
   // attach rem color to output
   outGeno['colRem'] = bodyColRem;
   return outGeno;
+
 }; // end _pickTrait
 
 const _genoQuiz = function(){

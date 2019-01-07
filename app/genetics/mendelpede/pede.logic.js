@@ -74,7 +74,7 @@ exports.determinePhenotype = function(genoFacts, inPede){
             // either dom -> 'dom', both rec -> `rec`
             rawPheno[traitInt] = ((locus1 > 0 || locus2 > 0) ? genoFacts[0]['dom'] : genoFacts[0]['rec']);
             break;
-          case tEnum.INHERIT.EPICOMP:
+          case tEnum.INHERIT.EPICOM:
             // both dom -> 'dom', either rec -> `rec`
             rawPheno[traitInt] = ((locus1 > 0 && locus2 > 0) ? genoFacts[0]['dom'] : genoFacts[0]['rec']);
             break;
