@@ -210,7 +210,6 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    * @returns {FridgePhage[]} array of all slots in fridge, including empty
    */
   _fillPedes(fridgePedes: MendelpedePede[]): MendelpedePede[]{
-    //console.log(fridgePedes);
     var out: MendelpedePede[] = [];
     for(let i = 0; i < this.maxShelf*this.spots; i++){
       out.push({bugID: i, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null});
@@ -226,7 +225,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
       } else {
         out[n].canDelete = true
       }
-      this.nextSpot = (n === this.nextSpot ? n+1 : this.nextSpot);
+      this.nextSpot = (n >= this.nextSpot ? n+1 : this.nextSpot);
     }
     return out;
   }
@@ -283,7 +282,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   storePede(pedeToStore: MendelpedePede){
     //pedeToStoreL['bugID'] = this.fridge.pedes.length;
     let pedeToStoreL: MendelpedePede = {
-      bugID: this.fridge.pedes.length,
+      bugID: this.nextSpot,
       userId: pedeToStore.userId,
       id: pedeToStore.id,
       scenCode: pedeToStore.scenCode,

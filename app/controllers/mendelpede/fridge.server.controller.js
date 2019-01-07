@@ -51,7 +51,7 @@ const getMendelFridgeInfo = function (mendelFridge) {
   var count = 0;
   let pedeList = mendelFridge.pedeList.map((pede) => {
     var pede = getPedeInfo(pede)
-    pede.bugID = count
+    //pede.bugID = count
     count++;
     return pede;
   });
