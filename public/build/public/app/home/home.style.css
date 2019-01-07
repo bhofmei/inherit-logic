@@ -7,8 +7,8 @@
   padding-bottom: 2em;
 }
 
-#home-jumbotron h2{
-  font-weight: bold;
+#home-jumbotron img{
+  max-width: 500px;
 }
 
 #jumbotron-contents{

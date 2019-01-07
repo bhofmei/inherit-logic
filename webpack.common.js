@@ -64,14 +64,14 @@ module.exports = {
     //      name: 'manifest'
     //    }),
     new HtmlWebpackPlugin({
-      title: 'Inherit Logic',
+      title: 'InheritLogic',
       filename: 'index.ejs',
       template: require('html-webpack-template'),
       inject: false,
       baseHref: '/',
       bodyHtmlSnippet: `<cricket-app>
 <div class="container text-center">
-<h1 id="load-header" class="mt-3">Loading INHERIT <span style="font-weight:200;">LOGIC</span>...</h1>
+<h1 id="load-header" class="mt-3">Loading <span style="color:#007BFF;">INHERIT<span style="font-weight:200;">LOGIC</span></span>...</h1>
 Please wait.
 </div>
 </cricket-app>`,
