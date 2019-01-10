@@ -143,6 +143,14 @@ module.exports = [
     courseLevel: courseEnum.UNGRAD
   },*/
   {
+    label: 'Mitochondrial or Maternal Effect',
+    shortCode: 'MitoMatEffect',
+    inheritType: 'mitoMatEffect',
+    scenType: 'discovery',
+    ordOfScen: 5,
+    courseLevel: courseEnum.UNGRAD
+  },
+  {
     label: 'Pathway1',
     shortCode: 'Path1',
     inheritType: 'epiDup',

@@ -52,6 +52,11 @@ const getInheritance = function(scenario) {
       var val = randGen.randInt(0,10, randEngine) + 75;
       genoFacts[0] = {inherit: tEnum.INHERIT.PENETRANCE, howBad: val};
       break;
+    // choose mitochondrial or maternal effect
+    case tEnum.INHERIT.MITOMATEFFECT:
+      var val = randGen.randBool(randEngine) ? tEnum.INHERIT.MITO : tEnum.INHERIT.MATEFFECT;
+      genoFacts[0] = {inherit: val};
+      break;
     // geno 0 is set same
     case tEnum.INHERIT.INCDOM:
     case tEnum.INHERIT.XLINK:

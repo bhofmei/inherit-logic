@@ -18,6 +18,7 @@ exports.INHERIT = {
   PENETRANCE: 'penetrance',
   MULTGENES: 'multGenes',
   MULTALLELES: 'multAlleles',
+  MITOMATEFFECT: 'mitoMatEffect',
   EPIDUP: 'epiDup',
   EPICOM: 'epiComp',
   EPIREC: 'epiRec',
