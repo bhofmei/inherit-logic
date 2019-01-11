@@ -86,7 +86,7 @@
     "@compodoc/compodoc": "^1.1.5",
     "@types/angular": "^1.6.39",
     "@types/core-js": "^0.9.43",
-    "@types/jasmine": "^2.8.6",
+    "@types/jasmine": "2.5.x",
     "@types/lodash": "^4.14.104",
     "@types/node": "^8.0.53",
     "angular-router-loader": "^0.8.2",
