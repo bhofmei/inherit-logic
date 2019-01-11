@@ -1,7 +1,7 @@
 {
-  "name": "cricket",
-  "version": "1.0.10",
-  "description": "Cricket application",
+  "name": "inherit-logic",
+  "version": "2.0.0",
+  "description": "Web application using computer simulated experiments to learn about genetics",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -23,7 +23,8 @@
     "cov:back": "NODE_ENV=test nyc --reporter=json-summary mocha --recursive --reporter spec -t 5000 app/tests/"
   },
   "keywords": [
-    "genetics"
+    "genetics",
+    "angular"
   ],
   "author": "Brigitte Hofmeister",
   "license": "Apache-2.0",
@@ -133,6 +134,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bhofmei/cricket.git"
+    "url": "git+https://github.com/bhofmei/inherit-logic.git"
   }
 }

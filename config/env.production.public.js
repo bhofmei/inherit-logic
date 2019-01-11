@@ -2,7 +2,7 @@
 // EXAMPLE PRODUCTION CONFIGURATION FOR GIT REPOSITORY
 module.exports = {
   // Production configuration options
-  db: 'mongodb://localhost/cricket',
+  db: 'mongodb://localhost/inherit-logic',
   sessionSecret : process.env.SES_SEC || 'defaultSessSec',
   encodeKey: process.env.ENC_KEY || 'encodeKey',
   loadScenario: true,

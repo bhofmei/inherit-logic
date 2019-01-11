@@ -6,7 +6,6 @@ import { AuthenticationService } from './authentication.service';
 import { User } from '../interfaces';
 import { userAdmin, userInstr, userStudent, listOfStudents } from '../testing/sample-data';
 
-//let authServiceSpy: jasmine.SpyObj<AuthenticationService>;
 let authService: AuthenticationService;
 
 describe('Authentication Service', ()=>{

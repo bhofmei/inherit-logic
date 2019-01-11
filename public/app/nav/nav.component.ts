@@ -7,7 +7,7 @@ import { User } from '../interfaces/user.interface';
  * Navigation bar at the top of the site
  */
 @Component({
-    selector: 'cricket-nav',
+    selector: 'IL-nav',
     templateUrl: './nav.template.html',
     styleUrls: ['./nav.style.css']
 })

@@ -15,17 +15,17 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
  * i.e. logging in/out users and resetting forgotten passwords
  */
 @NgModule({
-    imports: [
-        CommonModule,
-      SharedModule,
-        RouterModule.forChild(AuthenticationRoutes)
-    ],
-    declarations: [
-        SigninComponent,
-        SignupComponent,
-      SignoutComponent,
-      ForgetPasswordComponent,
-      ResetPasswordComponent
-    ]
+  imports: [
+    CommonModule,
+    SharedModule,
+    RouterModule.forChild(AuthenticationRoutes)
+  ],
+  declarations: [
+    SigninComponent,
+    SignupComponent,
+    SignoutComponent,
+    ForgetPasswordComponent,
+    ResetPasswordComponent
+  ]
 })
 export class AuthenticationModule { }

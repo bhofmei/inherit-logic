@@ -1,6 +1,6 @@
 module.exports = {
   // Development configuration options
-  db: 'mongodb://localhost/cricket-dev',
+  db: 'mongodb://localhost/inherit-logic-dev',
   sessionSecret : 'developmentSessionSecret',
   encodeKey: 'twEEXTsWW76k2Y0',
   loadScenario: true,

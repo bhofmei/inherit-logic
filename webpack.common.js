@@ -69,12 +69,12 @@ module.exports = {
       template: require('html-webpack-template'),
       inject: false,
       baseHref: '/',
-      bodyHtmlSnippet: `<cricket-app>
+      bodyHtmlSnippet: `<inherit-logic>
 <div class="container text-center">
 <h1 id="load-header" class="mt-3">Loading <span style="color:#007BFF;">INHERIT<span style="font-weight:200;">LOGIC</span></span>...</h1>
 Please wait.
 </div>
-</cricket-app>`,
+</inherit-logic>`,
       links: [{
           href: './img/logos/white-blue-black.png',
           rel: 'shortcut icon',

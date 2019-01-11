@@ -9,7 +9,7 @@ Additionally, due to the numerous ways servers can be set-up, this application h
 
 ## MongoDB
 
-The database used by the application is [MongoDB](). This is a no-sql database where each record is stored as a file.
+The database used by the application is [MongoDB](https://www.mongodb.com/what-is-mongodb). This is a no-sql database where each record is stored as a file.
 This gives the flexibility to be schema-less, however we use Mongoose define schema's making the code consistent and easier to debug.
 
 Install MongoDB for your system. The most up-to-date version should suffice for the compatible Mongoose version.
@@ -30,8 +30,8 @@ Web application framework. We use [yarn](https://yarnpkg.com/en/) to install pac
 2. Install MongoDB from [MongoDB](https://www.mongodb.com/download-center?jmp=nav#community)
   1. Check that MonogDB is working
   2. Set it up so MongoDB is always running
-3. (If not already), clone this repository into a location accessible to the web, let's call it *cricket*
-4. In the new `cricket` directory, run `yarn install --prod` (for production builds) or `yarn install` for development/local build. If you do not have yarn installed, run npm install.
+3. (If not already), clone this repository into a location accessible to the web, let's call it *inherit-logic*
+4. In the new `inherit-logic` directory, run `yarn install --prod` (for production builds) or `yarn install` for development/local build. If you do not have yarn installed, run npm install.
 5. Run unit tests to test the installation.
   - ` yarn run test:server` tests server-side (Express.js) code
   - `yarn run test:ng` tests client-side (Angular) code
@@ -58,7 +58,7 @@ Web application framework. We use [yarn](https://yarnpkg.com/en/) to install pac
 3. Create the default course.
   1. Run
 ```
-db.courses.insert({courseNum: "NA", courseDescription: "default course", isGraduateCourse: false})
+db.courses.insert({courseNum: "NA", courseDescription: "default course"})
 ```
   2. If this worked you'll get the response `WriteResult({ "nInserted" : 1 })`.
   3. Run `db.courses.find({})` to get the course object ID `"_id":ObjectId("...")`

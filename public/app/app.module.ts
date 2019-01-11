@@ -33,37 +33,37 @@ import { MendelpedeModule } from './mendelpede/mendelpede.module'
  * The main bootstrapped module
  */
 @NgModule({
-    imports: [
-        BrowserModule,
-      SharedModule,
-        HttpClientModule,
-      HelpModule,
-      AdminModule,
-      ProfileModule,
-        AuthenticationModule,
-      CricketModule,
-      MendelpedeModule,
-      RouterModule.forRoot(AppRoutes)
-    ],
-    declarations: [
-        AppComponent,
-        NavComponent,
-      HomeComponent,
-      PageNotFoundComponent
-    ],
-    providers: [
-      AuthenticationService,
-      LoggedInGuard,
-      CricketService,
-      CourseService,
-      ScenarioResolver,
-      MendelpedeScenarioResolver,
-      //SelectService
-    ],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    SharedModule,
+    HttpClientModule,
+    HelpModule,
+    AdminModule,
+    ProfileModule,
+    AuthenticationModule,
+    CricketModule,
+    MendelpedeModule,
+    RouterModule.forRoot(AppRoutes)
+  ],
+  declarations: [
+    AppComponent,
+    NavComponent,
+    HomeComponent,
+    PageNotFoundComponent
+  ],
+  providers: [
+    AuthenticationService,
+    LoggedInGuard,
+    CricketService,
+    CourseService,
+    ScenarioResolver,
+    MendelpedeScenarioResolver,
+    //SelectService
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
-constructor(breadcrumbsConfig: McBreadcrumbsConfig) {
+  constructor(breadcrumbsConfig: McBreadcrumbsConfig) {
 
     breadcrumbsConfig.postProcess = (x) => {
 
@@ -71,7 +71,7 @@ constructor(breadcrumbsConfig: McBreadcrumbsConfig) {
 
       let y = x;
 
-      if(x.length && x[0].text !== 'Home') {
+      if (x.length && x[0].text !== 'Home') {
         y = [
           {
             text: 'Home',
