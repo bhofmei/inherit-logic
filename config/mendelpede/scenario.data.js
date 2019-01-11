@@ -47,8 +47,8 @@ module.exports = [
     courseLevel: courseEnum.ALL
   },
   {
-    label: 'Homozygous Dominant Lethality',
-    shortCode: 'HomoDomLeth',
+    label: 'AA Lethality',
+    shortCode: 'AALeth',
     inheritType: 'homoDomLeth',
     scenType: 'scenario',
     ordOfScen: 6,
