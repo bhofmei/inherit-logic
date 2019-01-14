@@ -5,6 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import { HelpRoutes } from './help.routes';
 import { HelpComponent } from './help.component';
 import { HelpCricketComponent } from './help-cricket/help-cricket.component';
+import { HelpMendelpedeComponent } from './help-mendelpede/help-mendelpede.component';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { HelpCricketComponent } from './help-cricket/help-cricket.component';
   ],
   declarations: [
     HelpComponent,
-    HelpCricketComponent
+    HelpCricketComponent,
+    HelpMendelpedeComponent
   ]
 })
 export class HelpModule {}
