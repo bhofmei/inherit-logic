@@ -134,7 +134,7 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
                                       let score = 'Quiz not submitted yet'
                                       if(mfridge.quiz){
                                         score = mfridge.quiz.score.toString();
-                                      } 
+                                      }
                                       this.scoreMap[option.shortCode] = score;
                                   },
                                       (error) => {
@@ -290,7 +290,7 @@ export class StudentIndivComponent implements OnInit, OnDestroy {
    */
     roleButtonClass(src: string): Object {
         return {
-            'btn btn-sm': true,
+            'btn btn-sm flex-grow-0': true,
             'btn-outline-secondary': src !== this.student.role,
             'btn-secondary': src === this.student.role
         }
