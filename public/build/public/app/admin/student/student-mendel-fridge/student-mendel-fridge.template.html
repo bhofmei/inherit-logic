@@ -34,12 +34,14 @@
         <div class="col-2"><div class="text-weight-bold text-primary mr-2">Inherit</div></div>
         <div class="col-2"><div class="text-weight-bold text-primary mr-2">Dom</div></div>
         <div class="col-2"><div class="text-weight-bold text-primary mr-2">Rec</div></div>
+        <div class="col-2"><div class="text-weight-bold text-primary mr-2">Interm</div></div>
       </div>
-      <div class="ist-group-item m-0 row border" *ngFor="let genoFacts of currGenoFacts">
+      <div class=" m-0 row border" *ngFor="let genoFacts of currGenoFacts">
         <div class="col-2">{{ genoFacts.trait }}</div>
         <div class="col-2">{{ genoFacts.inherit }}</div>
         <div class="col-2">{{ genoFacts.dom }}</div>
         <div class="col-2">{{ genoFacts.rec }}</div>
+        <div *ngIf="genoFacts.interm !== null" class="col-2">{{genoFacts.interm}}</div>
       </div>
       <div class="row d-flex mb-3" id="scenario-info">
         <div class="text-weight-bold text-primary mr-2">MendelPedes</div>

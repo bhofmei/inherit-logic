@@ -114,7 +114,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
                 this.isQuizTaken = true;
               }
               if(mfridge.genoFacts){
-                this.currGenoFacts = JSON.parse(mfridge.genoFacts)
+                this.currGenoFacts = JSON.parse(mfridge.genoFacts);
                 if (this.currGenoFacts !== null){
                   this.hasFridge = true
                 }
@@ -169,7 +169,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
     this._studentService.deleteQuizScore(this.admin.id, this.studentId, this.scenId)
     .takeUntil(this.isDestroyed$)
     .subscribe((err)=>{
-      
+
     });
   }
 
