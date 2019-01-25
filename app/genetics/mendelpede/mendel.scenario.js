@@ -258,7 +258,7 @@ const _pickIncDom = function(traitsLeft, bodyColRem, dotCol){
       outGeno['rec'] = val ? dotCol[2] : dotCol[5];
       break;
     case 'EyeColor':
-    case 'BodyColor':
+    case 'SegColor':
       // randomly choose red, orange, beige or purple, skyblue, cyan schmeme
       outGeno['trait'] = trait;
       val = randGen.randBool(randEngine);
