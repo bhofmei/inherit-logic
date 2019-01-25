@@ -54,6 +54,10 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
    * Potential backend error messages
    */
   private errorMessage: string = '';
+  /**
+   * Scoremap which contains quiz score for all listed students if any
+   */
+  private scoreMap: Map<string, string> = new Map<string, string>();
 
   constructor(private _router: Router,
     private _route: ActivatedRoute,
@@ -78,25 +82,40 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
       .subscribe(params => {
           let course = params['courseNum'];
           let scenCode = params['scenShortCode'];
-      this.courseNum = course.toUpperCase();
-      this._scenarioService.getScenario(scenCode)
-        .takeUntil(this.isDestroyed$)
-        .subscribe((res)=>{
-          // success
-          this.scenario = res;
-        this._courseService.getMendelScenarioStatus(this.admin.id, course, scenCode)
-          .takeUntil(this.isDestroyed$)
-          .subscribe((stats)=>{
+          this.courseNum = course.toUpperCase();
+          this._scenarioService.getScenario(scenCode)
+            .takeUntil(this.isDestroyed$)
+            .subscribe((res)=>{
+              // success
+              this.scenario = res;
+            this._courseService.getMendelScenarioStatus(this.admin.id, course, scenCode)
+              .takeUntil(this.isDestroyed$)
+              .subscribe((stats)=>{
+                this.students = stats;
+                this.students.forEach((student) => {
+                  this._studentService.getMendelFridge(this.admin.id, student.userId, scenCode)
+                    .takeUntil(this.isDestroyed$)
+                          .subscribe((mfridge) => {
+                            //console.log('we got fridge from db')
+                            //console.log('coming for quiz');
+                            let score = 'Quiz not submitted yet'
+                            if(mfridge.quiz){
+                              score = mfridge.quiz.score.toString();
+                            }
+                            this.scoreMap[student.userId] = score;
+                        },
+                            (error) => {
+                          this.errorMessage = readErrorMessage(error);
+                        });
+                      });
+            }, (err2)=>{
+              this.errorMessage = readErrorMessage(err2);
+            });
 
-            this.students = stats;
-        }, (err2)=>{
-          this.errorMessage = readErrorMessage(err2);
-        });
-
-      }, (err)=>{
-        this.errorMessage = readErrorMessage(err);
-      });
-        });
+          }, (err)=>{
+            this.errorMessage = readErrorMessage(err);
+          });
+            });
   }
 
   /**
@@ -109,6 +128,16 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
    */
   formatAccess(isGranted: boolean): string{
     return (isGranted ? 'Access granted' : 'Access not granted');
+  }
+
+  /**
+   * Returns score of the student
+   * @param studentId: student userid 
+   */
+  getQuizScore(studentId: string){
+    //console.log(this.scoreMap);
+    //console.log(scenId);
+    return this.scoreMap[studentId];
   }
 
   /**
