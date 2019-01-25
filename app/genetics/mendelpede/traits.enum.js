@@ -19,6 +19,7 @@ exports.INHERIT = {
   MULTGENES: 'multGenes',
   MULTALLELES: 'multAlleles',
   MITOMATEFFECT: 'mitoMatEffect',
+  MYSTERY: 'mystery',
   EPIDUP: 'epiDup',
   EPICOM: 'epiComp',
   EPIREC: 'epiRec',

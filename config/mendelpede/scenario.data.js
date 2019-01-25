@@ -151,6 +151,14 @@ module.exports = [
     courseLevel: courseEnum.UNGRAD
   },
   {
+    label: 'Mystery',
+    shortCode: 'Mystery',
+    inheritType: 'mystery',
+    scenType: 'discovery',
+    ordOfScen: 6,
+    courseLevel: courseEnum.ALL
+  },
+  {
     label: 'Pathway1',
     shortCode: 'Path1',
     inheritType: 'epiDup',

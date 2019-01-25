@@ -32,6 +32,16 @@ const getInheritance = function(scenario) {
   var genoFacts = [1,2,3,4,5].map((x)=>{
     return {inherit: tEnum.INHERIT.MENDEL};
   });
+  // if mystery scenario, need to set inherit type first
+  console.log(scenario);
+  if(scenario.inheritType === tEnum.INHERIT.MYSTERY){
+
+    let opts = [tEnum.INHERIT.MENDEL, tEnum.INHERIT.XLINK,
+      tEnum.INHERIT.SYNTHLETH, tEnum.INHERIT.HOMODOMLETH];
+      console.log('mystery-', opts);
+    scenario.inheritType = randGen.randPick(opts, randEngine);
+    console.log(scenario);
+  }
   // fill genoFacts based on scenario
   switch(scenario.inheritType){
     // 3 mendel traits - inherit mode is already set
