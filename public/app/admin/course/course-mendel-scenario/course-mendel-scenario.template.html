@@ -18,7 +18,7 @@
                   <span class="text-primary student-label">{{student | personName}}</span>
               </div>
               <div class="btn-group" role="group">
-                <span style="padding-right: 20px" class="text-secondary"> Score: {{ getQuizScore(student.userId) }}</span>
+                <span *ngIf="scenario.shortCode === 'quiz1' || scenario.shortCode === 'quiz2'" style="padding-right: 20px" class="text-secondary"> Score: {{ getQuizScore(student.userId) }}</span>
                 <button class="btn btn-outline-primary btn-sm" (click)="goToFridge(student.userId)">View fridge</button>
               </div>
               </div> <!-- end list-group-item -->
