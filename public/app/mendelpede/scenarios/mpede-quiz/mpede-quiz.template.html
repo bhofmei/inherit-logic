@@ -1,0 +1,36 @@
+<div class="card border-primary">
+    <div class="card-header text-primary">
+        <h4 class="card-title mb-0 pl-0">Quiz</h4>
+    </div>
+    <div *ngIf="quiz" class="card-body">
+        <div class="">Determine the genotype of each individual for trait <span class="text-primary">{{quizTrait | pedeQuizTrait}}</span></div>
+        <hr class="my-2">
+        <div *ngIf="quiz.score !== -1" class="font-weight-bold">Your Score: <span class="text-primary">{{quiz.score}} / 8</span></div>
+        <hr *ngIf="quiz.score !== -1" class="my-2">
+        <!-- <form> -->
+        <div id="quiz-form">
+        <div class="form-row" *ngFor="let x of quiz.isAnswerCorrect; let i=index">
+            <div class="col-12 col-lg-4 px-0" [ngClass]="getQuizBackgroundColor(i)">Pede {{i+1}}:</div>
+            <div class="col-12 col-lg-8">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="pedeAnswer-{{i}}" id="pede-AA-{{i}}" [(ngModel)]="quiz.submittedAnswers[i]" value="AA">
+                    <label class="form-check-label" for="pede-AA-{{i}}">AA</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="pedeAnswer-{{i}}" id="pede-Aa-{{i}}" [(ngModel)]="quiz.submittedAnswers[i]" value="Aa">
+                    <label class="form-check-label" for="pede-Aa-{{i}}">Aa</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="pedeAnswer-{{i}}" id="pede-aa-{{i}}" [(ngModel)]="quiz.submittedAnswers[i]" value="aa">
+                    <label class="form-check-label" for="pede-aa-{{i}}">aa</label>
+                </div>
+            </div>
+        </div> <!-- end form-row -->
+        <!-- </form> -->
+        <div class="form-row">
+          <button type="button" [disabled]="quizSubmitted" (click)="submitQuiz()" class="btn btn-primary">Submit Quiz</button>
+        </div>
+        </div> <!-- quiz-form -->
+        <div *ngIf="errorMessage !== ''" class="text-danger">{{errorMessage}}</div>
+    </div> <!-- end card-body -->
+</div> <!-- end card -->

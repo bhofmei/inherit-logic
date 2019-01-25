@@ -1,27 +1,18 @@
-const pEnum = require('./phage.enum');
+const pEnum = require('./cricket/phage.enum');
 const randGen = require('./random.generator');
 const debug = require('debug')('genetics:util');
-/*exports.howManyToMake = function(randGen, inList){
-  if(inList.length === 1){
-    return inList[0];
-  } else {
-    return randGen.integer(inList[0], inList[1]);
-  }
-}
+const clone = require('clone');
 
-exports.holyRoller = function(randGen, numSides, numTimes){
-  var diceAr = randGen.dice(numSides, numTimes);
-  var sumDice = 0;
-  return diceAr.forEach((n)=>{
-    sumDice = sumDice + n;
-  });
-}*/
 exports.howManyToMake = function(engine, inList){
   if(inList.length === 1){
     return inList[0];
   } else {
     return randGen.randInt(inList[0], inList[1], engine);
   }
+}
+
+exports.inArray = function(searchVal, inAr){
+  return inAr.indexOf(searchVal) != -1;
 }
 
 exports.holyRoller = function(engine, numSides, numTimes){
@@ -31,6 +22,34 @@ exports.holyRoller = function(engine, numSides, numTimes){
     sumDice = sumDice + n;
   });
   return sumDice;
+}
+
+exports.removeFromArray = function(inAr, removeElm){
+  if(inAr.length === 0){
+    return inAr;
+  }
+
+    var j = inAr.indexOf(removeElm);
+    if(j!== -1){
+      inAr.splice(j, 1);
+    }
+  return inAr;
+}
+
+exports.makeLongEnoughArray = function(engine, inAr, numNeeded){
+  var outArray = clone(inAr);
+  if (outArray.length > 0){
+    var groupsNeeds = Math.ceil(numNeeded / inAr.length);
+    for(var i=2; i <= groupsNeeds; i++){
+      outArray = outArray.concat(inAr);
+    }
+    outArray = randGen.randShuffle(outArray, engine);
+  }
+  return outArray;
+}
+
+exports.absSort = function(a, b){
+  return Math.abs(a) - Math.abs(b)
 }
 
 exports.locSort = function(a, b){
@@ -58,6 +77,11 @@ exports.expand = function(inList, guesses){
 }
 
 exports.gaussRand = function(engine, inNum){
+  // if test environment, return 0
+  if(process.env.NODE_ENV === 'test'){
+    return 0;
+  }
+  // else generate number
   debug('guassRand start %d', inNum);
   var notGood = true;
   var r, v, w, n1, n2;
@@ -101,7 +125,7 @@ exports.identicalGenotypes = function( phage1, phage2){
   } else {
     // loop through deletions
     for(let i = 0; i < s1.length; i++){
-      if(s1[i].location !== s2[i].location || s1[i].kind != s2[i].kind){
+      if(s1[i] !== s2[i]){
         return false;
       }
     }

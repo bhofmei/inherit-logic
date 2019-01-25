@@ -1,3 +1,7 @@
+/**
+ * List of user roles with their numeric value (`value`), string value
+ * used by MongoDB (`key`), and string displayed on webpage (`label`)
+ */
 export const StudentRolesArray: any = [
   {
     key: 'student',

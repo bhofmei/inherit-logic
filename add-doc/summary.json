@@ -1,0 +1,81 @@
+[{
+  "title": "Controllers",
+  "file": "controllers.md",
+  "children": [{
+      "title": "Admin Controller",
+      "file": "controllers/admin.md"
+    },
+    {
+      "title": "Course Controller",
+      "file": "controllers/course.md"
+    },
+    {
+      "title": "Fridge Controller",
+      "file": "controllers/fridge.md"
+    },
+    {
+      "title": "Genetics Controller",
+      "file": "controllers/genetics.md"
+    },
+    {
+      "title": "Scenario Controller",
+      "file": "controllers/scenario.md"
+    },
+    {
+      "title": "User Controller",
+      "file": "controllers/user.md"
+    }
+  ]
+},
+{
+  "title": "Genetics",
+  "file": "genetics.md",
+  "children": [
+    {
+      "title": "Phage Scenario",
+      "file": "genetics/phage-scenario.md"
+    },
+    {
+      "title": "Phage Logic",
+      "file": "genetics/phage-logic.md"
+    },
+    {
+      "title": "Phage Experiment",
+      "file": "genetics/phage-experiment.md"
+    },
+    {
+      "title": "Plate Experiment",
+      "file": "genetics/plate-experiment.md"
+    },
+    {
+      "title": "Plexer Experiment",
+      "file": "genetics/plexer-experiment.md"
+    }
+  ]
+},
+{
+  "title": "Models",
+  "file": "models.md",
+  "children": [
+    {
+      "title": "Course Model",
+      "file": "models/course-model.md"
+    },
+    {
+      "title": "Fridge Model",
+      "file": "models/fridge-model.md"
+    },
+    {
+      "title": "Phage Model",
+      "file": "models/phage-model.md"
+    },
+    {
+      "title": "Scenario Model",
+      "file": "models/scenario-model.md"
+    },
+    {
+      "title": "User Model",
+      "file": "models/user-model.md"
+    }
+  ]
+}]

@@ -7,7 +7,5 @@ import '@angular/forms';
 import '@angular/http';
 import '@angular/router';
 import 'rxjs';
-//import 'tslib';
 import '@ng-bootstrap/ng-bootstrap';
-import 'ng2-dnd';
 import 'ngx-breadcrumbs';

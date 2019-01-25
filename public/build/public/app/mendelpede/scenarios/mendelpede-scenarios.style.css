@@ -1,0 +1,15 @@
+.row.no-gutter {
+    margin-left: 7px;
+    margin-right: 7px;
+  }
+  .row.no-gutter [class*='col-']:not(:first-child),
+  .row.no-gutter [class*='col-']:not(:last-child) {
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+
+  @media (max-width: 768px) {
+    .con-flu-sm {
+    max-width: 100%;
+  }
+}

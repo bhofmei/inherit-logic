@@ -1,7 +1,8 @@
 const user = require('../controllers/user.server.controller');
 const admin = require('../controllers/admin.server.controller');
 const course = require('../controllers/course.server.controller');
-const scenario = require('../controllers/scenario.server.controller');
+const cricketScenario = require('../controllers/cricket/cricket-scenario.server.controller');
+const mendelScenario = require('../controllers/mendelpede/scenario.server.controller')
 
 module.exports = function (app) {
 
@@ -27,11 +28,19 @@ module.exports = function (app) {
   app.route('/api/admin/:userId/courses/:courseNum/instructors/:studentId')
     .post(admin.hasAuthorization, course.isInstructor, course.setInstructor)
 
-  app.route('/api/admin/:userId/courses/:courseNum/:scenarioId')
+  app.route('/api/admin/:userId/courses/:courseNum/:scenCode')
     .get(admin.hasAuthorization, course.isInstructor, course.getScenarioStatus);
+  
+  app.route('/api/admin/:userId/mendel-courses/:courseNum/:scenShortCode')
+    .get(admin.hasAuthorization, course.isInstructor, course.getScenarioStatus);
+
+  app.route('/api/admin/course-by-id/:courseId')
+    .get(course.getCourse)
 
   app.param('userId', user.userById);
   app.param('studentId', user.userById);
-  app.param('scenarioId', scenario.scenarioByCode);
+  app.param('scenCode', cricketScenario.scenByCode);
   app.param('courseNum', course.courseByNum);
+  app.param('scenShortCode', mendelScenario.scenarioByCode);
+  app.param('courseId', course.courseById)
 }

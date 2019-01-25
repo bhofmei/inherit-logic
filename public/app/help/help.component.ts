@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'help-cmp',
-  templateUrl: 'app/help/help.template.html',
-  styleUrls: ['app/help/help.style.css']
+  selector: 'help',
+  templateUrl: './help.template.html'
 })
 
 export class HelpComponent{

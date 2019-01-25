@@ -1,10 +1,13 @@
 const user = require('../controllers/user.server.controller');
 const admin = require('../controllers/admin.server.controller');
-const scenario = require('../controllers/scenario.server.controller');
-const fridge = require('../controllers/fridge.server.controller');
+const cricketScenario = require('../controllers/cricket/cricket-scenario.server.controller');
+const mendelScenario = require('../controllers/mendelpede/scenario.server.controller');
+const cricketFridge = require('../controllers/cricket/cricket-fridge.server.controller');
+const MendelFridge = require('../controllers/mendelpede/fridge.server.controller');
 
 module.exports = function (app) {
 
+  app.route('/api/admin/*').all(user.requiresLogin)
   /* admin user routes */
   app.route('/api/admin/:userId/students')
     .get(admin.hasAuthorization, admin.listUsers);
@@ -14,12 +17,23 @@ module.exports = function (app) {
     .post(admin.isAdmin, admin.setRole)
     .delete(admin.isAdmin, admin.deleteUser);
 
-  /* admin user scenario routes */
-  app.route('/api/admin/:userId/students/:studentId/:scenarioId')
-    .get(admin.hasAuthorization, fridge.getStudentFridge)
-    .post(admin.hasAuthorization, fridge.deleteStudentFridge, user.grantAccess);
+  /* admin user Cricket scenario routes */
+  app.route('/api/admin/:userId/students/:studentId/:scenCode')
+    .get(admin.hasAuthorization, cricketFridge.getStudentFridge)
+    .post(admin.hasAuthorization, cricketFridge.deleteStudentFridge, user.grantAccess);
+  
+  app.route('/api/admin/:userId/mendel-students/:studentId/:scenShortCode')
+    .get(admin.hasAuthorization, MendelFridge.getStudentFridge)
+    //.post(admin.hasAuthorization, MendelFridge.deleteStudentFridge, user.grantAccess);
+
+  app.route('/api/admin/:userId/delete-mendel-fridge/:studentId/:scenShortCode')
+    .delete(admin.hasAuthorization, MendelFridge.findFridgeByScenOwner, MendelFridge.deleteStudentMendelFridge, MendelFridge.deleteQuiz)
+
+  app.route('/api/admin/:userId/delete-quiz-score/:studentId/:scenShortCode')
+    .delete(admin.hasAuthorization, MendelFridge.findFridgeByScenOwner, MendelFridge.deleteQuizScore)
 
   app.param('userId', user.userById);
   app.param('studentId', user.userById);
-  app.param('scenarioId', scenario.scenarioByCode);
+  app.param('scenCode', cricketScenario.scenByCode);
+  app.param('scenShortCode', mendelScenario.scenarioByCode);
 };

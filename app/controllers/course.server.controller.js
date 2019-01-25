@@ -1,25 +1,54 @@
+/**
+ * The Course-related controller functions
+ * @module course.server.controller
+ * @name Course Controller
+ * @type Controller
+ */
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Course = mongoose.model('Course');
 const User = mongoose.model('User');
 
-const getErrorMessage = function (err) {
-  if (err.errors) {
-    for (const errName in err.errors) {
-      if (err.errors[errName].message) return err.errors[errName].message;
-    }
-  } else {
-    return 'Unknown server error';
-  }
-};
+const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
 
+/**
+ * @external USER
+ * @see {@link ../models/user-model.html}
+ */
+/**
+ * @external COURSE
+ * @see {@link ../models/course-model.html}
+ */
+/**
+ * @external SCENARIO
+ * @see {@link ../models/scenario-model.html}
+ */
+
+/**
+ * Middleware to allow only admin and the instructor of the course to proceed
+ * @protected
+ *
+ * @param {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById}
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum}
+ * @param {Object} res - Express response object
+ * @param {function} next - next middleware
+ *
+ * @returns {Object | Function} json object to response not allowed or next middleware if allowed
+ * @yields {403_Forbidden} current user not authorized, send error as `{message: 'Not instructor of this course'}`
+ * @yields {next()} If user authorized, go to next middleware
+ */
 exports.isInstructor = function (req, res, next) {
   let instr = req.curUser;
+  let id = JSON.stringify(instr._id);
   let course = req.course;
+  let instrIds = course.instructors.map((inst) => {
+    return JSON.stringify(inst._id);
+  });
   // search for this user in list of instructors
   if (instr.role === 'admin') {
     next();
-  } else if (course.instructors.indexOf(instr._id) === -1) {
+  } else if (instrIds.indexOf(id) === -1) {
     return res.status(403)
       .send({
         message: 'Not instructor of this course'
@@ -33,6 +62,18 @@ exports.isInstructor = function (req, res, next) {
  * get list of courses
  * is user is admin, list all
  * if user is instructor, list courses for teacher
+ *
+ * @apiType GET
+ * @apiPath /api/admin/:userId/courses
+ *
+ * @params {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById}
+ * @params {Object} res - Express response object
+ *
+ * @returns {Object} json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {404_Not_Found} User is admin and there are no courses OR user is instr role but not the instructor of any courses; sends message as `{message: 'No courses found'}`
+ * @yields {200_OK} List of courses; courses in the list depend on user role
  */
 exports.listCourses = function (req, res) {
   let user = req.curUser;
@@ -49,7 +90,7 @@ exports.listCourses = function (req, res) {
     if (err) {
       return res.status(500)
         .send({
-          message: err
+          message: getErrorMessage(err)
         })
     } else if (!courses) {
       return res.status(404)
@@ -62,6 +103,22 @@ exports.listCourses = function (req, res) {
   });
 };
 
+/**
+ * Return the list of course numbers that currently exist
+ *
+ * This is used during sign-up and does not require a user to be logged in
+ *
+ * @apiType GET
+ * @apiPath /api/courses
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object} json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {404_Not_Found} there are no courses; sends message as `{message: "No courses found"}`
+ * @yields {200_OK} List of courses with properties `courseNum` and `id` (DB id)
+ */
 exports.listCourseNum = function (req, res) {
   Course.find({}, 'courseNum id', (err, courses) => {
     if (err) {
@@ -81,7 +138,19 @@ exports.listCourseNum = function (req, res) {
 }
 
 /**
- *  Create a new course
+ *  Create a new course and set current user as instructor
+ *
+ * @apiType POST
+ * @apiPath /api/admin/:userId/courses
+ *
+ * @param {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {Object} body - details about new course: `courseNum`, `level`, and `description`
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object} json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {200_OK} Newly created course
  */
 exports.createCourse = function (req, res) {
   // Create a new course object
@@ -94,7 +163,7 @@ exports.createCourse = function (req, res) {
   course.save((err) => {
     if (err) {
       // If an error occurs send the error message
-      return res.status(400)
+      return res.status(500)
         .send({
           message: getErrorMessage(err)
         });
@@ -106,7 +175,19 @@ exports.createCourse = function (req, res) {
 };
 
 /**
- * get an existing course
+ * Get information about an existing course
+ *
+ * @apiType GET
+ * @apiPath /api/admin/:userId/courses/:courseNum
+ *
+ * @param {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object} json object to response
+ * @yields {200_OK} the course information including `courseNum`, `description`, and list of `instructors`
+ *
  */
 exports.getCourse = function (req, res) {
   res.json(req.course);
@@ -114,13 +195,26 @@ exports.getCourse = function (req, res) {
 
 /**
  * Update the description of an existing course
+ *
+ * @apiType POST
+ * @apiPath /api/admin/:userId/courses/:courseNum
+ *
+ * @param {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById}  with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @property {Object} body - course information to update - the description
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object} json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {200_OK} Updated course information
  */
 exports.editCourse = function (req, res) {
   let course = req.course;
 
   // Update the fields
   course.description = req.body.description;
-
+  course.level = req.body.level;
   // Try saving the updated article
   course.save((err) => {
     if (err) {
@@ -137,6 +231,18 @@ exports.editCourse = function (req, res) {
 
 /**
  * Delete a course
+ *
+ * @apiType DELETE
+ * @apiPath /api/admin/:userId/courses/:courseNum
+ *
+ * @params {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @params {Object} res - Express response object
+ *
+ * @returns {Object} json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {200_OK} Information about course just deleted
  */
 exports.deleteCourse = function (req, res) {
   const course = req.course;
@@ -156,6 +262,18 @@ exports.deleteCourse = function (req, res) {
 
 /**
  * get list of students for a course
+ *
+ * @apiType GET
+ * @apiPath /api/admin/:userId/courses/:courseNum/students
+ *
+ * @param {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @param {Object} res - Express response object
+ *
+ * @return {Object} json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {200_OK} List of students in the course; each student has properties `firstName`, `lastName`, `userId`, `accessGranted`, and `email`
  */
 exports.getStudents = function (req, res) {
   var course = req.course;
@@ -177,7 +295,21 @@ exports.getStudents = function (req, res) {
 };
 
 /**
- * delete all students in a course
+ * Bulk delete all students in a particular course
+ * Most useful when finished with semester and course is over
+ * Does not remove the course itself
+ *
+ * @apiType DELETE
+ * @apiPath /api/admin/:userId/courses/:courseNum/students
+ *
+ * @param {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object} json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {200_Success} List of students just deleted
  */
 exports.deleteCourseStudents = function (req, res) {
   let courseId = new ObjectId(req.course._id);
@@ -195,11 +327,28 @@ exports.deleteCourseStudents = function (req, res) {
   });
 };
 
+/**
+ * Get list of all possible instructors for a specific course (not including the instrcutors currently teaching the course)
+ * Admin can add current instructors or students in the course
+ * Instructors can add other instrctors
+ *
+ * @apiType GET
+ * @apiPath /api/admin/:userId/courses/:courseNum/instructors
+ *
+ * @param {Object} - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById}  with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @param {Object} - Express response object
+ *
+ * @returns {Object} json object to response
+ * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
+ * @yields {200_OK} List of possible instrcutors; each person has properties `firstName`, `lastName`, `userId`, and `role`
+ */
 exports.getPossibleInstructors = function (req, res) {
   let admin = req.curUser;
   let courseId = new ObjectId(req.course._id);
 
-  let currInstr = req.course.instructors.map((elm)=>{
+  let currInstr = req.course.instructors.map((elm) => {
     return elm.userId;
   });
 
@@ -223,10 +372,10 @@ exports.getPossibleInstructors = function (req, res) {
       if (err) {
         return res.status(500)
           .send({
-            message: err
+            message: getErrorMessage(err)
           })
       } else {
-        let out = users.filter((elm)=>{
+        let out = users.filter((elm) => {
           return currInstr.indexOf(elm.userId) === -1;
         })
         res.json(out);
@@ -235,7 +384,21 @@ exports.getPossibleInstructors = function (req, res) {
 }
 
 /**
- * add an instuctor to the course
+ * Add an instuctor to the course and make user "instructor" role if user is a student
+ *
+ * @apiType POST
+ * @apiPath /api/admin/:userId/courses/:courseNum/instructors/:studentId'
+ *
+ * @param {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum} with course number `courseNum`
+ * @property {external:USER} student - user to make instructor; identified with [userById]{@link user-controller.html#userById} with id `studentId`
+ * @param {Object} res - Express response object
+ *
+ * @return {Object} json object to response
+ * @yields {400_Bad_Request} On error updating the course, sends description of error as `{message: error-message}`
+ * @yields {500_Internal_Server_Error} On error updating the user, sends description of error as `{message: error-message}`
+ * @yields {200_OK} The updated course
  */
 exports.setInstructor = function (req, res) {
   let newInstructor = req.student;
@@ -246,36 +409,60 @@ exports.setInstructor = function (req, res) {
     return res.json(course);
   }
 
-  course.instructors.push(newInstructor);
-  course.save((err, c) => {
-    if (err) {
-      return res.status(500)
-        .send({
-          message: getErrorMessage(err)
-        });
-    } else {
-      if (newInstructor.role === 'student') {
-        newInstructor.role = 'instr';
-        newInstructor.save((err2) => {
-          if (err) {
-            return res.status(400)
-              .send({
-                message: getErrorMessage(err)
-              });
-          } else {
-            res.json(c);
-          }
-        }); // end instructor.save
+  User.findByIdAndUpdate(
+    newInstructor._id, {
+      role: (newInstructor.role === 'student' ? 'instr' : newInstructor.role)
+    }, {
+      new: true
+    },
+    (err, updated) => {
+      if (err) {
+        return res.status(500)
+          .send({
+            message: getErrorMessage(err)
+          });
       } else {
-        res.json(c);
+        Course.findByIdAndUpdate(
+          course._id, {
+            $push: {
+              instructors: updated._id
+            }
+          }, {
+            new: true
+          },
+          (err2, c) => {
+            if (err2) {
+              return res.status(400)
+                .send({
+                  message: getErrorMessage(err)
+                });
+            } else {
+              res.json(c)
+            }
+          }
+        ); // end course find
       }
     }
-  }); // end course.save
+  ); // end user find
 };
 
 /**
  * Get scenario status (aka access granted) for a scenario for all
- * users in a course
+ * students in a course
+ *
+ * @apiType GET
+ * @apiPath /api/admin/:userId/courses/:courseNum/:scenarioId
+ *
+ * @param {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum}
+ * @property {external:SCENARIO} scenario - scenario of interested; identified with [scenarioByCode]{@link scenario-controller.html#scenarioByCode} with id `scenarioId`
+ * @param {Object} res - Express response object
+ *
+ * @return {Object} json object to response
+ * @yields {404_Not_Found} There are no students in the course, sends error as `{message: "no students found"}`
+ * @yields {500_Internal_Server_Error} Database error, sends description of error as `{message: error-message}`
+ * @yields {200_OK} List of students in course with scenario access; each object in list has `firstName`, `lastName`, `userId`, and `status`
  */
 exports.getScenarioStatus = function (req, res) {
   const course = req.course;
@@ -299,9 +486,10 @@ exports.getScenarioStatus = function (req, res) {
     } else {
       var output = students.map((student) => {
         return {
-          name: student.name,
+          firstName: student.firstName,
+          lastName: student.lastName,
           userId: student.userId,
-          status: student.accessGranted[scenId]
+          status: student.accessGranted[scenId] || false
         }
       });
       res.json(output);
@@ -309,19 +497,70 @@ exports.getScenarioStatus = function (req, res) {
   });
 };
 
+/**
+ * Middleware to find course by course number
+ * @protected
+ *
+ * @apiPath :courseNum
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - next middleware function
+ * @param {string} id - course number from URL
+ *
+ * @returns {Function} go to next middleware
+ * @yields {next(error)} If error, pass the error to the next middleware
+ * @yields {next('Failed to load course id')} If course doesn't exist, pass message to middleware
+ * @yield {next()} If success, set request `course` and go to next middleware
+ */
 exports.courseByNum = function (req, res, next, id) {
   Course.findOne({
-    courseNum: id
-  }).populate('instructors', 'firstName lastName userId')
+      courseNum: id
+    })
+    .populate('instructors', 'firstName lastName userId')
     .exec((err, course) => {
-    if (err) {
-      return next(err);
-    }
-    if (!course) {
-      return next(new Error('Failed to load course ' + id));
-    }
-    req.course = course;
-    // Call the next middleware
-    next();
-  })
+      if (err) {
+        return next(err);
+      }
+      if (!course) {
+        return next('Failed to load course ' + id);
+      }
+      req.course = course;
+      // Call the next middleware
+      next();
+    })
+};
+
+/**
+ * Middleware to find course by course number
+ * @protected
+ *
+ * @apiPath :courseNum
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - next middleware function
+ * @param {string} id - course number from URL
+ *
+ * @returns {Function} go to next middleware
+ * @yields {next(error)} If error, pass the error to the next middleware
+ * @yields {next('Failed to load course id')} If course doesn't exist, pass message to middleware
+ * @yield {next()} If success, set request `course` and go to next middleware
+ */
+exports.courseById = function (req, res, next, id) {
+  Course.findOne({
+      _id: id
+    })
+    .populate('instructors', 'firstName lastName userId')
+    .exec((err, course) => {
+      if (err) {
+        return next(err);
+      }
+      if (!course) {
+        return next('Failed to load course ' + id);
+      }
+      req.course = course;
+      // Call the next middleware
+      next();
+    })
 };

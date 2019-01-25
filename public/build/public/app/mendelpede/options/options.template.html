@@ -1,0 +1,60 @@
+<div class="container">
+<h2 class="mt-4 text-dark">MendelPede Scenarios</h2>
+<p class="mb-2 text-secondary col-12 font-italic">Study the inheritance of traits using "pedes"</p>
+<div *ngIf="user" class="row mx-0">
+      <div class="col-12 col-lg-6">
+        <div class="mb-3 card" id="scenarios">
+        <div class="card-header"><h5 class="text-primary mb-0">Scenarios</h5></div>
+        <div class="list-group list-group-flush">
+            <a *ngFor="let scenario of scenarios" [routerLink]="[scenario.shortCode]" class="list-group-item list-group-item-action">{{scenario.label}}</a>
+          </div>
+      </div> <!-- end scenarios -->
+      <div *ngIf="isUndergrad" class="mb-3 card" id="quizzes1">
+      <div class="card-header"><h5 class="text-primary mb-0">Quizzes</h5></div>
+          <div class="list-group list-group-flush">
+              <a *ngFor="let quiz of quizzes" [routerLink]="[quiz.shortCode]" class="list-group-item list-group-item-action">{{quiz.label}}</a>
+            </div>
+      </div> <!-- end quizzes1 -->
+      </div> <!-- end col 1 -->
+      <div class="col-12 col-lg-6">
+        <div *ngIf="!isUndergrad" class="mb-3 card" id="quizzes2">
+        <div class="card-header"><h5 class="text-primary mb-0">Quizzes</h5></div>
+            <div class="list-group list-group-flush">
+                <a *ngFor="let quiz of quizzes" [routerLink]="[quiz.shortCode]" class="list-group-item list-group-item-action">{{quiz.label}}</a>
+              </div>
+        </div> <!-- end quizzes2 -->
+    <div *ngIf="discoveries.length!==0" class="mb-3 card" id="discoveries">
+      <div class="card-header"><h5 class="text-primary mb-0">Discoveries</h5></div>
+            <div class="list-group list-group-flush">
+                <a *ngFor="let discovery of discoveries" [routerLink]="[discovery.shortCode]" class="list-group-item list-group-item-action">{{discovery.label}}</a>
+              </div>
+        </div> <!-- end discoveries -->
+        <div class="mb-3 card" id="pathways">
+          <div class="card-header"><h5 class="text-primary mb-0">Pathways</h5></div>
+            <div class="list-group list-group-flush">
+                <a *ngFor="let pathway of pathways" [routerLink]="[pathway.shortCode]" class="list-group-item list-group-item-action">{{pathway.label}}</a>
+            </div>
+        </div> <!-- end pathways -->
+    </div> <!-- end col 2 -->
+    <!--<div class="card">
+        <div class="card-header" id="headingFour">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+              Pathways
+            </button>
+          </h5>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+          <div class="card-body">
+              <div class="list-group mt-2">
+                  <a *ngFor="let pathway of pathways" [routerLink]="[pathway.shortCode]" class="list-group-item list-group-item-action">{{pathway.label}}</a>
+              </div>
+          </div>
+        </div>
+      </div>-->
+  </div>
+  <div *ngIf="!user" class="col-12">
+      <p>
+        <a [routerLink]="['/authentication/signin']">Sign in</a> or <a [routerLink]="['/authentication/signup']">Sign up</a> to see scenarios.</p>
+    </div>
+</div>

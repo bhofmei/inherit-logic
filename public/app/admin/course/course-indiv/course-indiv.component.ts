@@ -1,70 +1,158 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/takeUntil'
+import { Subject } from 'rxjs';
+
 
 import { CourseService } from '../course.service';
-import { ScenarioService } from '../../../scenario/scenario.service';
+import { CricketService } from '../../../cricket/cricket.service';
+import { MendelpedeScenarioService } from '../../../mendelpede/scenarios/mendelpede-scenarios.service'
 import { AuthenticationService } from '../../../authentication/authentication.service';
+import { readErrorMessage } from '../../../shared/read-error';
 
-import { Course } from '../../../interfaces/course.interface';
-import { Student, sortStudents } from '../../../interfaces/student.interface';
-import { Scenario } from '../../../interfaces/scenario.interface';
-import { User } from '../../../interfaces/user.interface';
+import { Course, CourseLevels, Student, sortStudents, Scenario, User, MendelpedeScenario } from '../../../interfaces';
 
 @Component({
-  selector: 'course-indiv-cmp',
-  templateUrl: 'app/admin/course/course-indiv/course-indiv.template.html',
-  styleUrls: ['app/admin/course/course-indiv/course-indiv.style.css']
+  selector: 'course-indiv',
+  templateUrl: './course-indiv.template.html'
 })
 
-export class CourseIndivComponent{
 
+/**
+ * Component to view an individual course
+ * Includes information such as course number, description, instructors, and students
+ */
+export class CourseIndivComponent implements OnInit, OnDestroy {
+
+  /**
+   * List of students enrolled in the course
+   */
   private students: Student[] = [];
-  private courseInfo: Course;
+  /**
+   * Course info including `courseNum`, `description`, `instructors`
+   */
+  courseInfo: Course;
+  /**
+   * list of available scenarios (used for linking)
+   */
   private scenarios: Scenario[];
+  /**
+   * State variable to make unsubscribing from services easier
+   */
   private isDestroyed$: Subject<boolean>;
   private paramObserver: any;
 
-  //private courseNum: string;
+  /**
+   * Potential error message that could arise
+   */
   private errorMessage: string = '';
 
-  constructor(private _router: Router,
-        private _route: ActivatedRoute,
-               private _courseService: CourseService,
-               private _authService: AuthenticationService,
-              private _scenarioService: ScenarioService){
+  /**
+   * List of all Mendelpede scenarios
+   */
+  private mpedeOptions: MendelpedeScenario[];
+
+  mpedeScenarios: MendelpedeScenario[] = Array();
+  quizes: MendelpedeScenario[] = Array();
+  discoveries: MendelpedeScenario[] = Array();
+  pathways: MendelpedeScenario[] = Array();
+
+  constructor(
+    private _router: Router,
+    private _route: ActivatedRoute,
+    private _courseService: CourseService,
+    private _authService: AuthenticationService,
+    private _scenarioService: CricketService,
+    private _mpedeScenarioService: MendelpedeScenarioService, ) {
     this.isDestroyed$ = new Subject<boolean>();
   }
 
-  ngOnInit(){
+  /**
+   * Initialize all content on the page using several services
+   * 1. Get the logged in user
+   * 2. Get the course information (description, instructors)
+   * 3. Get the list of students in the course
+   * 4. Get the list of scenarios
+   */
+  ngOnInit() {
     let admin: User = this._authService.getUser();
     this.paramObserver = this._route.params.subscribe(params => {
-            let course = params['courseNum'];
-
-            this._courseService.getCourse(admin.id, course)
+      let course = params['courseNum'];
+      this._courseService.getCourse(admin.id, course)
         .takeUntil(this.isDestroyed$)
-              .subscribe((info) => {
-              this.courseInfo = info;
-              this._courseService.getStudents(admin.id, course)
-              .takeUntil(this.isDestroyed$)
-              .subscribe((students)=>{
-                this.students = students.sort(sortStudents);
-                this._scenarioService.listScenarios()
-                  .takeUntil(this.isDestroyed$)
-                  .subscribe((scens)=>{
-                    this.scenarios = scens;
+        .subscribe((info) => {
+          this.courseInfo = info;
+          this._courseService.getStudents(admin.id, course)
+            .takeUntil(this.isDestroyed$)
+            .subscribe((students) => {
+              this.students = students.sort(sortStudents);
+              this._scenarioService.listScenarios()
+                .takeUntil(this.isDestroyed$)
+                .subscribe((scens) => {
+                  this.scenarios = scens;
                 });
-              });
-            },
-                (error) => {
-              this.errorMessage = error.message;
+              this._mpedeScenarioService.listScenarios(this.courseInfo.level).takeUntil(this.isDestroyed$)
+                .subscribe((scens) => {
+                  this.mpedeOptions = scens;
+                  this.mpedeOptions.forEach((option) => {
+                    if (option.scenType === 'scenario') {
+                      this.mpedeScenarios.push(option);
+                    } else if (option.scenType === 'quiz') {
+                      this.quizes.push(option);
+                    } else if (option.scenType === 'discovery') {
+                      this.discoveries.push(option);
+                    } else if (option.scenType === 'pathway') {
+                      this.pathways.push(option);
+                    }
+                  });
+                  this.mpedeScenarios = this.mpedeScenarios.sort((o1, o2) => {
+                    if (o1.ordOfScen < o2.ordOfScen) {
+                      return -1;
+                    } else if (o1.ordOfScen > o2.ordOfScen) {
+                      return 1;
+                    } else {
+                      return 0;
+                    }
+                  })
+                  this.quizes = this.quizes.sort((o1, o2) => {
+                    if (o1.ordOfScen < o2.ordOfScen) {
+                      return -1;
+                    } else if (o1.ordOfScen > o2.ordOfScen) {
+                      return 1;
+                    } else {
+                      return 0;
+                    }
+                  })
+                  this.discoveries = this.discoveries.sort((o1, o2) => {
+                    if (o1.ordOfScen < o2.ordOfScen) {
+                      return -1;
+                    } else if (o1.ordOfScen > o2.ordOfScen) {
+                      return 1;
+                    } else {
+                      return 0;
+                    }
+                  })
+                  this.pathways = this.pathways.sort((o1, o2) => {
+                    if (o1.ordOfScen < o2.ordOfScen) {
+                      return -1;
+                    } else if (o1.ordOfScen > o2.ordOfScen) {
+                      return 1;
+                    } else {
+                      return 0;
+                    }
+                  })
+                });
             });
+        }, (error) => {
+          this.errorMessage = readErrorMessage(error);
         });
+    });
   }
 
-  ngOnDestroy(){
+  /**
+   * Unsubscribe from subscriptions to prevent memory leaks
+   */
+  ngOnDestroy() {
     this.paramObserver.unsubscribe();
     this.isDestroyed$.next(true);
     this.isDestroyed$.unsubscribe();

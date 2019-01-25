@@ -1,0 +1,75 @@
+<div class="container">
+  <div *ngIf="errorMessage !== ''" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="fridge">
+    <div class="row" id="student-name">
+      <a [routerLink]="['../../']" class="text-dark">
+        <h4>{{ fridge.owner | personName }}</h4>
+      </a>
+      <div class="col">
+        <button *ngIf="hasFridge" class="btn btn-outline-danger btn-sm mx-auto float-right" type="button" (click)="checkDeleteStudentFridge()">Delete Fridge</button>
+        <button *ngIf="isQuizTaken && hasFridge" class="btn btn-outline-danger btn-sm mx-auto float-right" type="button" (click)="checkDeleteQuizScore()">Delete Quiz Score</button>
+      </div>
+    </div>
+
+    <div class="row d-flex mb-3" id="scenario-info">
+      <div class="text-weight-bold text-primary mr-2">{{ fridge.scenario.scenCode }}</div>
+      <div class="text-secondary mr-4">{{ fridge.scenario.label }} </div>
+      <div *ngIf="isQuizTaken && hasFridge" class="text-primary mr-2">Score: </div><div *ngIf="isQuizTaken && hasFridge" class="text-secondary mr-4">{{fridge.quiz.score}}</div>
+      <div *ngIf="isQuizTaken && hasFridge" class="text-primary mr-2">Date Taken: </div><div *ngIf="isQuizTaken && hasFridge" class="text-secondary">{{fridge.quiz.quizTakenDate | date:'short'}}</div>
+      <!--<div class="ml-auto">
+              Access granted: {{ fridge.accessGranted }}
+            </div>-->
+    </div>
+    <div *ngIf="!hasFridge" id="no-fridge">
+      Fridge does not exist yet
+    </div>
+    <div *ngIf="hasFridge">
+      <div class="row d-flex mb-3" id="scenario-info">
+        <div class="text-weight-bold text-primary mr-2">GenoFacts</div>
+      </div>
+      <div class="m-0 row border">
+        <div class="col-2"><div class="text-weight-bold text-primary mr-2">Trait</div></div>
+        <div class="col-2"><div class="text-weight-bold text-primary mr-2">Inherit</div></div>
+        <div class="col-2"><div class="text-weight-bold text-primary mr-2">Dom</div></div>
+        <div class="col-2"><div class="text-weight-bold text-primary mr-2">Rec</div></div>
+      </div>
+      <div class="ist-group-item m-0 row border" *ngFor="let genoFacts of currGenoFacts">
+        <div class="col-2">{{ genoFacts.trait }}</div>
+        <div class="col-2">{{ genoFacts.inherit }}</div>
+        <div class="col-2">{{ genoFacts.dom }}</div>
+        <div class="col-2">{{ genoFacts.rec }}</div>
+      </div>
+      <div class="row d-flex mb-3" id="scenario-info">
+        <div class="text-weight-bold text-primary mr-2">MendelPedes</div>
+      </div>
+      <!-- end not hasFridge -->
+      <div id="fridge-outer">
+        <div class="list-group mt-3" id="fridge">
+          <div class="ist-group-item m-0 row border" *ngFor="let pede of fridge.pedes">
+            <div class="strain-num text-primary col-1">{{ pede.bugID + 1 }}</div>
+            <div class="col-3">
+              <div [ngClass]="getMendelpede(pede.phenotype)" style="margin: auto;">
+              </div>
+            </div>
+            <!-- phage.strainNum -->
+            <div class="col-3">
+              <!--{{ pede.genotype | pedeGenotype:fridge.scenario.scenCode }}-->
+              <div *ngFor="let geno of pede.genotype; let i=index">
+                {{ currGenoFacts[i]["trait"] }}: {{ geno | pedeGenotype:fridge.scenario.scenCode }}
+              </div>
+            </div>
+            <div class="col-1">{{ pede.isFemale }}</div>
+            <div class="col-4 text-smaller" [innerHTML]="pede.phenotype | pedePhenotype"></div>
+            <!-- end phageType -->
+            <!-- end phage-details -->
+          </div>
+
+        </div> <!-- end fridge -->
+      </div>
+      <!-- end hasFridge -->
+    </div>
+    <!-- end if fridge -->
+  </div>
+</div>

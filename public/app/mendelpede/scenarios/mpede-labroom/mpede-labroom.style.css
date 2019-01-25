@@ -1,0 +1,13 @@
+.selected-object{
+  box-shadow: 0 0 0 0.2rem rgba(52,58,64,.5);
+}
+.drop-object{
+  border: 1px dashed black;
+}
+
+.btn-group-xs > .btn, .btn-xs {
+  padding  : .60rem .8rem;
+  font-size  : .950rem;
+  line-height  : .5;
+  border-radius : .2rem;
+}

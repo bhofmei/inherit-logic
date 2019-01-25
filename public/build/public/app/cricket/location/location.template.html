@@ -1,0 +1,41 @@
+<div class="container mt-2">
+  <div class="row">
+    <fridge class="col-5 col-md-4 col-lg-3"></fridge>
+    <!-- location navigation -->
+    <div class="col-7 col-md-8 col-lg-9 container-fluid">
+      <div class="card">
+        <div class="card-header">
+          <ul class=" nav nav-pills card-header-pills">
+            <li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" data-toggle="pill" routerLink="info" aria-selected="true">
+            Info
+            </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLinkActive]="['active']" data-toggle="pill" routerLink="lab-room" aria-selected="false">
+            Lab
+          </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLinkActive]="['active']" routerLink="plexer-room" data-toggle="pill" aria-selected="false">
+            Plexer
+          </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLinkActive]="['active']" data-toggle="pill" aria-selected="false" routerLink="model-room">
+            Model
+          </a>
+            </li>
+          </ul>
+        </div>
+        <!-- end card header -->
+        <div class="card-body">
+          <router-outlet></router-outlet>
+        </div>
+        <!-- end card-body -->
+      </div>
+      <!-- end card -->
+    </div>
+  </div>
+  <!-- end row -->
+</div>
+<!-- end container -->

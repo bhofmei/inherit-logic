@@ -1,0 +1,17 @@
+<div *ngIf="hasQuiz"  class="container-fluid">
+  <div class="row m-0">
+    <mendelpede-fridge class="col-4 col-md-3" #mendelFridge [labroom] = "labroom"></mendelpede-fridge>
+    <mpede-labroom class="col-8 col-md-6" #labroom [mendelFridge] = "mendelFridge"></mpede-labroom>
+    <mendelpede-quiz class="col-12 col-md-3" [mendelFridge] = "mendelFridge"></mendelpede-quiz>
+    </div> <!-- end row -->
+</div> <!-- end hasQuiz -->
+<div *ngIf="!hasQuiz" class="container con-flu-sm">
+    <div class="row">
+      <mendelpede-fridge class="col-4" #mendelFridge [labroom] = "labroom"></mendelpede-fridge>
+      <mpede-labroom class="col-8" #labroom [mendelFridge] = "mendelFridge"></mpede-labroom>
+    </div> <!-- end row -->
+</div> <!-- end !hasQuiz -->
+<div *ngIf="!user" class="col-12">
+    <p>
+    <a [routerLink]="['/authentication/signin']">Sign in</a> or <a [routerLink]="['/authentication/signup']">Sign up</a> to see scenarios.</p>
+</div>

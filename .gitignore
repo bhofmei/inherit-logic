@@ -9,7 +9,11 @@ public/app/**/*.js.map
 npm-debug.log
 /typings/
 
-/config/credentials/*
-!/config/credentials/*public*
+config/credentials/*
+!config/credentials/*public*
 
 /config/env.production.js
+/.nyc_output/
+coverage/**/html/*
+/docs/
+/docs2/

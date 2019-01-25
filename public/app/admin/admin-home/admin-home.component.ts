@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 
+/**
+ * A view component that is visible when going to the main admin page
+ */
 @Component({
   selector: 'admin-home',
-  templateUrl: 'app/admin/admin-home/admin-home.template.html'
+  templateUrl: './admin-home.template.html'
 })
 
 export class AdminHomeComponent{}

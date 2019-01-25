@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { AuthenticationService } from './authentication/authentication.service';
-import { Router } from '@angular/router';
 
+/**
+ * The main application component;
+ * Links the nav bar to the content needed based on the url
+ */
 @Component({
-    selector: 'cricket-app',
-    template: '<cricket-nav></cricket-nav><router-outlet></router-outlet>',
+    selector: 'inherit-logic',
+    template: '<IL-nav></IL-nav><router-outlet></router-outlet>'
 })
 export class AppComponent {
-    constructor(private _authenticationService: AuthenticationService, private router: Router) { }
+    constructor() { }
 }

@@ -1,19 +1,33 @@
 import { Course } from './course.interface';
+import { _User } from './user.interface';
+//  firstName: string;
+//  lastName: string;
+//  userId: number;
 
-export interface Student {
-  firstName: string;
-  lastName: string;
+/**
+ * Information needed as a user using the app in scenarios
+ */
+export interface Student extends _User {
   email?: string;
-  userId: number;
   accessGranted?: any;
   status?: boolean;
 }
 
+/**
+ * Additional information needed for admin pages about a user/student
+ */
 export interface AdminStudent extends Student {
   course: Course;
   role: string;
 }
 
+/**
+ * Function to sort students alphabetically by last name;
+ * Uses first name for ties
+ *
+ * Makes the name lowercase before sorting to ensure sort is
+ * case insensitive
+ */
 export const sortStudents = function(a,b){
     var comparison = a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase());
     if (comparison === 0) {

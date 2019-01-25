@@ -1,0 +1,116 @@
+<div class="card">
+  <div class="card-header row m-0">
+    <h4 class="card-title mb-0 pl-0 col-6">Lab Room</h4>
+  </div> <!-- end card header -->
+  <div class="card-body">
+    <div class="clear-fix row" id="cross-row">
+      <!--<div id="crosses" class="col-12 col-sm-9 col-lg-10">
+        <div class="row">-->
+      <div class="col-4 cross-pede">
+        <label class="cross-label d-block text-center text-info mb-1" for="cross-male">Male</label>
+        <div class="p-0 border border-info rounded m-1" id="cross-male">
+          <div *ngIf="malePede.phenotype !== null" class="row my-0 mx-1">
+            <div class="text-secondary col-6 col-lg-3 order-first pl-1 pr-0">{{ malePede.bugID + 1}}</div>
+            <div class="col-6 col-lg-3 text-right pl-0 pr-1 order-lg-12">
+              <!--<span *ngIf="childPedes[0].isFemale === 'F'" class="text-danger">F</span>
+              <span *ngIf="childPedes[0].isFemale === 'M'" class="text-info">M</span>-->
+            </div>
+            <div class="col-12 col-lg-6 p-0">
+              <div [ngClass]="getMendelpede(malePede.phenotype)"></div>
+            </div>
+          </div> <!-- end not null -->
+          <div *ngIf="malePede.phenotype === null" class="mpede-empty row p-0">
+          </div>
+        </div> <!-- end cross-male -->
+      </div> <!-- end cross-pede male -->
+      <div class="col-4 px-0 cross-pede">
+        <label class="cross-label d-block text-center text-dark mb-1" for="cross-progeny">Progeny</label>
+        <div class="p-0 border border-secondary rounded m-1" id="cross-progeny">
+          <div *ngIf="childPedes[0].phenotype !== null" class="row my-0 mx-1">
+            <div class="text-dark col-8 col-lg-3 order-first pl-1 pr-0 text-nowrap">#{{ childPedes[0].bugID }}</div>
+            <div class="col-4 col-lg-3 text-right pl-0 pr-1 order-lg-12">
+              <span *ngIf="childPedes[0].isFemale === 'F'" class="text-danger">F</span>
+              <span *ngIf="childPedes[0].isFemale === 'M'" class="text-info">M</span>
+            </div>
+            <div class="col-12 col-lg-6 p-0">
+              <div [ngClass]="getMendelpede(childPedes[0].phenotype)"></div>
+            </div>
+          </div> <!-- end not null -->
+          <div *ngIf="childPedes[0].phenotype === null" class="mpede-empty row p-0">
+          </div>
+        </div> <!-- end cross-progeny -->
+      </div> <!-- end cross-pede progeny -->
+      <div class="col-4 cross-pede">
+        <label class="cross-label d-block text-center text-danger mb-1" for="cross-female">Female</label>
+        <div class="p-0 border border-danger rounded m-1" id="cross-female">
+          <div *ngIf="femalePede.phenotype !== null" class="row my-0 mx-1">
+            <div class="text-secondary col-6 col-lg-3 order-first pl-1 pr-0">{{ femalePede.bugID + 1 }}</div>
+            <div class="col-6 col-lg-3 text-right pl-0 pr-1 order-lg-12">
+              <!--<span *ngIf="childPedes[0].isFemale === 'F'" class="text-danger">F</span>
+              <span *ngIf="childPedes[0].isFemale === 'M'" class="text-info">M</span>-->
+            </div>
+            <div class="col-12 col-lg-6 p-0">
+              <div [ngClass]="getMendelpede(femalePede.phenotype)"></div>
+            </div>
+          </div> <!-- end not null -->
+          <div *ngIf="femalePede.phenotype === null" class="mpede-empty row p-0">
+          </div>
+        </div> <!-- end cross-female -->
+      </div> <!-- end cross-pede female -->
+      <!--</div>
+      </div> -- end crosses -->
+    </div> <!-- end cross row -->
+    <div id="cross-buttons" class="row my-2">
+      <div class="btn-group mx-auto">
+        <button type="button" class="btn btn-dark" (click)="clearAll()">Clear</button>
+        <button type="button" class="btn btn-primary" [disabled]="undoSpotList.length === 0" (click)="undoPede()">Undo</button>
+      </div>
+    </div> <!-- end cross-buttons -->
+    <!--<div class="pede-list row">-->
+      <div *ngFor="let pederow of storablePedes; let i=index" class="row">
+        <div *ngFor="let pedes of pederow" class="col-6 col-md-3 store-pede">
+          <button *ngIf="i===0" class="btn btn-outline-primary d-block btn-sm mx-auto" type="button" (click)="storePede(pedes[pedes.length-1])" [disabled]="pedes[pedes.length-1].phenotype === null">Store</button>
+          <button *ngIf="i===1" class="btn btn-outline-primary d-block d-md-none btn-sm mx-auto" type="button" (click)="storePede(pedes[pedes.length-1])" [disabled]="pedes[pedes.length-1].phenotype === null">Store</button>
+          <div class="p-0 border border-secondary rounded m-1" (click)="dropPedeToStorage(pedes[pedes.length-1].bugID)">
+            <div *ngIf="pedes[pedes.length-1].phenotype" class="row my-0 mx-1">
+              <div class="text-dark col-8 col-sm-3 col-md-8 col-lg-3 order-first pl-1 pr-0 text-nowrap">#{{ pedes.length-1 }}</div>
+              <div class="col-4 col-sm-3 col-md-4 col-lg-3 text-right pl-0 pr-1 order-sm-12 order-md-0 order-lg-12">
+                <span *ngIf="pedes[pedes.length-1].isFemale === 'F'" class="text-danger">F</span>
+                <span *ngIf="pedes[pedes.length-1].isFemale === 'M'" class="text-info">M</span>
+              </div>
+              <div class="col-12 col-sm-6 col-md-12 col-lg-6 p-0">
+                <div [ngClass]="getMendelpede(pedes[pedes.length-1].phenotype)"></div>
+              </div>
+            </div> <!-- end not null -->
+            <div *ngIf="pedes[pedes.length-1].phenotype === null" class="row p-0">
+              <div class="mpede-empty w-100" ></div>
+            </div>
+          </div> <!-- end store-pede -->
+          <button *ngIf="i===1" class="btn btn-outline-primary d-none d-md-block btn-sm mx-auto" type="button" (click)="storePede(pedes[pedes.length-1])" [disabled]="pedes[pedes.length-1].phenotype === null">Store</button>
+          <!--<div class="ls-strain m-0 row">
+            <div class="col-xl-14 p-0 border border-dark" >
+              <div *ngIf="pedes[pedes.length-1].phenotype !== null" >
+                <span >#{{ pedes.length-1 }}</span>
+                <span >{{ pedes[pedes.length-1].isFemale }}</span>
+                <div [ngClass]="getMendelpede(pedes[pedes.length-1].phenotype)"  (click)="dropPedeToStorage(pedes[pedes.length-1].bugID)">
+                </div>
+              </div>
+              <div *ngIf="pedes[pedes.length-1].phenotype === null" >
+
+              </div>
+            </div>
+          </div>-->
+          <!--<div class="ls-strain m-0 row" *ngIf="pederow === storablePedes[1]">
+            <div class="col-xl-4" >
+              <div *ngIf="pedes[pedes.length-1].phenotype === null">
+                <button type="button"  (click)="storePede(pedes[pedes.length-1])" disabled class="btn btn-outline-primary btn-xs">Store</button>
+              </div>
+              <div *ngIf="pedes[pedes.length-1].phenotype !== null">
+                <button type="button"  (click)="storePede(pedes[pedes.length-1])" class="btn btn-outline-primary btn-xs">Store</button>
+              </div>
+            </div>-->
+        </div> <!-- end pede -->
+      </div><!-- end pederow -->
+    <!--</div> -- end pede-list -->
+  </div> <!-- end card body -->
+</div> <!-- end card -->

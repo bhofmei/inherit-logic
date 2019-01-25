@@ -1,16 +1,18 @@
 import { Routes } from '@angular/router';
 
-import { AuthenticationComponent } from './authentication.component';
 import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
 import { SignoutComponent } from './signout/signout.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 export const AuthenticationRoutes: Routes = [{
     path: 'authentication',
-    //component: AuthenticationComponent,
     children: [
         { path: 'signin', component: SigninComponent },
         { path: 'signup', component: SignupComponent },
-        { path: 'signout', component: SignoutComponent }
+        { path: 'signout', component: SignoutComponent },
+      {path: 'forget-password', component: ForgetPasswordComponent},
+      {path: 'reset-password/:token', component: ResetPasswordComponent}
     ]
 }];
