@@ -55,7 +55,7 @@ module.exports = [
     courseLevel: courseEnum.GRAD
   },
   {
-    label: 'Synthetic Lethality',
+    label: 'Synthetic Lethality aabb',
     shortCode: 'SynthLeth',
     inheritType: 'synthLeth',
     scenType: 'scenario',
