@@ -108,7 +108,7 @@ module.exports = [
     inheritType: 'mito',
     scenType: 'discovery',
     ordOfScen: 1,
-    courseLevel: courseEnum.UNGRAD
+    courseLevel: courseEnum.ALL
   },
   {
     label: 'Discovery2',
@@ -116,7 +116,7 @@ module.exports = [
     inheritType: 'homoDomLeth',
     scenType: 'discovery',
     ordOfScen: 2,
-    courseLevel: courseEnum.UNGRAD
+    courseLevel: courseEnum.ALL
   },
   {
     label: 'Discovery3',
@@ -124,7 +124,7 @@ module.exports = [
     inheritType: 'synthLeth',
     scenType: 'discovery',
     ordOfScen: 3,
-    courseLevel: courseEnum.UNGRAD
+    courseLevel: courseEnum.ALL
   },
   {
     label: 'Discovery4',
@@ -132,7 +132,7 @@ module.exports = [
     inheritType: 'segDistort',
     scenType: 'discovery',
     ordOfScen: 4,
-    courseLevel: courseEnum.UNGRAD
+    courseLevel: courseEnum.ALL
   },
   /*{
     label: 'Discovery5',
