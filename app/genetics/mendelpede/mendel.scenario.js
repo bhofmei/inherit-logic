@@ -50,6 +50,7 @@ const getInheritance = function(scenario) {
       break;
     // random value with it
     case tEnum.INHERIT.AUTOLINK:
+      // likely needs updated to increase val, i.e. more linkage
       var val = randGen.randInt(0,10, randEngine) + 70;
       genoFacts[0] = {inherit: tEnum.INHERIT.AUTOLINK, howBad: val};
       genoFacts[1] = {inherit: tEnum.INHERIT.AUTOLINK, howBad: val};

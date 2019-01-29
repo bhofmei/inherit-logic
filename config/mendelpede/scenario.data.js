@@ -76,7 +76,7 @@ module.exports = [
     inheritType: 'matEffect',
     scenType: 'scenario',
     ordOfScen: 9,
-    courseLevel: courseEnum.OTHER
+    courseLevel: courseEnum.UNGRAD
   },
   {
     label: 'Penetrance',
