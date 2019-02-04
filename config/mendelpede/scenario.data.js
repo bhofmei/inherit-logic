@@ -105,7 +105,7 @@ module.exports = [
   {
     label: 'Discovery1',
     shortCode: 'Disc1',
-    inheritType: 'mito',
+    inheritType: 'homoDomLeth',
     scenType: 'discovery',
     ordOfScen: 1,
     courseLevel: courseEnum.ALL
@@ -113,7 +113,7 @@ module.exports = [
   {
     label: 'Discovery2',
     shortCode: 'Disc2',
-    inheritType: 'homoDomLeth',
+    inheritType: 'mito',
     scenType: 'discovery',
     ordOfScen: 2,
     courseLevel: courseEnum.ALL

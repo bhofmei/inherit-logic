@@ -234,8 +234,8 @@ exports.resetPasswordEmail = function (req, res, next) {
       let mailOptions = {
         to: user.email,
         from: fromEmail,
-        subject: 'Cricket Password Reset',
-        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your Cricket account.\n\n' +
+        subject: 'Inherit Logic Password Reset',
+        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your Inherit Logic account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
           'http://' + req.headers.host + '/authentication/reset-password/' + token + '\n\n' +
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
