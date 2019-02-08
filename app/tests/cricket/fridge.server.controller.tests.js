@@ -1,14 +1,14 @@
 // Load the test dependencies
-const app = require('../../index.js');
+const app = require('../../../index.js');
 const request = require('supertest');
 const should = require('should');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const Scenario = mongoose.model('Scenario');
-const Fridge = mongoose.model('Fridge');
-const Phage = mongoose.model('Phage');
-const scenDefaults = require('../../config/scenario.config');
-const cryptr = require('../../config/client.cryptr');
+const Scenario = mongoose.model('CricketScenario');
+const Fridge = mongoose.model('CricketFridge');
+const Phage = mongoose.model('CricketPhage');
+const scenDefaults = require('../../../config/cricket/scenario.config');
+const cryptr = require('../../../config/client.cryptr');
 
 // Define global test variables
 let user, fridge, scenario, scenario2;

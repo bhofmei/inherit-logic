@@ -1,8 +1,8 @@
 // Load the test dependencies
-const app = require('../../index.js');
+const app = require('../../../index.js');
 const should = require('should');
 const mongoose = require('mongoose');
-const Scenario = mongoose.model('Scenario');
+const Scenario = mongoose.model('CricketScenario');
 
 // Define global test variables
 let scenario, scenarioList;
@@ -11,7 +11,7 @@ let scenario, scenarioList;
 describe('Scenario Model Unit Tests:', () => {
   // Define a pre-tests function
   beforeEach((done) => {
-    scenarioList = require('../../config/scenario.data');
+    scenarioList = require('../../../config/cricket/scenario.data');
     scenario = new Scenario(scenarioList[0]);
     done();
   });

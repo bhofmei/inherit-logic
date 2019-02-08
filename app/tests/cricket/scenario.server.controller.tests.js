@@ -1,10 +1,10 @@
 // Load the test dependencies
-const app = require('../../index.js');
+const app = require('../../../index.js');
 const request = require('supertest');
 const should = require('should');
 const mongoose = require('mongoose');
-const Scenario = mongoose.model('Scenario');
-const scenarioList = require('../../config/scenario.data');
+const Scenario = mongoose.model('CricketScenario');
+const scenarioList = require('../../../config/cricket/scenario.data');
 
 // Define global test variables
 let scenario;

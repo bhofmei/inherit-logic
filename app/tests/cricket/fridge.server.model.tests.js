@@ -1,10 +1,10 @@
 // Load the test dependencies
-const app = require('../../index.js');
+const app = require('../../../index.js');
 const should = require('should');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const Fridge = mongoose.model('Fridge');
-const Scenario = mongoose.model('Scenario');
+const Fridge = mongoose.model('CricketFridge');
+const Scenario = mongoose.model('CricketScenario');
 
 let user, user2, scen;
 // Create an 'Fridge' model test suite
