@@ -76,7 +76,7 @@ module.exports = [
     inheritType: 'matEffect',
     scenType: 'scenario',
     ordOfScen: 9,
-    courseLevel: courseEnum.OTHER
+    courseLevel: courseEnum.UNGRAD
   },
   {
     label: 'Penetrance',
@@ -105,18 +105,18 @@ module.exports = [
   {
     label: 'Discovery1',
     shortCode: 'Disc1',
-    inheritType: 'mito',
+    inheritType: 'homoDomLeth',
     scenType: 'discovery',
     ordOfScen: 1,
-    courseLevel: courseEnum.UNGRAD
+    courseLevel: courseEnum.ALL
   },
   {
     label: 'Discovery2',
     shortCode: 'Disc2',
-    inheritType: 'homoDomLeth',
+    inheritType: 'mito',
     scenType: 'discovery',
     ordOfScen: 2,
-    courseLevel: courseEnum.UNGRAD
+    courseLevel: courseEnum.ALL
   },
   {
     label: 'Discovery3',
@@ -124,7 +124,7 @@ module.exports = [
     inheritType: 'synthLeth',
     scenType: 'discovery',
     ordOfScen: 3,
-    courseLevel: courseEnum.UNGRAD
+    courseLevel: courseEnum.ALL
   },
   {
     label: 'Discovery4',
@@ -132,7 +132,7 @@ module.exports = [
     inheritType: 'segDistort',
     scenType: 'discovery',
     ordOfScen: 4,
-    courseLevel: courseEnum.UNGRAD
+    courseLevel: courseEnum.ALL
   },
   /*{
     label: 'Discovery5',
