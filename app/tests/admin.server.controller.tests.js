@@ -3,11 +3,11 @@ const request = require('supertest');
 const should = require('should');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const Scenario = mongoose.model('Scenario');
+const Scenario = mongoose.model('CricketScenario');
 const Course = mongoose.model('Course');
-const Fridge = mongoose.model('Fridge');
-const Phage = mongoose.model('Phage');
-const scenDefaults = require('../../config/scenario.config');
+const Fridge = mongoose.model('CricketFridge');
+const Phage = mongoose.model('CricketPhage');
+const scenDefaults = require('../../config/cricket/scenario.config');
 
 let admin, adminDetails, instr, instrDetails, student1, studentDetails, student2, fridge, fridge2, scenario, course;
 let tmpUserDetails;

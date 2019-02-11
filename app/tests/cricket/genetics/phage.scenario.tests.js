@@ -1,9 +1,9 @@
-const app = require('../../../index.js');
+const app = require('../../../../index.js');
 const should = require('should');
 const clone = require('clone');
-const scenDefaults = require('../../../config/scenario.config');
-const scenarios = require('../../../config/scenario.data');
-const phageScen = require('../../genetics/phage.scenario.js');
+const scenDefaults = require('../../../../config/cricket/scenario.config');
+const scenarios = require('../../../../config/cricket/scenario.data');
+const phageScen = require('../genetics/phage.scenario.tests.js');
 const pEnum = require('../../genetics/phage.enum')
 const debug = require('debug')('genetics:phage');
 

@@ -1,12 +1,12 @@
 // Load the test dependencies
-const app = require('../../index.js');
+const app = require('../../../index.js');
 const request = require('supertest');
 const should = require('should');
 const clone = require('clone');
 const mongoose = require('mongoose');
-const Phage = mongoose.model('Phage');
-const scenDefaults = require('../../config/scenario.config');
-const phageScen = require('../genetics/phage.scenario');
+const Phage = mongoose.model('CricketPhage');
+const scenDefaults = require('../../../config/cricket/scenario.config');
+const phageScen = require('../cricket/genetics/phage.scenario.tests');
 const phageExp = require('../genetics/phage.experiment');
 const plateExp = require('../genetics/plate.experiment');
 const cryptr = require('../../config/client.cryptr');

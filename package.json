@@ -18,7 +18,9 @@
     "start:p": "concurrently \"npm run webpack:p\" \"npm run app\" ",
     "test:back": "NODE_ENV=test mocha --recursive --reporter spec -t 5000 app/tests/",
     "test:server": "NODE_ENV=test mocha --reporter spec -t 5000 app/tests/",
-    "test:genetics": "NODE_ENV=test mocha --reporter spec app/tests/genetics",
+    "test:cricket": "NODE_ENV=test mocha --reporter spec app/tests/cricket",
+    "test:cricket-genetics": "NODE_ENV=test mocha --reporter spec app/tests/cricket/genetics",
+    "test:mendelpede": "NODE_ENV=test mocha --reporter spec app/tests/mendelpede",
     "test:ng": "karma start",
     "cov:back": "NODE_ENV=test nyc --reporter=json-summary mocha --recursive --reporter spec -t 5000 app/tests/"
   },
