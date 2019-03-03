@@ -30,9 +30,6 @@ export class MendelpedeScenarioService {
         .post<MendelpedeScenario[]>(this._baseURL, body);
   }
 
-/**
- * The current scenario guesses
- */
   private _scenarioGenoFacts = new BehaviorSubject<any>({});
   getGenoFacts = this._scenarioGenoFacts.asObservable();
   /**
