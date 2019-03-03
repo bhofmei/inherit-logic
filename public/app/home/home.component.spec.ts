@@ -54,7 +54,7 @@ describe('Home Component', ()=>{
     fixture.detectChanges();
     let paragraph = fixture.debugElement.query(By.css('#jumbotron-contents')).query(By.css('p'));
     let pContent = paragraph.nativeElement.innerHTML;
-    expect(pContent).toBe('Relive the logic of Crick and collegues as they discover the "words" of the genetic code.')
+    expect(pContent).toBe('Learn about genetics!')
   }); // end Should have jumbotron
 
   describe('Without user', ()=>{
@@ -83,9 +83,11 @@ describe('Home Component', ()=>{
      expect(linkEl.length).toBe(0);
     }); // end Should not have sign out link
 
-    it('Should not have scenarios link', ()=>{
-      let linkEl = links.filter((el)=>{return el.linkParams[0] === '/scenarios'});
+    it('Should not have cricket and mendelpede links', ()=>{
+      let linkEl = links.filter((el)=>{return el.linkParams[0] === '/cricket'});
      expect(linkEl.length).toBe(0);
+     let linkEl2 = links.filter((el)=>{return el.linkParams[0] === '/mendelpede'});
+     expect(linkEl2.length).toBe(0);
     }); // end Should not have scenarios link
 
     it('Should not have admin link', ()=>{
@@ -120,9 +122,11 @@ describe('Home Component', ()=>{
      expect(linkEl.length).toBe(1);
     }); // end Should have sign out link
 
-    it('Should have scenarios link', ()=>{
-      let linkEl = links.filter((el)=>{return el.linkParams[0] === '/scenarios'});
+    it('Should have cricket and mendelpede links', ()=>{
+      let linkEl = links.filter((el)=>{return el.linkParams[0] === '/cricket'});
      expect(linkEl.length).toBe(1);
+     let linkEl2 = links.filter((el)=>{return el.linkParams[0] === '/mendelpede'});
+    expect(linkEl2.length).toBe(1);
     }); // end Should have scenarios link
 
     it('Should have admin link', ()=>{
@@ -157,9 +161,11 @@ describe('Home Component', ()=>{
      expect(linkEl.length).toBe(1);
     }); // end Should have sign out link
 
-    it('Should have scenarios link', ()=>{
-      let linkEl = links.filter((el)=>{return el.linkParams[0] === '/scenarios'});
+    it('Should have cricket and mendelpede links', ()=>{
+      let linkEl = links.filter((el)=>{return el.linkParams[0] === '/cricket'});
      expect(linkEl.length).toBe(1);
+     let linkEl2 = links.filter((el)=>{return el.linkParams[0] === '/mendelpede'});
+     expect(linkEl2.length).toBe(1);
     }); // end Should have scenarios link
 
     it('Should not have admin link', ()=>{

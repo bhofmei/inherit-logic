@@ -3,3 +3,4 @@ export * from './service-stubs/fake.course.service';
 export * from './service-stubs/fake.student.service';
 export * from './service-stubs/fake.cricket.service';
 export * from './service-stubs/fake.experiment.service';
+export * from './service-stubs/fake.mendelpede.service';
