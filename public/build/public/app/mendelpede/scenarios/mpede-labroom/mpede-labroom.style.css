@@ -11,3 +11,15 @@
   line-height  : .5;
   border-radius : .2rem;
 }
+
+/* handle padding on storing pedes for quizzes */
+@media (min-width:768px) and (max-width:991px){
+.quiz-store-row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+.quiz-store-row  div.store-pede{
+  padding-right:0px;
+  padding-left: 0px;
+}
+}
