@@ -7,6 +7,14 @@ export class CourseServiceStub {
   private courses: Course[] = listOfCourses;
   private _instrAdd: AdminStudent = instructorToAdd;
 
+  getCourseById(courseNum: string): Course{
+    return this.courses[0];
+  }
+
+  getMendelScenarioStatus(adminId: number, courseNum: string, scenId: string): Observable<Student[]>{
+    return this.getScenarioStatus(adminId, courseNum, scenId);
+  }
+
   private _findCourse(courseNum: string): Course {
     let course = this.courses.find(h => h.courseNum === courseNum);
     return course;
