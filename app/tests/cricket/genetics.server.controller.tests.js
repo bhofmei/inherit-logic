@@ -6,10 +6,10 @@ const clone = require('clone');
 const mongoose = require('mongoose');
 const Phage = mongoose.model('CricketPhage');
 const scenDefaults = require('../../../config/cricket/scenario.config');
-const phageScen = require('../cricket/genetics/phage.scenario.tests');
-const phageExp = require('../genetics/phage.experiment');
-const plateExp = require('../genetics/plate.experiment');
-const cryptr = require('../../config/client.cryptr');
+const phageScen = require('../../genetics/cricket/phage.scenario');
+const phageExp = require('../../genetics/cricket/phage.experiment');
+const plateExp = require('../../genetics/cricket/plate.experiment');
+const cryptr = require('../../../config/client.cryptr');
 
 // Define global test variables
 let scenario, scenDat, scenario2, scenDat2;

@@ -67,18 +67,18 @@
       </div>
     </div> <!-- end cross-buttons -->
     <!--<div class="pede-list row">-->
-      <div *ngFor="let pederow of storablePedes; let i=index" class="row">
-        <div *ngFor="let pedes of pederow" class="col-6 col-md-3 store-pede">
+      <div *ngFor="let pederow of storablePedes; let i=index" [ngClass]="{'row':true, 'quiz-store-row':isQuiz}">
+        <div *ngFor="let pedes of pederow" class="=col-6 col-md-3 store-pede">
           <button *ngIf="i===0" class="btn btn-outline-primary d-block btn-sm mx-auto" type="button" (click)="storePede(pedes[pedes.length-1])" [disabled]="pedes[pedes.length-1].phenotype === null">Store</button>
           <button *ngIf="i===1" class="btn btn-outline-primary d-block d-md-none btn-sm mx-auto" type="button" (click)="storePede(pedes[pedes.length-1])" [disabled]="pedes[pedes.length-1].phenotype === null">Store</button>
           <div class="p-0 border border-secondary rounded m-1" (click)="dropPedeToStorage(pedes[pedes.length-1].bugID)">
             <div *ngIf="pedes[pedes.length-1].phenotype" class="row my-0 mx-1">
-              <div class="text-dark col-8 col-sm-3 col-md-8 col-lg-3 order-first pl-1 pr-0 text-nowrap">#{{ pedes.length-1 }}</div>
-              <div class="col-4 col-sm-3 col-md-4 col-lg-3 text-right pl-0 pr-1 order-sm-12 order-md-0 order-lg-12">
+              <div [ngClass]="{'text-dark col-8 col-sm-3 col-md-8 order-first pl-1 pr-0 text-nowrap':true, 'col-lg-3':!isQuiz, 'col-xl-3':isQuiz}">#{{ pedes.length-1 }}</div>
+              <div [ngClass]="{'col-4 col-sm-3 col-md-4 text-right pl-0 pr-1 order-sm-12 order-md-0':true, 'col-lg-3 order-lg-12':!isQuiz, 'col-xl-3 order-xl-12':isQuiz}">
                 <span *ngIf="pedes[pedes.length-1].isFemale === 'F'" class="text-danger">F</span>
                 <span *ngIf="pedes[pedes.length-1].isFemale === 'M'" class="text-info">M</span>
               </div>
-              <div class="col-12 col-sm-6 col-md-12 col-lg-6 p-0">
+              <div [ngClass]="{'col-12 col-sm-6 col-md-12 p-0': true, 'col-lg-6':!isQuiz, 'col-xl-6':isQuiz}">
                 <div [ngClass]="getMendelpede(pedes[pedes.length-1].phenotype)"></div>
               </div>
             </div> <!-- end not null -->

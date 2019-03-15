@@ -59,6 +59,12 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
    * potential backend error message
    */
   errorMessage: string = '';
+
+  /**
+   * is this fridge being used for a quiz?
+   */
+  isQuiz: boolean = false;
+
   /**
    * State to monitior if component active to make unsubscribing to
    * multiple streams easier
@@ -192,6 +198,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
     this._currPedes();
     this._scenarioService.setFridge(newFridge);
     this._scenarioService.setScenario(newFridge.genoFacts);
+    this.isQuiz = newFridge.firstTraitForQuiz !== undefined;
     /*
     this._scenarioService.setFridgeId(newFridge.id);
     this._scenarioService.setFirstTraitForQuiz(newFridge.firstTraitForQuiz);

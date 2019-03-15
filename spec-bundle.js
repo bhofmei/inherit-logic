@@ -27,6 +27,6 @@ function requireAll(requireContext) {
     .map(requireContext);
 }
 
-var modules = requireAll(testContext);
-//var modules = [require('./public/app/admin/course/course-edit/course-edit.component.spec')];
+//var modules = requireAll(testContext);
+var modules = [require('./public/app/cricket/cricket.service.spec')];
 //var modules = [require('./public/app/authentication/reset-password/reset-password.component.spec')];
