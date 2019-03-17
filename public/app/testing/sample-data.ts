@@ -9,7 +9,8 @@ export var userAdmin: User = {
   firstName: 'Admin',
   lastName: 'Tester',
   email: 'admin@test.com',
-  role: 2 // admin
+  role: 2, // admin
+  courseId: 'TEST001'
 }
 
 export var userInstr: User = {

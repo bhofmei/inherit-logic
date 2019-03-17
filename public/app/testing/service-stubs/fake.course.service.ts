@@ -7,8 +7,8 @@ export class CourseServiceStub {
   private courses: Course[] = listOfCourses;
   private _instrAdd: AdminStudent = instructorToAdd;
 
-  getCourseById(courseNum: string): Course{
-    return this.courses[0];
+  getCourseById(courseNum: string): Observable<Course>{
+    return Observable.of(this.courses[0]);
   }
 
   getMendelScenarioStatus(adminId: number, courseNum: string, scenId: string): Observable<Student[]>{
