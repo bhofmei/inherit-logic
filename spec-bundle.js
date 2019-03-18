@@ -20,7 +20,7 @@ testing.TestBed.initTestEnvironment(
   browser.platformBrowserDynamicTesting()
 );
 
-var testContext = require.context('./public/app', true, /.spec\.ts/)
+var testContext = require.context('./public/app/admin/student', true, /.spec\.ts/)
 
 function requireAll(requireContext) {
   return requireContext.keys()
@@ -28,5 +28,5 @@ function requireAll(requireContext) {
 }
 
 //var modules = requireAll(testContext);
-var modules = [require('./public/app/cricket/cricket.service.spec')];
+var modules = [require('./public/app/admin/course/course-scenario/course-scenario.component.spec')];
 //var modules = [require('./public/app/authentication/reset-password/reset-password.component.spec')];
