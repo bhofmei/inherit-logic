@@ -404,7 +404,7 @@ export var listOfFridges: MendelpedeFridge[] = _fridges.map((f)=>{
 
 export var listOfStudentMendelFridges: StudentMendelFridge[] = _fridges.map((f)=>{
   return {
-    owner: f.user,
+    owner: f.owner,
     genoFacts: f.genoFacts,
     accessGranted: f.accessGranted,
     scenario: f.scenario,

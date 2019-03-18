@@ -39,16 +39,16 @@ export class OptionsComponent implements OnInit {
 
   ngOnInit() {
     this.user = this._authenticationService.getUser();
-    console.log(this.user);
+    //console.log(this.user);
     this._courseService.getCourseById(this.user.courseId)
       .takeUntil(this.isDestroyed$)
       .subscribe((course) => {
-        console.log(course);
+        //console.log(course);
         this.isUndergrad = (course.level === 'undergraduate');
         this._scenarioService.listScenarios(course.level)
           .takeUntil(this.isDestroyed$)
           .subscribe((options) => {
-            console.log(options)
+            //console.log(options)
             this._initOptions(options);
           }, (err) => {
             this._initOptions([]);

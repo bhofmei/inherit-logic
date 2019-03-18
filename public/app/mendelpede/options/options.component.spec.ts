@@ -1,68 +1,100 @@
 import { fakeAsync, tick, async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { Directive, DebugElement } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
-import { Observable } from 'rxjs/Rx';
-import { Subject } from 'rxjs';
-import { Router, RouterStub, ActivatedRoute, ActivatedRouteStub, RouterLinkStubDirective, getAllRouterLinks, recurCSSQuery, click, addMatchers } from '../../testing';
-import * as _ from 'lodash';
+import { RouterStub, ActivatedRouteStub,Router, ActivatedRoute, RouterLinkStubDirective, getAllRouterLinks, addMatchers } from '../../testing';
 
-import { SharedModule } from '../../shared/shared.module';
 import { OptionsComponent } from './options.component';
-import { MendelpedeScenarioService } from '../scenarios/mendelpede-scenarios.service';
 import { AuthenticationService } from '../../authentication/authentication.service';
-import { CourseService } from '../../admin/course/course.service'
+import { CourseService } from '../../admin/course/course.service';
+import { MendelpedeScenarioService } from '../scenarios/mendelpede-scenarios.service';
 
-import { MendelpedeFridge, MendelpedePede, MendelpedeScenario } from '../../interfaces';
-import { listOfMendelpedes, listOfScenarios } from '../../testing/mendelpede-sample-data';
-import { MendelpedeServiceStub, AuthServiceStub, CourseServiceStub  } from '../../testing/service-stubs';
+import { User, Scenario } from '../../interfaces';
+import { AuthServiceStub, MendelpedeServiceStub, CourseServiceStub } from '../../testing/service-stubs';
+import { userAdmin, listOfMendelScenarios } from '../../testing/mendelpede-sample-data';
 
-class MendelpedeOptionsTestComponent extends OptionsComponent {
-  // so we have access to internal properties
-}
+let fixture: ComponentFixture<OptionsComponent>;
+let comp: OptionsComponent;
+let authService: AuthenticationService;
+let scenarioService: MendelpedeScenarioService;
+let page: Page;
 
-// Testing variables
-let fixture: ComponentFixture<MendelpedeOptionsTestComponent>;
-let comp: MendelpedeOptionsTestComponent;
-let activateRoute: ActivatedRouteStub;
-let route: RouterStub;
-
-
-describe('Mendelpede Options Component', () => {
-  beforeEach(async(() => {
-    activateRoute = new ActivatedRouteStub();
-    route = new RouterStub();
+describe('List Component', ()=>{
+    beforeEach(async(()=>{
     TestBed.configureTestingModule({
-      imports: [SharedModule],
-      declarations: [MendelpedeOptionsTestComponent],
+      imports: [RouterTestingModule],
+      declarations: [OptionsComponent, RouterLinkStubDirective],
       providers: [
-        { provide: MendelpedeScenarioService, useClass: MendelpedeServiceStub },
-        { provide: AuthenticationService, useClass: AuthServiceStub },
-        { provide: ActivatedRoute, useValue: activateRoute},
-        { provide: Router, useValue: route},
-        { provide: CourseService, useClass: CourseServiceStub}
+        {provide: AuthenticationService, useClass: AuthServiceStub},
+        {provide: CourseService, useClass: CourseServiceStub},
+        {provide: MendelpedeScenarioService, useClass: MendelpedeServiceStub}
+        //{provide: ActivatedRoute, useValue: activateRoute},
+        //{provide: Router, useValue: route}
       ]
     }).compileComponents();
   })); // end beforeEach async
-  
-  describe('Test all options', () => {
-    let scenario: MendelpedeScenario;
-    
-    beforeEach(fakeAsync(() => {
-      createComponent();
-      //comp.dropPhageBact({ dragData: dropPhage }, 'B');
+
+  describe('Test with user', ()=>{
+    beforeEach(fakeAsync(()=>{
+      createComponent(true);
       tick();
-      fixture.detectChanges();
+      page.addElements();
+      addMatchers();
     })); // end beforeEach fakeAsync
 
-    it('should have 12 scenarios', () => {
-      expect(comp.scenarios.length).toBe(12);
-    }) // end should have 6 mendelpedes test1
+    it('Should have header', ()=>{
+      console.log(page);
+      expect(page.header.innerHTML).toBe('MendelPede Scenarios');
+    }); // end Should have header
+    
+    it('Should have three scenarios', ()=>{
+      expect(page.links.length).toBe(3);
+      expect(page.labels.length).toBe(3);
+    }); // end Should have two scenarios
 
-  }); // end Test Fridge initial UI
-}); // end Mendelpede Options Component
+    it('Should have scenario 1', ()=>{
+      let expected = listOfMendelScenarios[0];
+      let linkEl = page.links[0];
+      expect(linkEl.linkParams[0]).toBe(expected.shortCode);
+      let labelEl = page.labels[0];
+      expect(labelEl.innerHTML).toTemplateMatch(expected.label);
+    }); // end Should have scenario 1
+    
+    it('Should have scenario 2', ()=>{
+      let expected = listOfMendelScenarios[1];
+      let linkEl = page.links[1];
+      expect(linkEl.linkParams[0]).toBe(expected.shortCode);
+      let labelEl = page.labels[1];
+      expect(labelEl.innerHTML).toTemplateMatch(expected.label);
+    }); // end Should have scenario 2
+  }); // Test with user
+}); // end List Component
 
-function createComponent() {
-  fixture = TestBed.createComponent(MendelpedeOptionsTestComponent);
+class Page{
+
+  header: HTMLElement;
+  links: any[];
+  labels: any[];
+
+  constructor(){}
+
+  addElements(){
+    if(fixture){
+      this.links = getAllRouterLinks(fixture.debugElement);
+      this.header = fixture.debugElement.query(By.css('h2')).nativeElement;
+    this.labels = fixture.debugElement.queryAll(By.css('.list-group-item-action'))
+        .map((el)=>{return el.nativeElement});
+    }
+  }
+}
+
+function createComponent(hasUser: boolean){
+  fixture = TestBed.createComponent(OptionsComponent);
   comp = fixture.componentInstance;
-  fixture.detectChanges(); // trigger ngOnInit
+  authService = TestBed.get(AuthenticationService);
+  if(hasUser === false){
+    authService.setUser(null);
+  }
+  page = new Page();
+  fixture.detectChanges();
 }
