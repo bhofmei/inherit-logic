@@ -24,6 +24,7 @@ let fixture: ComponentFixture<MendelpedeFridgeTestComponent>;
 let comp: MendelpedeFridgeTestComponent;
 let activateRoute: ActivatedRouteStub;
 let route: RouterStub;
+let page: Page;
 
 
 describe('Mendelpede Fridge Component', () => {
@@ -51,27 +52,33 @@ describe('Mendelpede Fridge Component', () => {
       createComponent();
       //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
+      page.addElements();
+      addMatchers();
       fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
     it('should have 6 mendelpedes test1', () => {
-      expect(comp.pedeList[5].genotype).not.toBeNull();
+      //expect(comp.pedeList[5].genotype).not.toBeNull();
+      expect(page.pedes.length).toBe(6);
     }) // end should have 6 mendelpedes test1
-    
-    it('should have 6 mendelpedes test2', () => {
-      expect(comp.pedeList[6].genotype).toBeNull();
-    }) // should have 6 mendelpedes test2
 
     it('Should have 256 spaces in Fridge', () => {
       expect(comp.pedeList.length).toBe(256);
     })// end Should have 256 spaces
 
+    it('Should have 8 places in shelf', () => {
+      expect(page.fridgeShelf.length * 2).toBe(8);
+    })// Should have 8 places in shelf
+
     it('Should have first shelf displayed', () => {
       expect(comp.shelf).toBe(0);
     })// end Should have first shelf displayed
 
-  }); // end Test Fridge initial UI
+    it('Should not have error message', ()=>{
+      expect(page.errorMessage).toBeNull();
+    })
 
+  }); // end Test Fridge initial UI
   describe('Test Fridge initial UI (Quiz)', () => {
     let scenario: MendelpedeScenario;
     
@@ -81,75 +88,108 @@ describe('Mendelpede Fridge Component', () => {
       createComponent();
       //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
+      page.addElements();
+      addMatchers();
       fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
     it('should have 8 mendelpedes test1', () => {
-      expect(comp.pedeList[7].genotype).not.toBeNull();
+      expect(page.pedes.length).toBe(8);
     }) // end should have 8 mendelpedes test1
     
     it('should have 8 mendelpedes test2', () => {
       expect(comp.pedeList[8].genotype).toBeNull();
     }) // should have 8 mendelpedes test2
+
+    it('Should have 8 places in shelf', () => {
+      expect(page.fridgeShelf.length * 2).toBe(8);
+    })// Should have 8 places in shelf
+
+    it('Should not have error message', ()=>{
+      expect(page.errorMessage).toBeNull();
+    })
   }); // end Test Fridge initial UI (Quiz)
 
-  describe('Test Changing shelf', () => {
-    let scenario: MendelpedeScenario;
-    
-    beforeEach(fakeAsync(() => {
-      scenario = listOfMendelScenarios[0];
+  describe('Test changing shelves', ()=>{
+    beforeEach(fakeAsync(()=>{
+      let scenario: MendelpedeScenario;
+
+      scenario = listOfMendelScenarios[2];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
       createComponent();
+      comp.setShelf(3);
       //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
+      page.addElements();
+      addMatchers();
       fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
-    it('should change to next shelf', () => {
-      comp.changeShelf(1);
-      expect(comp.shelf).toBe(1);
-    }) // should change to next shelf
+    it('Should not have error message', ()=>{
+      expect(page.errorMessage).toBeNull();
+    })
 
-    it('should change to next next shelf', () => {
-      comp.changeShelf(1);
-      comp.changeShelf(1);
-      expect(comp.shelf).toBe(2);
-    }) // should change to next next shelf
+    it('shelf should be 3 at starting', ()=>{
+      expect(comp.shelf).toBe(3);
+    })
 
-    it('should change to previous shelf', () => {
-      comp.changeShelf(1);
-      comp.changeShelf(1);
-      comp.changeShelf(-1);
-      expect(comp.shelf).toBe(1);
-    }); // end should change to previous shelf
+    it('Should go forward a shelf', fakeAsync(()=>{
+      click(page.btnForward);
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+      // comp shelf should be changed to 1
+      expect(comp.shelf).toBe(4);
+    })); // end Should go forward a shelf
 
-    it('should change to previous previous shelf', () => {
-      comp.changeShelf(1);
-      comp.changeShelf(1);
-      comp.changeShelf(1);
-      comp.changeShelf(-1);
-      comp.changeShelf(-1);
-      expect(comp.shelf).toBe(1)
-    }); // end should change to previous previous shelf
-
-    it('should go to last shelf', () => {
-      comp.changeShelf(1);
-      comp.changeShelf(1);
-      comp.changeShelf(1);
-      comp.setShelf(31);
-      expect(comp.shelf).toBe(31);
-    })// end should go to last shelf
-
-    it('should go to first shelf', () => {
-      comp.changeShelf(1);
-      comp.changeShelf(1);
-      comp.changeShelf(1);
-      comp.setShelf(0);
+    it('Should go to first shelf', fakeAsync(()=>{
+      click(page.btnFirst);
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+      // go to first shelf
       expect(comp.shelf).toBe(0);
-    })// end should go to first shelf
+      // back buttons should be disabled
+      let firstDisabled = page.btnFirst.nativeElement.hasAttribute('disabled');
+      let backDisabled = page.btnBackward.nativeElement.hasAttribute('disabled');
+      let forDisabled = page.btnForward.nativeElement.hasAttribute('disabled');
+      expect(firstDisabled).toBe(true);
+      expect(backDisabled).toBe(true);
+      expect(forDisabled).toBe(false);
+    })); // end Should go to first shelf
 
-  }); // end Test Changing shelf
+    it('Should go to last shelf', fakeAsync(()=>{
+      click(page.btnLast);
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+      // first phage should be #496(+1)
+      expect(comp.shelf).toBe(31);
+      // forward buttons should be disabled
+      let backDisabled = page.btnBackward.nativeElement.hasAttribute('disabled');
+      let forDisabled = page.btnForward.nativeElement.hasAttribute('disabled');
+      let lastDisabled = page.btnLast.nativeElement.hasAttribute('disabled');
+      expect(backDisabled).toBe(false);
+      expect(forDisabled).toBe(true);
+      expect(lastDisabled).toBe(true);
+    })); // end Should go to last shelf
 
+    it('Should go back a shelf', fakeAsync(()=>{
+      click(page.btnBackward);
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+      // comp shelf should be changed to 30
+      expect(comp.shelf).toBe(2);
+    })); // end Should go back a shelf
+
+  }); // end Test student1 scenario1
+
+  
   describe('Test store pede', () => {
     let scenario: MendelpedeScenario;
     
@@ -159,6 +199,8 @@ describe('Mendelpede Fridge Component', () => {
       createComponent();
       //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
+      page.addElements();
+      addMatchers();
       fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
@@ -178,6 +220,8 @@ describe('Mendelpede Fridge Component', () => {
       createComponent();
       //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
+      page.addElements();
+      addMatchers();
       fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
@@ -206,17 +250,60 @@ describe('Mendelpede Fridge Component', () => {
       createComponent();
       //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
+      page.addElements();
+      addMatchers();
       fixture.detectChanges();
     })); // end beforeEach fakeAsync
     it('should have correct css class', () => {
       expect(comp.getMendelpede([ "Yellow", "Red", "LightGreen", "2", "1" ])).not.toBeNull();
     }); //end should have correct css class
   }); // end Test css class for mendelpede image
-
 }); // end Mendelpede Fridge Component
+
+class Page {
+  // variables
+  //practice: HTMLElement;
+  pedes: DebugElement[];
+  btnFirst: DebugElement;
+  btnBackward: DebugElement;
+  btnForward: DebugElement;
+  btnLast: DebugElement;
+  fridgeShelf: DebugElement[];
+  pedesWithBugIds: DebugElement[];
+  deleteMpedes: DebugElement[];
+
+  errorMessage: HTMLElement;
+
+  createFridgeSpy: any;
+
+  constructor(){
+    let scenService = fixture.debugElement.injector.get(MendelpedeScenarioService);
+    //this.createFridgeSpy = spyOn(scenService, 'createMendelFridge').and.callThrough();
+  }
+
+  addElements(){
+    if(comp.fridge){
+      let header = fixture.debugElement.query(By.css('.card-header')).query(By.css('.card-title'));
+      //this.practice = (header ? header.nativeElement : null);
+      this.pedes = fixture.debugElement.queryAll(By.css('#fridge-pedes'));
+      this.fridgeShelf = fixture.debugElement.queryAll(By.css('#fridge-shelf'));
+      this.pedesWithBugIds = fixture.debugElement.queryAll(By.css('#bugId'));
+      this.deleteMpedes = fixture.debugElement.queryAll(By.css('#deleteMpede'));
+      let btns = fixture.debugElement.queryAll(By.css('button'));
+      this.btnFirst = btns[0];
+      this.btnBackward = btns[1];
+      this.btnForward = btns[2];
+      this.btnLast = btns[3];
+    }
+
+    let tmp = fixture.debugElement.query(By.css('.alert'));
+    this.errorMessage = (tmp ? tmp.nativeElement : null);
+  }
+}
 
 function createComponent() {
   fixture = TestBed.createComponent(MendelpedeFridgeTestComponent);
   comp = fixture.componentInstance;
+  page = new Page();
   fixture.detectChanges(); // trigger ngOnInit
 }
