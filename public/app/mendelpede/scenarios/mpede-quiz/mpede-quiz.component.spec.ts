@@ -12,7 +12,7 @@ import { MendelpedeScenarioService } from '../mendelpede-scenarios.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 
 import { MendelpedeFridge, MendelpedePede, MendelpedeScenario, MendelpedeQuiz } from '../../../interfaces';
-import { listOfMendelpedes, listOfMendelScenarios } from '../../../testing/mendelpede-sample-data';
+import { listOfMendelpedes, listOfMendelScenarios, fridgeToCreateQuiz, fridgeToCreateQuiz2 } from '../../../testing/mendelpede-sample-data';
 import { MendelpedeServiceStub, AuthServiceStub  } from '../../../testing/service-stubs';
 
 class MendelpedeQuizTestComponent extends MendelpedeQuizComponent {
@@ -24,7 +24,7 @@ let fixture: ComponentFixture<MendelpedeQuizTestComponent>;
 let comp: MendelpedeQuizTestComponent;
 let activateRoute: ActivatedRouteStub;
 let route: RouterStub;
-
+let page: Page;
 
 describe('Mendelpede Quiz Component', () => {
   beforeEach(async(() => {
@@ -46,51 +46,75 @@ describe('Mendelpede Quiz Component', () => {
     beforeEach(fakeAsync(() => {
       createComponent();
       tick();
+      page.addElements();
+      addMatchers();
       fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
-    describe('Test Quizpedes', () => {
-      it('Should have 8 quizpedes', () => {
-        //expect(comp.quizPedes.length).toBe(8);
-      }); // end Should have 8 quizpedes
+    it('Should have quiz trait', () =>{
+      expect(page.quizTrait).toContain('Determine the genotype of each individual for trait');
+    })
 
-      it('Should have -1 score', () => {
-        //expect(comp.quiz.score).toBe(-1);
-      })
-    }); // end Test Quizpedes
+    it('Should not have quiz score', () =>{
+      expect(page.quizScore).toBeNull();
+    })
 
-  }); // end Test initial Quiz UI
+    it('Should not have enabled submit button', () =>{
+      let forDisabled = page.btnSubmit.nativeElement.hasAttribute('disabled');
+      expect(forDisabled).toBe(false);
+    })
 
-  describe('Test Quiz submission', () => {
-    beforeEach(fakeAsync(() => {
-      createComponent();
+    it('Should have quiz score 4 after submitting', fakeAsync(() => {
+      click(page.btnSubmit);
       tick();
+      page.addElements();
+      addMatchers();
       fixture.detectChanges();
-    })); // end beforeEach fakeAsync
+      expect(comp.quiz.score).toBe(4);
+    })); // end Should have quiz score 4
 
-    describe('Test submit quiz', () => {
-
-      it('Should have quiz score 4', () => {
-        comp.submitQuiz();
-        //expect(comp.quiz.score).toBe(4);
-      }); // end Should have quiz score 4
-
-      it('Should have quiz submitted', () => {
-        comp.submitQuiz();
-        //expect(comp.quizSubmitted).toBe(true);
-      }); // end Should have quiz score 4
-
-      it('Should have correct scoring for one question', () => {
-        comp.submitQuiz();
-        //expect(comp.quiz.isAnswerCorrect[0]).toBe(true);
-      })
-    }); // end Test submit quiz
-
-  }); // end Quiz submission
+    it('Should have quiz submit button disabled after submitting', fakeAsync(() => {
+      click(page.btnSubmit);
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+      let forDisabled = page.btnSubmit.nativeElement.hasAttribute('disabled');
+      expect(forDisabled).toBe(true);
+    })); // end Should have quiz score 4
+    
+  }); // end Test initial Quiz UI
 }); // end Mendelpede Quiz Component
+
+class Page {
+  // variables
+  //practice: HTMLElement;
+  storagePedeBugIds: DebugElement[];
+  quizTrait: DebugElement;
+  quizScore: DebugElement;
+  btnSubmit: DebugElement;
+  errorMessage: HTMLElement;
+
+  constructor(){
+    let scenService = fixture.debugElement.injector.get(MendelpedeScenarioService);
+    //this.createFridgeSpy = spyOn(scenService, 'createMendelFridge').and.callThrough();
+  }
+
+  addElements(){
+    //let header = fixture.debugElement.query(By.css('.card-header')).query(By.css('.card-title'));
+    //this.practice = (header ? header.nativeElement : null);
+    this.quizTrait = fixture.debugElement.query(By.css('.card-body')).query(By.css('#quizTrait')).nativeElement.innerHTML;
+    this.quizScore = fixture.debugElement.query(By.css('.card-body')).query(By.css('#quizScore'));
+    let btns = fixture.debugElement.queryAll(By.css('button'));
+    let tmp = fixture.debugElement.query(By.css('.alert'));
+    this.btnSubmit = btns[0];
+    this.errorMessage = (tmp ? tmp.nativeElement : null);
+  }
+}
 
 function createComponent() {
   fixture = TestBed.createComponent(MendelpedeQuizTestComponent);
   comp = fixture.componentInstance;
+  page = new Page();
   fixture.detectChanges(); // trigger ngOnInit
 }
