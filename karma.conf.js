@@ -30,8 +30,8 @@ module.exports = function (config) {
     exclude: [],
 
     proxies: {
-      '/app/': '/base/public/app/',
-      "/img/": "/base/public/img/"
+      '/app/': 'public/app/',
+      "/img/": "public/img/"
     },
 
     // preprocess matching files before serving them to the browser
@@ -45,8 +45,8 @@ module.exports = function (config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'coverage', 'remap-coverage'],
-    //reporters: ['progress'],
+    //reporters: ['progress', 'coverage', 'remap-coverage'],
+    reporters: ['progress'],
 
     coverageReporter: {
       type: 'in-memory'

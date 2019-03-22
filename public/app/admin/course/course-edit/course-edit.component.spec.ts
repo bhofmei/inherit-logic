@@ -124,6 +124,8 @@ describe('Course Edit Component', ()=>{
 
   }); // end Edit description
 
+  // Test course level information
+
   describe('Add instructor', ()=>{
     let cService, addSpy;
     beforeEach(fakeAsync(()=>{
@@ -219,6 +221,7 @@ describe('Course Edit Component', ()=>{
 class Page {
   courseNumDisplay: HTMLElement;
   courseDescrTextArea: HTMLTextAreaElement;
+
   listInstr: HTMLElement[];
   instrAdd: HTMLElement[];
   links: RouterLinkStubDirective[];
@@ -235,8 +238,8 @@ class Page {
 
   addElements(){
     if(comp.courseInfo){
-      this.courseNumDisplay = recurCSSQuery(fixture.debugElement, ['#course-info', 'h4']);
-      this.courseDescrTextArea = fixture.debugElement.query(By.css('#desc-input')).nativeElement;
+      this.courseNumDisplay = recurCSSQuery(fixture.debugElement, ['#course-info', 'h4', 'span']);
+      this.courseDescrTextArea = fixture.debugElement.query(By.css('#inputDesc')).nativeElement;
       let buttons = fixture.debugElement.queryAll(By.css('button'));
       this.addInstrButton = buttons[0];
       this.submitButton = buttons[1];
@@ -244,7 +247,7 @@ class Page {
       this.deleteButton = buttons[3];
       this.deleteStudentsButton = buttons[4];
       this.listInstr = fixture.debugElement.query(By.css('#currInstructors'))
-        .queryAll(By.css('.ml-2')).map((de)=>{return de.nativeElement});
+        .queryAll(By.css('.curr-instr')).map((de)=>{return de.query(By.css('span')).nativeElement});
       this.instrAdd = fixture.debugElement.query(By.css('#addInstructor'))
         .queryAll(By.css('option')).map((de)=>{return de.nativeElement});
     }

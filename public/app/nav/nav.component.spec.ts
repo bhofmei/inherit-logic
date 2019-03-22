@@ -51,7 +51,7 @@ describe('Nav Component', ()=>{
 
   it('Should not have user before OnInit', ()=>{
     let listElements = fixture.debugElement.queryAll(By.css('li'));
-    expect(listElements.length).toBe(2);
+    expect(listElements.length).toBe(1);
   }); // end Should not have user before OnInit
 
   it('Should have user after OnInit', async(()=>{
@@ -59,20 +59,13 @@ describe('Nav Component', ()=>{
     fixture.whenStable().then(()=>{
       fixture.detectChanges();
       let listElements = fixture.debugElement.queryAll(By.css('li'));
-    expect(listElements.length).toBe(3);
+    expect(listElements.length).toBe(2);
     });
   })); // end Should have user after OnInit
 
-  it('Should have scenario link', ()=>{
-    let listElements = fixture.debugElement.queryAll(By.css('li'));
-    let scenElement = listElements[0].query(By.css('a'));
-    let link = scenElement.nativeElement.getAttribute('routerLink');
-    expect(link).toMatch(/scenarios/);
-  }); // end Should have scenario link
-
   it('Should have help link', ()=>{
     let listElements = fixture.debugElement.queryAll(By.css('li'));
-    let scenElement = listElements[1].query(By.css('a'));
+    let scenElement = listElements[0].query(By.css('a'));
     let link = scenElement.nativeElement.getAttribute('routerLink');
     expect(link).toMatch(/help/);
   }); // end Should have help link

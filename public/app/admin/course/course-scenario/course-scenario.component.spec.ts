@@ -98,7 +98,7 @@ describe('Course Scenario Component', ()=>{
         click(page.fridgeButton);
         tick();
         let pathNav = route.path;
-        expect(pathNav).toBe('/admin/students/'+expectedStudent.id + '/' + scenario.scenCode);
+        expect(pathNav).toBe('/admin/students/'+expectedStudent.id + '/cricket/' + scenario.scenCode);
       }));
     }); // end Test buttons
   }); // end Test existing course and scenario with access
@@ -164,7 +164,7 @@ describe('Course Scenario Component', ()=>{
         click(page.fridgeButton);
         tick();
         let pathNav = route.path;
-        expect(pathNav).toBe('/admin/students/'+expectedStudent.id + '/' + scenario.scenCode);
+        expect(pathNav).toBe('/admin/students/'+expectedStudent.id + '/cricket/' + scenario.scenCode);
       })); // end Should navigate to student fridge
     }); // end Test buttons
   }); // end Test existing course and scenario without access
@@ -225,8 +225,8 @@ class Page {
     if(comp.getScenario()){
       this.courseNum = recurCSSQuery(fixture.debugElement, ['#info', 'h4']);
       let tmp = fixture.debugElement.query(By.css('#scenario-info'));
-      this.scenarioCode = tmp.query(By.css('.text-primary')).nativeElement;
-      this.scenarioLabel = tmp.query(By.css('.text-secondary')).nativeElement;
+      this.scenarioCode = tmp.query(By.css('.text-secondary')).nativeElement;
+      this.scenarioLabel = tmp.query(By.css('.text-dark')).nativeElement;
 
       this.studentList = fixture.debugElement.queryAll(By.css('.list-group-item'));
 

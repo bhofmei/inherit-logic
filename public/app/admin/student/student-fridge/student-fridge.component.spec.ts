@@ -106,7 +106,7 @@ describe('Student Fridge Component', ()=>{
       let infoSec = fixture.debugElement.query(By.css('#student-name'));
       let links = getAllRouterLinks(infoSec);
       let linkParam = links[0].linkParams;
-      expect(linkParam[0]).toBe('../');
+      expect(linkParam[0]).toBe('../../');
     }); // end Should have link to student
   }); // end Test existing fridge
 
