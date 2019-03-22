@@ -3,9 +3,9 @@
         <h4 class="card-title mb-0 pl-0">Quiz</h4>
     </div>
     <div *ngIf="quiz" class="card-body">
-        <div class="">Determine the genotype of each individual for trait <span class="text-primary">{{quizTrait | pedeQuizTrait}}</span></div>
+        <div id="quizTrait" class="">Determine the genotype of each individual for trait <span id="quizTraitLabel" class="text-primary">{{quizTrait | pedeQuizTrait}}</span></div>
         <hr class="my-2">
-        <div *ngIf="quiz.score !== -1" class="font-weight-bold">Your Score: <span class="text-primary">{{quiz.score}} / 8</span></div>
+        <div id="quizScore" *ngIf="quiz.score !== -1" class="font-weight-bold">Your Score: <span id="quizScoreLabel" class="text-primary">{{quiz.score}} / 8</span></div>
         <hr *ngIf="quiz.score !== -1" class="my-2">
         <!-- <form> -->
         <div id="quiz-form">

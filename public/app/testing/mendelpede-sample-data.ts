@@ -431,6 +431,16 @@ export const fridgeToCreateQuiz: MendelpedeFridge = {
   firstTraitForQuiz: 'test'
 }
 
+export const fridgeToCreateQuiz2: MendelpedeFridge = {
+  id: '1',
+  userId: listOfStudents[0].userId,
+  mendelpedeScenCode: listOfMendelScenarios[1].shortCode,
+  accessGranted: listOfStudents[0].accessGranted[listOfMendelScenarios[1].shortCode], // false
+  pedes: listOfMendelpedes.slice(0,8),
+  genoFacts: 'Encrypted Genofacts',
+  firstTraitForQuiz: 'test'
+}
+
 export const scenarioGenoFacts: any[] = [ { inherit: 'mendel', trait: 'SegColor', dom: 'Orange', interm: null, rec: 'LightGray' },
 { inherit: 'mendel', trait: 'EyeColor', dom: 'Red', interm: null, rec: 'Cyan' },
 { inherit: 'mendel', trait: 'NumSegments', dom: 2, interm: null, rec: 3 },
