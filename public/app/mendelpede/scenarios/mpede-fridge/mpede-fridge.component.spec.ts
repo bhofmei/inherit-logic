@@ -17,6 +17,10 @@ import { MendelpedeServiceStub, AuthServiceStub  } from '../../../testing/servic
 
 class MendelpedeFridgeTestComponent extends MendelpedeFridgeComponent {
   // so we have access to internal properties
+  sendPede(pede: MendelpedePede){
+    //console.log("pede sent");
+    page.sendPedeClicked = true;
+  }
 }
 
 // Testing variables
@@ -189,6 +193,31 @@ describe('Mendelpede Fridge Component', () => {
 
   }); // end Test student1 scenario1
 
+  describe('Test send pede (Click on mendelpede)', () => {
+    let scenario: MendelpedeScenario;
+    
+    beforeEach(fakeAsync(() => {
+      scenario = listOfMendelScenarios[0];
+      activateRoute.testParams = {scenShortCode: scenario.shortCode};
+      createComponent();
+      //comp.dropPhageBact({ dragData: dropPhage }, 'B');
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+    })); // end beforeEach fakeAsync
+
+    it('should click on pede', fakeAsync(() => {
+      //comp.storePede(listOfMendelpedes[11]);
+      click(page.pedes[2]);
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+      expect(page.sendPedeClicked).toBe(true);
+    })); // end should click on pede
+
+  }); // end Test send pede (Click on mendelpede)
   
   describe('Test store pede', () => {
     let scenario: MendelpedeScenario;
@@ -204,10 +233,10 @@ describe('Mendelpede Fridge Component', () => {
       fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
-    it('should store pede in fridge', () => {
+    it('should store pede in fridge', fakeAsync(() => {
       comp.storePede(listOfMendelpedes[11]);
       expect(comp.pedeList[6].phenotype).not.toBeNull();
-    }); // end should store pede in fridge
+    })); // end should store pede in fridge
 
   }); // end Test store pede
 
@@ -271,6 +300,8 @@ class Page {
   fridgeShelf: DebugElement[];
   pedesWithBugIds: DebugElement[];
   deleteMpedes: DebugElement[];
+
+  sendPedeClicked: boolean = false;
 
   errorMessage: HTMLElement;
 
