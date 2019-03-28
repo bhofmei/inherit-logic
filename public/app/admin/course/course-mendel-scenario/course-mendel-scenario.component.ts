@@ -149,6 +149,7 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
    * @param {number} studentId - the student's userID
    */
   goToFridge(studentId: number){
+    // student-indiv
     this._router.navigate(['/admin/students/', studentId,'mendelpede', this.scenario.shortCode]);
   }
 

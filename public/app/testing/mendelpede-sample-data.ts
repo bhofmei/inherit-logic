@@ -159,8 +159,14 @@ export var listOfMendelScenarios: MendelpedeScenario[] = [
   ordOfScen: 2
 },
 {
-  label: 'Test Scenario 2',
+  label: 'Test Scenario 3',
   shortCode: 'quiz1',
+  scenType: 'quiz',
+  ordOfScen: 3
+},
+{
+  label: 'Test Scenario 4',
+  shortCode: 'quiz2',
   scenType: 'quiz',
   ordOfScen: 3
 }
