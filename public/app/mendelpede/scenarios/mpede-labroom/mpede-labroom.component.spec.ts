@@ -17,6 +17,10 @@ import { MendelpedeServiceStub, AuthServiceStub  } from '../../../testing/servic
 
 class MendelpedeLabRoomTestComponent extends MendelpedeLabroomComponent {
   // so we have access to internal properties
+  storePede(pedeToStore: MendelpedePede){
+    //console.log("storePede called");
+    page.pedeStoreLoc = pedeToStore.bugID;
+  }
 }
 
 // Testing variables
@@ -243,7 +247,8 @@ describe('Mendelpede Lab Room Component', () => {
     })); // end Should click and add pede to storage
 
     it('Should click and add pede to storage row 1 column 1', fakeAsync(() => {
-      comp.dropPedeToStorage(0);
+      //comp.dropPedeToStorage(0);
+      click(page.storagePedeBugIds[0]);
       tick();
       page.addElements();
       addMatchers();
@@ -253,7 +258,8 @@ describe('Mendelpede Lab Room Component', () => {
     })); // end Should click and add pede to storage
 
     it('Should click and add pede to storage row 1 column 3', fakeAsync(() => {
-      comp.dropPedeToStorage(3);
+      //comp.dropPedeToStorage(3);
+      click(page.storagePedeBugIds[3]);
       tick();
       page.addElements();
       addMatchers();
@@ -263,7 +269,8 @@ describe('Mendelpede Lab Room Component', () => {
     })); // end Should click and add pede to storage
 
     it('Should click and add pede to storage row 2 column 2', fakeAsync(() => {
-      comp.dropPedeToStorage(5);
+      //comp.dropPedeToStorage(5);
+      click(page.storagePedeBugIds[5]);
       tick();
       page.addElements();
       addMatchers();
@@ -273,7 +280,8 @@ describe('Mendelpede Lab Room Component', () => {
     })); // end Should click and add pede to storage
 
     it('Should remove pede from child pedes when stored', fakeAsync(() => {
-      comp.dropPedeToStorage(5);
+      //comp.dropPedeToStorage(5);
+      click(page.storagePedeBugIds[5]);
       tick();
       page.addElements();
       addMatchers();
@@ -344,6 +352,42 @@ describe('Mendelpede Lab Room Component', () => {
       expect(comp.getMendelpede([ "Yellow", "Red", "LightGreen", "2", "1" ])).not.toBeNull();
     }); //end should have correct css class
   }); // end Test css class for mendelpede image
+
+  describe('Test store button for mendelpede labroom', () => {
+    let malePede: MendelpedePede;
+    let femalePede: MendelpedePede;
+    let scenario: MendelpedeScenario;
+    beforeEach(fakeAsync(() => {
+      scenario = listOfMendelScenarios[0];
+      malePede = listOfMendelpedes[1];
+      femalePede = listOfMendelpedes[0];
+      createComponent();
+      comp.dropPedeToStorage(0);
+      activateRoute.testParams = {scenShortCode: scenario.shortCode};
+      //comp.dropPhageBact({ dragData: dropPhage }, 'B');
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+      //page.addElements();
+      //addMatchers();
+      comp.dropPede(malePede);
+      comp.dropPede(femalePede);
+    })); // end beforeEach fakeAsync
+
+    it('Should click store button', fakeAsync(() => {
+      //comp.dropPedeToStorage(0);
+      click(page.btnStore0);
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+      //let storagePedeBugId = page.storagePedeBugIds[0].query(By.css(".row")).query(By.css("#storageBugId")).nativeElement.innerHTML;
+      expect(page.pedeStoreLoc).toBe(0);
+
+    })); // end Should click and add pede to storage
+  }); // end Test store button for mendelpede labroom
+
 }); // end Mendelpede Lab Room Component
 
 class Page {
@@ -361,6 +405,7 @@ class Page {
   btnStore6: DebugElement;
   btnStore7: DebugElement;
   errorMessage: HTMLElement;
+  pedeStoreLoc: any;
 
   malePedeBugId: DebugElement;
   topChildPedeBugId: DebugElement;

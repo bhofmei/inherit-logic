@@ -59,7 +59,7 @@ describe('Mendelpede Quiz Component', () => {
       expect(page.quizScore).toBeNull();
     })
 
-    it('Should not have enabled submit button', () =>{
+    it('Should have enabled submit button', () =>{
       let forDisabled = page.btnSubmit.nativeElement.hasAttribute('disabled');
       expect(forDisabled).toBe(false);
     })

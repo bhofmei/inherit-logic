@@ -17,6 +17,10 @@ import { MendelpedeServiceStub, AuthServiceStub  } from '../../../testing/servic
 
 class MendelpedeFridgeTestComponent extends MendelpedeFridgeComponent {
   // so we have access to internal properties
+  sendPede(pede: MendelpedePede){
+    //console.log("pede sent");
+    page.sendPedeClicked = true;
+  }
 }
 
 // Testing variables
@@ -189,6 +193,31 @@ describe('Mendelpede Fridge Component', () => {
 
   }); // end Test student1 scenario1
 
+  describe('Test send pede (Click on mendelpede)', () => {
+    let scenario: MendelpedeScenario;
+    
+    beforeEach(fakeAsync(() => {
+      scenario = listOfMendelScenarios[0];
+      activateRoute.testParams = {scenShortCode: scenario.shortCode};
+      createComponent();
+      //comp.dropPhageBact({ dragData: dropPhage }, 'B');
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+    })); // end beforeEach fakeAsync
+
+    it('should click on pede', fakeAsync(() => {
+      //comp.storePede(listOfMendelpedes[11]);
+      click(page.pedes[2]);
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+      expect(page.sendPedeClicked).toBe(true);
+    })); // end should click on pede
+
+  }); // end Test send pede (Click on mendelpede)
   
   describe('Test store pede', () => {
     let scenario: MendelpedeScenario;
@@ -204,13 +233,14 @@ describe('Mendelpede Fridge Component', () => {
       fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
-    it('should store pede in fridge', () => {
+    it('should store pede in fridge', fakeAsync(() => {
       comp.storePede(listOfMendelpedes[11]);
-      expect(comp.pedeList[6].phenotype).not.toBeNull();
-    }); // end should store pede in fridge
+      let bugId = page.pedesWithBugIds[6].nativeElement.innerHTML;
+      expect(bugId).not.toBe(11);
+    })); // end should store pede in fridge
 
   }); // end Test store pede
-
+/*
   describe('Test delete pede', () => {
     let scenario: MendelpedeScenario;
     
@@ -218,6 +248,8 @@ describe('Mendelpede Fridge Component', () => {
       scenario = listOfMendelScenarios[0];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
       createComponent();
+      comp.storePede(listOfMendelpedes[11]);
+      comp.storePede(listOfMendelpedes[7]);
       //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
       page.addElements();
@@ -225,22 +257,28 @@ describe('Mendelpede Fridge Component', () => {
       fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
-    it('should delete stored pede', () => {
-      comp.storePede(listOfMendelpedes[11]);
-      comp.deletePede(comp.pedeList[6]);
+    it('should delete stored pede', fakeAsync(() => {
+      console.log(comp.pedeList[7].canDelete);
+      console.log(page.deleteMpedes);
+      click(page.deleteButtons[6]);
+      tick();
+      page.addElements();
+      addMatchers();
+      fixture.detectChanges();
+      //comp.deletePede(comp.pedeList[6]);
       expect(comp.pedeList[6].phenotype).toBeNull();
-    }); // end should delete stored pede
+    })); // end should delete stored pede
     
     it('should delete stored pede at the location only', () => {
       comp.storePede(listOfMendelpedes[11]);
       comp.storePede(listOfMendelpedes[14]);
       comp.deletePede(comp.pedeList[6]);
-      expect(comp.pedeList[7].phenotype).toBeNull();
-      expect(comp.pedeList[6].phenotype).not.toBeNull();
+      expect(comp.pedeList[6].phenotype).toBeNull();
+      expect(comp.pedeList[7].phenotype).not.toBeNull();
     }); // end should delete stored pede at the location only
 
   }); // end Test delete pede
-
+*/
   describe('Test css class for mendelpede image', () => {
     let scenario: MendelpedeScenario;
     
@@ -270,7 +308,9 @@ class Page {
   btnLast: DebugElement;
   fridgeShelf: DebugElement[];
   pedesWithBugIds: DebugElement[];
-  deleteMpedes: DebugElement[];
+  deleteMpedes: DebugElement;
+  deleteButtons: DebugElement[];
+  sendPedeClicked: boolean = false;
 
   errorMessage: HTMLElement;
 
@@ -288,12 +328,14 @@ class Page {
       this.pedes = fixture.debugElement.queryAll(By.css('#fridge-pedes'));
       this.fridgeShelf = fixture.debugElement.queryAll(By.css('#fridge-shelf'));
       this.pedesWithBugIds = fixture.debugElement.queryAll(By.css('#bugId'));
-      this.deleteMpedes = fixture.debugElement.queryAll(By.css('#deleteMpede'));
+      this.deleteMpedes = fixture.debugElement.query(By.css('#fridge-shelf')).query(By.css('#firstColumn'));
       let btns = fixture.debugElement.queryAll(By.css('button'));
       this.btnFirst = btns[0];
       this.btnBackward = btns[1];
       this.btnForward = btns[2];
       this.btnLast = btns[3];
+
+      //this.deleteButtons = fixture.debugElement.queryAll(By.css('.oi-trash'));
     }
 
     let tmp = fixture.debugElement.query(By.css('.alert'));
