@@ -9,6 +9,7 @@ import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog.component'
 
 import { PersonNamePipe } from '../pipes/person-name.pipe';
 import { TitleCasePipe } from '../pipes/title-case.pipe';
+import { PedeImagePipe } from '../pipes/pede-image.pipe';
 import { PedeQuizTraitPipe } from '../pipes/pede-quizTrait.pipe'
 import { PedeGenotypePipe } from '../pipes/pede-genotype.pipe';
 import { PeopleListNamesPipe } from '../pipes/people-list-names.pipe';
@@ -38,6 +39,7 @@ import { SelectDropModule } from './select-drop/select-drop.module';
     PersonNamePipe,
     TitleCasePipe,
     PedeGenotypePipe,
+    PedeImagePipe,
     PedeQuizTraitPipe,
     PeopleListNamesPipe,
     PhageParentsPipe,
@@ -54,6 +56,7 @@ import { SelectDropModule } from './select-drop/select-drop.module';
       PersonNamePipe,
       TitleCasePipe,
       PedeGenotypePipe,
+      PedeImagePipe,
       PeopleListNamesPipe,
       PhageParentsPipe,
       PedeQuizTraitPipe,
