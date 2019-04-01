@@ -6,11 +6,11 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 
 import { MendelpedeScenarioService } from '../mendelpede-scenarios.service';
-
+import { MendelpedeLabroomComponent } from '../mpede-labroom/mpede-labroom.component';
 import { MendelpedeFridge } from '../../../interfaces/mendelpede-fridge.interface';
 import { MendelpedePede } from '../../../interfaces/mendelpede-pede.interface';
 import { readErrorMessage } from '../../../shared/read-error';
-import { MendelpedeLabroomComponent } from '../mpede-labroom/mpede-labroom.component';
+import { PedeImagePipe } from '../../../pipes/pede-image.pipe';
 
 @Component({
   selector: 'mendelpede-fridge',
@@ -121,25 +121,6 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
           } }
         );
     });
-  }
-
-  /**
-   * Gets CSS classes
-   *
-   * @returns {Object} classes wh
-   */
-  getMendelpede(phenotype: string[]): Object{
-    var mpedeCssClass = {'mx-auto sizeI': true};
-
-    // create css classes using traits
-    var segcol: string = 'mpede-bodycol-'+phenotype[2];
-    var eyecol: string = 'mpede-eyecol-'+phenotype[1]
-    var imurl: string = 'mpede-pede-'+phenotype[0].toLowerCase()+'-seg'+phenotype[4]+'-leg'+phenotype[3]+'-min'
-    mpedeCssClass[segcol] = true
-    mpedeCssClass[eyecol] = true
-    mpedeCssClass[imurl] = true
-    //mpedeCssClass['sizeI'] = true
-    return mpedeCssClass
   }
 
   /**

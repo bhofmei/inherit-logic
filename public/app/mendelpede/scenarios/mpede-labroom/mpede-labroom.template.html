@@ -16,7 +16,8 @@
               <span *ngIf="childPedes[0].isFemale === 'M'" class="text-info">M</span>-->
             </div>
             <div class="col-12 col-lg-6 p-0">
-              <div [ngClass]="getMendelpede(malePede.phenotype)"></div>
+              <!--<div [ngClass]="getMendelpede(malePede.phenotype)"></div>-->
+              <div [className]="malePede.phenotype | pedeImage"></div>
             </div>
           </div> <!-- end not null -->
           <div *ngIf="malePede.phenotype === null" class="mpede-empty row p-0">
@@ -33,7 +34,8 @@
               <span *ngIf="childPedes[0].isFemale === 'M'" class="text-info">M</span>
             </div>
             <div class="col-12 col-lg-6 p-0">
-              <div [ngClass]="getMendelpede(childPedes[0].phenotype)"></div>
+              <!-- <div [ngClass]="getMendelpede(childPedes[0].phenotype)"></div> -->
+              <div [className]="childPedes[0].phenotype | pedeImage"></div>
             </div>
           </div> <!-- end not null -->
           <div *ngIf="childPedes[0].phenotype === null" class="mpede-empty row p-0">
@@ -50,7 +52,8 @@
               <span *ngIf="childPedes[0].isFemale === 'M'" class="text-info">M</span>-->
             </div>
             <div class="col-12 col-lg-6 p-0">
-              <div [ngClass]="getMendelpede(femalePede.phenotype)"></div>
+              <!-- <div [ngClass]="getMendelpede(femalePede.phenotype)"></div>-->
+              <div [className]="femalePede.phenotype | pedeImage"></div>
             </div>
           </div> <!-- end not null -->
           <div *ngIf="femalePede.phenotype === null" class="mpede-empty row p-0">
