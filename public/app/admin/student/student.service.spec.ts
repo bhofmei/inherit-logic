@@ -5,6 +5,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { StudentService } from './student.service';
 import { Scenario, Fridge, StudentFridge } from '../../interfaces';
 import { listOfScenarios, userAdmin, sampleInstr, listOfStudents,  listOfStudentFridges} from '../../testing/sample-data';
+import { listOfMendelScenarios,  listOfStudentMendelFridges} from '../../testing/mendelpede-sample-data';
 import * as _ from 'lodash';
 
 describe('Student Service', ()=>{
@@ -250,6 +251,87 @@ describe('Student Service', ()=>{
     }) // end inject
     ); // end Should not delete non-existant student
   }); // end Test deleteStudent
+
+  describe('Test getMendelFridge', ()=>{
+    it('Should get student mendel fridge',
+       inject(
+      [HttpTestingController, StudentService],
+      (
+        backend: HttpTestingController,
+        service: StudentService
+    )=>{
+        const userId = 2;
+        const studentId = 15;
+        const scenCode = listOfMendelScenarios[0].shortCode
+        const expectedFridge = listOfStudentMendelFridges[0];
+          service.getMendelFridge(userId, studentId, scenCode).subscribe(
+            (res) => {
+              expect(res.owner.firstName).toBe(listOfStudents[0].firstName);
+              expect(res.scenario.label).toBe(listOfMendelScenarios[0].label);
+              expect(res.accessGranted).toBeTruthy();
+              expect(res.pedes.length).toBe(6);
+            }, (err) => {
+              fail('There should not be an error');
+            }
+          ); // end subscribe
+          const mockReq = backend.expectOne('/api/admin/' + userId + '/mendel-students/'+studentId+'/'+scenCode);
+          expect(mockReq.request.responseType).toEqual('json');
+          mockReq.flush(listOfStudentMendelFridges[0]);
+    }) // end inject
+    ); // end Should getMendelFridge
+  }); // end test getMendelFridge
+
+  describe('Test deleteStudentMendelFridge', ()=>{
+    it('Should delete student mendel fridge',
+       inject(
+      [HttpTestingController, StudentService],
+      (
+        backend: HttpTestingController,
+        service: StudentService
+    )=>{
+        const userId = 2;
+        const studentId = 15;
+        const scenCode = listOfMendelScenarios[0].shortCode
+        const expectedFridge = listOfStudentMendelFridges[0];
+          service.deleteStudentMendelFridge(userId, studentId, scenCode).subscribe(
+            (res) => {
+              expect(res).toBe('mendelfridge deleted');
+            }, (err) => {
+              fail('There should not be an error');
+            }
+          ); // end subscribe
+          const mockReq = backend.expectOne('/api/admin/' + userId + '/delete-mendel-fridge/'+studentId+'/'+scenCode);
+          expect(mockReq.request.responseType).toEqual('json');
+          mockReq.flush('mendelfridge deleted');
+    }) // end inject
+    ); // end Should delete student mendel fridge
+  }); // end test deleteStudentMendelFridge
+
+  describe('Test deleteQuizScore', ()=>{
+    it('Should delete student mendel fridge',
+       inject(
+      [HttpTestingController, StudentService],
+      (
+        backend: HttpTestingController,
+        service: StudentService
+    )=>{
+        const userId = 2;
+        const studentId = 15;
+        const scenCode = listOfMendelScenarios[0].shortCode
+        const expectedFridge = listOfStudentMendelFridges[0];
+          service.deleteQuizScore(userId, studentId, scenCode).subscribe(
+            (res) => {
+              expect(res).toBe('quiz deleted');
+            }, (err) => {
+              fail('There should not be an error');
+            }
+          ); // end subscribe
+          const mockReq = backend.expectOne('/api/admin/' + userId + '/delete-quiz-score/'+studentId+'/'+scenCode);
+          expect(mockReq.request.responseType).toEqual('json');
+          mockReq.flush('quiz deleted');
+    }) // end inject
+    ); // end Should delete student mendel fridge
+  }); // end test deleteStudentMendelFridge
 
   describe('Test getFridge', ()=>{
     it('Should get student fridge',
