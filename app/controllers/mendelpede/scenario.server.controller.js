@@ -10,7 +10,7 @@ const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 
 const courseLevels = ['','all', 'graduate', 'undergraduate'];
 /**
- * @external SCENARIO
+ * @external MENDELSCENARIO
  * @see {@link ../models/mendescenario-model.html}
  */
 
@@ -35,7 +35,6 @@ exports.list = function (req, res) {
   Scenario.find({}, 'label shortCode scenType ordOfScen courseLevel')
     .mod('courseLevel', [level, 0])
     .exec((err, scenarios) => {
-      //console.log('before find in controller');
       if (err) {
         // If an error occurs send the error message
         return res.status(500)
@@ -50,13 +49,13 @@ exports.list = function (req, res) {
 };
 
 /**
- * Get the details about a specifc scenario
+ * Get the details about a specifc mendel scenario
  *
  * @apiType GET
  * @apiPath /api/mendelpede/:scenarioId
  *
  * @param {Object} req - Express request object;
- * @property {external:SCENARIO} scenario - current scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
+ * @property {external:MENDELSCENARIO} scenario - current scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
  * @param {Object} res - Express response object
  *
  * @returns {Object} returns json object of scenario to response with properties `label`, `scenCode`, `purpose`, `startingPoint`, `relevance`, and `degOfDiff`
@@ -76,7 +75,7 @@ exports.read = function (req, res) {
  * Retreives a scenario from a scenario code
  * @protected
  *
- * @apiPath :scenarioId
+ * @apiPath :scenShortCode
  *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
@@ -89,7 +88,6 @@ exports.read = function (req, res) {
  * @yields {next()} - if successful, set request `scenario` and go to next middleware
  */
 exports.scenarioByCode = function (req, res, next, id) {
-  //console.log('mendel id', id);
   Scenario.findOne({
     shortCode: id
   }, (err, scenario) => {
