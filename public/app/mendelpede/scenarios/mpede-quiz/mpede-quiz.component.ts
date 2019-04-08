@@ -33,18 +33,28 @@ export class MendelpedeQuizComponent{
   private quizPedes: MendelpedePede[] = [];
 
   /**
-   * placeholder to store Quiz answers
+   * first trait of the quiz to be displayed as a hint
    */
   private quizTrait: string;
-
+  /**
+   * If the quiz is already taken by student
+   */
   private quizSubmitted: boolean = false;
-
+  /**
+   * fridge id of the quiz
+   */
   private quizFridgeId: string;
-
+  /**
+   * quiz object
+   */
   private quiz: MendelpedeQuiz;
-
+  /**
+   * error message
+   */
   private errorMessage: string = '';
-
+  /**
+   * communicate with mendelfridge component
+   */
   @Input() mendelFridge: MendelpedeFridgeComponent;
 
   constructor(private _authenticationService: AuthenticationService,
@@ -54,13 +64,19 @@ export class MendelpedeQuizComponent{
   ) {
       this.isDestroyed$ = new Subject<boolean>();
   }
-
+  /**
+   * CSS class is set for correct or incorrect answers
+   * @param n index of the answer
+   */
   getQuizBackgroundColor(n: number){
     return {
       'text-success': this.quiz.isAnswerCorrect && this.quiz.isAnswerCorrect[n] && this.quizSubmitted
     }
   }
 
+  /**
+   * 1. get fridge associated with the quiz
+   */
   ngOnInit(){
     this._scenarioService.getFridge
     .takeUntil(this.isDestroyed$)
@@ -78,6 +94,9 @@ export class MendelpedeQuizComponent{
       });
   }
 
+  /**
+   * Initialize the quiz with empty quiz options
+   */
   private _initQuiz(){
     var arr1 = [];
     var arr2 = [];
@@ -92,6 +111,10 @@ export class MendelpedeQuizComponent{
     }
   }
 
+  /**
+   * submit the quiz with student's answers
+   * display the score of student
+   */
   submitQuiz(){
     // reset error messages
     this.errorMessage = '';
