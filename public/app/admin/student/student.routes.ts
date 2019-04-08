@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 import { StudentListComponent } from './student-list/student-list.component';
 import { StudentIndivComponent } from './student-indiv/student-indiv.component';
 import { StudentFridgeComponent } from './student-fridge/student-fridge.component';
-import { StudentMendelFridgeComponent } from './student-mendel-fridge/student-mendel-fridge.component'
+import { StudentMendelFridgeComponent } from './student-mendel-fridge/student-mendel-fridge.component';
 
 import { ScenarioResolver } from '../../cricket/scenario.resolver';
 import { MendelpedeScenarioResolver } from '../../mendelpede/mendelpede-scenario.resolver';

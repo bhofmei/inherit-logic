@@ -56,7 +56,8 @@
           <div class="ist-group-item m-0 row border" *ngFor="let pede of fridge.pedes">
             <div class="strain-num text-primary col-1">{{ pede.bugID + 1 }}</div>
             <div class="col-3">
-              <div [ngClass]="getMendelpede(pede.phenotype)" style="margin: auto;">
+              <!--<div [ngClass]="getMendelpede(pede.phenotype)" style="margin: auto;">-->
+              <div [className]="pede.phenotype | pedeImage"></div>
               </div>
             </div>
             <!-- phage.strainNum -->

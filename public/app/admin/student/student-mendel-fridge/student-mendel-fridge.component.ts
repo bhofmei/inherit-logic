@@ -8,13 +8,16 @@ import { ConfirmDeleteDialogComponent } from '../../../shared/confirm-delete-dia
 import { StudentService } from '../student.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 
-import { Course, AdminStudent, Scenario, MendelpedePede, StudentMendelFridge } from '../../../interfaces';
+import { Course, AdminStudent, MendelpedePede, StudentMendelFridge } from '../../../interfaces';
 
 import { readErrorMessage } from '../../../shared/read-error';
+import { PedeImagePipe } from '../../../pipes/pede-image.pipe';
 
 @Component({
   selector: 'student-mendel-fridge',
   templateUrl: './student-mendel-fridge.template.html',
+  //template: require('./student-mendel-fridge.template.html')
+
   styleUrls: ['./student-mendel-fridge.style.css','../../../mendelpede/scenarios/mpede-pedes.style.css']
 })
 
@@ -68,26 +71,8 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
     private _studentService: StudentService,
     private _authService: AuthenticationService,
     private _modalService: NgbModal){
+      console.log('construct');
     this.isDestroyed$ = new Subject<boolean>();
-  }
-  /**
-   * Gets CSS classes
-   *
-   * @returns {Object} classes wh
-   */
-
-  getMendelpede(phenotype: string[]): Object{
-    var mpedeCssClass: {} = {};
-
-    // create css classes using traits
-    var segcol: string = 'mpede-bodycol-'+phenotype[2];
-    var eyecol: string = 'mpede-eyecol-'+phenotype[1]
-    var imurl: string = 'mpede-pede-'+phenotype[0].toLowerCase()+'-seg'+phenotype[4]+'-leg'+phenotype[3]+'-min'
-    mpedeCssClass[segcol] = true
-    mpedeCssClass[eyecol] = true
-    mpedeCssClass[imurl] = true
-    mpedeCssClass['sizeI'] = true
-    return mpedeCssClass
   }
 
   /**

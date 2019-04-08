@@ -1,12 +1,13 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { User } from '../../../interfaces/user.interface';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { MendelpedePede } from '../../../interfaces/mendelpede-pede.interface';
 import { MendelpedeScenarioService } from '../../scenarios/mendelpede-scenarios.service';
-import { Subject } from 'rxjs';
+
 import { MendelpedeFridgeComponent } from '../mpede-fridge/mpede-fridge.component'
+import { PedeImagePipe } from '../../../pipes/pede-image.pipe';
 import { readErrorMessage } from '../../../shared/read-error';
 
 @Component({
@@ -250,25 +251,6 @@ export class MendelpedeLabroomComponent implements OnInit {
           );
       });
     }
-  }
-
-  /**
-   * Gets CSS classes
-   *
-   * @returns {Object} classes
-   */
-
-  getMendelpede(phenotype: string[]): Object {
-    var mpedeCssClass = { 'mx-auto sizeI': true };
-
-    // create css classes using traits
-    var segcol: string = 'mpede-bodycol-' + phenotype[2];
-    var eyecol: string = 'mpede-eyecol-' + phenotype[1]
-    var imurl: string = 'mpede-pede-' + phenotype[0].toLowerCase() + '-seg' + phenotype[4] + '-leg' + phenotype[3] + '-min'
-    mpedeCssClass[segcol] = true
-    mpedeCssClass[eyecol] = true
-    mpedeCssClass[imurl] = true
-    return mpedeCssClass
   }
 
   /**
