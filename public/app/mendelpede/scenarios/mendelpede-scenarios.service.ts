@@ -56,7 +56,7 @@ export class MendelpedeScenarioService {
   }
 
   /**
-   * @param fridge Fridge to be set
+   * @param {MendelpedeFridge} fridge Fridge to be set
    */
   setFridge(fridge: MendelpedeFridge) {
     this._fridge.next(fridge);
