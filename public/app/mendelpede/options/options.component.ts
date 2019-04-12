@@ -86,7 +86,7 @@ export class OptionsComponent implements OnInit {
 
   /**
    * 
-   * @param optList All scenarios 
+   * @param {MendelpedeScenario[]} optList All scenarios 
    * Sets scearios based on their types
    */
   _initOptions(optList: MendelpedeScenario[]) {
