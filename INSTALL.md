@@ -51,7 +51,45 @@ Web application framework. We use [yarn](https://yarnpkg.com/en/) to install pac
   2. Copy `email.test.public.js` and rename as `email.test.js`.
     - This allows for unit-testing Nodemailer and password reset
     - I recommend using [Ethereal](https://ethereal.email/). Add `secure: false` under `port: 587`.
-
+3. MendelPede includes *Discovery* and *Pathway* scenarios where students must determine the inheritance type.
+So students can't just look up the inheritance type using the config file, you'll need to assign them.
+  1. In `config/mendelpede` folder, copy `scenario.data.public.js` and rename as `scenario.data.js`.
+  2. Find the section where Discovery 1 - 4 are described (line 106-136).
+    - For each discovery, the `inhertType` is currently set as `mito | homoDomLeth | synthLeth | segDistort`.
+    - Assign each discovery one of those inheritance types such that each discovery has a unique inheritance type. For example,
+    ```
+    ...
+    shortCode: 'Disc1',
+    inheritType: 'segDistort'
+    ...
+    shortCode: 'Disc2',
+    inheritType: 'mito',
+    ...
+    shortCode: 'Disc3',
+    inheritType: 'synthLeth',
+    ...
+    shortCode: 'Disc4',
+    inheritType: 'homoDomLeth',
+    ...
+    ```
+  3. Similarly, find the section where Pathway 1-4 are described (line 161-192).
+    - For each pathway, the `inheritType` is currently set as `epiDup | epiComp | epiRec | epiDom`.
+    - Assign each pathway one of those inheritance types such that each pathway has a unique inheritance type. For example,
+    ```
+    ...
+    shortCode: 'Path1',
+    inheritType: 'epiComp'
+    ...
+    shortCode: 'Path2',
+    inheritType: 'epiRec',
+    ...
+    shortCode: 'Path3',
+    inheritType: 'epiDup',
+    ...
+    shortCode: 'Path4',
+    inheritType: 'epiDom',
+    ...
+    ```
 ## Initialize the database
 1. Open the mongo terminal by running `mongo`.
 2. Run `use db`, replacing *db* with the name of the MongoDB database specified in configuration above
