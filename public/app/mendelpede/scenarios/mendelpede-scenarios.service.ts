@@ -76,7 +76,7 @@ export class MendelpedeScenarioService {
   *
   * @param {string} scenShortCode scenario identifier
   *
-  * @returns {Scenario}
+  * @returns {Observable<MendelpedeScenario>}
   * - scenario information
   * - or error "Failed to load scenario <scenId>" if scenario doesn't exist
   * - or other server/database error
