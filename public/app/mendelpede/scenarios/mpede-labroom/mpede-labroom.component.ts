@@ -86,7 +86,7 @@ export class MendelpedeLabroomComponent implements OnInit {
     this.storageSlots = 8
   }
   /**
-   * 1. get the genofacts
+   * get the genofacts
    */
   ngOnInit() {
     this._initPedes();
