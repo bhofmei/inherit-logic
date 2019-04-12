@@ -567,6 +567,82 @@ describe('Course Service', ()=>{
       ); // end Should get list of course numbers
   }); // end Test getCouseList
 
+  describe('Test getMendelScenarioStatus', ()=>{
+    const testCourse = listOfCourses[0];
+    const userId = sampleInstr.userId;
+    const scenId = 'test1';
+    it('Should get mendel scenario status',
+      inject(
+        [HttpTestingController, CourseService],
+        (
+          backend: HttpTestingController,
+          service: CourseService
+        ) => {
+
+          service.getMendelScenarioStatus(userId, testCourse.courseNum, scenId).subscribe(
+            (res) => {
+              expect(res).toBeDefined();
+              expect(res.length).toBe(listOfStudents.length);
+              expect(res[0].status).toBeTruthy();
+            }, (err) => {
+              fail('There should not be an error');
+            }
+          ); // end subscribe
+          const mockReq = backend.expectOne('/api/admin/' + userId + '/mendel-courses/'+testCourse.courseNum+'/'+scenId);
+          expect(mockReq.request.responseType).toEqual('json');
+          let output = listOfStudents.map((el)=>{
+            return {firstName: el.firstName, lastName: el.lastName,
+                   userId: el.userId, status: true}
+          });
+          mockReq.flush(output);
+        }) // end inject
+    ); // end should get scenario status
+
+    it('Should not get mendel scenario status - course does not exist',
+      inject(
+        [HttpTestingController, CourseService],
+        (
+          backend: HttpTestingController,
+          service: CourseService
+        ) => {
+          service.getMendelScenarioStatus(userId, 'TEST004', scenId).subscribe(
+            (res) => {
+              fail('Should not have result');
+            }, (err) => {
+              expect(err.error.message).toBe('Failed to load course TEST004');
+            }
+          ); // end subscribe
+          const mockReq = backend.expectOne('/api/admin/' + userId + '/mendel-courses/TEST004/'+scenId);
+          const mockError = new ErrorEvent('Not Found', {
+            message: "Failed to load course TEST004"
+          });
+          mockReq.error(mockError);
+        }) // end inject
+    ); // end not get scenario status - course does not exist
+
+    it('Should not get mendel scenario status - scenario does not exist',
+      inject(
+        [HttpTestingController, CourseService],
+        (
+          backend: HttpTestingController,
+          service: CourseService
+        ) => {
+          service.getMendelScenarioStatus(userId, testCourse.courseNum, 'test3').subscribe(
+            (res) => {
+              fail('Should not have result');
+            }, (err) => {
+              expect(err.error.message).toBe('Failed to load scenario test3');
+            }
+          ); // end subscribe
+          const mockReq = backend.expectOne('/api/admin/' + userId + '/mendel-courses/'+testCourse.courseNum+'/test3');
+          const mockError = new ErrorEvent('Not Found', {
+            message: "Failed to load scenario test3"
+          });
+          mockReq.error(mockError);
+        }) // end inject
+    ); // end not get scenario status - scenario does not exist
+  }); // end Test getScenarioStatus
+
   afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
     backend.verify();
   })); // end afterEach

@@ -14,12 +14,12 @@ const mendScen = require('../../genetics/mendelpede/mendel.scenario');
 const cryptr = require('../../../config/client.cryptr');
 const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 /**
- * @external FRIDGE
- * @see {@link ../models/fridge-model.html}
+ * @external MENDELFRIDGE
+ * @see {@link ../models/mendelpede/mendelpede-fridge-model.html}
  */
 /**
- * @external SCENARIO
- * @see {@link ../models/scenario-model.html}
+ * @external MENDELSCENARIO
+ * @see {@link ../models/mendel-scenario-model.html}
  */
 /**
  * @external USER
@@ -41,7 +41,7 @@ const getPedeInfo = function(pede){
  * Helper method to return fridge details in consistent
  * format
  *
- * @param {external:FRIDGE} fridge - fridge object from DB
+ * @param {external:MENDELFRIDGE} mendelfridge - fridge object from DB
  *
  * @returns {Object} - cleaned up fridge object with properties
  * `scenarioDetails`, `guesses`, `accessGranted`, `userId`, `scenCode`, and `strains`
@@ -67,14 +67,14 @@ const getMendelFridgeInfo = function (mendelFridge) {
 }
 
 /**
- * Create a new fridge stocked with the scenario phage
+ * Create a new mendel fridge stocked with mendelpedes
  *
  * @apiType GET
- * @apiPath /api/cricket/:userId/:scenarioId/new-fridge
+ * @apiPath /api/mendelpede/:userId/:scenShortCode/new-fridge
  *
  * @param {Object} req - Express request object
  * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
- * @property {external:SCENARIO} scenario - current scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
+ * @property {external:MENDELSCENARIO} mendelscenario - current mendelpede scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
  * @param {Object} res - Express response object
  *
  * @returns {Object} json object to response
@@ -83,23 +83,9 @@ const getMendelFridgeInfo = function (mendelFridge) {
  * @yields {200_OK} Newly created fridge cleaned by [getFridgeInfo]{@link #getFridgeInfo}
  */
 exports.stockMendelFridge = function (req, res) {
-  //console.log('Create fridge method called.....')
   var user = req.curUser;
   var scen = req.scenario;
-  // determine if access granted -> default true bc of testing
-  //let accessGranted = user.get('accessGranted');
   let access = true;
-  /*if (accessGranted) {
-    // created user
-    access = accessGranted[scen.scenShortCode];
-  } else {
-    // testing user -> grant access to use predefined see
-    access = true;
-  }
-  // get stock phage and details
-  if (!access) {
-    mendScen.seedEngine(scen.ordOfScen);
-  }*/
   var stock = mendScen.buildScenario(scen);
   let pedeList = stock.pedes;
   var pedeIdList = [];
@@ -126,7 +112,6 @@ exports.stockMendelFridge = function (req, res) {
     owner: user,
     pedeList: pedeIdList,
     genoFacts: JSON.stringify(stock.genoFacts),
-    //quizScore: 'Quiz not submitted yet'
   };
   // save fridge
   MendelFridge.create(newFridge, (err, fridge) => {
@@ -148,6 +133,19 @@ exports.stockMendelFridge = function (req, res) {
   });
 };
 
+/**
+ * Insert mendelpede in a fridge (called by click on store button)
+ *
+ * @apiType POST
+ * @apiPath /api/mendelpede/:scenShortCode/add-pede
+ *
+ * @param {Object} req - Express request object
+ * @property {external:MENDELSCENARIO} mendelscenario - current mendelpede scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object} json object to response
+ * @yields {400_Bad_Request} Error creating phage for this fridge, sends error as `{message: 'Unable to create new pede for scenario'}`
+ */
 exports.insertPedeToFridge = function(req, res){
   var reqBody = req.body;
   var fridgeId = reqBody.fridgeId;
@@ -208,21 +206,20 @@ exports.insertPedeToFridge = function(req, res){
     }
 
 /**
- * Get the current user's fridge
- * Only include info needed to be known for lab room, plexer room, and model room of scenario
+ * Get the current user's mendelfridge
  *
  * @apiType GET
- * @apiPath /api/cricket/:userId/:scenarioId
+ * @apiPath /api/mendelpede/:userId/:scenShortCode
  *
  * @param {Object} req - Express request object
  * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
- * @property {external:SCENARIO} scenario - current scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
+ * @property {external:MENDELSCENARIO} mendelscenario - current mendel scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
  * @param {Object} res - Express response object
  *
  * @returns {Object} json object to response
  * @yields {500_Internal_Server_Error} On server/database error send description of error as `{message: error-message}`
- * @yields{307_Temporary_Redirect} If fridge does not exist; used by front-end to know to make call to create a new fridge
- * @yields {200_OK} User's fridge for this scenario cleaned by [getFridgeInfo]{@link #getFridgeInfo}
+ * @yields {307_Temporary_Redirect} If fridge does not exist; used by front-end to know to make call to create a new fridge
+ * @yields {200_OK} User's fridge for this scenario cleaned by [getMendelFridgeInfo]{@link #getFridgeInfo}
  */
 exports.getMendelFridge = function (req, res) {
   var user = req.curUser;
@@ -279,6 +276,20 @@ exports.getMendelFridge = function (req, res) {
     });
 };
 
+/**
+ * Get Student's mendelfridge (Used by Admin page)
+ *
+ * @apiType GET
+ * @apiPath /api/admin/:userId/mendel-students/:studentId/:scenShortCode
+ *
+ * @param {Object} req - Express request object
+ * @property {external:USER} student - Student in context [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:MENDELSCENARIO} mendelscenario - current mendel scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object} json object to response
+ * @yields {200_OK} Student's fridge for this scenario cleaned by [getMendelFridgeInfo]{@link #getFridgeInfo}
+ */
 exports.getStudentFridge = function(req, res){
   let student = req.student;
   let scen = req.scenario;
@@ -325,7 +336,6 @@ exports.getStudentFridge = function(req, res){
             bugID: pede.bugID,
             isFemale: pede.isFemale?'F':'M',
             genotype: pede.genotype,
-            //genotype: pede.genotype,
             phenotype: pede.phenotype,
             id: pede.id
             }
@@ -344,12 +354,27 @@ exports.getStudentFridge = function(req, res){
             submittedAnswers: fridge.quiz.submittedAnswers
           }
         }
-        //console.log(ret);
         res.json(ret);
       }
     });
 }
 
+/**
+ * Retreives a Mendelpede from a Mendelpede id and sets mendelpede in req object
+ * @protected
+ *
+ * @apiPath :mendelPedeId
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - next middleware to follow
+ * @param {String} id - mendelpede id from URL
+ *
+ * @returns {Function} - next middleware
+ * @yields {next(error)} On error, pass the error to next middleware
+ * @yields {next('No pede found for id')} - If mendelpede doesn't exist, pass message to next middleware
+ * @yields {next()} - if successful, set request `Mendelpede` and go to next middleware
+ */
 exports.mendelpedeById = function(req, res, next, id){
   //console.log('*************************getPede method');
   MendelPede.findOne({
@@ -372,24 +397,23 @@ exports.mendelpedeById = function(req, res, next, id){
   });
 }
 
+/**
+ * Retreives a mendel fridge from scenario owner and sets mendelfridge in req object
+ * @protected
+ *
+ * @apiPath /api/mendelpede/:userId/:scenShortCode/:mendelPedeId
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - next middleware to follow
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:MENDELSCENARIO} mendelscenario - current mendel scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
+ * @returns {Function} - next middleware
+ * @yields {next(error)} On error, pass the error to next middleware
+ * @yields {next('No fridge for scenario/user')} - If mendelpede doesn't exist, pass message to next middleware
+ * @yields {next()} - if successful, set request `Mendelfridge` and go to next middleware
+ */
 exports.findFridgeByScenOwner = function (req, res, next) {
-  /*
-  var user = req.curUser;
-  var scen = req.scenario;
-  MendelFridge.findOne({
-    owner: user._id,
-    scenario: scen._id
-  }, (err, fridge) => {
-    if (err) {
-      console.log(err)
-      next(err)
-    } else if (!fridge) {
-      return next('Failed to find fridge')
-    } else {
-      req.mendelFridge = fridge;
-      next()
-    }
-  });*/
   var user = req.curUser;
   var scen = req.scenario;
 
@@ -411,32 +435,41 @@ exports.findFridgeByScenOwner = function (req, res, next) {
     })
     .exec((err, mendelFridge) => {
       if (err) {
-        //console.log('error in get fridge: '+err);
         return res.status(500)
           .send({
             message: getErrorMessage(err)
           });
       } else if (!mendelFridge) {
-        //console.log('no fridge');
         return res.status(307)
           .send({
             message: 'No fridge for scenario/user'
           });
       } else {
-        //mendelFridge.genoFacts = cryptr.encrypt(mendelFridge.genoFacts);
-        //let i = getMendelFridgeInfo(mendelFridge);
-        //console.log(scen);
         req.mendelFridge = mendelFridge;
         next()
       }
     });
 };
 
+/**
+ * Delete a Mendelpede from fridge 
+ * @protected
+ * @apiPath /api/mendelpede/:userId/:scenShortCode/:mendelPedeId
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @property {external:MENDELFRIDGE} mendelFridge - Mendel fridge [userById]{@link mendelpede/fridge-controller.html#findFridgeByScenOwner} with scenOwner `userId`
+ * @property {external:MENDELSCENARIO} mendelscenario - current mendel scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
+ * @property {external:MENDELPEDEPEDE} mendelpede - mendelpede to be deleted [mendelpedeById]{@link mendelpede/fridge-controller.html#mendelpedeById} with scenOwner `mendelpedeId`
+ * @param {Object} res - Express response object
+ *
+ * @returns {Object} json object to response
+ * @yields {200_OK} Mendel fridge for this scenario cleaned by [getMendelFridgeInfo]{@link #getFridgeInfo}
+ */
 exports.deletePede = function (req, res) {
   var fridge = req.mendelFridge;
   var mendelpede = req.mendelpede;
   var scen = req.scenario;
-  // delete strain from fridge list
+  // delete pede from fridge pede list
   fridge.pedeList.pull(mendelpede._id);
   fridge.save((error) => {
     if (error) {
@@ -456,9 +489,8 @@ exports.deletePede = function (req, res) {
         } else {
         fridge.genoFacts = cryptr.encrypt(fridge.genoFacts);
         let i = getMendelFridgeInfo(fridge);
-        //console.log(scen);
         if (scen.shortCode.toUpperCase().includes("QUIZ")){
-
+          // set first trait for a hint in quiz
           i['firstTraitForQuiz'] = JSON.parse(cryptr.decrypt(fridge.genoFacts))[0]['trait'];
         }
         //console.log(i)
@@ -468,6 +500,16 @@ exports.deletePede = function (req, res) {
     }
   });
 };
+
+/**
+ * Delete quiz (which is a mendel fridge)
+ * @protected
+ * @apiPath /api/admin/:userId/delete-mendel-fridge/:studentId/:scenShortCode
+ * @param {Object} req - Express request object
+ * @property {external:MENDELFRIDGE} fridge - Mendel fridge [findFridgeByScenOwner]{@link mendelpede/fridge-controller.html#findFridgeByScenOwner} with scenOwner `userId`
+ *
+ * @returns {nothing}: returns nothing
+ */
 exports.deleteQuiz = function(req, res, next) {
   var fridge = req.mendelFridge;
   if(fridge.quiz){
@@ -483,6 +525,15 @@ exports.deleteQuiz = function(req, res, next) {
   }
 }
 
+/**
+ * Delete quiz score (remove quiz connection from mendelfridge)
+ * @protected
+ * @apiPath /api/admin/:userId/delete-quiz-score/:studentId/:scenShortCode
+ * @param {Object} req - Express request object
+ * @property {external:MENDELFRIDGE} fridge - Mendel fridge [findFridgeByScenOwner]{@link mendelpede/fridge-controller.html#findFridgeByScenOwner} with scenOwner `userId`
+ * @yields {400} remove quiz error
+ * @returns {Object}: json object
+ */
 exports.deleteQuizScore = function(req, res, next) {
   var fridge = req.mendelFridge;
   if(fridge.quiz){
@@ -505,6 +556,25 @@ exports.deleteQuizScore = function(req, res, next) {
   }
 }
 
+/**
+ * Middleware which deletes a mendel fridge and all mendelpedes within the mendel fridge
+ * Called after granting access because new fridge
+ * needs to be created for the user/scenario
+ * @protected
+ *
+ * @apiPath /api/admin/:userId/delete-mendel-fridge/:studentId/:scenShortCode
+ *
+ * @param {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:USER} student - student of interest from [userById]{@link user-controller.html#userById} with id `studentId`
+ * @property {external:MENDELSCENARIO} scenario - current scenario from [scenarioByCode](@link scenario-controller.html#scenarioByCode) with scenCode `scenarioId`
+ * @param {Object} res - Express response object
+ * @param {Function} next - next function to go to
+ *
+ * @returns {Function} go to next middleware
+ * @yields {next(error)} If error, pass the error to the next middleware; can have error removing fridge and/or removing individual pedes
+ * @yields {next()} If successful, delete the mendelfridge and all pedes in the fridge, then go to next middleware
+ */
 exports.deleteStudentMendelFridge = function (req, res, next) {
   let student = req.student;
   let scen = req.scenario;

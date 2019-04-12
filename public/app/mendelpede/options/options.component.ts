@@ -18,12 +18,32 @@ export class OptionsComponent implements OnInit {
   * list of available scenarios
   */
   options: MendelpedeScenario[];
+
+  /**
+   * Scenarios
+   */
   scenarios: MendelpedeScenario[] = Array();
+
+  /**
+   * Quizes 1 and 2
+   */
   quizzes: MendelpedeScenario[] = Array();
+
+  /**
+   * Discoveries
+   */
   discoveries: MendelpedeScenario[] = Array();
+
+  /**
+   * Pathways
+   */
   pathways: MendelpedeScenario[] = Array();
 
+  /** 
+   * error message string to be displayed
+   */
   errorMessage: string;
+  
   /**
    * State to monitior if component active to make unsubscribing to
    * multiple streams easier
@@ -36,7 +56,10 @@ export class OptionsComponent implements OnInit {
     private _courseService: CourseService) {
     this.isDestroyed$ = new Subject<boolean>();
   }
-
+  /**
+   * 1. get the course
+   * 2. list scenarios based on course level
+   */
   ngOnInit() {
     this.user = this._authenticationService.getUser();
     //console.log(this.user);
@@ -61,6 +84,11 @@ export class OptionsComponent implements OnInit {
         });
   } // end ngInit
 
+  /**
+   * 
+   * @param {MendelpedeScenario[]} optList All scenarios 
+   * Sets scearios based on their types
+   */
   _initOptions(optList: MendelpedeScenario[]) {
     // separate into list types
     for (let opt of optList) {

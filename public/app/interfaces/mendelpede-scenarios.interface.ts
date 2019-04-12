@@ -1,5 +1,5 @@
 /**
- * Information needed about each scenario
+ * Information needed about each Mendel scenario
  */
 export interface MendelpedeScenario{
   /**
@@ -12,7 +12,7 @@ export interface MendelpedeScenario{
    */
   shortCode: string;
   /**
-   * Description of phage strains to begin the scenario
+   * Scenario type like quiz, discovery etc.
    */
   scenType: string;
   /**

@@ -14,7 +14,7 @@ import { Course, Student, User, MendelpedeScenario } from '../../../interfaces/'
 import { readErrorMessage } from '../../../shared/read-error';
 
 /**
- * This component displays the scenario status of all students
+ * For Mendelpede, This component displays the scenario status of all students
  * within the course and allows for navigation to student fridges
  * and grant access for a student
  */
@@ -35,7 +35,7 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
    */
   private courseNum: string;
   /**
-   * Information about the scenario
+   * Information about the mendel scenario
    */
   protected scenario: MendelpedeScenario;
   /**
@@ -75,6 +75,7 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
    * 2. Based on the URL, get the course number and scenario code
    * 3. Get the scenario information
    * 4. Get the scenario status of students in the course
+   * 5. Get the mendel fridge information for student
    */
   ngOnInit() {
     this.admin = this._authService.getUser();
@@ -131,7 +132,7 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Returns score of the student
+   * Returns quiz score of the student
    * @param studentId: student userid 
    */
   getQuizScore(studentId: string){
