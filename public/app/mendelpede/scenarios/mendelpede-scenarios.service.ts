@@ -128,7 +128,7 @@ export class MendelpedeScenarioService {
    * @param {MendelpedePede} pede - mendelpede to be inserted 
    * @param {MendelpedeFridge} fridge - mendel fridge 
    * @param {string} scenShortCode - scenario identifier
-   * @returns {MendelpedeFridge}
+   * @returns {Observable<MendelpedeFridge>}
    * - returns mendel fridge after inserting the mendelpede 
    */
   insertPede(pede: MendelpedePede, fridge: MendelpedeFridge, scenShortCode: String): Observable<MendelpedeFridge> {
