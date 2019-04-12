@@ -126,7 +126,7 @@ export class MendelpedeScenarioService {
   /**
    * 
    * @param {MendelpedePede} pede - mendelpede to be inserted 
-   * @param fridge - mendel fridge 
+   * @param {MendelpedeFridge} fridge - mendel fridge 
    * @param scenShortCode - scenario identifier
    * @returns {MendelpedeFridge}
    * - returns mendel fridge after inserting the mendelpede 
