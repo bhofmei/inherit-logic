@@ -66,7 +66,7 @@ export class MendelpedeQuizComponent{
   }
   /**
    * CSS class is set for correct or incorrect answers
-   * @param n index of the answer
+   * @param {number} n index of the answer
    */
   getQuizBackgroundColor(n: number){
     return {

@@ -147,9 +147,9 @@ export class MendelpedeScenarioService {
 
   /**
    * Calculate quiz score from submitted answers
-   * @param quizPedes - mendelpedes on which the quiz was created
-   * @param studentAnswers - answers of the student
-   * @param quizFridgeId - fridge id of the quiz
+   * @param {MendelpedePede[]} quizPedes - mendelpedes on which the quiz was created
+   * @param {string[]} studentAnswers - answers of the student
+   * @param {string} quizFridgeId - fridge id of the quiz
    * @returns {MendelpedeQuiz} - mendelpedequiz object which has aspects like score, graded 
    * student answers
    */
@@ -181,9 +181,10 @@ export class MendelpedeScenarioService {
 
   /**
    * Delete the mendelpede
-   * @param userId - user id
-   * @param scenShortCode - scenario identifier
-   * @param pede - mendelpede to be deleted
+   * @param {number} userId - user id
+   * @param {string} scenShortCode - scenario identifier
+   * @param {MendelpedePede} pede - mendelpede to be deleted
+   * @returns {any} It actually returns nothing
    */
   deletePede(userId: number, scenShortCode: string, pede: MendelpedePede): Observable<any> {
     let mendelPedeId = pede.id;

@@ -186,7 +186,9 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
 
   /**
    * 
-   * @param fridgePedes - mendelpedes list as an ayyar
+   * @param {Mendelpedepede[]} fridgePedes - mendelpedes list from backend
+   * @returns {MendelpedePede[]}: list of mendelpedes with values copied from fridgePedes
+   * and filled with placeholder mendelpedes
    * sets all pedes for the view on frontend
    */
   _fillPedes(fridgePedes: MendelpedePede[]): MendelpedePede[]{
@@ -235,7 +237,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   @Input() labroom: MendelpedeLabroomComponent;
 
   /**
-   * @param pede - pede to be sent
+   * @param {MendelpedePede} pede - pede to be sent
    * send mendelpede to the labroom component
    * called by `(click)` on the male or female pede 
    */
@@ -245,7 +247,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
   }
 
   /**
-   * @param pede - pede to be deleted
+   * @param {MendelpedePede} pede - pede to be deleted
    * delete mendelpede
    * called by `(click)` on the delete icon 
    */
@@ -271,7 +273,7 @@ export class MendelpedeFridgeComponent implements OnInit, OnDestroy{
 
   /**
    * Store the mendelpede in the fridge
-   * @param pedeToStore - mendelpede to be stored
+   * @param {MendelpedePede} pedeToStore - mendelpede to be stored
    * Called by `(click)` on the store button of the labroom
    */
   storePede(pedeToStore: MendelpedePede){

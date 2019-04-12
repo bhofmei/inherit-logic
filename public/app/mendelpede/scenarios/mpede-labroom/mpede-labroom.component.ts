@@ -140,7 +140,7 @@ export class MendelpedeLabroomComponent implements OnInit {
    * store mendelpede in the fridge by calling same method of mendelpede 
    * fridge component
    * called by `(click)` on store button
-   * @param pedeToStore : mendelpede to be stored
+   * @param {MendelpedePede} pedeToStore : mendelpede to be stored
    */
   @HostListener('storePede')
   storePede(pedeToStore: MendelpedePede) {
@@ -170,7 +170,7 @@ export class MendelpedeLabroomComponent implements OnInit {
 
   /**
    * drop the mendelpede from child stack to storage area
-   * @param spot : spot where the mendelpede should be moved
+   * @param {number} spot : spot where the mendelpede should be moved
    */
   @HostListener('dropPedeToStorage')
   dropPedeToStorage(spot: number) {
@@ -196,7 +196,7 @@ export class MendelpedeLabroomComponent implements OnInit {
   }
   /**
    * handling keyboard presses
-   * @param event key board event
+   * @param {KeyboardEvent} event key board event
    */
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
@@ -219,7 +219,7 @@ export class MendelpedeLabroomComponent implements OnInit {
    * drop male or female pede to labroom from firdge
    * called by fridge component
    * Creates Child pedes if male and female bith mendelpedes are present
-   * @param pede - mendelpede female or male dropped from fridge
+   * @param {MendelpedePede} pede - mendelpede female or male dropped from fridge
    */
   dropPede(pede: MendelpedePede) {
     this._checkQuiz();
