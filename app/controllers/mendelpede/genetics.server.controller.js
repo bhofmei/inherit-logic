@@ -8,6 +8,22 @@ const mendScen = require('../../genetics/mendelpede/mendel.scenario');
 const cryptr = require('../../../config/client.cryptr');
 const getErrorMessage = require('../helpers.server.controller').getErrorMessage;
 
+/**
+ * Middleware which creates 20 children based on genofacts of the fridge,
+ * Male mendelpede and female mendelpede
+ * @protected
+ *
+ * @apiPath /api/mendelpede/make-children
+ *
+ * @param {Object} req - Express request object
+ * @property {external:MENDELPEDEPEDE} malepede - male mendelpede [mendelpedeById](@link fridge-controller.html#mendelpedeById) with scenCode `mendelPedeId`
+ * @property {external:MENDELPEDEPEDE} femalepede - female mendelpede [mendelpedeById](@link fridge-controller.html#mendelpedeById) with scenCode `mendelPedeId`
+ * @property {req.genoFacts} genoFacts - Genofacts of the fridge
+ * @param {Object} res - Express response object
+ * @param {Function} next - next function to go to
+ *
+ * @yields {200_OK} Return list of mendelpede children
+ */
 exports.makeChildren = function (req, res){
   var reqBody = req.body;
   var genoFacts = cryptr.decrypt(reqBody.genoFacts);
@@ -25,6 +41,19 @@ exports.makeChildren = function (req, res){
   res.json(children);
 }
 
+/**
+ * Middleware which calculates quiz score and returns a quiz object
+ * @apiPath /api/mendelpede/calculate-score
+ *
+ * @param {Object} req - Express request object
+ * @property {req.quizPedes} quizPedes - list of mendelpedes for which quiz was asked
+ * @property {req.studentAnswers} studentAnswers - string array containing student's answers
+ * @property {req.fridgeId} fridgeId - fridge id
+ * @param {Object} res - Express response object
+ * @yields {400_NOT_OK} - error while calculating quiz score
+ * @yields {500_QUIZ_NOT_CREATE} - Error while creating a new quiz
+ * @yields {200_OK} Creates a Mendelpede quiz and return it
+ */
 exports.calculateQuizScore = function(req, res){
   var reqBody = req.body;
   var quizPedes = reqBody.quizPedes;
@@ -44,17 +73,15 @@ exports.calculateQuizScore = function(req, res){
     }
     gradedQuiz.push(regGenoStr[geno[0]] + regGenoStr[geno[1]] === studentAnswer)
   }
-  var quizScore = gradedQuiz.filter(Boolean).length
-  //console.log('**********')
-  //console.log(quizFinalScore)
-  //console.log(fridgeId)
 
+  var quizScore = gradedQuiz.filter(Boolean).length
   var quiz = {
     score: quizScore,
     quizTakenDate: Date.now(),
     submittedAnswers: studentAnswers,
     isAnswerCorrect: gradedQuiz
   }
+  // Create mendelquiz object
   MendelQuiz.create(quiz, (err, quiz) => {
     if (err)
       return res.status(500)
@@ -81,20 +108,33 @@ exports.calculateQuizScore = function(req, res){
 
 }
 
+/**
+ * Retreives a Mendelpede from a Mendelpede id and sets female and male pede in req object
+ * @protected
+ *
+ * @apiPath :mendelPedeId
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - next middleware to follow
+ * @param {String} id - mendelpede id from URL
+ *
+ * @returns {Function} - next middleware
+ * @yields {next(error)} On error, pass the error to next middleware
+ * @yields {next('No pede found for id')} - If mendelpede doesn't exist, pass message to next middleware
+ * @yields {next()} - if successful, set request `Mendelpede` and go to next middleware
+ */
 exports.getPede = function(req, res, next, id){
-  //console.log('*************************getPede method');
   MendelPede.findOne({
     _id: id
   },(error, pede) => {
     if(error){
-      //console.log('error occured');
       return res.status(400)
               .send({
                 message: 'Error occurred while getting pede'
               });
     }
     if(!pede){
-      //console.log('No pede found');
       return res.status(400)
               .send({
                 message: 'No pede found'

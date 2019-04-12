@@ -16,28 +16,52 @@ import { readErrorMessage } from '../../../shared/read-error';
   styleUrls: ['./mpede-labroom.style.css', '../mpede-pedes.style.css']
 })
 export class MendelpedeLabroomComponent implements OnInit {
-
+  /**
+   * user in the session
+   */
   user: User;
-
+  /**
+   * male mendelpede
+   */
   malePede: MendelpedePede;
+  /**
+   * Children pedes dependant on male and female pede
+   */
   childPedes: MendelpedePede[];
+  /**
+   * female mendelpede
+   */
   femalePede: MendelpedePede;
+  /**
+   * data structure holding mendelpedes for storage area of the labroom
+   */
   storablePedes: MendelpedePede[][][];
 
   private sSubscription: Subscription;
 
   private paramObserver: any;
 
-  // Used to determine how many children we will get from backend
-  private numOfChildren: number;
+  /**
+   *  Used to determine how many children we will get from backend
+  */
+   private numOfChildren: number;
 
+  /**
+   * how many storage slots
+   */
   private storageSlots: number;
 
+  /**
+   * Fridge genofacts of the session
+   */
   private currFridgeGenoFacts: string;
-
-  //Used to fill correct number of child pedes
+  /**
+   * Used to fill correct number of child pedes
+   */
   private currNumChildren: number;
-
+  /**
+   * store mendelpedes to support undo functionaity
+   */
   undoSpotList: number[] = [];
 
   /**
@@ -61,7 +85,9 @@ export class MendelpedeLabroomComponent implements OnInit {
     this.numOfChildren = 20;
     this.storageSlots = 8
   }
-
+  /**
+   * get the genofacts
+   */
   ngOnInit() {
     this._initPedes();
     this.user = this._authenticationService.getUser();
@@ -72,9 +98,10 @@ export class MendelpedeLabroomComponent implements OnInit {
         .subscribe((details) => { this.currFridgeGenoFacts = details });
     });
   }
-
+  /**
+   * initialize the labroom
+   */
   _initPedes() {
-
     this.currNumChildren = 0;
     this.malePede = { bugID: 0, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null };
     this._initChildPedes();
@@ -83,6 +110,9 @@ export class MendelpedeLabroomComponent implements OnInit {
     this.femalePede = { bugID: 1, genotype: null, phenotype: null, userId: null, isFemale: null, scenCode: null, id: null }
   }
 
+  /**
+   * Empty each variables
+   */
   _emptyStoragePedes() {
     var counter: number = 0;
     this.storablePedes = [];
@@ -96,6 +126,9 @@ export class MendelpedeLabroomComponent implements OnInit {
     }
   }
 
+  /**
+   * Initialize child pedes
+   */
   _initChildPedes() {
     this.childPedes = [];
     for (let i = 0; i < this.numOfChildren; i++) {
@@ -103,20 +136,29 @@ export class MendelpedeLabroomComponent implements OnInit {
     }
   }
 
+  /**
+   * store mendelpede in the fridge by calling same method of mendelpede 
+   * fridge component
+   * called by `(click)` on store button
+   * @param {MendelpedePede} pedeToStore : mendelpede to be stored
+   */
   @HostListener('storePede')
   storePede(pedeToStore: MendelpedePede) {
-    //console.log('button pressed');
-    //console.log(this.storablePedes);
     this.mendelFridge.storePede(pedeToStore);
-    //console.log(this.storablePedes);
   }
-
+  /**
+   * Clear everything
+   * called by `(click)` on clear button
+   */
   @HostListener('clearAll')
   clearAll() {
     this._initPedes();
   }
 
   @HostListener('clearAll')
+  /**
+   * undo and remove pede from storage are and move to child pede stack
+   */
   undoPede() {
     var undoSpot: number = this.undoSpotList[this.undoSpotList.length - 1]
     //var arrLength = this.storablePedes[Math.ceil((this.undoSpot+1)/4)-1][this.undoSpot>3?(this.undoSpot-4):(this.undoSpot)].length;
@@ -126,12 +168,13 @@ export class MendelpedeLabroomComponent implements OnInit {
     this.undoSpotList.pop();
   }
 
+  /**
+   * drop the mendelpede from child stack to storage area
+   * @param {number} spot : spot where the mendelpede should be moved
+   */
   @HostListener('dropPedeToStorage')
   dropPedeToStorage(spot: number) {
     let pede: MendelpedePede = this.childPedes[0];
-    //console.log(pede);
-    //console.log(spot);
-    //console.log(this.storablePedes);
     this.undoSpotList.push(spot);
     this.storablePedes[Math.ceil((spot + 1) / 4) - 1][spot > 3 ? (spot - 4) : (spot)].push({
       bugID: this.storablePedes[Math.ceil((spot + 1) / 4) - 1][spot > 3 ? (spot - 4) : (spot)][0].bugID,
@@ -150,9 +193,11 @@ export class MendelpedeLabroomComponent implements OnInit {
     } else {
       this.childPedes.shift();
     }
-    //console.log('stack of pedes');
-    //console.log(this.storablePedes);
   }
+  /**
+   * handling keyboard presses
+   * @param {KeyboardEvent} event key board event
+   */
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     //console.log(event.keyCode);
@@ -171,17 +216,13 @@ export class MendelpedeLabroomComponent implements OnInit {
   }
 
   /**
-   * Adds a new strain to a fridge
-   *
-   * Called by `(onDropSucess)` of slot
-   *
-   * @param {any} $event - drag event, incuding data for strain to add;
-   * has: shifts, deletion, parents
-   * @param {number} spot - slot to drop new strain
+   * drop male or female pede to labroom from firdge
+   * called by fridge component
+   * Creates Child pedes if male and female bith mendelpedes are present
+   * @param {MendelpedePede} pede - mendelpede female or male dropped from fridge
    */
   dropPede(pede: MendelpedePede) {
     this._checkQuiz();
-    //console.log('dropping pede')
     if (pede.isFemale === 'M' && this.malePede.phenotype === null) {
       this.malePede = {
         bugID: pede.bugID,
@@ -210,7 +251,10 @@ export class MendelpedeLabroomComponent implements OnInit {
       }
     }
   }
-
+  /**
+   * is this quiz?
+   * set @isQuiz variable to true if this is a quiz else set false
+   */
   _checkQuiz() {
     if (this.isQuiz == null) {
       if (this.mendelFridge) {
@@ -219,6 +263,11 @@ export class MendelpedeLabroomComponent implements OnInit {
     }
   }
 
+  /**
+   * Create Children of the male and female pedes
+   * Called when male and female both pedes are dropped
+   * called when view runs out of 20 child pedes
+   */
   createChildPedes() {
     if (this.malePede.phenotype !== null && this.femalePede.phenotype !== null) {
       let userId = this.user.id;

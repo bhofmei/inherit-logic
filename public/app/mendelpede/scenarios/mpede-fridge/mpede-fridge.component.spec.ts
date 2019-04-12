@@ -240,7 +240,7 @@ describe('Mendelpede Fridge Component', () => {
     })); // end should store pede in fridge
 
   }); // end Test store pede
-/*
+
   describe('Test delete pede', () => {
     let scenario: MendelpedeScenario;
     
@@ -259,7 +259,7 @@ describe('Mendelpede Fridge Component', () => {
 
     it('should delete stored pede', fakeAsync(() => {
       console.log(comp.pedeList[7].canDelete);
-      console.log(page.deleteMpedes);
+      console.log(page.deleteButtons[6]);
       click(page.deleteButtons[6]);
       tick();
       page.addElements();
@@ -278,7 +278,6 @@ describe('Mendelpede Fridge Component', () => {
     }); // end should delete stored pede at the location only
 
   }); // end Test delete pede
-*/
   describe('Test css class for mendelpede image', () => {
     let scenario: MendelpedeScenario;
     
@@ -335,7 +334,7 @@ class Page {
       this.btnForward = btns[2];
       this.btnLast = btns[3];
 
-      //this.deleteButtons = fixture.debugElement.queryAll(By.css('.oi-trash'));
+      this.deleteButtons = fixture.debugElement.queryAll(By.css('.oi-trash'));
     }
 
     let tmp = fixture.debugElement.query(By.css('.alert'));

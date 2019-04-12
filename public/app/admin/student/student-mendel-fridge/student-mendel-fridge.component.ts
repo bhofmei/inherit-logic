@@ -23,11 +23,11 @@ import { PedeImagePipe } from '../../../pipes/pede-image.pipe';
 
 export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
   /**
-   * Fridge object (if it exists)
+   * Student mendel Fridge object (if it exists)
    */
   protected fridge: StudentMendelFridge;
   /**
-   * If fridge exists determine by if this.fridge has strains
+   * If fridge exists 
    */
   protected hasFridge: boolean = false;
   /**
@@ -39,31 +39,39 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
    */
   private paramObserver: any;
 
+  /**
+   * Genofacts to be diaplayed on the page
+  */
   private currGenoFacts: any;
 
+  /**
+   * Has the student taken the quiz: helps to display quiz score section
+   */
   protected isQuizTaken: boolean = false;
 
   /**
-   * Option to show all strains in fridge or
-   * only strains of interest for grading (unknown
-   * and submitted)
-   *
-   * Should be `"all"` or `"graded"`
-   */
-  //private viewStrains: string = 'all';
-  /**
-   * List of phage currently being viewed
+   * List of mendelpedes currently being viewed
    */
   pedes: MendelpedePede[];
+  
   /**
    * Error message from the server
    */
   private errorMessage: string = '';
-
+  
+  /**
+   * Student's id
+   */
   private studentId: any;
 
+  /**
+   * Mendel scenario id
+   */
   private scenId: any;
 
+  /**
+   * Admin
+   */
   private admin: any;
 
   constructor(private _router: Router,
@@ -80,8 +88,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
    * 1. Get studentId, scenarioId, and admin
    * 2. Get the fridge
    * 3. If the fridge exists
-   * 3a. add the "guesses" to each strain
-   * 3b. sort the strains by strain number
+   * add quiz, mendelpedes to the view
    */
   ngOnInit(){
     this.paramObserver = this._route.params.subscribe(params => {
@@ -92,7 +99,6 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
       this._studentService.getMendelFridge(this.admin.id, this.studentId, this.scenId)
         .takeUntil(this.isDestroyed$)
               .subscribe((mfridge) => {
-                //console.log('we got fridge from db')
               this.fridge = mfridge;
               this.fridge.owner = mfridge.owner;
               if(this.fridge.quiz){
@@ -104,9 +110,6 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
                   this.hasFridge = true
                 }
               }
-
-              //console.log('we got fridge')
-              //console.log(this.fridge)
             },
                 (error) => {
               this.errorMessage = readErrorMessage(error);
@@ -134,7 +137,14 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
       return;
     });
   }
-
+  
+  /**
+   * - when clicking delete quiz button, open a modal dialog to confirm delete
+   * - if confirm, delete quiz and redirect to same page
+   * - otherwise, do nothing
+   *
+   * Called on `(click)` of the "Delete" button
+   */
   checkDeleteQuizScore(){
     const modelRef = this._modalService.open(ConfirmDeleteDialogComponent, {size: 'sm'});
     modelRef.componentInstance.message = 'Are you sure you want to delete?';
@@ -149,6 +159,11 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * - Delete quiz score
+   *
+   * Called on `(click)` of the "Delete" button
+   */
   deleteQuizScore(){
     this.isQuizTaken = false;
     this._studentService.deleteQuizScore(this.admin.id, this.studentId, this.scenId)
@@ -158,6 +173,9 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Delete Student fridge 
+   */
   deleteStudentFridge(){
     this.fridge = null;
     this.hasFridge = false;
@@ -182,6 +200,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
       this.errorMessage = readErrorMessage(err);
     })
   }
+  
   /**
    * When destorying the component, unsubscribe from services and
    * observables to prevent memory leak
