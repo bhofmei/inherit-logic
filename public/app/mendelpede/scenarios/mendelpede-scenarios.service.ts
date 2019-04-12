@@ -48,7 +48,6 @@ export class MendelpedeScenarioService {
   * Set the scenario details and scenario guesses
   *
   * @param {string} scenarioGenoFacts - scenario genofacts
-  * - necessary for performing experiments
   */
   setScenario(scenarioGenoFacts: string) {
         if (scenarioGenoFacts !== null)
