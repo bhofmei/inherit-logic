@@ -58,20 +58,22 @@ describe('Lab Room Component', () => {
 
     it('Should have empty plate', () => {
       let plateContents = page.labPlate.children;
-      expect(plateContents.length).toBe(0);
+      expect(plateContents.length).toBe(1);
+      expect(plateContents[0].nativeElement.className).toContain('empty-plate');
     }); // end Should have empty plate
 
     it('Should not be able to drag bacteria tube', () => {
       var canDrag = comp.canDragBact();
       expect(canDrag).toBeFalsy();
     }); // end Should not be able to drag bacteria tube
+
   }); // end Test initial page (no previous interaction)
 
   describe('Test add to bacteria tube', () => {
     let dropPhage: FridgePhage = listOfPhage[0];
     beforeEach(fakeAsync(() => {
       createComponent();
-      comp.dropPhageBact({ dragData: dropPhage }, 'B');
+      comp.dropPhageBact({ data: dropPhage }, 'B');
       tick();
       fixture.detectChanges();
       page.addElements();
@@ -111,7 +113,7 @@ describe('Lab Room Component', () => {
           parents: [{ id: 'a1', strainNum: 2 }],
           src: 'small'
         };
-        comp.dropPhageBact({ dragData: platePhage }, 'B');
+        comp.dropPhageBact({ data: platePhage }, 'B');
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -122,7 +124,7 @@ describe('Lab Room Component', () => {
     describe('Test add 2 phage', () => {
       var dropPhage2: FridgePhage = listOfPhage[1];
       beforeEach(fakeAsync(() => {
-        comp.dropPhageBact({ dragData: dropPhage2 }, 'B');
+        comp.dropPhageBact({ data: dropPhage2 }, 'B');
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -148,7 +150,7 @@ describe('Lab Room Component', () => {
 
       it('Should not be able to add another phage', fakeAsync(() => {
         var dropPhage3: FridgePhage = listOfPhage[2];
-        comp.dropPhageBact({ dragData: dropPhage3 }, 'B');
+        comp.dropPhageBact({ data: dropPhage3 }, 'B');
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -168,7 +170,7 @@ describe('Lab Room Component', () => {
 
     beforeEach(fakeAsync(() => {
       createComponent();
-      comp.dropContentsDil({ dragData: beginBactTube }, 0);
+      comp.dropContentsDil({ data: beginBactTube }, 0);
       tick();
       fixture.detectChanges();
       page.addElements();
@@ -219,7 +221,7 @@ describe('Lab Room Component', () => {
         { id: phage2.id, strainNum: phage2.strainNum, numPhage: 100000 }]
       };
       beforeEach(fakeAsync(() => {
-        comp.dropContentsDil({ dragData: tube1Contents }, 1);
+        comp.dropContentsDil({ data: tube1Contents }, 1);
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -266,7 +268,7 @@ describe('Lab Room Component', () => {
           { id: phage2.id, strainNum: phage2.strainNum, numPhage: 10000 }]
         };
         beforeEach(fakeAsync(() => {
-          comp.dropContentsDil({ dragData: tube1Contents }, 2);
+          comp.dropContentsDil({ data: tube1Contents }, 2);
           tick();
           fixture.detectChanges();
           page.addElements();
@@ -318,7 +320,7 @@ describe('Lab Room Component', () => {
 
       beforeEach(fakeAsync(() => {
         createComponent();
-        comp.dropOnPlate({ dragData: dilContents });
+        comp.dropOnPlate({ data: dilContents });
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -345,7 +347,7 @@ describe('Lab Room Component', () => {
 
       beforeEach(fakeAsync(() => {
         createComponent();
-        comp.dropOnPlate({ dragData: dilContents });
+        comp.dropOnPlate({ data: dilContents });
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -384,7 +386,7 @@ describe('Lab Room Component', () => {
 
       beforeEach(fakeAsync(() => {
         createComponent();
-        comp.dropOnPlate({ dragData: dilContents });
+        comp.dropOnPlate({ data: dilContents });
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -422,7 +424,7 @@ describe('Lab Room Component', () => {
       }); // end Should be able to drag small but not large
 
       it('Should remove plaque when added to fridge', fakeAsync(() => {
-        comp.addedToFridge({ dragData: { src: 'small' } });
+        comp.addedToFridge({ data: { src: 'small' } });
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -442,7 +444,7 @@ describe('Lab Room Component', () => {
 
       beforeEach(fakeAsync(() => {
         createComponent();
-        comp.dropOnPlate({ dragData: dilContents });
+        comp.dropOnPlate({ data: dilContents });
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -488,7 +490,7 @@ describe('Lab Room Component', () => {
       }); // end Should be able to drag large and small plaques
 
       it('Should remove small plaque from plate', fakeAsync(() => {
-        comp.addedToFridge({ dragData: { src: 'small' } });
+        comp.addedToFridge({ data: { src: 'small' } });
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -497,7 +499,7 @@ describe('Lab Room Component', () => {
       })); // end Should remove small plaque from plate
 
       it('Should remove large plaque from plate', fakeAsync(() => {
-        comp.addedToFridge({ dragData: { src: 'large' } });
+        comp.addedToFridge({ data: { src: 'large' } });
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -517,7 +519,7 @@ describe('Lab Room Component', () => {
 
       beforeEach(fakeAsync(() => {
         createComponent();
-        comp.dropOnPlate({ dragData: dilContents });
+        comp.dropOnPlate({ data: dilContents });
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -560,7 +562,7 @@ describe('Lab Room Component', () => {
       }); // end Should be able to drag small plaques only
 
       it('Should remove small plaque from plate', fakeAsync(() => {
-        comp.addedToFridge({ dragData: { src: 'small' } });
+        comp.addedToFridge({ data: { src: 'small' } });
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -580,7 +582,7 @@ describe('Lab Room Component', () => {
       };
       beforeEach(fakeAsync(() => {
         createComponent();
-        comp.dropOnPlate({ dragData: dilContents });
+        comp.dropOnPlate({ data: dilContents });
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -617,14 +619,14 @@ describe('Lab Room Component', () => {
       beforeEach(fakeAsync(() => {
         // add stuff to bacteria tubes, dilution tubes, and plate
         createComponent();
-        comp.dropPhageBact({ dragData: phage1 }, 'K');
-        comp.dropContentsDil({ dragData: bactContents }, 0);
+        comp.dropPhageBact({ data: phage1 }, 'K');
+        comp.dropContentsDil({ data: bactContents }, 0);
         tick();
         fixture.detectChanges();
         page.addElements();
         // add second phage
-        comp.dropPhageBact({ dragData: phage2 }, 'K');
-        comp.dropOnPlate({ dragData: dilContents });
+        comp.dropPhageBact({ data: phage2 }, 'K');
+        comp.dropOnPlate({ data: dilContents });
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -669,14 +671,14 @@ describe('Lab Room Component', () => {
       beforeEach(fakeAsync(() => {
         // add stuff to bacteria tubes, dilution tubes, and plate
         createComponent();
-        comp.dropPhageBact({ dragData: phage1 }, 'K');
-        comp.dropContentsDil({ dragData: bactContents }, 0);
+        comp.dropPhageBact({ data: phage1 }, 'K');
+        comp.dropContentsDil({ data: bactContents }, 0);
         tick();
         fixture.detectChanges();
         page.addElements();
         // add second phage
-        comp.dropPhageBact({ dragData: phage2 }, 'K');
-        comp.dropOnPlate({ dragData: dilContents });
+        comp.dropPhageBact({ data: phage2 }, 'K');
+        comp.dropOnPlate({ data: dilContents });
         tick();
         fixture.detectChanges();
         click(page.clearTubeButton);
@@ -714,14 +716,14 @@ describe('Lab Room Component', () => {
       beforeEach(fakeAsync(() => {
         // add stuff to bacteria tubes, dilution tubes, and plate
         createComponent();
-        comp.dropPhageBact({ dragData: phage1 }, 'K');
-        comp.dropContentsDil({ dragData: bactContents }, 0);
+        comp.dropPhageBact({ data: phage1 }, 'K');
+        comp.dropContentsDil({ data: bactContents }, 0);
         tick();
         fixture.detectChanges();
         page.addElements();
         // add second phage
-        comp.dropPhageBact({ dragData: phage2 }, 'K');
-        comp.dropOnPlate({ dragData: dilContents });
+        comp.dropPhageBact({ data: phage2 }, 'K');
+        comp.dropOnPlate({ data: dilContents });
         tick();
         fixture.detectChanges();
         click(page.clearPlateButton);
@@ -755,7 +757,8 @@ describe('Lab Room Component', () => {
 
       it('Should have empty plate', () => {
         let plateContents = page.labPlate.children;
-        expect(plateContents.length).toBe(0);
+        expect(plateContents.length).toBe(1);
+        expect(plateContents[0].nativeElement.className).toContain('empty-plate');
       }); // end Should have empty plate
     }); // end Test clear plate
 
@@ -763,14 +766,14 @@ describe('Lab Room Component', () => {
       beforeEach(fakeAsync(() => {
         // add stuff to bacteria tubes, dilution tubes, and plate
         createComponent();
-        comp.dropPhageBact({ dragData: phage1 }, 'K');
-        comp.dropContentsDil({ dragData: bactContents }, 0);
+        comp.dropPhageBact({ data: phage1 }, 'K');
+        comp.dropContentsDil({ data: bactContents }, 0);
         tick();
         fixture.detectChanges();
         page.addElements();
         // add second phage
-        comp.dropPhageBact({ dragData: phage2 }, 'K');
-        comp.dropOnPlate({ dragData: dilContents });
+        comp.dropPhageBact({ data: phage2 }, 'K');
+        comp.dropOnPlate({ data: dilContents });
         tick();
         fixture.detectChanges();
         click(page.clearAllButton);
@@ -794,7 +797,8 @@ describe('Lab Room Component', () => {
 
       it('Should have empty plate', () => {
         let plateContents = page.labPlate.children;
-        expect(plateContents.length).toBe(0);
+        expect(plateContents.length).toBe(1);
+        expect(plateContents[0].nativeElement.className).toContain('empty-plate');
       }); // end Should have empty plate
     }); // end Test clear all
   }); // end Test buttons

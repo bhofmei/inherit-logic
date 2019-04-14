@@ -61,6 +61,7 @@ describe('Fridge Component', ()=>{
     })); // end beforeEach fakeAsync
 
       it('Should have strain 1 empty', ()=>{
+        //console.log(page.strains[0]);
         let isEmpty = isPhageType(page.strains[0], 'empty');
         expect(isEmpty).toBe(true);
         let strainNum = page.strains[0].query(By.css('.strain-num')).nativeElement.innerHTML;
@@ -107,7 +108,7 @@ describe('Fridge Component', ()=>{
       }); // end Should have strain 5 unknown
   }); // Test phage types
 
-      describe('Test student2 scenario1', ()=>{
+describe('Test student2 scenario1', ()=>{
     let student: User;
     let scenario: Scenario;
     beforeEach(fakeAsync(()=>{
@@ -152,7 +153,7 @@ describe('Fridge Component', ()=>{
         let strainNum = strain.query(By.css('.strain-num')).nativeElement.innerHTML;
         expect(strainNum).toTemplateMatch('3');
       }); // end Should have strain 3 empty
-  }); // end Test student2 scenario1
+  }); // end Test student2 scenario1*
 
     describe('Test student2 scenario2', ()=>{
     let student: User;
@@ -348,7 +349,7 @@ describe('Fridge Component', ()=>{
 
     describe('Test drop phage', ()=>{
       beforeEach(fakeAsync(()=>{
-        let event = {dragData: testPhage1};
+        let event = {data: testPhage1};
         comp.dropStrain(event, 8);
       tick();
       fixture.detectChanges();
@@ -464,6 +465,8 @@ class Page {
       let header = fixture.debugElement.query(By.css('.card-header')).query(By.css('.card-subtitle'));
       this.practice = (header ? header.nativeElement : null);
       this.strains = fixture.debugElement.queryAll(By.css('.ls-strain'));
+      //console.log(this.strains.length);
+      //console.log(this.strains[0].nativeElement);
       let btns = fixture.debugElement.queryAll(By.css('button'));
       this.btnFirst = btns[0];
       this.btnBackward = btns[1];
@@ -488,11 +491,6 @@ function createComponent(user: User){
 
 function isPhageType(el: DebugElement, expected: string){
   let spans = el.queryAll(By.css('span'));
-  if(expected === 'empty'){return (spans.length == 1)}
-  else if(spans.length === 1){
-    // is empty but expect something
-    return false
-  }
   let cList = spans[1].nativeElement.className;
   if(expected === 'reference'){
     return (cList.search('strain-image-reference') !== -1)
@@ -500,6 +498,8 @@ function isPhageType(el: DebugElement, expected: string){
     return (cList.search('strain-image-unknown') !== -1)
   }else if(expected === 'submitted'){
     return (cList.search('strain-image-submitted') !== -1)
+  } else if(expected === 'empty'){
+    return (cList.search('strain-empty') !== -1)
   } else {
     // user type -> no special class
     return true;
