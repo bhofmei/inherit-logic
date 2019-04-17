@@ -97,17 +97,32 @@ exports.generateScenario = function (scenario) {
         scenDetails = newPhageDet.scenData;
         phageNum++;
       }
-    } else {
+    } else { // negative num to make have special properties
       let howMany = Math.abs(rPhage.numToMake);
       for (let j = 0; j < howMany; j++) {
         let newPhage;
-        if (tmpStrainList.length == 0 || randGen.randBoolFrac(1, 3, randEngine)) {
-          // create new phage
+        // create brand new phage if no phage already created
+        if (tmpStrainList.length == 0) {
           newPhageDet = this.makePhage(rPhage, phageNum, pEnum.PHAGETYPE.UNKNOWN, scenDetails);
           newPhage = newPhageDet.phage;
           scenDetails = newPhageDet.scenData;
-        } else {
-          // duplicate exisiting
+        }
+        // if frameChoice is 0, scenario is SameOrDiff2, force frame choice
+        else if (rPhage.frameshifts.frameChoice === 0){
+          let sPhage = clone(rPhage);
+          sPhage.frameshifts.frameChoice = (tmpStrainList[0]['mutationList'][0] > 0 ? 1 : -1);
+          newPhageDet = this.makePhage(sPhage, phageNum, pEnum.PHAGETYPE.UNKNOWN, scenDetails);
+          newPhage = newPhageDet.phage;
+          scenDetails = newPhageDet.scenData;
+        }
+        // else if frameChoice specified and randomly 1/3, new phage
+        else if( randGen.randBoolFrac(1, 3, randEngine) ){
+          newPhageDet = this.makePhage(rPhage, phageNum, pEnum.PHAGETYPE.UNKNOWN, scenDetails);
+          newPhage = newPhageDet.phage;
+          scenDetails = newPhageDet.scenData;
+        }
+        // else frameChoice specificed and duplicate existing
+        else {
           let pickPhage = randGen.randPick(tmpStrainList, randEngine);
           newPhage = clone(pickPhage);
           newPhage.strainNum = phageNum;
