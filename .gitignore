@@ -12,6 +12,7 @@ npm-debug.log
 config/credentials/*
 !config/credentials/*public*
 config/mendelpede/scenario.data.js
+config/cricket/scenario.data.js
 
 /config/env.production.js
 /.nyc_output/
