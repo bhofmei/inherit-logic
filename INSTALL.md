@@ -90,6 +90,14 @@ So students can't just look up the inheritance type using the config file, you'l
     inheritType: 'epiDom',
     ...
     ```
+  4. You can also customize which scenarios are available in undergraduate and graduate courses by changing `courseLevel`.
+4. Cricket also has scenario parameters and settings that can be customized.
+  1. In `config/cricket` folder, copy `scenario.data.public.js` and rename as `scenario.data.js`. You must do this step even if you don't need to make any changes.
+  2. You can override the scenario default parameters for a specific scenario such as `minStops` and `gcProb`.
+  3. You could add, remove, or update the starting phage.
+  4. In scenarios to determine if mutations are the same or different, you could force it in one direction.
+  5. Contact the developer if you have other ideas or need help.
+
 ## Initialize the database
 1. Open the mongo terminal by running `mongo`.
 2. Run `use db`, replacing *db* with the name of the MongoDB database specified in configuration above
@@ -124,3 +132,8 @@ When running the application the first time, login as the user you created direc
 3. Update password, entering `password` as the old password and make the new password a unique, secure password.
 
 If you've verified that Nodemailer is functional, you can also reset your password by navigating to the sign-in page and following the instructions for `Forget password?`
+
+## Updates
+- Most updates will work by running `git pull` to get the most up-to-date version, then rebuilding and restarting the application.
+- The scenario configuration data is loaded into MongoDB the first time the app runs. If changes are made to MendelPede or Cricket's `scenario.data.js`, either delete the corresponding table in MongoDB or update the DB entry.
+If you delete the table, the new scenario data will loaded on application restart.
