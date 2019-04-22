@@ -105,7 +105,7 @@ module.exports = [
   {
     label: 'Discovery1',
     shortCode: 'Disc1',
-    inheritType: 'homoDomLeth',
+    inheritType: 'mito | homoDomLeth | synthLeth | segDistort',
     scenType: 'discovery',
     ordOfScen: 1,
     courseLevel: courseEnum.ALL
@@ -113,7 +113,7 @@ module.exports = [
   {
     label: 'Discovery2',
     shortCode: 'Disc2',
-    inheritType: 'mito',
+    inheritType: 'mito | homoDomLeth | synthLeth | segDistort',
     scenType: 'discovery',
     ordOfScen: 2,
     courseLevel: courseEnum.ALL
@@ -121,7 +121,7 @@ module.exports = [
   {
     label: 'Discovery3',
     shortCode: 'Disc3',
-    inheritType: 'synthLeth',
+    inheritType: 'mito | homoDomLeth | synthLeth | segDistort',
     scenType: 'discovery',
     ordOfScen: 3,
     courseLevel: courseEnum.ALL
@@ -129,7 +129,7 @@ module.exports = [
   {
     label: 'Discovery4',
     shortCode: 'Disc4',
-    inheritType: 'segDistort',
+    inheritType: 'mito | homoDomLeth | synthLeth | segDistort',
     scenType: 'discovery',
     ordOfScen: 4,
     courseLevel: courseEnum.ALL
@@ -161,7 +161,7 @@ module.exports = [
   {
     label: 'Pathway1',
     shortCode: 'Path1',
-    inheritType: 'epiDup',
+    inheritType: 'epiDup | epiComp | epiRec | epiDom',
     scenType: 'pathway',
     ordOfScen: 1,
     courseLevel: courseEnum.ALL
@@ -169,7 +169,7 @@ module.exports = [
   {
     label: 'Pathway2',
     shortCode: 'Path2',
-    inheritType: 'epiComp',
+    inheritType: 'epiDup | epiComp | epiRec | epiDom',
     scenType: 'pathway',
     ordOfScen: 2,
     courseLevel: courseEnum.ALL
@@ -177,7 +177,7 @@ module.exports = [
   {
     label: 'Pathway3',
     shortCode: 'Path3',
-    inheritType: 'epiRec',
+    inheritType: 'epiDup | epiComp | epiRec | epiDom',
     scenType: 'pathway',
     ordOfScen: 3,
     courseLevel: courseEnum.ALL
@@ -185,7 +185,7 @@ module.exports = [
   {
     label: 'Pathway4',
     shortCode: 'Path4',
-    inheritType: 'epiDom',
+    inheritType: 'epiDup | epiComp | epiRec | epiDom',
     scenType: 'pathway',
     ordOfScen: 4,
     courseLevel: courseEnum.ALL

@@ -4,7 +4,8 @@
       <label class="tb-lab-label font-italic" for="bact-tubes" title="Bacteria to grow phage in">E. coli</label>
       <div class="row h-100" id="bact-tubes">
         <div id="bact-tube-B" [ngClass]="getClassesBact('B')" title="On E. coli B, rIIb mutants make Big plaques and rIIb wild type phage make small plaques.">
-          <div class="test-tube-inner" select-droppable [selectEnabled]="canDragBact()" [selectData]="getDataBact('B')" (onDropSuccess)="dropPhageBact($event, 'B')">
+          <div class="test-tube-inner" select-droppable [selectEnabled]="canDragBact()"
+          [selectData]="getDataBact('B')" (onDropSuccess)="dropPhageBact($event, 'B')">
             <span class="coli">B</span><br>
             <div *ngIf="this.phage.length>0" class="phage-label-1 text-dark">{{phage[0].strainNum+1}}</div>
             <div *ngIf="this.phage.length>1" class="phage-label-2 text-dark">{{phage[1].strainNum+1}}</div>
@@ -13,7 +14,8 @@
         </div>
         <!-- end bact-tube-b -->
         <div id="bact-tube-K" [ngClass]="getClassesBact('K')" title="On E. coli K, rIIb mutants make no plaques and rIIb wild type phage make small plaques.">
-          <div class="test-tube-inner" select-droppable [selectEnabled]="canDragBact()" [selectData]="getDataBact('K')" (onDropSuccess)="dropPhageBact($event, 'K')">
+          <div class="test-tube-inner" select-droppable [selectEnabled]="canDragBact()"
+          [selectData]="getDataBact('K')" (onDropSuccess)="dropPhageBact($event, 'K')">
             <span class="coli">K</span><br>
             <div *ngIf="this.phage.length>0" class="phage-label-1 text-dark">{{phage[0].strainNum+1}}</div>
             <div *ngIf="this.phage.length>1" class="phage-label-2 text-dark">{{phage[1].strainNum+1}}</div>

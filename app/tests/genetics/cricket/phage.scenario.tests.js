@@ -187,7 +187,7 @@ describe('Scenario phage creator unit tests: ', () => {
           n = 20;
       let scen2 = clone(scenario);
       scen2.referencePhage = [scenDefaults.wildtypePhage];
-      scen2.otherPhage = ['{"numToMake": -2, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "always", "readable": "any"}, "deletion": false, "comment": "Phage containing a single frameshift mutation"}'];
+      scen2.otherPhage = ['{"numToMake": -2, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "always", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Phage containing a single frameshift mutation"}'];
       for(let i = 0; i < n; i++){
         var scenOutput = phageScen.generateScenario(scen2);
         scenOutput.should.be.an.Object();
@@ -207,6 +207,30 @@ describe('Scenario phage creator unit tests: ', () => {
       diff.should.not.equal(0);
 
     }); // Should be able to create same and diff for scenario
+
+    it('Should create same sign for scenario', ()=>{
+      let same = 0,
+          diff = 0,
+          n = 20;
+      let scen3 = clone(scenario);
+      scen3.referencePhage = [scenDefaults.wildtypePhage];
+      scen3.otherPhage = ['{"numToMake": -2, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice":0}, "deletion": false, "comment": "Phage containing a single frameshift mutation"}'];
+      for(let i = 0; i < n; i++){
+      var scenOutput = phageScen.generateScenario(scen3);
+      scenOutput.strainList.should.have.length(3);
+      let p1 = scenOutput.strainList[1].mutationList[0];
+      let p2 = scenOutput.strainList[2].mutationList[0];
+      if((p1 > 0 && p2 > 0) || (p1 < 0 && p2 < 0)){
+        same++;
+      }else if ((p1 > 0 && p2 <0) || (p1 < 0 && p2 > 0)){
+        diff++;
+      }else{
+        console.log('ERROR', p1, p2);
+      }
+    }
+    same.should.equal(n);
+    diff.should.equal(0);
+    }); // end Should create same sign for scenario
 
   });
 });

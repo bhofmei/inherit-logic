@@ -39,7 +39,7 @@ describe('List Component', ()=>{
     })); // end beforeEach fakeAsync
 
     it('Should have header', ()=>{
-      expect(page.header.innerHTML).toBe('Available Scenarios');
+      expect(page.header.innerHTML).toBe('Cricket Scenarios');
     }); // end Should have header
 
     it('Should have two scenarios', ()=>{
@@ -73,7 +73,7 @@ describe('List Component', ()=>{
     })); // end beforeEach fakeAsync
 
     it('Should have header', ()=>{
-      expect(page.header.innerHTML).toBe('Available Scenarios');
+      expect(page.header.innerHTML).toBe('Cricket Scenarios');
     }); // end Should have header
 
     it('Should not have scenarios', ()=>{

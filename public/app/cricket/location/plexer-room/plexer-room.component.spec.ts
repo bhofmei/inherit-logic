@@ -120,7 +120,7 @@ describe('Plexer Room Component', ()=>{
 
       it('Should add to column', fakeAsync(()=>{
         let phageToAdd = listOfPhage[0];
-        comp.addPhage({dragData: phageToAdd}, 'col', 0);
+        comp.addPhage({data: phageToAdd}, 'col', 0);
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -131,7 +131,7 @@ describe('Plexer Room Component', ()=>{
 
       it('Should add to column', fakeAsync(()=>{
         let phageToAdd = listOfPhage[0];
-        comp.addPhage({dragData: phageToAdd}, 'col', 0);
+        comp.addPhage({data: phageToAdd}, 'col', 0);
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -142,7 +142,7 @@ describe('Plexer Room Component', ()=>{
 
       it('Should add to row', fakeAsync(()=>{
         let phageToAdd = listOfPhage[1];
-        comp.addPhage({dragData: phageToAdd}, 'row', 4);
+        comp.addPhage({data: phageToAdd}, 'row', 4);
         tick();
         fixture.detectChanges();
         page.addElements();
@@ -154,10 +154,10 @@ describe('Plexer Room Component', ()=>{
       describe('Test add to both', ()=>{
         beforeEach(fakeAsync(()=>{
           let phageToAdd1 = listOfPhage[0];
-          comp.addPhage({dragData: phageToAdd1}, 'col', 1);
+          comp.addPhage({data: phageToAdd1}, 'col', 1);
           tick();
           let phageToAdd2 = listOfPhage[1];
-          comp.addPhage({dragData: phageToAdd2}, 'row', 2);
+          comp.addPhage({data: phageToAdd2}, 'row', 2);
           tick();
           fixture.detectChanges();
           page.addElements();
@@ -196,19 +196,19 @@ describe('Plexer Room Component', ()=>{
         // a1, a0, b3 x a4, b3
         beforeEach(fakeAsync(()=>{
           createComponent();
-          comp.addPhage({dragData: phageA1}, 'row', 0);
+          comp.addPhage({data: phageA1}, 'row', 0);
           tick();
           fixture.detectChanges();
-          comp.addPhage({dragData: phageA0}, 'row', 1);
+          comp.addPhage({data: phageA0}, 'row', 1);
           tick();
           fixture.detectChanges();
-          comp.addPhage({dragData: phageB3}, 'row', 2);
+          comp.addPhage({data: phageB3}, 'row', 2);
           tick();
           fixture.detectChanges();
-          comp.addPhage({dragData: phageA4}, 'col', 0);
+          comp.addPhage({data: phageA4}, 'col', 0);
           tick();
           fixture.detectChanges();
-          comp.addPhage({dragData: phageB3}, 'col', 1);
+          comp.addPhage({data: phageB3}, 'col', 1);
           tick();
           fixture.detectChanges();
           page.addElements();
@@ -273,19 +273,19 @@ describe('Plexer Room Component', ()=>{
         // a0, a1 x a4, b2, b3
         beforeEach(fakeAsync(()=>{
           createComponent();
-          comp.addPhage({dragData: phageA0}, 'row', 0);
+          comp.addPhage({data: phageA0}, 'row', 0);
           tick();
           fixture.detectChanges();
-          comp.addPhage({dragData: phageA1}, 'row', 2);
+          comp.addPhage({data: phageA1}, 'row', 2);
           tick();
           fixture.detectChanges();
-          comp.addPhage({dragData: phageB2}, 'col', 2);
+          comp.addPhage({data: phageB2}, 'col', 2);
           tick();
           fixture.detectChanges();
-          comp.addPhage({dragData: phageA4}, 'col', 0);
+          comp.addPhage({data: phageA4}, 'col', 0);
           tick();
           fixture.detectChanges();
-          comp.addPhage({dragData: phageB3}, 'col', 3);
+          comp.addPhage({data: phageB3}, 'col', 3);
           tick();
           fixture.detectChanges();
           page.addElements();
@@ -379,7 +379,7 @@ describe('Plexer Room Component', ()=>{
       tick();
       fixture.detectChanges();
       // add phage
-      comp.addPhage({dragData: phageToAdd}, 'row', 0);
+      comp.addPhage({data: phageToAdd}, 'row', 0);
       tick();
       fixture.detectChanges();
       page.addElements();
