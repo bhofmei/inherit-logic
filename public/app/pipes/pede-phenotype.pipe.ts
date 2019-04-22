@@ -6,11 +6,12 @@ import { Pipe, PipeTransform } from '@angular/core';
  *
  * **Usage:** `{{ phenoList | pedePhenotype }}`
  *
- * @example <caption>Normal output :  </caption>
- * code>0</code> becomes "aa"
- * <code>1</code> becomes "Aa"
- * <code>3</code> becomes "Aa"
- * <code>4</code> becomes "AA"
+ * @example 4 elements in phenoList: [ "Yellow", "Red", "LightGreen", "2", "1" ]
+ * "Yellow" is Dot color
+ * "Red" is Eye color
+ * "LightGreen" is segment color
+ * "2" is no of legs
+ * "1" is no of segments
  */
 @Pipe({name: 'pedePhenotype'})
 export class PedePhenotypePipe implements PipeTransform {

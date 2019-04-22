@@ -1,24 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 /**
- * Format a MendelPede's genotype as A and a alleles
- * - When multAllele/multGenes, uses A^0, A^1, A^2
+ * Format a quiz trait code to user displayable string
  *
- * **Usage:** `{{ genotypeNum | pedeGenotype:scenCode }}`
+ * **Usage:** `{{ quizTrait | pedeQuizTrait }}`
  *
  * @example <caption>Normal output :  </caption>
- * code>0</code> becomes "aa"
- * <code>1</code> becomes "Aa"
- * <code>3</code> becomes "Aa"
- * <code>4</code> becomes "AA"
- * @example <caption>Multiple Allele output :  </caption>
- * code>0</code> becomes "A^0A^0"
- * <code>1</code> becomes "A^1A^0"
- * <code>2</code> becomes "A^2A^0"
- * <code>5</code> becomes "A^2A^1"
- * <code>8</code> becomes "A^2A^2"
- * @example <caption>Invalid :  </caption>
- * <code>10</code> becomes "invalid"
+ * "DotColor" to "Color of Dot"
+ * "NumLegs" to "Number of Legs"
  */
 @Pipe({name: 'pedeQuizTrait'})
 export class PedeQuizTraitPipe implements PipeTransform {
