@@ -57,7 +57,7 @@ So students can't just look up the inheritance type using the config file, you'l
     2. Find the section where Discovery 1 - 4 are described (line 106-136).
         - For each discovery, the `inhertType` is currently set as `mito | homoDomLeth | synthLeth | segDistort`.
         - Assign each discovery one of those inheritance types such that each discovery has a unique inheritance type. For example,
-    ```
+          ```
     ...
     shortCode: 'Disc1',
     inheritType: 'segDistort'
@@ -71,11 +71,11 @@ So students can't just look up the inheritance type using the config file, you'l
     shortCode: 'Disc4',
     inheritType: 'homoDomLeth',
     ...
-    ```
+           ```
     3. Similarly, find the section where Pathway 1-4 are described (line 161-192).
         - For each pathway, the `inheritType` is currently set as `epiDup | epiComp | epiRec | epiDom`.
         - Assign each pathway one of those inheritance types such that each pathway has a unique inheritance type. For example,
-    ```
+         ```
     ...
     shortCode: 'Path1',
     inheritType: 'epiComp'
@@ -89,7 +89,7 @@ So students can't just look up the inheritance type using the config file, you'l
     shortCode: 'Path4',
     inheritType: 'epiDom',
     ...
-    ```
+         ```
     4. You can also customize which scenarios are available in undergraduate and graduate courses by changing `courseLevel`.
 4. Cricket also has scenario parameters and settings that can be customized.
     1. In `config/cricket` folder, copy `scenario.data.public.js` and rename as `scenario.data.js`. You must do this step even if you don't need to make any changes.
@@ -103,16 +103,16 @@ So students can't just look up the inheritance type using the config file, you'l
 2. Run `use db`, replacing *db* with the name of the MongoDB database specified in configuration above
 3. Create the default course.
     1. Run
-```
-db.courses.insert({courseNum: "NA", courseDescription: "default course"})
-```
+        ```
+        db.courses.insert({courseNum: "NA", courseDescription: "default course"})
+        ```
     2. If this worked you'll get the response `WriteResult({ "nInserted" : 1 })`.
     3. Run `db.courses.find({})` to get the course object ID `"_id":ObjectId("...")`
 4. Create first admin user.
     1. Run the following command, replacing *firstName*, *lastName*, and *email* with your information and use the course object ID found from above. **Do not change the password at this time!**
-  ```
+    ```
 db.users.insert({firstName:"First", lastName:"Last", email:"test@email.com", "course": ObjectId("..."), password: "$2a$10$/JljmqqPzF3TY810mSd5oOVJhhcLB7tLv8.BHFJh8MvGPcDaxAerK", accessGranted:{ "WTorMute":false, "ThreeOther":false, "SameOrDiff1":false, "OneEach":false, "WhoMiddle":false, "CombineTwo":false, "MapDelete":false, "ProveCode":false, "FindStop":false, "SameOrDiff2":false, "HowMany":false }, userId: 1, role: "admin"})
-  ```
+    ```
     2. If it worked, you'll get the response `WriteResult({ "nInserted" : 1 })`.
     3. You can double check the user was created by running `db.users.find({})` and you'll see the new user.
 5. This user information/password will need to be changed upon first log-in. See below.

@@ -53,7 +53,7 @@ module.exports = [
     relevance: "Two mutant phage with the same phenotype do not necessarily have the same genotype. It’s important to be able to differentiate between specific mutations, especially when trying to construct phage mutants with multiple +1 frameshifts.",
     startingPoint: "You are given two +1 frameshift mutant phage. Your task is to determine whether they both possess identical frameshift mutations (the +1 frameshift in the same exact position), or if they have different frameshift mutations.",
     referencePhage: [scenDefaults.wildtypePhage],
-    otherPhage: ['{"numToMake": -2, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "always", "readable": "any"}, "deletion": false, "comment": "Phage containing a single frameshift mutation"}']
+    otherPhage: ['{"numToMake": -2, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "always", "readable": "any", "frameChoice": 1}, "deletion": false, "comment": "Phage containing a single frameshift mutation"}']
   },
   {
     label: "Recover each single mutant from a double mutant",
@@ -179,7 +179,7 @@ module.exports = [
     relevance: "Exercising your skills in mutant isolation and putting your understanding of frameshifts and translation to the test. Think hard and make sure your conclusions are airtight. To get credit, your strategy must be robust.",
     startingPoint: "A wild-type phage as reference, and two mutant phage containing different mutations that may or may not be of the same sign.",
     referencePhage: [scenDefaults.wildtypePhage],
-    otherPhage: ['{"numToMake": 2, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 0}, "deletion": false, "comment": "Mutant phage containing a single frameshift mutation"}']
+    otherPhage: ['{"numToMake": -2, "isWildType": false, "frameshifts": {"howMany": [1,1], "mixed": "never", "readable": "any", "frameChoice": 0}, "deletion": false, "comment": "Mutant phage containing a single frameshift mutation"}']
   },
   {
     label: "How many mutations?",

@@ -9,7 +9,8 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "back:docs": "./add-doc/gen-backend-docs.sh",
-    "ng:docs": "./node_modules/.bin/compodoc public -p tsconfig.doc.json -d docs --includes add-doc --includesName 'Backend Documentation' -t -n Cricket --disableDomTree --hideGenerator --customFavicon ./public/img/cricket-docs.png --templates ./templates --unitTestCoverage coverage/angular-coverage-summary.json",
+    "ng:docs": "./node_modules/.bin/compodoc public -p tsconfig.doc.json -d docs --includes add-doc --includesName 'Backend Documentation' -t -n 'Inherit Logic' --disableDomTree --hideGenerator --customFavicon ./public/img/logos/inherit-logic-docs.png --templates ./templates --unitTestCoverage coverage/angular-coverage-summary.json",
+    "ng:docs2": "./node_modules/.bin/compodoc public -t -c .compodocrc.json",
     "docs": "yarn run back:docs; yarn run ng:docs",
     "webpack": "webpack --watch --config webpack.dev.js",
     "webpack:p": "webpack --config webpack.prod.js",
@@ -19,7 +20,7 @@
     "test:back": "NODE_ENV=test mocha --recursive --reporter spec -t 5000 app/tests/",
     "test:server": "NODE_ENV=test mocha --reporter spec -t 5000 app/tests/",
     "test:cricket": "NODE_ENV=test mocha --reporter spec app/tests/cricket",
-    "test:cricket-genetics": "NODE_ENV=test mocha --reporter spec app/tests/cricket/genetics",
+    "test:cricket-genetics": "NODE_ENV=test mocha --reporter spec app/tests/genetics/cricket",
     "test:mendelpede": "NODE_ENV=test mocha --reporter spec app/tests/mendelpede",
     "test:ng": "karma start",
     "cov:back": "NODE_ENV=test nyc --reporter=json-summary mocha --recursive --reporter spec -t 5000 app/tests/"

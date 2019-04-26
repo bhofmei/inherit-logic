@@ -8,6 +8,8 @@ the concepts through problem-solving.
 
 ![Home page](public/img/home.png)
 
+**Demo coming soon. For a walk-through of the app, see [about](ABOUT.md).**
+
 ## Cricket
 
 Follow the footsteps of Crick *et al.* as they deduce the 3-letter nature of the code

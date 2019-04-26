@@ -20,13 +20,13 @@ testing.TestBed.initTestEnvironment(
   browser.platformBrowserDynamicTesting()
 );
 
-var testContext = require.context('./public/app/admin/student', true, /.spec\.ts/)
+var testContext = require.context('./public/app/authentication', true, /.spec\.ts/)
 
 function requireAll(requireContext) {
   return requireContext.keys()
     .map(requireContext);
 }
 
-//var modules = requireAll(testContext);
-var modules = [require('./public/app/admin/course/course-scenario/course-scenario.component.spec')];
+var modules = requireAll(testContext);
+//var modules = [require('./public/app/cricket/location/plexer-room/plexer-room.component.spec')];
 //var modules = [require('./public/app/authentication/reset-password/reset-password.component.spec')];
