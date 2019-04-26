@@ -9,10 +9,11 @@ import { StudentIndivComponent } from './student-indiv.component';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { StudentService } from '../student.service';
 import { CricketService } from '../../../cricket/cricket.service';
+import { MendelpedeScenarioService } from '../../../mendelpede/scenarios/mendelpede-scenarios.service';
 
 import { User, AdminStudent, _User, Scenario } from '../../../interfaces';
 import { userAdmin, userInstr, sampleCourse, listOfCourses, listOfScenarios, listOfStudents, listOfUsers } from '../../../testing/sample-data';
-import { StudentServiceStub, AuthServiceStub, CricketServiceStub } from '../../../testing/service-stubs';
+import { StudentServiceStub, AuthServiceStub, CricketServiceStub, MendelpedeServiceStub } from '../../../testing/service-stubs';
 
 class StudentIndivTestComponent extends StudentIndivComponent {
   checkDelete(){
@@ -43,6 +44,7 @@ describe('Student Indiv Component', ()=>{
         {provide: StudentService, useClass: StudentServiceStub},
         {provide: AuthenticationService, useClass: AuthServiceStub},
         {provide: CricketService, useClass: CricketServiceStub},
+        {provide: MendelpedeScenarioService, useClass: MendelpedeServiceStub},
         {provide: Router, useValue: route}
       ]
     }).compileComponents();
@@ -62,6 +64,7 @@ describe('Student Indiv Component', ()=>{
 
     describe('Test view elements', ()=>{
       it('Should display student name', ()=>{
+        console.log(page.scenarioLabels);
         let n = page.studentName.innerHTML;
         n = n.replace(/^(\s|\n|\t)+|(\s|\n|\t)+$/g, '');
         expect(n).toBe(expected.firstName + ' ' + expected.lastName);

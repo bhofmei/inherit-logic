@@ -9,10 +9,11 @@ import { CourseIndivComponent } from './course-indiv.component';
 import { AuthenticationService } from '../../../authentication/authentication.service';
 import { CourseService } from '../course.service';
 import { CricketService } from '../../../cricket/cricket.service';
+import { MendelpedeScenarioService } from '../../../mendelpede/scenarios/mendelpede-scenarios.service';
 
 import { User, Course, _User, Scenario } from '../../../interfaces';
 import { userAdmin, sampleCourse, sampleScenario, listOfCourses } from '../../../testing/sample-data';
-import { CourseServiceStub } from '../../../testing/service-stubs';
+import { CourseServiceStub, MendelpedeServiceStub } from '../../../testing/service-stubs';
 
 // Testing variables
 let activatedRoute: ActivatedRouteStub;
@@ -32,6 +33,7 @@ describe('Course Indiv Component', ()=>{
         {provide: CourseService, useClass: CourseServiceStub},
         {provide: AuthenticationService, useClass: AuthServiceStub},
         {provide: CricketService, useClass: CricketServiceStub},
+        {provide: MendelpedeScenarioService, useClass: MendelpedeServiceStub},
         {provide: Router, useClass: RouterStub}
       ]
     }).compileComponents();
@@ -98,7 +100,7 @@ describe('Course Indiv Component', ()=>{
     it('Should have scenario links', ()=>{
       let scenDE = fixture.debugElement.query(By.css('#statusByScenario'));
       let scenLinks = getAllRouterLinks(scenDE);
-      expect(scenLinks.length).toBe(1);
+      expect(scenLinks.length).toBe(5);
       expect(scenLinks[0].linkParams[1]).toBe(sampleScenario.scenCode);
 
     }); // end Should have scenario links
