@@ -20,7 +20,7 @@ testing.TestBed.initTestEnvironment(
   browser.platformBrowserDynamicTesting()
 );
 
-var testContext = require.context('./public/app/authentication', true, /.spec\.ts/)
+var testContext = require.context('./public/app/mendelpede', true, /.spec\.ts/)
 
 function requireAll(requireContext) {
   return requireContext.keys()
