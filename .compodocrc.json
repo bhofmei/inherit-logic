@@ -1,0 +1,13 @@
+{
+  "tsconfig": "tsconfig.doc.json",
+  "output": "docs",
+  "assetsFolder": "./public/img/",
+  "includes": "add-doc",
+  "includesName":"Backend Documentation",
+  "name":"Inherit Logic",
+  "disableDomTree":true,
+  "hideGenerator": true,
+  "customFavicon":"./public/img/logos/inherit-logic-docs.png",
+  "templates":"./templates",
+  "unitTestCoverage":"coverage/angular-coverage-summary.json"
+}

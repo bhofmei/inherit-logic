@@ -17,5 +17,3 @@ config/cricket/scenario.data.js
 /config/env.production.js
 /.nyc_output/
 coverage/**/html/*
-/docs/
-/docs2/
