@@ -82,7 +82,8 @@
                 <span *ngIf="pedes[pedes.length-1].isFemale === 'M'" class="text-info">M</span>
               </div>
               <div [ngClass]="{'col-12 col-sm-6 col-md-12 p-0': true, 'col-lg-6':!isQuiz, 'col-xl-6':isQuiz}">
-                <div [ngClass]="getMendelpede(pedes[pedes.length-1].phenotype)"></div>
+                <!--<div [ngClass]="getMendelpede(pedes[pedes.length-1].phenotype)"></div>-->
+                <div [className]="pedes[pedes.length-1].phenotype | pedeImage"></div>
               </div>
             </div> <!-- end not null -->
             <div *ngIf="pedes[pedes.length-1].phenotype === null" class="row p-0">
