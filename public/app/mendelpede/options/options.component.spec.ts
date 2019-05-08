@@ -48,8 +48,8 @@ describe('List Component', ()=>{
     }); // end Should have header
     
     it('Should have three scenarios', ()=>{
-      expect(page.links.length).toBe(3);
-      expect(page.labels.length).toBe(3);
+      expect(page.links.length).toBe(4);
+      expect(page.labels.length).toBe(4);
     }); // end Should have two scenarios
 
     it('Should have scenario 1', ()=>{

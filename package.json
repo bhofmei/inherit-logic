@@ -9,8 +9,7 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "back:docs": "./add-doc/gen-backend-docs.sh",
-    "ng:docs": "./node_modules/.bin/compodoc public -p tsconfig.doc.json -d docs --includes add-doc --includesName 'Backend Documentation' -t -n 'Inherit Logic' --disableDomTree --hideGenerator --customFavicon ./public/img/logos/inherit-logic-docs.png --templates ./templates --unitTestCoverage coverage/angular-coverage-summary.json",
-    "ng:docs2": "./node_modules/.bin/compodoc public -t -c .compodocrc.json",
+    "ng:docs": "./node_modules/.bin/compodoc public -t -c .compodocrc.json",
     "docs": "yarn run back:docs; yarn run ng:docs",
     "webpack": "webpack --watch --config webpack.dev.js",
     "webpack:p": "webpack --config webpack.prod.js",

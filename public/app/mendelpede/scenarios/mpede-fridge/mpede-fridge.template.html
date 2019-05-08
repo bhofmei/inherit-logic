@@ -21,7 +21,7 @@
               </div>
               <div [ngClass]="{'col-12 p-0':true, 'col-lg-6':!isQuiz, 'col-xl-6':isQuiz}">
                 <!--<div id="fridge-pedes" [ngClass]="getMendelpede(pede[0].phenotype)" (click)="sendPede(pede[0])"></div> -->
-                <div [className]="pede[0].phenotype | pedeImage"></div>
+                <div id="fridge-pedes" [className]="pede[0].phenotype | pedeImage" (click)="sendPede(pede[0])"></div>
               </div>
             </div> <!-- end not null -->
             <div id="bugId" *ngIf="pede[0].phenotype === null" class="mpede-empty row p-0">
@@ -38,7 +38,7 @@
               </div>
               <div [ngClass]="{'col-12 p-0':true, 'col-lg-6':!isQuiz, 'col-xl-6':isQuiz}">
                 <!--<div id="fridge-pedes" [ngClass]="getMendelpede(pede[1].phenotype)" (click)="sendPede(pede[1])"></div>-->
-                <div [className]="pede[1].phenotype | pedeImage"></div>
+                <div id="fridge-pedes" [className]="pede[1].phenotype | pedeImage" (click)="sendPede(pede[1])"></div>
               </div>
             </div> <!-- end not null -->
             <div id="bugId" *ngIf="pede[1].phenotype === null" class="mpede-empty row p-0">

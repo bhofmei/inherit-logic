@@ -1,3 +1,10 @@
+/**
+ * The controller which performs genetic crosses
+ * @module mendelpede/genetics.server.controller
+ * @name MendelPede Genetics Controller
+ * @type Controller
+*/
+
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const MendelPede = mongoose.model('MendelPede');
@@ -59,7 +66,7 @@ exports.calculateQuizScore = function(req, res){
   var quizPedes = reqBody.quizPedes;
   var studentAnswers = reqBody.studentAnswers;
   var fridgeId = reqBody.fridgeId
-  
+
   var gradedQuiz = []
   for (let i = 0; i < quizPedes.length; i++){
     quizPedes[i]['genotype'] = JSON.parse(cryptr.decrypt(quizPedes[i]['genotype']));

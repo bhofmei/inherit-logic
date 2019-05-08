@@ -14,6 +14,7 @@ import { AuthenticationService } from '../../../authentication/authentication.se
 import { MendelpedeFridge, MendelpedePede, MendelpedeScenario } from '../../../interfaces';
 import { listOfMendelpedes, listOfMendelScenarios } from '../../../testing/mendelpede-sample-data';
 import { MendelpedeServiceStub, AuthServiceStub  } from '../../../testing/service-stubs';
+import { PedeImagePipe } from '../../../pipes/pede-image.pipe';
 
 class MendelpedeFridgeTestComponent extends MendelpedeFridgeComponent {
   // so we have access to internal properties
@@ -43,13 +44,14 @@ describe('Mendelpede Fridge Component', () => {
         { provide: AuthenticationService, useClass: AuthServiceStub },
         {provide: ActivatedRoute, useValue: activateRoute},
         {provide: Router, useValue: route},
+        {provide: PedeImagePipe, useValue: PedeImagePipe}
       ]
     }).compileComponents();
   })); // end beforeEach async
-  
+
   describe('Test Fridge initial UI', () => {
     let scenario: MendelpedeScenario;
-    
+
     beforeEach(fakeAsync(() => {
       scenario = listOfMendelScenarios[0];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
@@ -85,7 +87,7 @@ describe('Mendelpede Fridge Component', () => {
   }); // end Test Fridge initial UI
   describe('Test Fridge initial UI (Quiz)', () => {
     let scenario: MendelpedeScenario;
-    
+
     beforeEach(fakeAsync(() => {
       scenario = listOfMendelScenarios[2];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
@@ -100,7 +102,7 @@ describe('Mendelpede Fridge Component', () => {
     it('should have 8 mendelpedes test1', () => {
       expect(page.pedes.length).toBe(8);
     }) // end should have 8 mendelpedes test1
-    
+
     it('should have 8 mendelpedes test2', () => {
       expect(comp.pedeList[8].genotype).toBeNull();
     }) // should have 8 mendelpedes test2
@@ -195,7 +197,7 @@ describe('Mendelpede Fridge Component', () => {
 
   describe('Test send pede (Click on mendelpede)', () => {
     let scenario: MendelpedeScenario;
-    
+
     beforeEach(fakeAsync(() => {
       scenario = listOfMendelScenarios[0];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
@@ -218,10 +220,10 @@ describe('Mendelpede Fridge Component', () => {
     })); // end should click on pede
 
   }); // end Test send pede (Click on mendelpede)
-  
+
   describe('Test store pede', () => {
     let scenario: MendelpedeScenario;
-    
+
     beforeEach(fakeAsync(() => {
       scenario = listOfMendelScenarios[0];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
@@ -235,6 +237,8 @@ describe('Mendelpede Fridge Component', () => {
 
     it('should store pede in fridge', fakeAsync(() => {
       comp.storePede(listOfMendelpedes[11]);
+      console.log(page.pedesWithBugIds.length);
+      console.log(page.pedes.length);
       let bugId = page.pedesWithBugIds[6].nativeElement.innerHTML;
       expect(bugId).not.toBe(11);
     })); // end should store pede in fridge
@@ -243,14 +247,13 @@ describe('Mendelpede Fridge Component', () => {
 
   describe('Test delete pede', () => {
     let scenario: MendelpedeScenario;
-    
+
     beforeEach(fakeAsync(() => {
       scenario = listOfMendelScenarios[0];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
       createComponent();
       comp.storePede(listOfMendelpedes[11]);
       comp.storePede(listOfMendelpedes[7]);
-      //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
       page.addElements();
       addMatchers();
@@ -258,9 +261,11 @@ describe('Mendelpede Fridge Component', () => {
     })); // end beforeEach fakeAsync
 
     it('should delete stored pede', fakeAsync(() => {
+
       console.log(comp.pedeList[7].canDelete);
-      console.log(page.deleteButtons[6]);
-      click(page.deleteButtons[6]);
+      console.log(page.pedes.length);
+      console.log(page.deleteButtons.length)
+      click(page.deleteButtons[7]);
       tick();
       page.addElements();
       addMatchers();
@@ -268,7 +273,7 @@ describe('Mendelpede Fridge Component', () => {
       //comp.deletePede(comp.pedeList[6]);
       expect(comp.pedeList[6].phenotype).toBeNull();
     })); // end should delete stored pede
-    
+
     it('should delete stored pede at the location only', () => {
       comp.storePede(listOfMendelpedes[11]);
       comp.storePede(listOfMendelpedes[14]);
@@ -278,23 +283,6 @@ describe('Mendelpede Fridge Component', () => {
     }); // end should delete stored pede at the location only
 
   }); // end Test delete pede
-  describe('Test css class for mendelpede image', () => {
-    let scenario: MendelpedeScenario;
-    
-    beforeEach(fakeAsync(() => {
-      scenario = listOfMendelScenarios[0];
-      activateRoute.testParams = {scenShortCode: scenario.shortCode};
-      createComponent();
-      //comp.dropPhageBact({ dragData: dropPhage }, 'B');
-      tick();
-      page.addElements();
-      addMatchers();
-      fixture.detectChanges();
-    })); // end beforeEach fakeAsync
-    it('should have correct css class', () => {
-      expect(comp.getMendelpede([ "Yellow", "Red", "LightGreen", "2", "1" ])).not.toBeNull();
-    }); //end should have correct css class
-  }); // end Test css class for mendelpede image
 }); // end Mendelpede Fridge Component
 
 class Page {
@@ -333,7 +321,6 @@ class Page {
       this.btnBackward = btns[1];
       this.btnForward = btns[2];
       this.btnLast = btns[3];
-
       this.deleteButtons = fixture.debugElement.queryAll(By.css('.oi-trash'));
     }
 

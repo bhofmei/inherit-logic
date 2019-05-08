@@ -14,6 +14,7 @@ import { AuthenticationService } from '../../../authentication/authentication.se
 import { MendelpedeFridge, MendelpedePede, MendelpedeScenario } from '../../../interfaces';
 import { listOfMendelpedes, listOfMendelScenarios } from '../../../testing/mendelpede-sample-data';
 import { MendelpedeServiceStub, AuthServiceStub  } from '../../../testing/service-stubs';
+import { PedeImagePipe } from '../../../pipes/pede-image.pipe';
 
 class MendelpedeLabRoomTestComponent extends MendelpedeLabroomComponent {
   // so we have access to internal properties
@@ -42,6 +43,7 @@ describe('Mendelpede Lab Room Component', () => {
         { provide: AuthenticationService, useClass: AuthServiceStub },
         {provide: ActivatedRoute, useValue: activateRoute},
         {provide: Router, useValue: route},
+        {provide: PedeImagePipe, useValue: PedeImagePipe}
       ]
     }).compileComponents();
   })); // end beforeEach async
@@ -329,29 +331,6 @@ describe('Mendelpede Lab Room Component', () => {
       expect(storagePedeBugId).toBeNull();
     })); // end should undo by removing pede from storage
   }); // end Test Undo button
-
-  describe('Test css class for mendelpede image', () => {
-    let malePede: MendelpedePede;
-    let femalePede: MendelpedePede;
-    let scenario: MendelpedeScenario;
-    beforeEach(fakeAsync(() => {
-      scenario = listOfMendelScenarios[0];
-      malePede = listOfMendelpedes[1];
-      femalePede = listOfMendelpedes[0];
-      createComponent();
-      activateRoute.testParams = {scenShortCode: scenario.shortCode};
-      //comp.dropPhageBact({ dragData: dropPhage }, 'B');
-      tick();
-      fixture.detectChanges();
-      //page.addElements();
-      //addMatchers();
-      comp.dropPede(malePede);
-      comp.dropPede(femalePede);
-    })); // end beforeEach fakeAsync
-    it('should have correct css class', () => {
-      expect(comp.getMendelpede([ "Yellow", "Red", "LightGreen", "2", "1" ])).not.toBeNull();
-    }); //end should have correct css class
-  }); // end Test css class for mendelpede image
 
   describe('Test store button for mendelpede labroom', () => {
     let malePede: MendelpedePede;

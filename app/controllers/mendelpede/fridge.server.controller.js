@@ -1,7 +1,7 @@
 /**
  * The Mendelpede Fridge-related controller functions
  * @module mendelpede/fridge.server.controller
- * @name mendelpede Fridge Controller
+ * @name MendelPede Fridge Controller
  * @type Controller
  */
 
@@ -452,7 +452,7 @@ exports.findFridgeByScenOwner = function (req, res, next) {
 };
 
 /**
- * Delete a Mendelpede from fridge 
+ * Delete a Mendelpede from fridge
  * @protected
  * @apiPath /api/mendelpede/:userId/:scenShortCode/:mendelPedeId
  * @param {Object} req - Express request object

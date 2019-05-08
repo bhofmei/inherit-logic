@@ -27,6 +27,6 @@ function requireAll(requireContext) {
     .map(requireContext);
 }
 
-var modules = requireAll(testContext);
-//var modules = [require('./public/app/cricket/location/plexer-room/plexer-room.component.spec')];
+//var modules = requireAll(testContext);
+var modules = [require('./public/app/mendelpede/scenarios/mpede-fridge/mpede-fridge.component.spec')];
 //var modules = [require('./public/app/authentication/reset-password/reset-password.component.spec')];

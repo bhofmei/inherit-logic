@@ -8,23 +8,51 @@ const Schema = mongoose.Schema;
  * @type Model
  */
 
+/**
+ * @external USER
+ * @see {@link user-model.html}
+ */
+/**
+ * @external MENDELSCENARIO
+ * @see {@link mendelscenario-model.html}
+ */
+
  const MendelPedeSchema = new Schema({
+   /**
+    * @member {Number} bugID - unique id given to mendelpede
+    */
    bugID: {
      type: Number,
      required: true
    },
+   /**
+   * @member {external:USER} owner - user who owns the fridge which contains 
+   * this mendelpede
+   */
    owner: {
      type: Schema.ObjectId,
      ref: 'User'
    },
+   /**
+   * @member {external:MENDELSCENARIO} scenario - scenario the mendelpede is for
+   */
    scenario: {
      type: Schema.ObjectId,
      ref: 'MendelScenario'
    },
+   /**
+    * @member {Boolean} isFemale - true if this mendelpede is female
+    * false if male
+    */
    isFemale: Boolean,
-   // encoded with ternary for each trait that's part of scenario
+   /**
+    * @member {Number} genoType - encoded with ternary for each trait that's part of scenario
+    */
    genotype: [Number],
-   // ordered dotcolor, eyeColor-x, segColor-y, numLegs, numSegs-- image: dotcolor, numseg, numleg, 
+   /**
+    * @member {String[]} phenotype - ordered dotcolor, eyeColor-x, segColor-y, numLegs, numSegs
+    * useful for the image 
+    */
    phenotype: [String]
  });
 

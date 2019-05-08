@@ -1,7 +1,7 @@
 /**
  * The Mendelpede Scenario-related controller functions
  * @module mendelpede/scenario.server.controller
- * @name Mendelpede Scenario Controller
+ * @name MendelPede Scenario Controller
  * @type Controller
  */
 const mongoose = require('mongoose');

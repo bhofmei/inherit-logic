@@ -47,7 +47,7 @@ export class MendelpedeQuizComponent{
   /**
    * quiz object
    */
-  private quiz: MendelpedeQuiz;
+   quiz: MendelpedeQuiz;
   /**
    * error message
    */

@@ -33,7 +33,7 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
   /**
    * The course number
    */
-  private courseNum: string;
+  protected courseNum: string;
   /**
    * Information about the mendel scenario
    */
@@ -133,7 +133,7 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
 
   /**
    * Returns quiz score of the student
-   * @param studentId: student userid 
+   * @param studentId: student userid
    */
   getQuizScore(studentId: string){
     //console.log(this.scoreMap);

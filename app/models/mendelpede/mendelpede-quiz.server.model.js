@@ -9,13 +9,24 @@ const Schema = mongoose.Schema;
  */
 
  const MendelQuizSchema = new Schema({
-
+   /**
+    * @member {Number} score - Quiz score
+    */
    score: Number,
-
+   /**
+    * @member {Date} quizTakenDate - date on which quiz was taken
+    */
    quizTakenDate: Date,
-
+  /**
+   * @member {String[]} submittedAnswers - Student's answers of the quiz
+   * @example ['AAA', 'aaa', 'AAa', 'aAa', 'AAa', 'aAa', 'AAA', 'aaa']
+   */
    submittedAnswers: [String],
-
+  /**
+   * @member {Boolean[]} isAnswerCorrect - Array of booleans representing if the 
+   * answers are correct
+   * @example [True, False, False, True, True, True, False, True]
+   */
    isAnswerCorrect: [Boolean]
  });
 
