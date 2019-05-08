@@ -9,39 +9,39 @@
         {{errorMessage}}
       </div>
       <div class="pede-list">
-        <div id="fridge-shelf" *ngFor="let pede of currPedes" class="m-0 row">
-          <div id="firstColumn" class="col p-0 border border-secondary rounded m-1 pede">
-            <div id="firstColumn2" *ngIf="pede[0].phenotype !== null" class="row my-0 mx-1">
-              <div id="bugId" [ngClass]="{'text-secondary col-4 order-first pl-1 pr-0':true, 'col-lg-3':!isQuiz, 'col-xl-3':isQuiz}">{{ pede[0].bugID + 1 }}</div>
+        <div *ngFor="let pede of currPedes" class="m-0 row">
+          <div class="col p-0 border border-secondary rounded m-1 pede-spot">
+            <div *ngIf="pede[0].phenotype !== null" class="row my-0 mx-1">
+              <div [ngClass]="{'bugId text-secondary col-4 order-first pl-1 pr-0':true, 'col-lg-3':!isQuiz, 'col-xl-3':isQuiz}">{{ pede[0].bugID + 1 }}</div>
               <div [ngClass]="{'col-4 px-0 text-center':true, 'd-lg-none':!isQuiz, 'd-xl-none':isQuiz}"><span *ngIf="pede[0].canDelete" class="oi oi-trash text-muted" (click)="deletePede(pede[0])"></span></div>
               <div [ngClass]="{'col-4 text-right pl-0 pr-1': true, 'col-lg-3 order-lg-12':!isQuiz, 'col-xl-3 order-xl-12':isQuiz}">
                 <span *ngIf="pede[0].isFemale === 'F'" class="text-danger">F</span>
                 <span *ngIf="pede[0].isFemale === 'M'" class="text-info">M</span>
-                <span id="deleteMpede" *ngIf="pede[0].canDelete" [ngClass]="{'oi oi-trash text-muted d-none mr-2p':true, 'd-lg-block':!isQuiz, 'd-xl-block':isQuiz}" (click)="deletePede(pede[0])"></span>
+                <span *ngIf="pede[0].canDelete" [ngClass]="{'oi oi-trash text-muted d-none mr-2p':true, 'd-lg-block':!isQuiz, 'd-xl-block':isQuiz}" (click)="deletePede(pede[0])"></span>
               </div>
-              <div [ngClass]="{'col-12 p-0':true, 'col-lg-6':!isQuiz, 'col-xl-6':isQuiz}">
+              <div [ngClass]="{'pede-outer col-12 p-0':true, 'col-lg-6':!isQuiz, 'col-xl-6':isQuiz}">
                 <!--<div id="fridge-pedes" [ngClass]="getMendelpede(pede[0].phenotype)" (click)="sendPede(pede[0])"></div> -->
-                <div id="fridge-pedes" [className]="pede[0].phenotype | pedeImage" (click)="sendPede(pede[0])"></div>
+                <div [className]="pede[0].phenotype | pedeImage" (click)="sendPede(pede[0])"></div>
               </div>
             </div> <!-- end not null -->
-            <div id="bugId" *ngIf="pede[0].phenotype === null" class="mpede-empty row p-0">
+            <div class="mpede-empty row p-0" *ngIf="pede[0].phenotype === null">
             </div>
           </div> <!-- end pede1 -->
-          <div class="col p-0 border border-secondary rounded m-1 pede">
+          <div class="col p-0 border border-secondary rounded m-1 pede-spot">
             <div *ngIf="pede[1].phenotype !== null" class="row my-0 mx-1">
-              <div id="bugId" [ngClass]="{'text-secondary col-4 order-first pl-1 pr-0':true, 'col-lg-3':!isQuiz, 'col-xl-3':isQuiz }">{{ pede[1].bugID + 1 }}</div>
+              <div [ngClass]="{'bugId text-secondary col-4 order-first pl-1 pr-0':true, 'col-lg-3':!isQuiz, 'col-xl-3':isQuiz }">{{ pede[1].bugID + 1 }}</div>
               <div [ngClass]="{'col-4 px-0 text-center':true, 'd-lg-none':!isQuiz, 'd-xl-none':isQuiz}"><span *ngIf="pede[0].canDelete" class="oi oi-trash text-muted" (click)="deletePede(pede[1])"></span></div>
               <div [ngClass]="{'col-4 text-right pl-0 pr-1':true, 'col-lg-3 order-lg-12':!isQuiz, 'col-xl-3 order-xl-12':isQuiz}">
                 <span *ngIf="pede[1].isFemale === 'F'" class="text-danger">F</span>
                 <span *ngIf="pede[1].isFemale === 'M'" class="text-info">M</span>
-                <span id="deleteMpede" *ngIf="pede[1].canDelete" [ngClass]="{'oi oi-trash text-muted d-none mr-2p':true, 'd-lg-block':!isQuiz, 'd-xl-block':isQuiz}" (click)="deletePede(pede[1])"></span>
+                <span *ngIf="pede[1].canDelete" [ngClass]="{'oi oi-trash text-muted d-none mr-2p':true, 'd-lg-block':!isQuiz, 'd-xl-block':isQuiz}" (click)="deletePede(pede[1])"></span>
               </div>
-              <div [ngClass]="{'col-12 p-0':true, 'col-lg-6':!isQuiz, 'col-xl-6':isQuiz}">
+              <div [ngClass]="{'pede-outer col-12 p-0':true, 'col-lg-6':!isQuiz, 'col-xl-6':isQuiz}">
                 <!--<div id="fridge-pedes" [ngClass]="getMendelpede(pede[1].phenotype)" (click)="sendPede(pede[1])"></div>-->
-                <div id="fridge-pedes" [className]="pede[1].phenotype | pedeImage" (click)="sendPede(pede[1])"></div>
+                <div [className]="pede[1].phenotype | pedeImage" (click)="sendPede(pede[1])"></div>
               </div>
             </div> <!-- end not null -->
-            <div id="bugId" *ngIf="pede[1].phenotype === null" class="mpede-empty row p-0">
+            <div class="mpede-empty row p-0" *ngIf="pede[1].phenotype === null" >
             </div>
           </div> <!-- end pede2 -->
         </div>

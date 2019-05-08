@@ -56,16 +56,14 @@ describe('Mendelpede Fridge Component', () => {
       scenario = listOfMendelScenarios[0];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
       createComponent();
-      //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
       page.addElements();
       addMatchers();
-      fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
     it('should have 6 mendelpedes test1', () => {
-      //expect(comp.pedeList[5].genotype).not.toBeNull();
       expect(page.pedes.length).toBe(6);
+      expect(page.pedesWithBugIds.length).toBe(6);
     }) // end should have 6 mendelpedes test1
 
     it('Should have 256 spaces in Fridge', () => {
@@ -73,7 +71,7 @@ describe('Mendelpede Fridge Component', () => {
     })// end Should have 256 spaces
 
     it('Should have 8 places in shelf', () => {
-      expect(page.fridgeShelf.length * 2).toBe(8);
+      expect(page.pedeSpots.length).toBe(8);
     })// Should have 8 places in shelf
 
     it('Should have first shelf displayed', () => {
@@ -92,11 +90,9 @@ describe('Mendelpede Fridge Component', () => {
       scenario = listOfMendelScenarios[2];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
       createComponent();
-      //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
       page.addElements();
       addMatchers();
-      fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
     it('should have 8 mendelpedes test1', () => {
@@ -108,7 +104,7 @@ describe('Mendelpede Fridge Component', () => {
     }) // should have 8 mendelpedes test2
 
     it('Should have 8 places in shelf', () => {
-      expect(page.fridgeShelf.length * 2).toBe(8);
+      expect(page.pedeSpots.length).toBe(8);
     })// Should have 8 places in shelf
 
     it('Should not have error message', ()=>{
@@ -128,7 +124,6 @@ describe('Mendelpede Fridge Component', () => {
       tick();
       page.addElements();
       addMatchers();
-      fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
     it('Should not have error message', ()=>{
@@ -152,9 +147,8 @@ describe('Mendelpede Fridge Component', () => {
     it('Should go to first shelf', fakeAsync(()=>{
       click(page.btnFirst);
       tick();
-      page.addElements();
-      addMatchers();
       fixture.detectChanges();
+      page.addElements();
       // go to first shelf
       expect(comp.shelf).toBe(0);
       // back buttons should be disabled
@@ -186,9 +180,8 @@ describe('Mendelpede Fridge Component', () => {
     it('Should go back a shelf', fakeAsync(()=>{
       click(page.btnBackward);
       tick();
-      page.addElements();
-      addMatchers();
       fixture.detectChanges();
+      page.addElements();
       // comp shelf should be changed to 30
       expect(comp.shelf).toBe(2);
     })); // end Should go back a shelf
@@ -202,20 +195,16 @@ describe('Mendelpede Fridge Component', () => {
       scenario = listOfMendelScenarios[0];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
       createComponent();
-      //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
       page.addElements();
       addMatchers();
-      fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
     it('should click on pede', fakeAsync(() => {
-      //comp.storePede(listOfMendelpedes[11]);
       click(page.pedes[2]);
       tick();
-      page.addElements();
-      addMatchers();
       fixture.detectChanges();
+      page.addElements();
       expect(page.sendPedeClicked).toBe(true);
     })); // end should click on pede
 
@@ -228,26 +217,28 @@ describe('Mendelpede Fridge Component', () => {
       scenario = listOfMendelScenarios[0];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
       createComponent();
-      //comp.dropPhageBact({ dragData: dropPhage }, 'B');
       tick();
       page.addElements();
       addMatchers();
-      fixture.detectChanges();
     })); // end beforeEach fakeAsync
 
     it('should store pede in fridge', fakeAsync(() => {
       comp.storePede(listOfMendelpedes[11]);
-      console.log(page.pedesWithBugIds.length);
-      console.log(page.pedes.length);
-      let bugId = page.pedesWithBugIds[6].nativeElement.innerHTML;
-      expect(bugId).not.toBe(11);
+      tick()
+      fixture.detectChanges();
+      page.addElements();
+
+      expect(page.pedes.length).toBe(7);
+      let n = page.pedesWithBugIds.length-1
+      let bugId = page.pedesWithBugIds[n].nativeElement.innerHTML;
+      expect(bugId).toTemplateMatch("7");
     })); // end should store pede in fridge
 
-  }); // end Test store pede
+  });// end Test store pede
 
   describe('Test delete pede', () => {
     let scenario: MendelpedeScenario;
-
+    let deleteSpy;
     beforeEach(fakeAsync(() => {
       scenario = listOfMendelScenarios[0];
       activateRoute.testParams = {scenShortCode: scenario.shortCode};
@@ -255,45 +246,58 @@ describe('Mendelpede Fridge Component', () => {
       comp.storePede(listOfMendelpedes[11]);
       comp.storePede(listOfMendelpedes[7]);
       tick();
+      fixture.detectChanges();
       page.addElements();
       addMatchers();
-      fixture.detectChanges();
+        let scenService = fixture.debugElement.injector.get(MendelpedeScenarioService);
+        deleteSpy = spyOn(scenService, 'deletePede').and.callThrough();
     })); // end beforeEach fakeAsync
 
-    it('should delete stored pede', fakeAsync(() => {
+    it('should be able to delete pede', (()=>{
+      expect(comp.pedeList[6].canDelete).toBe(true);
+      let pedeSpot = page.pedeSpots[6];
+      //let deleteSpan = recurCSSQuery(pedeSpot, ['text-right', 'oi-trash']);
+      let deleteSpan = pedeSpot.query(By.css('.text-right')).query(By.css('.oi-trash'));
+      expect(deleteSpan).not.toBeNull();
+      expect(page.deleteButtons.length).toBe(2);
+    }));
 
-      console.log(comp.pedeList[7].canDelete);
-      console.log(page.pedes.length);
-      console.log(page.deleteButtons.length)
-      click(page.deleteButtons[7]);
+    it('should delete stored pede', fakeAsync(() => {
+      // for testing we can only delete the last pede in the fridge
+      click(page.deleteButtons[1]);
       tick();
-      page.addElements();
-      addMatchers();
       fixture.detectChanges();
-      //comp.deletePede(comp.pedeList[6]);
+      page.addElements();
+      let isCalled = deleteSpy.calls.any();
+      expect(isCalled).toBe(true);
+      expect(page.pedes.length).toBe(7);
       expect(comp.pedeList[6].phenotype).toBeNull();
+      expect(page.deleteButtons.length).toBe(1);
     })); // end should delete stored pede
 
-    it('should delete stored pede at the location only', () => {
-      comp.storePede(listOfMendelpedes[11]);
-      comp.storePede(listOfMendelpedes[14]);
-      comp.deletePede(comp.pedeList[6]);
-      expect(comp.pedeList[6].phenotype).toBeNull();
-      expect(comp.pedeList[7].phenotype).not.toBeNull();
-    }); // end should delete stored pede at the location only
+    it('should remove pede image on delete', fakeAsync(()=>{
+      click(page.deleteButtons[1]);
+      tick();
+      fixture.detectChanges();
+      page.addElements();
+      let pedeSpot = page.pedeSpots[7];
+      let emptyPede = pedeSpot.query(By.css('.mpede-empty'));
+      expect(emptyPede).not.toBeNull();
+      let bugId = pedeSpot.query(By.css('.bugId'));
+      expect(bugId).toBeNull();
+    })); // end should remove pede image on delete
 
   }); // end Test delete pede
 }); // end Mendelpede Fridge Component
 
 class Page {
   // variables
-  //practice: HTMLElement;
   pedes: DebugElement[];
   btnFirst: DebugElement;
   btnBackward: DebugElement;
   btnForward: DebugElement;
   btnLast: DebugElement;
-  fridgeShelf: DebugElement[];
+  pedeSpots: DebugElement[];
   pedesWithBugIds: DebugElement[];
   deleteMpedes: DebugElement;
   deleteButtons: DebugElement[];
@@ -301,27 +305,21 @@ class Page {
 
   errorMessage: HTMLElement;
 
-  createFridgeSpy: any;
-
   constructor(){
-    let scenService = fixture.debugElement.injector.get(MendelpedeScenarioService);
     //this.createFridgeSpy = spyOn(scenService, 'createMendelFridge').and.callThrough();
   }
 
   addElements(){
     if(comp.fridge){
-      let header = fixture.debugElement.query(By.css('.card-header')).query(By.css('.card-title'));
-      //this.practice = (header ? header.nativeElement : null);
-      this.pedes = fixture.debugElement.queryAll(By.css('#fridge-pedes'));
-      this.fridgeShelf = fixture.debugElement.queryAll(By.css('#fridge-shelf'));
-      this.pedesWithBugIds = fixture.debugElement.queryAll(By.css('#bugId'));
-      this.deleteMpedes = fixture.debugElement.query(By.css('#fridge-shelf')).query(By.css('#firstColumn'));
+      this.pedes = fixture.debugElement.queryAll(By.css('.pede-outer')).map((el)=>{return el.query(By.css('div'))});
+      this.pedeSpots = fixture.debugElement.queryAll(By.css('.pede-spot'));
+      this.pedesWithBugIds = fixture.debugElement.queryAll(By.css('.bugId'));
       let btns = fixture.debugElement.queryAll(By.css('button'));
       this.btnFirst = btns[0];
       this.btnBackward = btns[1];
       this.btnForward = btns[2];
       this.btnLast = btns[3];
-      this.deleteButtons = fixture.debugElement.queryAll(By.css('.oi-trash'));
+      this.deleteButtons = fixture.debugElement.queryAll(By.css('.oi-trash.d-none'));
     }
 
     let tmp = fixture.debugElement.query(By.css('.alert'));
