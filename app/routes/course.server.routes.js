@@ -28,11 +28,11 @@ module.exports = function (app) {
   app.route('/api/admin/:userId/courses/:courseNum/instructors/:studentId')
     .post(admin.hasAuthorization, course.isInstructor, course.setInstructor)
 
-  app.route('/api/admin/:userId/courses/:courseNum/:scenCode')
+  app.route('/api/admin/:userId/courses/:courseNum/cricket/:scenCode')
     .get(admin.hasAuthorization, course.isInstructor, course.getScenarioStatus);
-  
-  app.route('/api/admin/:userId/mendel-courses/:courseNum/:scenShortCode')
-    .get(admin.hasAuthorization, course.isInstructor, course.getScenarioStatus);
+
+  app.route('/api/admin/:userId/courses/:courseNum/mendelpede/:scenShortCode')
+    .get(admin.hasAuthorization, course.isInstructor, course.getMendelScenarioStatus);
 
   app.route('/api/admin/course-by-id/:courseId')
     .get(course.getCourse)

@@ -473,7 +473,6 @@ exports.deletePede = function (req, res) {
   fridge.pedeList.pull(mendelpede._id);
   fridge.save((error) => {
     if (error) {
-      console.log(err)
       return res.status(500)
         .send({
           message: 'Unable to remove pede from fridge'

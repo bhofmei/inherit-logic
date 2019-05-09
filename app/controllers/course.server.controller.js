@@ -5,11 +5,14 @@
  * @type Controller
  */
 const mongoose = require('mongoose');
+const async = require('async');
 const ObjectId = mongoose.Types.ObjectId;
 const Course = mongoose.model('Course');
 const User = mongoose.model('User');
+const MendelFridge = mongoose.model('MendelFridge')
 
-const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
+const getErrorMessage = require('./helpers.server.controller')
+  .getErrorMessage;
 
 /**
  * @external USER
@@ -38,7 +41,7 @@ const getErrorMessage = require('./helpers.server.controller').getErrorMessage;
  * @yields {403_Forbidden} current user not authorized, send error as `{message: 'Not instructor of this course'}`
  * @yields {next()} If user authorized, go to next middleware
  */
-exports.isInstructor = function (req, res, next) {
+exports.isInstructor = function(req, res, next) {
   let instr = req.curUser;
   let id = JSON.stringify(instr._id);
   let course = req.course;
@@ -75,7 +78,7 @@ exports.isInstructor = function (req, res, next) {
  * @yields {404_Not_Found} User is admin and there are no courses OR user is instr role but not the instructor of any courses; sends message as `{message: 'No courses found'}`
  * @yields {200_OK} List of courses; courses in the list depend on user role
  */
-exports.listCourses = function (req, res) {
+exports.listCourses = function(req, res) {
   let user = req.curUser;
   let userId = new ObjectId(user._id);
   let query;
@@ -119,7 +122,7 @@ exports.listCourses = function (req, res) {
  * @yields {404_Not_Found} there are no courses; sends message as `{message: "No courses found"}`
  * @yields {200_OK} List of courses with properties `courseNum` and `id` (DB id)
  */
-exports.listCourseNum = function (req, res) {
+exports.listCourseNum = function(req, res) {
   Course.find({}, 'courseNum id', (err, courses) => {
     if (err) {
       return res.status(500)
@@ -152,7 +155,7 @@ exports.listCourseNum = function (req, res) {
  * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
  * @yields {200_OK} Newly created course
  */
-exports.createCourse = function (req, res) {
+exports.createCourse = function(req, res) {
   // Create a new course object
   const course = new Course(req.body);
 
@@ -189,7 +192,7 @@ exports.createCourse = function (req, res) {
  * @yields {200_OK} the course information including `courseNum`, `description`, and list of `instructors`
  *
  */
-exports.getCourse = function (req, res) {
+exports.getCourse = function(req, res) {
   res.json(req.course);
 };
 
@@ -209,7 +212,7 @@ exports.getCourse = function (req, res) {
  * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
  * @yields {200_OK} Updated course information
  */
-exports.editCourse = function (req, res) {
+exports.editCourse = function(req, res) {
   let course = req.course;
 
   // Update the fields
@@ -244,7 +247,7 @@ exports.editCourse = function (req, res) {
  * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
  * @yields {200_OK} Information about course just deleted
  */
-exports.deleteCourse = function (req, res) {
+exports.deleteCourse = function(req, res) {
   const course = req.course;
 
   course.remove((err) => {
@@ -275,7 +278,7 @@ exports.deleteCourse = function (req, res) {
  * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
  * @yields {200_OK} List of students in the course; each student has properties `firstName`, `lastName`, `userId`, `accessGranted`, and `email`
  */
-exports.getStudents = function (req, res) {
+exports.getStudents = function(req, res) {
   var course = req.course;
   let courseId = new ObjectId(course._id);
 
@@ -311,7 +314,7 @@ exports.getStudents = function (req, res) {
  * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
  * @yields {200_Success} List of students just deleted
  */
-exports.deleteCourseStudents = function (req, res) {
+exports.deleteCourseStudents = function(req, res) {
   let courseId = new ObjectId(req.course._id);
   User.remove({
     course: courseId
@@ -344,7 +347,7 @@ exports.deleteCourseStudents = function (req, res) {
  * @yields {500_Internal_Server_Error} On error, sends description of error as `{message: error-message}`
  * @yields {200_OK} List of possible instrcutors; each person has properties `firstName`, `lastName`, `userId`, and `role`
  */
-exports.getPossibleInstructors = function (req, res) {
+exports.getPossibleInstructors = function(req, res) {
   let admin = req.curUser;
   let courseId = new ObjectId(req.course._id);
 
@@ -400,7 +403,7 @@ exports.getPossibleInstructors = function (req, res) {
  * @yields {500_Internal_Server_Error} On error updating the user, sends description of error as `{message: error-message}`
  * @yields {200_OK} The updated course
  */
-exports.setInstructor = function (req, res) {
+exports.setInstructor = function(req, res) {
   let newInstructor = req.student;
   let course = req.course;
 
@@ -451,7 +454,7 @@ exports.setInstructor = function (req, res) {
  * students in a course
  *
  * @apiType GET
- * @apiPath /api/admin/:userId/courses/:courseNum/:scenarioId
+ * @apiPath /api/admin/:userId/courses/:courseNum/cricket/:scenarioId
  *
  * @param {Object} req - Express request object
  * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
@@ -464,7 +467,7 @@ exports.setInstructor = function (req, res) {
  * @yields {500_Internal_Server_Error} Database error, sends description of error as `{message: error-message}`
  * @yields {200_OK} List of students in course with scenario access; each object in list has `firstName`, `lastName`, `userId`, and `status`
  */
-exports.getScenarioStatus = function (req, res) {
+exports.getScenarioStatus = function(req, res) {
   const course = req.course;
   let scenario = req.scenario;
 
@@ -498,6 +501,75 @@ exports.getScenarioStatus = function (req, res) {
 };
 
 /**
+ * Get scenario status (aka quiz score) for a scenario for all
+ * students in a course
+ *
+ * @apiType GET
+ * @apiPath /api/admin/:userId/courses/:courseNum/mendelpede/:scenShortCode
+ *
+ * @param {Object} req - Express request object
+ * @property {external:USER} curUser - logged in user from [userById]{@link user-controller.html#userById} with id `userId`
+ * @property {external:COURSE} course - course details from [courseByNum]{@link #courseByNum}
+ * @property {external:MENDELSCENARIO} scenShortCode - scenario of interested; identified with [scenarioByCode]{@link scenario-controller.html#scenarioByCode} with id `scenShortCode`
+ * @param {Object} res - Express response object
+ *
+ * @return {Object} json object to response
+ * @yields {404_Not_Found} There are no students in the course, sends error as `{message: "no students found"}`
+ * @yields {500_Internal_Server_Error} Database error, sends description of error as `{message: error-message}`
+ * @yields {200_OK} List of students in course with scenario access; each object in list has `firstName`, `lastName`, `userId`, and `status`
+ */
+exports.getMendelScenarioStatus = function(req, res) {
+  const course = req.course;
+  let scenario = req.scenario;
+
+  let courseId = new ObjectId(course._id);
+  //let scenId = new ObjectId(scenario._id);
+
+  User.find({
+    course: courseId
+  }, (err, students) => {
+    if (err) {
+      return res.status(500)
+        .send({
+          message: getErrorMessage(err)
+        });
+    } else if (!students) {
+      return res.status(404)
+        .send({
+          message: 'no students found'
+        });
+    } else {
+      async.map(students,
+        (student, doneCallback) => {
+          var o = {
+            firstName: student.firstName,
+            lastName: student.lastName,
+            userId: student.userId
+          };
+          if (scenario.scenType === 'quiz') {
+            MendelFridge.findOne({
+                owner: student._id,
+                scenario: scenario._id
+              })
+              .select('quiz')
+              .populate('quiz', 'score')
+              .exec((err, fridge) => {
+                o['quiz'] = (fridge && fridge.quiz ? fridge.quiz.score : 'NA');
+                doneCallback(null, o)
+              }); // end MendelFridge
+          } else {
+            doneCallback(null, o);
+          }
+        },
+        (err, results) => {
+          res.json(results);
+        }
+      ); // end map
+    }
+  });
+};
+
+/**
  * Middleware to find course by course number
  * @protected
  *
@@ -513,7 +585,7 @@ exports.getScenarioStatus = function (req, res) {
  * @yields {next('Failed to load course id')} If course doesn't exist, pass message to middleware
  * @yield {next()} If success, set request `course` and go to next middleware
  */
-exports.courseByNum = function (req, res, next, id) {
+exports.courseByNum = function(req, res, next, id) {
   Course.findOne({
       courseNum: id
     })
@@ -547,7 +619,7 @@ exports.courseByNum = function (req, res, next, id) {
  * @yields {next('Failed to load course id')} If course doesn't exist, pass message to middleware
  * @yield {next()} If success, set request `course` and go to next middleware
  */
-exports.courseById = function (req, res, next, id) {
+exports.courseById = function(req, res, next, id) {
   Course.findOne({
       _id: id
     })
