@@ -11,6 +11,7 @@ export interface Student extends _User {
   email?: string;
   accessGranted?: any;
   status?: boolean;
+  quiz?: string;
 }
 
 /**

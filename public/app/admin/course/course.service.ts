@@ -185,7 +185,7 @@ export class CourseService {
    */
   getScenarioStatus(adminId: number, courseNum: string, scenId: string): Observable<Student[]>{
     return this._http
-      .get<Student[]>(`${this._baseURL}/${adminId}/courses/${courseNum}/${scenId}`);
+      .get<Student[]>(`${this._baseURL}/${adminId}/courses/${courseNum}/cricket/${scenId}`);
   }
 
   /**
@@ -202,7 +202,7 @@ export class CourseService {
    */
   getMendelScenarioStatus(adminId: number, courseNum: string, scenId: string): Observable<Student[]>{
     return this._http
-      .get<Student[]>(`${this._baseURL}/${adminId}/mendel-courses/${courseNum}/${scenId}`);
+      .get<Student[]>(`${this._baseURL}/${adminId}/courses/${courseNum}/mendelpede/${scenId}`);
   }
 
   /**

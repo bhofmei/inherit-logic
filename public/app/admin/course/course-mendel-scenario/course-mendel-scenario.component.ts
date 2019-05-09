@@ -3,13 +3,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subject } from 'rxjs';
 
-
 import { CourseService } from '../course.service';
 import { MendelpedeScenarioService } from '../../../mendelpede/scenarios/mendelpede-scenarios.service';
 import { AuthenticationService } from '../../../authentication/authentication.service';
-import { StudentService } from '../../student/student.service';
 
-import { Course, Student, User, MendelpedeScenario } from '../../../interfaces/';
+import { Course, Student, User, MendelpedeScenario, sortStudents } from '../../../interfaces/';
 
 import { readErrorMessage } from '../../../shared/read-error';
 
@@ -38,6 +36,7 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
    * Information about the mendel scenario
    */
   protected scenario: MendelpedeScenario;
+  protected
   /**
    * State variable to make unsubscribing from services easier
    */
@@ -54,16 +53,12 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
    * Potential backend error messages
    */
   private errorMessage: string = '';
-  /**
-   * Scoremap which contains quiz score for all listed students if any
-   */
-  private scoreMap: Map<string, string> = new Map<string, string>();
+
 
   constructor(private _router: Router,
     private _route: ActivatedRoute,
     private _authService: AuthenticationService,
     private _courseService: CourseService,
-    private _studentService: StudentService,
     private _scenarioService: MendelpedeScenarioService
               ){
     this.isDestroyed$ = new Subject<boolean>();
@@ -92,23 +87,7 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
             this._courseService.getMendelScenarioStatus(this.admin.id, course, scenCode)
               .takeUntil(this.isDestroyed$)
               .subscribe((stats)=>{
-                this.students = stats;
-                this.students.forEach((student) => {
-                  this._studentService.getMendelFridge(this.admin.id, student.userId, scenCode)
-                    .takeUntil(this.isDestroyed$)
-                          .subscribe((mfridge) => {
-                            //console.log('we got fridge from db')
-                            //console.log('coming for quiz');
-                            let score = 'Quiz not submitted yet'
-                            if(mfridge.quiz){
-                              score = mfridge.quiz.score.toString();
-                            }
-                            this.scoreMap[student.userId] = score;
-                        },
-                            (error) => {
-                          this.errorMessage = readErrorMessage(error);
-                        });
-                      });
+                this.students = stats.sort(sortStudents);
             }, (err2)=>{
               this.errorMessage = readErrorMessage(err2);
             });
@@ -117,28 +96,6 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
             this.errorMessage = readErrorMessage(err);
           });
             });
-  }
-
-  /**
-   * Simple formatting function which returns formatted string
-   * depending on if student has access granted or not
-   *
-   * @param {boolean} isGranted - has access been granted
-   *
-   * @returns {string} - formatted string; "Access granted" if access has been granted, "Access not granted" otherwise
-   */
-  formatAccess(isGranted: boolean): string{
-    return (isGranted ? 'Access granted' : 'Access not granted');
-  }
-
-  /**
-   * Returns quiz score of the student
-   * @param studentId: student userid
-   */
-  getQuizScore(studentId: string){
-    //console.log(this.scoreMap);
-    //console.log(scenId);
-    return this.scoreMap[studentId];
   }
 
   /**
@@ -152,6 +109,27 @@ export class CourseMendelScenarioComponent implements OnInit, OnDestroy {
   goToFridge(studentId: number){
     // student-indiv
     this._router.navigate(['/admin/students/', studentId,'mendelpede', this.scenario.shortCode]);
+  }
+
+  downloadCSV(){
+
+    let headers = ['Last Name', 'First Name', 'Score'];
+    var result = 'data:text/csv;charset=utf-8,';
+    result += headers.join(',') + '\n';
+    for(let student of this.students){
+      let row = [student.lastName, student.firstName, student.quiz].join(',');
+      result += row + '\n';
+    }
+
+    const encoded = encodeURI(result);
+    const outFile = this.courseNum + '_' + this.scenario.shortCode + '.csv';
+    const link = document.createElement('a');
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', encoded);
+    link.setAttribute('download', outFile);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   }
 
   /**

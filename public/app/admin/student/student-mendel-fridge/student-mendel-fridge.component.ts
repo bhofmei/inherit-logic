@@ -27,7 +27,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
    */
   protected fridge: StudentMendelFridge;
   /**
-   * If fridge exists 
+   * If fridge exists
    */
   protected hasFridge: boolean = false;
   /**
@@ -53,12 +53,12 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
    * List of mendelpedes currently being viewed
    */
   pedes: MendelpedePede[];
-  
+
   /**
    * Error message from the server
    */
   private errorMessage: string = '';
-  
+
   /**
    * Student's id
    */
@@ -79,7 +79,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
     private _studentService: StudentService,
     private _authService: AuthenticationService,
     private _modalService: NgbModal){
-      console.log('construct');
+      //console.log('construct');
     this.isDestroyed$ = new Subject<boolean>();
   }
 
@@ -101,6 +101,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
               .subscribe((mfridge) => {
               this.fridge = mfridge;
               this.fridge.owner = mfridge.owner;
+              console.log(this.fridge);
               if(this.fridge.quiz){
                 this.isQuizTaken = true;
               }
@@ -137,7 +138,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
       return;
     });
   }
-  
+
   /**
    * - when clicking delete quiz button, open a modal dialog to confirm delete
    * - if confirm, delete quiz and redirect to same page
@@ -174,7 +175,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Delete Student fridge 
+   * Delete Student fridge
    */
   deleteStudentFridge(){
     this.fridge = null;
@@ -200,7 +201,7 @@ export class StudentMendelFridgeComponent implements OnInit, OnDestroy {
       this.errorMessage = readErrorMessage(err);
     })
   }
-  
+
   /**
    * When destorying the component, unsubscribe from services and
    * observables to prevent memory leak

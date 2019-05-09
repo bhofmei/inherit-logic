@@ -53,30 +53,27 @@
       <!-- end not hasFridge -->
       <div id="fridge-outer">
         <div class="list-group mt-3" id="fridge">
-          <div class="ist-group-item m-0 row border" *ngFor="let pede of fridge.pedes">
+          <div class="m-0 row border" *ngFor="let pede of fridge.pedes">
             <div class="strain-num text-primary col-1">{{ pede.bugID + 1 }}</div>
             <div class="col-3">
               <!--<div [ngClass]="getMendelpede(pede.phenotype)" style="margin: auto;">-->
               <div [className]="pede.phenotype | pedeImage"></div>
               </div>
-            </div>
+            <!--</div>-->
             <!-- phage.strainNum -->
             <div class="col-3">
-              <!--{{ pede.genotype | pedeGenotype:fridge.scenario.scenCode }}-->
               <div *ngFor="let geno of pede.genotype; let i=index">
                 {{ currGenoFacts[i]["trait"] }}: {{ geno | pedeGenotype:fridge.scenario.scenCode }}
               </div>
             </div>
             <div class="col-1">{{ pede.isFemale }}</div>
             <div class="col-4 text-smaller" [innerHTML]="pede.phenotype | pedePhenotype"></div>
-            <!-- end phageType -->
-            <!-- end phage-details -->
-          </div>
+          </div> <!-- end for pede -->
 
         </div> <!-- end fridge -->
+        </div>
       </div>
       <!-- end hasFridge -->
     </div>
     <!-- end if fridge -->
   </div>
-</div>

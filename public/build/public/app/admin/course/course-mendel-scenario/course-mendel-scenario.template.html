@@ -4,21 +4,22 @@
         </div>
         <div *ngIf="scenario && courseNum" id="info">
           <div class="row" id="courseNumber">
-            <a [routerLink]="['../']" class="text-dark"><h4>{{ courseNum }}</h4> </a>
+            <a [routerLink]="['../../']" class="text-dark"><h4>{{ courseNum }}</h4> </a>
           </div>
-      
-          <div class="row d-flex mb-2" id="scenario-info">
-            <div class="text-weight-bold text-primary mr-2">{{scenario.shortCode}}</div>
-            <div class="text-secondary">{{ scenario.label }}</div>
+
+          <div class="row d-flex justify-content-between mb-3" id="scenario-info">
+            <!--<div class="text-weight-bold text-primary mr-2">{{scenario.shortCode}}</div>-->
+            <div class="mr-2 text-primary">{{ scenario.label }}</div>
+            <button class='btn btn-sm btn-outline-secondary' *ngIf="scenario.shortCode === 'quiz1' || scenario.shortCode === 'quiz2'" (click)="downloadCSV()">Download scores</button>
           </div>
-      
+
           <div class="list-group">
-            <div *ngFor="let student of students; let i = index" class="list-group-item justify-content-between d-flex">
+            <div *ngFor="let student of students" class="list-group-item justify-content-between d-flex">
               <div class="access-status">
                   <span class="text-primary student-label">{{student | personName}}</span>
               </div>
-              <div class="btn-group" role="group">
-                <span *ngIf="scenario.shortCode === 'quiz1' || scenario.shortCode === 'quiz2'" style="padding-right: 20px" class="text-secondary"> Score: {{ getQuizScore(student.userId) }}</span>
+              <div role="group">
+                <span *ngIf="scenario.shortCode === 'quiz1' || scenario.shortCode === 'quiz2'" style="padding-right: 20px" class="text-secondary"> Score: {{ student.quiz }}</span>
                 <button class="btn btn-outline-primary btn-sm" (click)="goToFridge(student.userId)">View fridge</button>
               </div>
               </div> <!-- end list-group-item -->
@@ -27,4 +28,3 @@
         </div>
         <!-- end info -->
       </div>
-      
