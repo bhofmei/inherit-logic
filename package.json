@@ -22,7 +22,9 @@
     "test:cricket-genetics": "NODE_ENV=test mocha --reporter spec app/tests/genetics/cricket",
     "test:mendelpede": "NODE_ENV=test mocha --reporter spec app/tests/mendelpede",
     "test:ng": "karma start",
-    "cov:back": "NODE_ENV=test nyc --reporter=json-summary mocha --recursive --reporter spec -t 5000 app/tests/"
+    "cov:back": "NODE_ENV=test nyc --reporter=json-summary mocha --recursive --reporter spec -t 5000 app/tests/",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "keywords": [
     "genetics",
@@ -83,7 +85,8 @@
     "rxjs": "^5.5.2",
     "systemjs": "^0.19.39",
     "tslib": "^1.8.0",
-    "zone.js": "^0.8.18"
+    "zone.js": "^0.8.18",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@compodoc/compodoc": "^1.1.5",
@@ -137,5 +140,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bhofmei/inherit-logic.git"
-  }
+  },
+  "snyk": true
 }
