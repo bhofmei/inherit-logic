@@ -62,7 +62,7 @@
     "express-brute-memcached": "^0.0.1",
     "express-graceful-exit": "^0.4.0",
     "express-session": "^1.14.1",
-    "helmet": "^3.10.0",
+    "helmet": "^3.21.1",
     "https": "^1.0.0",
     "jquery": "^3.4.0",
     "lodash": "^4.17.10",
