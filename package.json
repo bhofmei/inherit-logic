@@ -67,7 +67,7 @@
     "jquery": "^3.4.0",
     "lodash": "^4.17.10",
     "method-override": "^2.3.6",
-    "mongoose": "^5.0.7",
+    "mongoose": "^5.11.7",
     "mongoose-sequence": "^4.0.1",
     "morgan": "^1.7.0",
     "ngx-breadcrumbs": "^0.0.3",
