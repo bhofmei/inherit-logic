@@ -65,7 +65,7 @@
     "helmet": "^3.10.0",
     "https": "^1.0.0",
     "jquery": "^3.4.0",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.21",
     "method-override": "^2.3.6",
     "mongoose": "^5.0.7",
     "mongoose-sequence": "^4.0.1",
