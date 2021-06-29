@@ -71,7 +71,7 @@
     "mongoose-sequence": "^4.0.1",
     "morgan": "^1.7.0",
     "ngx-breadcrumbs": "^0.0.3",
-    "nodemailer": "^4.4.2",
+    "nodemailer": "^6.6.1",
     "open-iconic": "https://github.com/iconic/open-iconic.git",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
